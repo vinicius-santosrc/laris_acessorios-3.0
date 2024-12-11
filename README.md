@@ -1,0 +1,1 @@
+# laris_acessorios-3.0
