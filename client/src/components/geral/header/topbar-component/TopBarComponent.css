@@ -1,0 +1,27 @@
+.topbar-wrapper {
+    background-color: #BE0A45;
+    padding: 2px 0px;
+}
+
+.topbar-content {
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    width: 1400px;
+    margin: auto;
+}
+
+@media screen and (max-width: 900px) {
+    .topbar-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+        width: 100%;
+        margin: auto;
+        font-size: 12px;
+        text-align: center;
+    }
+}

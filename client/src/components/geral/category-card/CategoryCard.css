@@ -1,0 +1,10 @@
+.category-card-inside img {
+    width: 200px;
+    height: 155px;
+    object-fit: cover;
+    background-color: #f7f7f7;
+}
+
+.category-card-inside span {
+    margin-top: 8px;
+}

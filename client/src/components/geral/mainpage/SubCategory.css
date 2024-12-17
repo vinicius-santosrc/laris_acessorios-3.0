@@ -1,0 +1,12 @@
+.subcategorys-section-wrapper {
+    margin: auto;
+    justify-content: center;
+    width: 1400px;
+    padding: 32px 0px;
+}
+
+.subcategory-section-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
