@@ -51,7 +51,7 @@ class productService {
             const response = await fetch(`${url}${preEndpoint}${secretKey}/products`);
             const data = await response.json();
             const foundProduct = data.filter((produto: Product) => produto.tipo.toLowerCase() == Category);
-            return foundProduct;
+            return foundProduct.reverse();
         } catch (err) {
             console.error(err);
             throw err;

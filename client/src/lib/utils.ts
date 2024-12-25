@@ -39,7 +39,7 @@ export const defaultsCategories: CategoriesProps[] = [
         highlightText: "Braceletes",
         highlightDescription: "Abrace o estilo com braceletes que refletem sua personalidade e elegância.",
         highlightImage: "/images/bracelets.jpg",
-        urlLink: "bracelete",
+        urlLink: "braceletes",
         products: []
     },
     {
@@ -54,6 +54,13 @@ export const defaultsCategories: CategoriesProps[] = [
         highlightDescription: "Piercings estilosos para todos os gostos, ideais para quem deseja um toque ousado.",
         highlightImage: "/images/piercings.jpg",
         urlLink: "piercing",
+        products: []
+    },
+    {
+        highlightText: "Pulseiras",
+        highlightDescription: "Pulseiras descricao",
+        highlightImage: "/images/pulseiras.jpg",
+        urlLink: "pulseiras",
         products: []
     }
 ]
