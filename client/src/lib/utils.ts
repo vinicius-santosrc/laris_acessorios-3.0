@@ -13,6 +13,21 @@ export interface CategoriesProps {
     products: any;
 }
 
+interface CategoryProps {
+    title: string;
+    redirect: string;
+    photoURL: string;
+}
+
+export const Categorys: CategoryProps[] = [
+    { title: "COLARES", redirect: "colar", photoURL: "" },
+    { title: "BRINCOS", redirect: "brincos", photoURL: "" },
+    { title: "ANÉIS", redirect: "aneis", photoURL: "" },
+    { title: "PULSEIRAS", redirect: "pulseiras", photoURL: "" },
+    { title: "BRACELETES", redirect: "braceletes", photoURL: "" },
+    { title: "PIERCINGS", redirect: "piercing", photoURL: "" }
+];
+
 export const defaultsCategories: CategoriesProps[] = [
     {
         highlightText: "Anéis",

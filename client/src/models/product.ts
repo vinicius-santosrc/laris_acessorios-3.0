@@ -55,6 +55,7 @@ export interface Product {
     personalizavel: boolean; // Indica se o produto é personalizável
     photoURL: string; // URL da foto do produto
     extensor: string; // Campo adicional para qualquer outra informação sobre o produto
+    type_full_label: string //Prata de Lei // Banhado a ouro // Banhado a prata
 }
 
 

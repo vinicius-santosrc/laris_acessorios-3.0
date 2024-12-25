@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { Button } from "../../ui/button";
 import { Image } from "@chakra-ui/react";
 import { FavoritesIcon } from "../../../components/icons/icons";
+import { Product } from "@/models/product";
 
-const PrincipalProductCard: React.FC<any> = ({ product }) => {
-
+const PrincipalProductCard = ({ product }: { product: Product }) => {
     const [isHover, setHover] = useState<boolean>(false);
 
     if (!product) {
@@ -18,7 +18,7 @@ const PrincipalProductCard: React.FC<any> = ({ product }) => {
     return (
         <div className="product-card-wrapper">
             <section className="product-card">
-                <Link to={product.url} className="product-link">
+                <Link to={window.location.origin + "/product/" + product.url} className="product-link">
                     <article className="product-card-article">
                         <header className="product-card-header">
                             <div className="favorite-button-container">
@@ -27,7 +27,7 @@ const PrincipalProductCard: React.FC<any> = ({ product }) => {
                             <div className="product-image-container">
                                 <Image
                                     src={Images.length > 1 ? isHover ? Images[1] : Images[0] : Images}
-                                    alt={product.description}
+                                    alt={product.name_product}
                                     loading="eager"
                                     className="product-image vtex-product-summary-2-x-imageNormal vtex-product-summary-2-x-image vtex-product-summary-2-x-mainImageHovered"
 
@@ -40,7 +40,7 @@ const PrincipalProductCard: React.FC<any> = ({ product }) => {
                                 <span className="product-title">{product.name_product.toUpperCase()}</span>
                             </div>
                             <div className="product-subtitle-container">
-                                <li className="product-subtitle">Banhado a ouro</li>
+                                <li className="product-subtitle">{product.type_full_label}</li>
                             </div>
                             <div className="product-price-container">
                                 <span className="product-price">R$ {product.price.toFixed(2)}</span>

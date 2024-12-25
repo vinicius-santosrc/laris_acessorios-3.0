@@ -4,6 +4,7 @@ import Header from './components/geral/header/Header';
 import Home from './pages/main/home/Home';
 import { Provider } from './components/ui/provider';
 import Collections from './pages/collections/Collections';
+import ProductPage from './pages/product/Product';
 
 function App( Component: any, pageProps: any ) {
   return (
@@ -14,6 +15,7 @@ function App( Component: any, pageProps: any ) {
           <Routes>
             <Route path='/' element={<Home />}></Route>
             <Route path='/collections/:collection_name' element={<Collections />}></Route>
+            <Route path='/product/:product_url' element={<ProductPage />}></Route>
           </Routes>
         </BrowserRouter>
       </Provider>
