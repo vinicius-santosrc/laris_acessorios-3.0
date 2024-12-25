@@ -1,12 +1,13 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import TopBarComponent from "./topbar-component/TopBarComponent"
 import logoHeader from "../../../images/logo.svg"
 import { AccountIcon, FavoritesIcon, SacolaIcon, SearchIcon } from "../../icons/icons"
 import "./Header.css"
 import { Link } from "react-router-dom"
-import { MenuIcon, Sheet } from "lucide-react"
+import { MenuIcon } from "lucide-react"
 import { Button } from "../../ui/button"
-import { DrawerActionTrigger, DrawerBackdrop, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTitle, DrawerTrigger, Image, Input } from "@chakra-ui/react"
+import { Image, Input } from "@chakra-ui/react"
+import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTitle, DrawerTrigger } from "../../../components/ui/drawer"
 
 const Header = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
@@ -36,13 +37,32 @@ const Header = () => {
                         <Button variant="ghost" aria-label="Favoritos">
                             <FavoritesIcon />
                         </Button>
-                        <Button onClick={() => setBagOpen(!isBagOpen)} variant="ghost" aria-label="Sacola de Compras">
-                            <SacolaIcon />
-                        </Button>
+                        <DrawerRoot>
+                            <DrawerBackdrop />
+                            <DrawerTrigger>
+                                <Button onClick={() => setBagOpen(!isBagOpen)} variant="ghost" aria-label="Sacola de Compras">
+                                    <SacolaIcon />
+                                </Button>
+                            </DrawerTrigger>
+                            <DrawerContent className="drawer-header-component">
+                                <DrawerCloseTrigger />
+                                <DrawerHeader className="drawer-header-component__header">
+                                    <DrawerTitle>Meus acessórios</DrawerTitle>
+                                </DrawerHeader>
+                                <DrawerBody className="drawer-header-component__body">
+                                    <section className="empty-bag">
+                                        <h2>Sua sacola está vazia.</h2>
+                                        <p>Adicione produtos à sacola para finalizar a compra.</p>
+                                        <Button className="btn-empty-bag">Escolher suas joias</Button>
+                                    </section>
+                                </DrawerBody>
+                                <DrawerFooter />
+                            </DrawerContent>
+                        </DrawerRoot>
                     </section>
                 </div>
 
-                
+
 
                 <nav className="header-app-bottom-content header-app-bottom-content__wrapper">
                     <div className="header-inside-bottom-content header-inside-bottom-content__redirects">
@@ -89,9 +109,28 @@ const Header = () => {
                         <Button variant="ghost" aria-label="Conta">
                             <AccountIcon />
                         </Button>
-                        <Button variant="ghost" aria-label="Sacola de Compras">
-                            <SacolaIcon />
-                        </Button>
+                        <DrawerRoot>
+                            <DrawerBackdrop />
+                            <DrawerTrigger>
+                                <Button onClick={() => setBagOpen(!isBagOpen)} variant="ghost" aria-label="Sacola de Compras">
+                                    <SacolaIcon />
+                                </Button>
+                            </DrawerTrigger>
+                            <DrawerContent className="drawer-header-component">
+                                <DrawerCloseTrigger />
+                                <DrawerHeader className="drawer-header-component__header">
+                                    <DrawerTitle>Meus acessórios</DrawerTitle>
+                                </DrawerHeader>
+                                <DrawerBody className="drawer-header-component__body">
+                                    <section className="empty-bag">
+                                        <h2>Sua sacola está vazia.</h2>
+                                        <p>Adicione produtos à sacola para finalizar a compra.</p>
+                                        <Button className="btn-empty-bag">Escolher suas joias</Button>
+                                    </section>
+                                </DrawerBody>
+                                <DrawerFooter />
+                            </DrawerContent>
+                        </DrawerRoot>
                     </section>
                 </div>
 

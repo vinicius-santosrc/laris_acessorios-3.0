@@ -69,6 +69,7 @@
   }
 }
 
-body {
+html {
   padding-top: 155px;
+  background-color: white !important;
 }
