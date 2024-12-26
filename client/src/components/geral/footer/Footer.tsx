@@ -93,7 +93,7 @@ const Footer = () => {
                         </AccordionRoot>
                     </div>
                     <div className="footer-bottom">
-                        <span>© LARIS ACESSÓRIOS - JOIAS E SEMIJOIAS {year} - Rua Doutor Lázaro de Carvalho, 637, Jardim Paraíso - Brasil</span>
+                        <span>© LARIS ACESSÓRIOS - JOIAS E SEMIJOIAS {year} - Brasil</span>
                     </div>
                 </div>
             </footer>

@@ -94,7 +94,7 @@ const Header = () => {
                 <div className="header-app-top-content header-app-top-content__wrapper">
                     <section className="header-inside-content header-inside-content__search">
                         <Button variant="ghost" aria-label="Menu">
-                            <MenuIcon />
+                            <MenuIcon size={26} />
                         </Button>
                         <Button variant="ghost" aria-label="Buscar">
                             <SearchIcon />

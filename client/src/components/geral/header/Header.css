@@ -130,10 +130,15 @@
     }
 
     .header-inside-content__logo img {
-        width: 640px;
+        width: 740px;
     }
 
     .header-inside-content__logo {
-        width: 640px;
+        width: 740px;
+        padding: 0 0;
+    }
+
+    .header-inside-content__logo a {
+        width: 100%;
     }
 }

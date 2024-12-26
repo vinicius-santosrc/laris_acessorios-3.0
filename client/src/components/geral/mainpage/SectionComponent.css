@@ -7,9 +7,10 @@
 .section-component-title {
     text-align: center;
     margin: 16px 0px;
+    padding: 16px 0px;
 }
 
-.section-component-title h1{
+.section-component-title h1 {
     font-size: 24px;
     font-weight: 700;
 }
@@ -20,14 +21,14 @@
 }
 
 @media screen and (max-width: 900px) {
-    .section-component-wrapper { 
+    .section-component-wrapper {
         width: 100%;
-
     }
 
     .section-component-title {
         width: 90%;
         margin: auto;
         padding: 42px 0px;
+        padding: 0px 0px;
     }
 }

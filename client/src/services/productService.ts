@@ -1,4 +1,3 @@
-import { defaultsCategories } from "@/lib/utils";
 import { Product } from "@/models/product";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
@@ -44,22 +43,10 @@ class productService {
 
     public static readonly getByURL = async (URL: string) => {
         try {
-            const response = await fetch(`${url}${preEndpoint}${secretKey}/products/searchbyurl`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    url: URL
-                }),
-            });
-
+            const response = await fetch(`${url}${preEndpoint}${secretKey}/products`);
             const data = await response.json();
-            if (response.ok) {
-                return data;
-            } else {
-                throw new Error(data.message || 'Product not found');
-            }
+            const foundProduct = data.find((produto: Product) => produto.url == URL);
+            return foundProduct;
         } catch (err) {
             console.error(err);
             throw err;

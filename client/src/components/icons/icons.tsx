@@ -10,35 +10,35 @@ export const CloseIcon: React.FC = () => {
 
 export const SearchIcon: React.FC = () => {
     return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="22" height="22" viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg">
             <g clipPath="url(#clip0_6_1106)">
-                <path fillRule="evenodd" clipRule="evenodd" d="M6 12C2.68629 12 0 9.3137 0 6C0 2.68629 2.68629 0 6 0C9.3137 0 12 2.68629 12 6C12 7.5369 11.4221 8.93887 10.4718 10.0004L15.8047 15.3333L15.3333 15.8047L10.0004 10.4718C8.93887 11.4221 7.5369 12 6 12ZM6 11.3333C8.94553 11.3333 11.3333 8.94553 11.3333 6C11.3333 3.05448 8.94553 0.666667 6 0.666667C3.05448 0.666667 0.666667 3.05448 0.666667 6C0.666667 8.94553 3.05448 11.3333 6 11.3333Z" fill="black" />
-                <mask id="mask0_6_1106" maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">
+                <path fillRule="evenodd" clipRule="evenodd" d="M6 12C2.68629 12 0 9.3137 0 6C0 2.68629 2.68629 0 6 0C9.3137 0 12 2.68629 12 6C12 7.5369 11.4221 8.93887 10.4718 10.0004L15.8047 15.3333L15.3333 15.8047L10.0004 10.4718C8.93887 11.4221 7.5369 12 6 12ZM6 11.3333C8.94553 11.3333 11.3333 8.94553 11.3333 6C11.3333 3.05448 8.94553 0.666667 6 0.666667C3.05448 0.666667 0.666667 3.05448 0.666667 6C0.666667 8.94553 3.05448 11.3333 6 11.3333Z" />
+                <mask id="mask0_6_1106" maskUnits="userSpaceOnUse" x="0" y="0" width="22" height="22">
                     <path fillRule="evenodd" clipRule="evenodd" d="M6 12C2.68629 12 0 9.3137 0 6C0 2.68629 2.68629 0 6 0C9.3137 0 12 2.68629 12 6C12 7.5369 11.4221 8.93887 10.4718 10.0004L15.8047 15.3333L15.3333 15.8047L10.0004 10.4718C8.93887 11.4221 7.5369 12 6 12ZM6 11.3333C8.94553 11.3333 11.3333 8.94553 11.3333 6C11.3333 3.05448 8.94553 0.666667 6 0.666667C3.05448 0.666667 0.666667 3.05448 0.666667 6C0.666667 8.94553 3.05448 11.3333 6 11.3333Z" fill="white" />
                 </mask>
                 <g mask="url(#mask0_6_1106)">
-                    <path d="M16 0H0V16H16V0Z" fill="black" />
+                    <path d="M16 0H0V16H16V0Z" fill="none" />
                 </g>
             </g>
             <defs>
                 <clipPath id="clip0_6_1106">
-                    <rect width="16" height="16" fill="white" />
+                    <rect width="22" height="22" fill="white" />
                 </clipPath>
             </defs>
         </svg>
-
     )
 }
 
+
 export const AccountIcon: React.FC = () => {
     return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="22" height="22" viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg">
             <path fillRule="evenodd" clipRule="evenodd" d="M3.99998 4C3.99998 6.20913 5.79085 8 7.99998 8C10.2091 8 12 6.20913 12 4C12 1.79086 10.2091 0 7.99998 0C5.79085 0 3.99998 1.79086 3.99998 4ZM11.3333 4C11.3333 5.84093 9.84091 7.33333 7.99998 7.33333C6.15905 7.33333 4.66665 5.84093 4.66665 4C4.66665 2.15905 6.15905 0.666667 7.99998 0.666667C9.84091 0.666667 11.3333 2.15905 11.3333 4ZM1.99998 16C1.99998 12.6863 4.68628 10 7.99998 10C11.3137 10 14 12.6863 14 16H14.6666C14.6666 12.3181 11.6819 9.33333 7.99998 9.33333C4.31808 9.33333 1.33331 12.3181 1.33331 16H1.99998Z" fill="black" />
-            <mask id="mask0_6_1182" maskUnits="userSpaceOnUse" x="1" y="0" width="14" height="16">
+            <mask id="mask0_6_1182" maskUnits="userSpaceOnUse" x="1" y="0" width="14" height="22">
                 <path fillRule="evenodd" clipRule="evenodd" d="M3.99998 4C3.99998 6.20913 5.79085 8 7.99998 8C10.2091 8 12 6.20913 12 4C12 1.79086 10.2091 0 7.99998 0C5.79085 0 3.99998 1.79086 3.99998 4ZM11.3333 4C11.3333 5.84093 9.84091 7.33333 7.99998 7.33333C6.15905 7.33333 4.66665 5.84093 4.66665 4C4.66665 2.15905 6.15905 0.666667 7.99998 0.666667C9.84091 0.666667 11.3333 2.15905 11.3333 4ZM1.99998 16C1.99998 12.6863 4.68628 10 7.99998 10C11.3137 10 14 12.6863 14 16H14.6666C14.6666 12.3181 11.6819 9.33333 7.99998 9.33333C4.31808 9.33333 1.33331 12.3181 1.33331 16H1.99998Z" fill="white" />
             </mask>
             <g mask="url(#mask0_6_1182)">
-                <path d="M16 0H0V16H16V0Z" fill="black" />
+                <path d="M16 0H0V16H16V0Z" fill="none" />
             </g>
         </svg>
 
@@ -47,7 +47,7 @@ export const AccountIcon: React.FC = () => {
 
 export const FavoritesIcon: React.FC = () => {
     return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="22" height="22" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fillRule="evenodd" clipRule="evenodd" d="M4.70025 2.85826C4.93081 1.24234 6.32031 0 7.99998 0C9.68038 0 11.0703 1.24341 11.3 2.86036C13.1152 3.01022 14.6664 4.817 14.6664 7.1108C14.6664 10.7926 11.3332 14.3326 7.99988 15.9988C4.66321 14.3304 1.33331 10.7926 1.33331 7.1108C1.33331 4.81767 2.88547 3.00929 4.70025 2.85826ZM10.6285 2.88129C10.4138 1.62383 9.31865 0.666667 7.99998 0.666667C6.68215 0.666667 5.58761 1.62258 5.37188 2.87883C6.11368 2.98636 6.87231 3.3803 7.56591 4.1351L7.69058 4.27553C7.69058 4.27553 7.89861 4.52833 7.99988 4.66783C8.10135 4.5285 8.30975 4.276 8.30975 4.276L8.43465 4.13573C9.12868 3.3825 9.88711 2.98903 10.6285 2.88129ZM7.99991 15.2486C11.3904 13.4417 13.9998 10.1137 13.9998 7.11087C13.9998 3.72573 10.6312 2.18726 8.53878 5.06037L7.99905 5.80147L7.46041 5.05957C5.37251 2.18368 1.99998 3.7249 1.99998 7.11087C1.99998 10.1145 4.60721 13.4403 7.99991 15.2486Z" fill="black" />
         </svg>
 
@@ -56,13 +56,13 @@ export const FavoritesIcon: React.FC = () => {
 
 export const SacolaIcon: React.FC = () => {
     return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="22" height="22" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clipPath="url(#clip0_6_1208)">
                 <path fillRule="evenodd" clipRule="evenodd" d="M5.33331 3.33333C5.33331 1.86057 6.52721 0.666667 7.99998 0.666667C9.47275 0.666667 10.6666 1.86057 10.6666 3.33333V4H5.33331V3.33333ZM11.3333 4H14.6666V16H1.33331V4H4.66665V3.33333C4.66665 1.49238 6.15905 0 7.99998 0C9.84091 0 11.3333 1.49238 11.3333 3.33333V4ZM10.6666 4.66667V6.66667H11.3333V4.66667H14V15.3333H1.99998V4.66667H4.66665V6.66667H5.33331V4.66667H10.6666Z" fill="black" />
             </g>
             <defs>
                 <clipPath id="clip0_6_1208">
-                    <rect width="16" height="16" fill="white" />
+                    <rect width="22" height="22" fill="white" />
                 </clipPath>
             </defs>
         </svg>
@@ -73,7 +73,7 @@ export const SacolaIcon: React.FC = () => {
 export const MenuIcon: React.FC = () => {
     return (
         <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g clipPath ="url(#clip0_65_837)">
+            <g clipPath="url(#clip0_65_837)">
                 <path d="M0 16.7006H18V17.6756H0V16.7006ZM0 0.725586H18V1.70059H0V0.725586ZM0 8.67559H18V9.65059H0V8.67559Z" fill="#1D1C1C" />
             </g>
             <defs>
