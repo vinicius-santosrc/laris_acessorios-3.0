@@ -18,3 +18,16 @@
     font-size: 14px;
     font-weight: 300;
 }
+
+@media screen and (max-width: 900px) {
+    .section-component-wrapper { 
+        width: 100%;
+
+    }
+
+    .section-component-title {
+        width: 90%;
+        margin: auto;
+        padding: 42px 0px;
+    }
+}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import SubCategoryCard from "../subcategory-card/SubcategoryCard";
 import "./SubCategory.css"
 
@@ -11,8 +12,8 @@ const SubCategorys = () => {
     const subCategories: SubCategoryProps[] = [
         {
             title: "Presentes para ela",
-            redirect: "/",
-            photoURL: ""
+            redirect: "/para-ela",
+            photoURL: "https://uploaddeimagens.com.br/images/004/877/966/full/processed-5EF3B05D-B8F3-4B16-892C-E8508CCD0A48.jpeg?1735149543"
         },
         {
             title: "Presentes para ele",
@@ -21,13 +22,13 @@ const SubCategorys = () => {
         },
         {
             title: "Banhado a ouro",
-            redirect: "/",
-            photoURL: ""
+            redirect: "/banhados-a-ouro",
+            photoURL: "https://uploaddeimagens.com.br/images/004/877/991/full/Brinco-Asa.png?1735179720"
         },
         {
             title: "Pratas Brilhantes",
-            redirect: "/",
-            photoURL: ""
+            redirect: "/pratas",
+            photoURL: "https://uploaddeimagens.com.br/images/004/877/971/full/processed-3D859BD8-1459-4679-8CBA-2AA437141FAB_%281%29.jpeg?1735151183"
         },
     ];
 
@@ -35,7 +36,11 @@ const SubCategorys = () => {
         <section className="subcategorys-section-wrapper">
             <div className="subcategory-section-content">
                 {subCategories.map((item) => {
-                    return <SubCategoryCard key={item.title} title={item.title} photoURL={item.photoURL} />;
+                    return (
+                        <Link to={window.location.origin + "/collections" + item.redirect}>
+                            <SubCategoryCard key={item.title} title={item.title} photoURL={item.photoURL} />
+                        </Link>
+                    );
                 })}
             </div>
         </section>

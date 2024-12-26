@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./PrincipalProductCard.css";
 import { Link } from "react-router-dom";
-import { Button } from "../../ui/button";
 import { Image } from "@chakra-ui/react";
 import { FavoritesIcon } from "../../../components/icons/icons";
 import { Product } from "@/models/product";

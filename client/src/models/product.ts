@@ -46,7 +46,7 @@ export interface Product {
     price: number; // Preço do produto
     desconto: number; // Desconto aplicado no produto (se houver)
     disponibilidade: boolean; // Indica se o produto está disponível ou não
-    tamanhos: string[]; // Lista de tamanhos disponíveis para o produto
+    tamanhos: string; // Lista de tamanhos disponíveis para o produto
     quantidade_disponivel: number; // Quantidade disponível do produto no estoque
     categoria: string; // Categoria do produto
     url: string; // URL do produto na loja
@@ -56,6 +56,7 @@ export interface Product {
     photoURL: string; // URL da foto do produto
     extensor: string; // Campo adicional para qualquer outra informação sobre o produto
     type_full_label: string //Prata de Lei // Banhado a ouro // Banhado a prata
+    categoryList: any //SubCategories 
 }
 
 

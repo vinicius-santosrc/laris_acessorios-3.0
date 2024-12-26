@@ -1,16 +1,13 @@
+import { defaultsCategories } from "@/lib/utils";
 import { Product } from "@/models/product";
 
-//const url = process.env.REACT_APP_API_ENDPOINT;
+const url = process.env.REACT_APP_API_ENDPOINT;
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
 const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
-const url = process.env.REACT_APP_API_ENDPOINT_TEST;
+//const url = process.env.REACT_APP_API_ENDPOINT_TEST;
 
 class productService {
-    constructor(
-
-    ) { }
-
-    static getAll = async () => {
+    public static readonly getAll = async () => {
         try {
             const response = await fetch(`${url}${preEndpoint}${secretKey}/products`);
             const data = await response.json() || [];
@@ -21,7 +18,7 @@ class productService {
         }
     }
 
-    static getById = async (id: string) => {
+    public static readonly getById = async (id: string) => {
         try {
             const response = await fetch(`${url}${preEndpoint}${secretKey}/products`);
             const data = await response.json();
@@ -33,11 +30,11 @@ class productService {
         }
     }
 
-    static getByCategory = async (Category: string) => {
+    public static readonly getByCategory = async (Category: string) => {
         try {
             const response = await fetch(`${url}${preEndpoint}${secretKey}/products`);
             const data = await response.json();
-            const foundProduct = data.filter((produto: Product) => produto.tipo.toLowerCase() == Category);
+            const foundProduct = data.filter((produto: Product) => JSON.parse(produto.categoryList).includes(Category));
             return foundProduct.reverse();
         } catch (err) {
             console.error(err);
@@ -45,7 +42,7 @@ class productService {
         }
     }
 
-    static getByURL = async (URL: string) => {
+    public static readonly getByURL = async (URL: string) => {
         try {
             const response = await fetch(`${url}${preEndpoint}${secretKey}/products/searchbyurl`, {
                 method: 'POST',
