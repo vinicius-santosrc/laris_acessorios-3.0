@@ -1,0 +1,164 @@
+.product-principal-pics {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: left;
+    width: 870px;
+    gap: 10px;
+}
+
+.product-principal-pics .product-pics img {
+    width: 430px;
+    height: 430px;
+    object-fit: cover;
+}
+
+.product-principal-pics .product-one-pic img {
+    width: 873px;
+    height: 873px;
+    object-fit: cover;
+}
+
+.product-page-inside {
+    display: flex;
+    justify-content: space-between;
+}
+
+.product-page-about {
+    width: 580px;
+    margin: 0 auto;
+    padding: 60px 110px;
+}
+
+.product-brand {
+    margin-top: 30px;
+    margin-bottom: 4px;
+}
+
+.product-brand span {
+    font-size: 14px;
+    border-bottom: 1px solid black;
+}
+
+.product-name span {
+    font-size: 26px;
+}
+
+.product-name {
+    margin-bottom: 70px;
+}
+
+.product-price-content p {
+    font-size: 10px;
+}
+
+.product-price-content #bold {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.product-sizes-content {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.product-sizes {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 6px;
+}
+
+.button-tamanhos-wrapper {
+    border: 1px solid black;
+    width: 62px;
+    height: 30px;
+    text-align: center;
+    justify-content: center;
+    font-size: 10px;
+    margin: auto;
+}
+
+.button-tamanhos-wrapper#selected {
+    background-color: black;
+    color: white;
+}
+
+.product-sizes {
+    margin-top: 5px;
+}
+
+.product-buy-button button {
+    width: 100%;
+    font-size: 14px;
+    font-size: 600;
+    padding: 14px;
+    background-color: black;
+    text-align: center;
+    color: white;
+
+}
+
+.product-credit-button button {
+    margin: 14px 0px;
+    text-align: center;
+    width: 100%;
+    font-size: 14px;
+}
+
+.product-description-content h2 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.product-description-content p {
+    font-size: 14px;
+}
+
+.description-tec {
+    margin-top: 32px;
+    font-size: 14px;
+    padding: 0px 20px;
+}
+
+.photos-mobile {
+    display: none;
+}
+
+@media screen and (max-width: 900px) {
+    .photos-mobile {
+        display: block;
+    }
+
+    .photos-mobile img {
+        width: 100%;
+        height: 430px;
+        object-fit: cover;
+    }
+
+    .photos-desktop {
+        display: none;
+    }
+
+    .product-page-inside {
+        display: block;
+    }
+
+    .product-page-about {
+        width: 100%;
+        padding: 60px 12px;
+    }
+
+    .product-price-content #bold {
+        font-size: 20px;
+    }
+
+    .product-price-content p {
+        font-size: 14px;
+    }
+
+    .product-description-content h2 {
+        font-size: 20px;
+    }
+}

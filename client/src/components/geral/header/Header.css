@@ -66,6 +66,37 @@
     display: none;
 }
 
+.drawer-header-component {
+    background-color: #FFFFFF;
+}
+
+.drawer-header-component__header {
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.empty-bag {
+    margin: auto;
+    justify-content: center;
+    text-align: center;
+}
+
+.drawer-header-component__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.drawer-header-component__body h2 {
+    font-weight: 800;
+}
+
+.btn-empty-bag {
+    border-radius: 0px;
+    border-bottom: 1px solid #BE0A45;
+}
+
 @media screen and (max-width: 900px) {
     .header-app-top-content {
         width: 100%;

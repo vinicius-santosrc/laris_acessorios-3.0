@@ -1,28 +1,49 @@
 .subcategory-card {
-    text-align: center;
+  text-align: center;
 }
 
 .subcategory-top-card img {
-    width: 312px;
-    height: 312px;
-    object-fit: cover;
-    background-color: #f7f7f7;
+  width: 312px;
+  height: 312px;
+  object-fit: cover;
+  background-color: #f7f7f7;
 }
 
 .subcategory-middle-card {
-    padding-top: 16px;
-    padding-bottom: 8px;
+  padding-top: 16px;
+  padding-bottom: 8px;
 }
 
 .subcategory-middle-card span {
-    font-size: 18px;
-    font-weight: 700;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .subcategory-actionbtn {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    gap: 4px;
-    margin: auto;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  margin: auto;
+}
+
+@media screen and (max-width: 900px) {
+  .subcategory-top-card img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    background-color: #f7f7f7;
+  }
+
+  .subcategory-top-card {
+    margin-bottom: 10px;
+  }
+
+  .subcategory-actionbtn {
+    font-size: 14px;
+  }
+
+  .subcategory-middle-card span {
+    font-size: 16px;
+  }
 }

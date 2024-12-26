@@ -69,6 +69,13 @@
   }
 }
 
-body {
-  padding-top: 155px;
+html {
+  padding-top: 185px;
+  background-color: white !important;
+}
+
+@media screen and (max-width: 900px) {
+  html {
+    padding-top: 90px;
+  }
 }

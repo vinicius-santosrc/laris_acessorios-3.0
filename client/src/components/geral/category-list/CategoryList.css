@@ -3,5 +3,30 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: 26px
+    gap: 26px;
+    display: block;
+}
+
+.category-list-content-mobile {
+    display: none;
+}
+
+.mySwiper {
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width: 900px) {
+    .category-list-content-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 26px;
+        display: block;
+    }
+
+    .category-list-content {
+        display: none;
+    }
 }
