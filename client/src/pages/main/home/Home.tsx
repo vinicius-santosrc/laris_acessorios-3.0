@@ -1,5 +1,5 @@
 import "./Main.css"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import SubCategorys from "../../../components/geral/mainpage/SubCategorys"
 import Carousel from "../../../components/geral/mainpage/Carousel"
 import SectionComponent from "../../../components/geral/mainpage/SectionComponent"
@@ -8,10 +8,29 @@ import Footer from "../../../components/geral/footer/Footer"
 import ProductsMainPage from "../../../components/geral/mainpage/ProductsMainPage"
 
 const Home = () => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    const checkMobileView = () => {
+        if (window.innerWidth <= 768) {
+            setIsMobile(true); // It's a mobile device
+        } else {
+            setIsMobile(false); // It's a desktop
+        }
+    };
+
+    useEffect(() => {
+        checkMobileView(); // Initial check
+        window.addEventListener("resize", checkMobileView); // Recheck on resize
+
+        return () => {
+            window.removeEventListener("resize", checkMobileView); // Clean up listener
+        };
+    }, []);
+    
     return (
         <React.Fragment>
             <Carousel
-                url=""
+                url={isMobile ? "https://uploaddeimagens.com.br/images/004/878/193/full/WhatsApp_Image_2024-12-26_at_11.01.30.jpeg?1735260472" : "https://uploaddeimagens.com.br/images/004/878/192/full/WhatsApp_Image_2024-12-26_at_10.49.53.jpeg?1735260341"}
             />
             <SubCategorys />
             <SectionComponent
