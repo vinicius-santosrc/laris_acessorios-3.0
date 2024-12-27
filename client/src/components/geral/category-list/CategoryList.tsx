@@ -1,4 +1,4 @@
-import { Categorys } from "../../../lib/utils";
+import { CategoryProps, Categorys } from "../../../lib/utils";
 import CategoryCard from "../category-card/CategoryCard";
 import "./CategoryList.css"
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -21,8 +21,8 @@ const CategoryList = () => {
                     modules={[Pagination]}
                     className="mySwiper"
                 >
-                    {Categorys.map((item, id) => (
-                        <SwiperSlide>
+                    {Categorys.map((item: CategoryProps, id) => (
+                        <SwiperSlide key={id}>
                             <CategoryCard title={item.title} redirect={item.redirect} key={id} photoURL={item.photoURL} />
                         </SwiperSlide>
                     ))}

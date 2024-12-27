@@ -21,7 +21,7 @@ const ProductPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [sizeSelected, setTamanho] = useState<any>("");
     const [sizesAvaliable, setSizes] = useState<any>(null);
-    const [photosAvaliable, setPhotos] = useState<string[]>([])
+    const [photosAvaliable, setPhotos] = useState<string[]>([]);
 
     useEffect(() => {
         if (!product_url) {

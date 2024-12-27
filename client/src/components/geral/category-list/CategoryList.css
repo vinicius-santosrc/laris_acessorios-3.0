@@ -11,9 +11,9 @@
 }
 
 .mySwiper {
-    display: flex;
+    display: flex !important;
     align-items: center;
-}
+} 
 
 @media screen and (max-width: 900px) {
     .category-list-content-mobile {

@@ -13,7 +13,7 @@ export interface CategoriesProps {
     products: any;
 }
 
-interface CategoryProps {
+export interface CategoryProps {
     title: string;
     redirect: string;
     photoURL: string;
@@ -145,7 +145,11 @@ export const menuItems = [
     },
     {
         title: "Coleções",
-        isLink: false
+        isLink: false,
+        subItems: [
+            { title: "Coleção A", href: "/colecao-a" },
+            { title: "Coleção B", href: "/colecao-b" }
+        ]
     },
     {
         title: "BlackFriday",
