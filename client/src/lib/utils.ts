@@ -116,3 +116,40 @@ export const defaultsCategories: CategoriesProps[] = [
     }
 
 ]
+
+export const menuItems = [
+    {
+        title: "Presentes",
+        isLink: true,
+        href: window.location.origin + '/collections/presentes'
+    },
+    {
+        title: "Lançamentos",
+        isLink: true,
+        href: window.location.origin + '/collections/lancamentos'
+    },
+    {
+        title: "Joias",
+        isLink: true,
+        href: window.location.origin + '/collections/joias'
+    },
+    {
+        title: "Semijoias",
+        isLink: true,
+        href: window.location.origin + '/collections/semijoias'
+    },
+    {
+        title: "Acessórios",
+        isLink: true,
+        href: window.location.origin + '/collections/acessorios'
+    },
+    {
+        title: "Coleções",
+        isLink: false
+    },
+    {
+        title: "BlackFriday",
+        isLink: true,
+        href: window.location.origin + '/collections/blackfriday'
+    }
+]

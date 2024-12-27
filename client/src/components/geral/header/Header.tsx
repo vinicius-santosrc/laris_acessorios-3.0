@@ -1,13 +1,14 @@
 import { useState } from "react"
 import TopBarComponent from "./topbar-component/TopBarComponent"
 import logoHeader from "../../../images/logo.svg"
-import { AccountIcon, FavoritesIcon, SacolaIcon, SearchIcon } from "../../icons/icons"
+import { AccountIcon, CloseIcon, FavoritesIcon, SacolaIcon, SearchIcon } from "../../icons/icons"
 import "./Header.css"
 import { Link } from "react-router-dom"
-import { MenuIcon } from "lucide-react"
+import { ArrowRight, ArrowRightIcon, ChevronRightIcon, ContactIcon, HeartIcon, MenuIcon, User2Icon } from "lucide-react"
 import { Button } from "../../ui/button"
 import { Image, Input } from "@chakra-ui/react"
 import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTitle, DrawerTrigger } from "../../../components/ui/drawer"
+import { menuItems } from "../../../lib/utils"
 
 const Header = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
@@ -94,7 +95,61 @@ const Header = () => {
                 <div className="header-app-top-content header-app-top-content__wrapper">
                     <section className="header-inside-content header-inside-content__search">
                         <Button variant="ghost" aria-label="Menu">
-                            <MenuIcon size={26} />
+                            <DrawerRoot
+                                placement={"start"}
+                                size={"full"}
+                            >
+                                <DrawerBackdrop />
+                                <DrawerTrigger>
+                                    <Button variant="ghost" aria-label="Sacola de Compras">
+                                        <MenuIcon size={22} />
+                                    </Button>
+                                </DrawerTrigger>
+                                <DrawerContent className="drawer-header-component">
+                                    <DrawerHeader className="drawer-header-component__header">
+                                        <DrawerCloseTrigger />
+                                        <DrawerTitle left={"0"} right={"0"} margin={"auto"} justifyContent={"center"}>
+                                            <img className="imageWrapper" src={logoHeader} alt="LARIS ACESSÓRIOS" />
+                                        </DrawerTitle>
+                                    </DrawerHeader>
+                                    <DrawerBody className="drawer-header-component__body">
+                                        <section className="drawer-menu-items">
+                                            {menuItems.map((item, id) => {
+                                                return (
+                                                    <Link to={item.href || "javascript:;"} key={id}>
+                                                        <div className="drawer-menu__item">
+                                                            <div>
+                                                                <p>{item.title}</p>
+                                                            </div>
+                                                            <div>
+                                                                <ChevronRightIcon />
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                )
+                                            })}
+                                        </section>
+                                    </DrawerBody>
+                                    <DrawerFooter>
+                                        <section className="footer-drawer">
+                                            <div className="footer-drawer-content">
+                                                <div className="item-footer">
+                                                    <User2Icon />
+                                                    <p>Minha conta</p>
+                                                </div>
+                                                <div className="item-footer">
+                                                    <HeartIcon />
+                                                    <p>Lista de desejos</p>
+                                                </div>
+                                                <div className="item-footer">
+                                                    <ContactIcon />
+                                                    <p>Entre em contato</p>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </DrawerFooter>
+                                </DrawerContent>
+                            </DrawerRoot>
                         </Button>
                         <Button variant="ghost" aria-label="Buscar">
                             <SearchIcon />
