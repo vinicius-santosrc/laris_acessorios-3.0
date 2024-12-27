@@ -117,7 +117,19 @@ export const defaultsCategories: CategoriesProps[] = [
 
 ]
 
-export const menuItems = [
+export interface MenuItemsProps {
+    title: string;
+    isLink: boolean;
+    href?: any;
+    subItems?: MenuSubItemsProps[]
+}
+
+export interface MenuSubItemsProps {
+    title: string;
+    href: string;
+}
+
+export const menuItems: MenuItemsProps[] = [
     {
         title: "Presentes",
         isLink: true,
@@ -142,6 +154,18 @@ export const menuItems = [
         title: "Acessórios",
         isLink: true,
         href: window.location.origin + '/collections/acessorios'
+    },
+    {
+        title: "Final de ano",
+        isLink: false,
+        subItems: [
+            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
+            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
+            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
+            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
+            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
+            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
+        ]
     },
     {
         title: "Coleções",

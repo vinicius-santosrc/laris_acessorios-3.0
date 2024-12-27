@@ -1,14 +1,12 @@
 import { useState } from "react"
 import TopBarComponent from "./topbar-component/TopBarComponent"
 import logoHeader from "../../../images/logo.svg"
-import { AccountIcon, FavoritesIcon, SacolaIcon, SearchIcon } from "../../icons/icons"
+import { AccountIcon, FavoritesIcon, SearchIcon } from "../../icons/icons"
 import "./Header.css"
 import { Link } from "react-router-dom"
-import { ChevronRightIcon, ContactIcon, HeartIcon, MenuIcon, User2Icon } from "lucide-react"
 import { Button } from "../../ui/button"
 import { Image, Input } from "@chakra-ui/react"
-import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTitle, DrawerTrigger } from "../../../components/ui/drawer"
-import { menuItems } from "../../../lib/utils"
+import { menuItems, MenuItemsProps } from "../../../lib/utils"
 import BagComponent from "./bag-component/BagComponent"
 import MenuComponent from "./menu-mobile/MenuComponent"
 
@@ -49,27 +47,13 @@ const Header = () => {
 
                 <nav className="header-app-bottom-content header-app-bottom-content__wrapper">
                     <div className="header-inside-bottom-content header-inside-bottom-content__redirects">
-                        <article className="redirect-item-content redirect-item-content__gifts">
-                            <Button>Presentes</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__launches">
-                            <Button>Lançamentos</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__jewels">
-                            <Button>Joias</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__semi-jewels">
-                            <Button>Semijoias</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__accessories">
-                            <Button>Acessórios</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__collections">
-                            <Button>Coleções</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__black-friday">
-                            <Button>Black Friday</Button>
-                        </article>
+                        {menuItems.map((categoria: MenuItemsProps) => {
+                            return (
+                                <article key={categoria.title} className="redirect-item-content redirect-item-content__gifts">
+                                    <Button onClick={() => categoria.isLink ? window.location.href = categoria.href : "javascript:;"}>{categoria.title}</Button>
+                                </article>
+                            )
+                        })}
                     </div>
                 </nav>
             </header>
