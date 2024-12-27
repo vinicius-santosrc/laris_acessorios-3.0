@@ -133,11 +133,11 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 40px;
+        margin-bottom: 30px;
     }
 
     .drawer-menu__item p {
-        font-size: 20px;
+        font-size: 16px;
     }
 
     .drawer-header-component__body {
@@ -182,16 +182,16 @@
     }
 
     .footer-drawer-content {
-        padding: 32px 44px;
+        padding: 16px 44px;
     }
 
     .item-footer {
         display: flex;
         gap: 14px ;
         color: white;
-        font-size: 20px;
+        font-size: 16px;
         padding: 16px 0px;
-        margin: 16px 0px;
+        margin: 0px 0px;
     }
 
     .drawer-header-component {

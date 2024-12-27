@@ -12,18 +12,18 @@ const Home = () => {
 
     const checkMobileView = () => {
         if (window.innerWidth <= 768) {
-            setIsMobile(true); // It's a mobile device
+            setIsMobile(true);
         } else {
-            setIsMobile(false); // It's a desktop
+            setIsMobile(false);
         }
     };
 
     useEffect(() => {
-        checkMobileView(); // Initial check
-        window.addEventListener("resize", checkMobileView); // Recheck on resize
+        checkMobileView();
+        window.addEventListener("resize", checkMobileView);
 
         return () => {
-            window.removeEventListener("resize", checkMobileView); // Clean up listener
+            window.removeEventListener("resize", checkMobileView);
         };
     }, []);
     
