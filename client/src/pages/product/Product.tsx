@@ -22,7 +22,6 @@ const ProductPage = () => {
     const [sizeSelected, setTamanho] = useState<any>("");
     const [sizesAvaliable, setSizes] = useState<any>(null);
     const [photosAvaliable, setPhotos] = useState<string[]>([]);
-    const [countErr, setCountErrs] = useState<number>(0);
 
     useEffect(() => {
         if (!product_url) {
@@ -38,13 +37,8 @@ const ProductPage = () => {
                 setSizes(JSON.parse(fetchedProduct.tamanhos))
                 setPhotos(JSON.parse(fetchedProduct.photoURL));
                 setLoading(false);
-                console.log(countErr)
             } catch (err: any) {
                 setError(err.toString());
-                if (countErr < 4) {
-                    fetchProduct(); 
-                }
-                setCountErrs(countErr + 1);
                 setLoading(false);
             }
         };

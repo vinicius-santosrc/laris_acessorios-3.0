@@ -145,7 +145,11 @@ export const menuItems = [
     },
     {
         title: "Coleções",
-        isLink: false
+        isLink: false,
+        subItems: [
+            { title: "Coleção A", href: "/colecao-a" },
+            { title: "Coleção B", href: "/colecao-b" }
+        ]
     },
     {
         title: "BlackFriday",

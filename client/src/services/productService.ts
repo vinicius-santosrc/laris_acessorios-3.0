@@ -6,6 +6,7 @@ const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
 //const url = process.env.REACT_APP_API_ENDPOINT_TEST;
 
 class productService {
+    private static countErr: number = 0;
     public static readonly getAll = async () => {
         try {
             const response = await fetch(`${url}${preEndpoint}${secretKey}/products`);
@@ -49,6 +50,10 @@ class productService {
             return foundProduct;
         } catch (err) {
             console.error(err);
+            if (this.countErr < 4) {
+                await productService.getByURL(URL)
+            }
+            this.countErr++;
             throw err;
         }
     };
