@@ -48,7 +48,7 @@ const ProductPage = () => {
 
     function addToCart() {
         if (product && sizeSelected) {
-            cartService.add(product);
+            cartService.add(product, sizeSelected);
         }
     }
 

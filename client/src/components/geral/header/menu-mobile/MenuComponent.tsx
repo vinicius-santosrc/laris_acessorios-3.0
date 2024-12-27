@@ -105,69 +105,64 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems }) 
                         </DrawerFooter>
                     </DrawerContent>
                 </DrawerRoot>
-            </Button>
-
-            {/* Coleção Submenu Drawer */}
-            <DrawerRoot
-                placement={"end"}
-                size={"full"}
-                open={isSubDrawerOpen}
-                onOpenChange={() => setIsSubDrawerOpen(!isSubDrawerOpen)}
-            >
-                <DrawerBackdrop />
-                <DrawerTrigger>
-                    <Button variant="ghost" aria-label="Submenu">
-                        {/* Placeholder button to trigger submenu */}
-                    </Button>
-                </DrawerTrigger>
-                <DrawerContent className="drawer-header-component sub-menu-drawer">
-                    <DrawerHeader className="drawer-header-component__header">
+                {/* Coleção Submenu Drawer */}
+                <DrawerRoot
+                    placement={"end"}
+                    size={"full"}
+                    open={isSubDrawerOpen}
+                    onOpenChange={() => setIsSubDrawerOpen(!isSubDrawerOpen)}
+                >
+                    <DrawerBackdrop />
+                    <DrawerTrigger />
+                    <DrawerContent className="drawer-header-component sub-menu-drawer">
                         <DrawerHeader className="drawer-header-component__header">
-                            <DrawerCloseTrigger />
-                            <DrawerTitle left={"0"} right={"0"} margin={"auto"} justifyContent={"center"}>
-                                <img className="imageWrapper" src={logoHeader} alt="LARIS ACESSÓRIOS" />
-                            </DrawerTitle>
-                            <DrawerDescription style={{textAlign: "center"}}>{ activeCollection}</DrawerDescription>
+                            <DrawerHeader className="drawer-header-component__header">
+                                <DrawerCloseTrigger />
+                                <DrawerTitle left={"0"} right={"0"} margin={"auto"} justifyContent={"center"}>
+                                    <img className="imageWrapper" src={logoHeader} alt="LARIS ACESSÓRIOS" />
+                                </DrawerTitle>
+                                <DrawerDescription style={{ textAlign: "center" }}>{activeCollection}</DrawerDescription>
+                            </DrawerHeader>
                         </DrawerHeader>
-                    </DrawerHeader>
-                    <DrawerBody className="drawer-header-component__body">
-                        <section className="drawer-menu-items">
-                            {menuItems
-                                .find(item => item.title === activeCollection)
-                                ?.subItems.map((subItem: any, subId: number) => (
-                                    <Link onClick={closeSubDrawer} to={subItem.href || "javascript:;"} key={subId}>
-                                        <div className="drawer-menu__item">
-                                            <div>
-                                                <p>{subItem.title}</p>
+                        <DrawerBody className="drawer-header-component__body">
+                            <section className="drawer-menu-items">
+                                {menuItems
+                                    .find(item => item.title === activeCollection)
+                                    ?.subItems.map((subItem: any, subId: number) => (
+                                        <Link onClick={closeSubDrawer} to={subItem.href || "javascript:;"} key={subId}>
+                                            <div className="drawer-menu__item">
+                                                <div>
+                                                    <p>{subItem.title}</p>
+                                                </div>
+                                                <div>
+                                                    <ChevronRightIcon />
+                                                </div>
                                             </div>
-                                            <div>
-                                                <ChevronRightIcon />
-                                            </div>
-                                        </div>
-                                    </Link>
-                                ))}
-                        </section>
-                    </DrawerBody>
-                    <DrawerFooter>
-                        <section className="footer-drawer">
-                            <div className="footer-drawer-content">
-                                <div className="item-footer">
-                                    <User2Icon />
-                                    <p>Minha conta</p>
+                                        </Link>
+                                    ))}
+                            </section>
+                        </DrawerBody>
+                        <DrawerFooter>
+                            <section className="footer-drawer">
+                                <div className="footer-drawer-content">
+                                    <div className="item-footer">
+                                        <User2Icon />
+                                        <p>Minha conta</p>
+                                    </div>
+                                    <div className="item-footer">
+                                        <HeartIcon />
+                                        <p>Lista de desejos</p>
+                                    </div>
+                                    <div className="item-footer">
+                                        <ContactIcon />
+                                        <p>Entre em contato</p>
+                                    </div>
                                 </div>
-                                <div className="item-footer">
-                                    <HeartIcon />
-                                    <p>Lista de desejos</p>
-                                </div>
-                                <div className="item-footer">
-                                    <ContactIcon />
-                                    <p>Entre em contato</p>
-                                </div>
-                            </div>
-                        </section>
-                    </DrawerFooter>
-                </DrawerContent>
-            </DrawerRoot>
+                            </section>
+                        </DrawerFooter>
+                    </DrawerContent>
+                </DrawerRoot>
+            </Button>
         </>
     )
 }
