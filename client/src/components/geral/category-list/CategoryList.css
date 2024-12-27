@@ -4,7 +4,6 @@
     justify-content: center;
     text-align: center;
     gap: 26px;
-    display: block;
 }
 
 .category-list-content-mobile {
@@ -23,7 +22,6 @@
         justify-content: center;
         text-align: center;
         gap: 26px;
-        display: block;
     }
 
     .category-list-content {

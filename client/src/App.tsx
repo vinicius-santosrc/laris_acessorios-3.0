@@ -5,11 +5,13 @@ import Home from './pages/main/home/Home';
 import { Provider } from './components/ui/provider';
 import Collections from './pages/collections/Collections';
 import ProductPage from './pages/product/Product';
+import { Toaster } from './components/ui/toaster';
 
 function App( Component: any, pageProps: any ) {
   return (
     <div className="page">
       <Provider>  
+        <Toaster />
         <BrowserRouter>
           <Header />
           <Routes>
