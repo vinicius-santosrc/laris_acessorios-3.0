@@ -204,4 +204,23 @@
         flex-direction: column;
         
     }
+
+        .search-btn-inside {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 20px;
+        }
+    
+        .search-btn-inside input {
+            width: 334px;
+            border-bottom: 1px solid black;
+        }
+    
+        .search-btn-inside button {
+            width: 155px;
+            background-color: #BE0A45;
+            color: white;
+            border: 1px solid #BE0A45
+        }
 }

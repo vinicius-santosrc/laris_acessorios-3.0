@@ -52,5 +52,6 @@ class productService {
             throw err;
         }
     };
+
 }
 export default productService;

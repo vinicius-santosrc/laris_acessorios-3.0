@@ -12,6 +12,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import { Pagination } from 'swiper/modules';
+import { cartService } from "../../services/cartService";
 
 const ProductPage = () => {
     const { product_url } = useParams<string>();
@@ -44,6 +45,12 @@ const ProductPage = () => {
 
         fetchProduct();
     }, [product_url]);
+
+    function addToCart() {
+        if (product && sizeSelected) {
+            cartService.add(product);
+        }
+    }
 
     if (loading) {
         return <div>Carregando...</div>;
@@ -135,7 +142,7 @@ const ProductPage = () => {
                             <div className="product-actions-btn">
                                 {product.disponibilidade == true ?
                                     <div className="product-buy-button">
-                                        <button>Comprar</button>
+                                        <button onClick={addToCart}>Comprar</button>
                                     </div>
                                     :
                                     <div className="product-buy-button">

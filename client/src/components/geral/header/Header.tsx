@@ -12,6 +12,7 @@ import { menuItems } from "../../../lib/utils"
 
 const Header = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
+    const [isSearchBoxOpen, setSearchbox] = useState<boolean>(false);
 
     return (
         <div className="header-full-component">
@@ -151,7 +152,7 @@ const Header = () => {
                                 </DrawerContent>
                             </DrawerRoot>
                         </Button>
-                        <Button variant="ghost" aria-label="Buscar">
+                        <Button onClick={() => { setSearchbox(!isSearchBoxOpen) }} variant="ghost" aria-label="Buscar">
                             <SearchIcon />
                         </Button>
                     </section>
@@ -188,6 +189,17 @@ const Header = () => {
                         </DrawerRoot>
                     </section>
                 </div>
+
+                {isSearchBoxOpen &&
+                    <section className="search-box-wrapper-mobile">
+                        <div className="search-box-wrapper-inside">
+                            <div className="search-btn-inside search-form">
+                                <Input className="search-input" placeholder="E-mail" />
+                                <Button className="search-btn" variant={"outline"}>Procurar</Button>
+                            </div>
+                        </div>
+                    </section>
+                }
 
                 <nav className="header-app-bottom-content header-app-bottom-content__wrapper">
                     <div className="header-inside-bottom-content header-inside-bottom-content__redirects">

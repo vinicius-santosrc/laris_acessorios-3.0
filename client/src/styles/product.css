@@ -91,7 +91,6 @@
 .product-buy-button button {
     width: 100%;
     font-size: 14px;
-    font-size: 600;
     padding: 14px;
     background-color: black;
     text-align: center;
@@ -108,7 +107,6 @@
 
 .product-description-content h2 {
     font-size: 14px;
-    font-weight: 600;
     margin-bottom: 16px;
 }
 
