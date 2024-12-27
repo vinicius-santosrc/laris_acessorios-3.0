@@ -13,7 +13,7 @@ export interface CategoriesProps {
     products: any;
 }
 
-interface CategoryProps {
+export interface CategoryProps {
     title: string;
     redirect: string;
     photoURL: string;
