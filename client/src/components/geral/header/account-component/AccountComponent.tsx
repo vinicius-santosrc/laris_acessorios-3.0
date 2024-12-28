@@ -85,7 +85,7 @@ const AccountComponent = () => {
                     <AccountIcon />
                 </Button>
             </DialogTrigger>
-            <DialogContent className={isMobile ? "dialogContentMobile" : ""}>
+            <DialogContent backgroundColor={"white"} className={isMobile ? "dialogContentMobile" : ""}>
                 <DialogBody>
                     <FormAccount
                         photoRef={formData[0].photoURL}

@@ -24,7 +24,6 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
         setBagItems(cartService.get());
     };
 
-    // Cálculo do subtotal, desconto e total
     const subtotal = bagItems.reduce((acc, item) => {
         const priceWithDiscount = item.price - item.desconto;
         return acc + priceWithDiscount;
