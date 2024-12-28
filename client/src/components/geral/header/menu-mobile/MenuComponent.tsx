@@ -29,6 +29,29 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems }) 
         setActiveCollection(null);
     }
 
+    const FooterHeader = () => {
+        return (
+            <DrawerFooter>
+                <section className="footer-drawer">
+                    <div className="footer-drawer-content">
+                        <div className="item-footer">
+                            <User2Icon />
+                            <p>Minha conta</p>
+                        </div>
+                        <div className="item-footer">
+                            <HeartIcon />
+                            <p>Lista de desejos</p>
+                        </div>
+                        <div className="item-footer">
+                            <ContactIcon />
+                            <p>Entre em contato</p>
+                        </div>
+                    </div>
+                </section>
+            </DrawerFooter>
+        )
+    }
+
     return (
         <>
             {/* Menu Principal Drawer */}
@@ -85,24 +108,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems }) 
                                 })}
                             </section>
                         </DrawerBody>
-                        <DrawerFooter>
-                            <section className="footer-drawer">
-                                <div className="footer-drawer-content">
-                                    <div className="item-footer">
-                                        <User2Icon />
-                                        <p>Minha conta</p>
-                                    </div>
-                                    <div className="item-footer">
-                                        <HeartIcon />
-                                        <p>Lista de desejos</p>
-                                    </div>
-                                    <div className="item-footer">
-                                        <ContactIcon />
-                                        <p>Entre em contato</p>
-                                    </div>
-                                </div>
-                            </section>
-                        </DrawerFooter>
+                        <FooterHeader />
                     </DrawerContent>
                 </DrawerRoot>
                 {/* Coleção Submenu Drawer */}
@@ -142,24 +148,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems }) 
                                     ))}
                             </section>
                         </DrawerBody>
-                        <DrawerFooter>
-                            <section className="footer-drawer">
-                                <div className="footer-drawer-content">
-                                    <div className="item-footer">
-                                        <User2Icon />
-                                        <p>Minha conta</p>
-                                    </div>
-                                    <div className="item-footer">
-                                        <HeartIcon />
-                                        <p>Lista de desejos</p>
-                                    </div>
-                                    <div className="item-footer">
-                                        <ContactIcon />
-                                        <p>Entre em contato</p>
-                                    </div>
-                                </div>
-                            </section>
-                        </DrawerFooter>
+                        <FooterHeader />
                     </DrawerContent>
                 </DrawerRoot>
             </Button>
