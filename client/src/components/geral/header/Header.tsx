@@ -1,7 +1,7 @@
 import { useState } from "react"
 import TopBarComponent from "./topbar-component/TopBarComponent"
 import logoHeader from "../../../images/logo.svg"
-import { AccountIcon, FavoritesIcon, SearchIcon } from "../../icons/icons"
+import { FavoritesIcon, SearchIcon } from "../../icons/icons"
 import "./Header.css"
 import { Link } from "react-router-dom"
 import { Button } from "../../ui/button"
@@ -9,6 +9,7 @@ import { Image, Input } from "@chakra-ui/react"
 import { menuItems, MenuItemsProps } from "../../../lib/utils"
 import BagComponent from "./bag-component/BagComponent"
 import MenuComponent from "./menu-mobile/MenuComponent"
+import AccountComponent from "./account-component/AccountComponent"
 
 const Header = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
@@ -33,9 +34,7 @@ const Header = () => {
                     </section>
 
                     <section className="header-inside-content header-inside-content__icons">
-                        <Button variant="ghost" aria-label="Conta">
-                            <AccountIcon />
-                        </Button>
+                        <AccountComponent />
                         <Button variant="ghost" aria-label="Favoritos">
                             <FavoritesIcon />
                         </Button>
@@ -71,9 +70,7 @@ const Header = () => {
                     </section>
 
                     <section className="header-inside-content header-inside-content__icons">
-                        <Button variant="ghost" aria-label="Conta">
-                            <AccountIcon />
-                        </Button>
+                        <AccountComponent />
                         <BagComponent setBagOpen={setBagOpen} isBagOpen={isBagOpen} />
                     </section>
                 </div>

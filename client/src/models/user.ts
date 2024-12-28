@@ -1,1 +1,9 @@
-export const paymenadasdt = "a";
+class userService {
+    constructor(
+
+    ) { }
+
+    static get() {
+        
+    }
+}
