@@ -103,6 +103,36 @@
   justify-content: space-between;
 }
 
+.bag-item {
+    display: flex;
+    align-items: top;
+    justify-content: space-between;
+    width: 95%;
+    margin: auto;
+    gap: 10px;
+}
+
+.bag-item img {
+  min-width: 100px;
+    width: 100px;
+    height: 100px;
+    background: #f7f7f7;
+}
+
+.bag-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bag-item__size {
+  font-size: 12px;
+}
+
+.bag-item__price {
+  color: #be0a45;
+}
+
 .form-field {
   display: flex;
   flex-direction: column;
@@ -130,6 +160,36 @@
 
 .breaklineHeader {
   font-size: 24px;
+}
+
+.footerBag {
+  margin: auto;
+  padding: 16px 22px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.finalizeBtn {
+  color: white;
+  background-color: #be0a45;
+  margin: auto;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.footerItems {
+  width: 100%;
+  justify-content: space-between;
+  padding: 5px 0px;
+}
+
+.itemFooter {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  padding: 5px 0px;
 }
 
 .checkbox {
