@@ -1,25 +1,50 @@
-import { useState } from "react"
-import TopBarComponent from "./topbar-component/TopBarComponent"
-import logoHeader from "../../../images/logo.svg"
-import { FavoritesIcon, SearchIcon } from "../../icons/icons"
-import "./Header.css"
-import { Link } from "react-router-dom"
-import { Button } from "../../ui/button"
-import { Image, Input } from "@chakra-ui/react"
-import { menuItems, MenuItemsProps } from "../../../lib/utils"
-import BagComponent from "./bag-component/BagComponent"
-import MenuComponent from "./menu-mobile/MenuComponent"
-import AccountComponent from "./account-component/AccountComponent"
+import { useState } from "react";
+import TopBarComponent from "./topbar-component/TopBarComponent";
+import logoHeader from "../../../images/logo.svg";
+import { FavoritesIcon, SearchIcon } from "../../icons/icons";
+import "./Header.css";
+import { Link } from "react-router-dom";
+import { Button } from "../../ui/button";
+import { Image, Input } from "@chakra-ui/react";
+import { menuItems, MenuItemsProps } from "../../../lib/utils";
+import BagComponent from "./bag-component/BagComponent";
+import MenuComponent from "./menu-mobile/MenuComponent";
+import AccountComponent from "./account-component/AccountComponent";
+import SubHeaderComponent from "./SubHeaderComponent";
 
 const Header = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
     const [isSearchBoxOpen, setSearchbox] = useState<boolean>(false);
+    const [isItemHover, setItemHover] = useState<MenuItemsProps | null>(null);
+    const [isSubHeaderOpen, setSubHeaderOpen] = useState<boolean>(false);
+    const [isSubMenuHovered, setIsSubMenuHovered] = useState<boolean>(false);
+
+    const handleMouseEnter = (categoria: MenuItemsProps) => {
+        setItemHover(categoria);
+        setSubHeaderOpen(true);
+    };
+
+    const handleMouseLeave = () => {
+        setTimeout(() => {
+            if (!isSubMenuHovered) {
+                setItemHover(null);
+                setSubHeaderOpen(false);
+            }
+        }, 1500);
+    };
+
+    const handleSubHeaderMouseEnter = () => {
+        setIsSubMenuHovered(true);
+    };
+
+    const handleSubHeaderMouseLeave = () => {
+        setIsSubMenuHovered(false);
+        setSubHeaderOpen(false);
+    };
 
     return (
         <div className="header-full-component">
-            <TopBarComponent
-                text="Compre pelo WhatsApp +55 35 99739-4181"
-            />
+            <TopBarComponent text="Compre pelo WhatsApp +55 35 99739-4181" />
             <header className="header-application header-application__wrapper">
                 <div className="header-app-top-content header-app-top-content__wrapper">
                     <section className="header-inside-content header-inside-content__search">
@@ -30,7 +55,9 @@ const Header = () => {
                     </section>
 
                     <section className="header-inside-content header-inside-content__logo">
-                        <Link to={window.location.origin}><Image src={logoHeader} alt="Logotipo" className="logo-image" /></Link>
+                        <Link to={window.location.origin}>
+                            <Image src={logoHeader} alt="Logotipo" className="logo-image" />
+                        </Link>
                     </section>
 
                     <section className="header-inside-content header-inside-content__icons">
@@ -42,31 +69,51 @@ const Header = () => {
                     </section>
                 </div>
 
-
-
                 <nav className="header-app-bottom-content header-app-bottom-content__wrapper">
                     <div className="header-inside-bottom-content header-inside-bottom-content__redirects">
                         {menuItems.map((categoria: MenuItemsProps) => {
                             return (
-                                <article key={categoria.title} className="redirect-item-content redirect-item-content__gifts">
-                                    <Button onClick={() => categoria.isLink ? window.location.href = categoria.href : "javascript:;"}>{categoria.title}</Button>
+                                <article
+                                    key={categoria.title}
+                                    className="redirect-item-content redirect-item-content__gifts"
+                                    onMouseEnter={() => handleMouseEnter(categoria)} // Ativar hover
+                                    onMouseLeave={handleMouseLeave} // Desativar hover
+                                >
+                                    <Button
+                                        onClick={() =>
+                                            categoria.isLink
+                                                ? (window.location.href = categoria.href)
+                                                : "javascript:;"
+                                        }
+                                    >
+                                        {categoria.title}
+                                    </Button>
                                 </article>
-                            )
+                            );
                         })}
                     </div>
                 </nav>
             </header>
+
             <header className="header-application-mobile header-application__wrapper">
                 <div className="header-app-top-content header-app-top-content__wrapper">
                     <section className="header-inside-content header-inside-content__search">
                         <MenuComponent logoHeader={logoHeader} menuItems={menuItems} />
-                        <Button onClick={() => { setSearchbox(!isSearchBoxOpen) }} variant="ghost" aria-label="Buscar">
+                        <Button
+                            onClick={() => {
+                                setSearchbox(!isSearchBoxOpen);
+                            }}
+                            variant="ghost"
+                            aria-label="Buscar"
+                        >
                             <SearchIcon />
                         </Button>
                     </section>
 
                     <section className="header-inside-content header-inside-content__logo">
-                        <Link to={window.location.origin}><Image src={logoHeader} alt="Logotipo" className="logo-image" /></Link>
+                        <Link to={window.location.origin}>
+                            <Image src={logoHeader} alt="Logotipo" className="logo-image" />
+                        </Link>
                     </section>
 
                     <section className="header-inside-content header-inside-content__icons">
@@ -75,45 +122,29 @@ const Header = () => {
                     </section>
                 </div>
 
-                {isSearchBoxOpen &&
+                {isSearchBoxOpen && (
                     <section className="search-box-wrapper-mobile">
                         <div className="search-box-wrapper-inside">
                             <div className="search-btn-inside search-form">
                                 <Input className="search-input" placeholder="Buscar produtos" />
-                                <Button className="search-btn" variant={"outline"}>BUSCAR</Button>
+                                <Button className="search-btn" variant={"outline"}>
+                                    BUSCAR
+                                </Button>
                             </div>
                         </div>
                     </section>
-                }
-
-                <nav className="header-app-bottom-content header-app-bottom-content__wrapper">
-                    <div className="header-inside-bottom-content header-inside-bottom-content__redirects">
-                        <article className="redirect-item-content redirect-item-content__gifts">
-                            <Button>Presentes</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__launches">
-                            <Button>Lançamentos</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__jewels">
-                            <Button>Joias</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__semi-jewels">
-                            <Button>Semijoias</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__accessories">
-                            <Button>Acessórios</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__collections">
-                            <Button>Coleções</Button>
-                        </article>
-                        <article className="redirect-item-content redirect-item-content__black-friday">
-                            <Button>Black Friday</Button>
-                        </article>
-                    </div>
-                </nav>
+                )}
             </header>
-        </div>
-    )
-}
 
-export default Header
+            <section
+                className="subHeader"
+                onMouseEnter={handleSubHeaderMouseEnter}
+                onMouseLeave={handleSubHeaderMouseLeave}
+            >
+                <SubHeaderComponent itemHover={isItemHover} isOpen={isSubHeaderOpen} />
+            </section>
+        </div>
+    );
+};
+
+export default Header;

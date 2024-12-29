@@ -1,3 +1,12 @@
+/**
+ * Creation Date: 28/12/2024
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2023, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+ */
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AccountIcon } from "../../../../components/icons/icons";
@@ -13,6 +22,9 @@ import { FormAccount } from "../FormAccount";
 import { Checkbox } from "../../../../components/ui/checkbox";
 import "../Header.css";
 import LogoHeader from "../../../../images/logo.webp";
+import authService from "../../../../services/authService";
+import { toaster } from "../../../../components/ui/toaster";
+import { UserAuthProps } from "@/lib/utils";
 
 const AccountComponent = () => {
     const [isRegistering, setIsRegistering] = useState<boolean>(false);
@@ -25,8 +37,8 @@ const AccountComponent = () => {
         btnLabel: "Entrar",
         photoURL: "https://uploaddeimagens.com.br/images/004/878/465/full/IMG_7323.png?1735408579",
         btnForm: [
-            { label: "E-mail", value: "", required: true },
-            { label: "Senha", value: "", required: true },
+            { label: "E-mail", value: "", json: 'email', required: true },
+            { label: "Senha", value: "", json: 'senha', required: true },
         ]
     }];
 
@@ -35,10 +47,10 @@ const AccountComponent = () => {
         btnLabel: "Cadastrar",
         photoURL: "https://uploaddeimagens.com.br/images/004/878/465/full/IMG_7323.png?1735408579",
         btnForm: [
-            { label: "Nome completo", value: "", required: true },
-            { label: "E-mail", value: "", required: true },
-            { label: "CPF", value: "", required: true },
-            { label: "Senha", value: "", required: true },
+            { label: "Nome completo", value: "", json: 'name', required: true },
+            { label: "E-mail", value: "", json: 'email', required: true },
+            { label: "CPF", value: "", json: 'cpf', required: true },
+            { label: "Senha", value: "", json: 'senha', required: true },
         ]
     }];
 
@@ -61,10 +73,58 @@ const AccountComponent = () => {
             setError("Preencha todos os campos obrigatórios.");
         } else {
             setError(null);
-            console.log(JSON.stringify(formValues, null, 2));
-            alert(JSON.stringify(formValues, null, 2));
+            const email: string = formValues["E-mail"];
+            const password: string = formValues["Senha"];
+            const nome_completo: string = formValues["Nome Completo"];
+            const cpf: string = formValues["CPF"]
+
+            const User: UserAuthProps = {
+                nome_completo: nome_completo,
+                email: email,
+                cpf: cpf,
+                password: password
+            }
+
+            if (!isRegistering) {
+                authService.login(User.email, User.password).then(response => {
+                    toaster.create({
+                        title: "Usuário logado com sucesso",
+                        type: "success",
+                    });
+                }).catch(error => {
+                    toaster.create({
+                        title: "Ocorreu um erro durante o credenciamento: " + error,
+                        type: "error",
+                    });
+                    console.error(error);
+                });
+            }
+            else {
+                authService.register(User).then(response => {
+                    toaster.create({
+                        title: "Usuário criado com sucesso",
+                        type: "success",
+                    });
+                }).catch(error => {
+                    toaster.create({
+                        title: "Ocorreu um erro durante criamento da conta: " + error,
+                        type: "error",
+                    });
+                    console.error(error);
+                });
+            }
         }
     };
+
+    async function checkIfIsLogged() {
+        const isLogged: boolean = await authService.isLogged();
+
+        if (isLogged) {
+            window.location.href = window.location.origin + '/account';
+        }
+
+    }
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -81,7 +141,7 @@ const AccountComponent = () => {
     return (
         <DialogRoot size={"lg"} motionPreset="slide-in-bottom" placement="center">
             <DialogTrigger asChild>
-                <Button variant="ghost" aria-label="Conta">
+                <Button onClick={checkIfIsLogged} variant="ghost" aria-label="Conta">
                     <AccountIcon />
                 </Button>
             </DialogTrigger>

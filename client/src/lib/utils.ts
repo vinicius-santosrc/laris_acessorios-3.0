@@ -129,6 +129,13 @@ export interface MenuSubItemsProps {
     href: string;
 }
 
+export interface UserAuthProps {
+    email: string;
+    cpf: string;
+    nome_completo: string;
+    password: string;
+}
+
 export const menuItems: MenuItemsProps[] = [
     {
         title: "Presentes",
@@ -138,33 +145,40 @@ export const menuItems: MenuItemsProps[] = [
     {
         title: "Lançamentos",
         isLink: true,
-        href: window.location.origin + '/collections/lancamentos'
+        href: window.location.origin + '/collections/lancamentos',
     },
     {
         title: "Joias",
         isLink: true,
-        href: window.location.origin + '/collections/joias'
+        href: window.location.origin + '/collections/joias',
+        subItems: [
+            { title: "Colares", href: window.location.origin + '/collections/colar' },
+            { title: "Brincos", href: window.location.origin + '/collections/brinco' },
+            { title: "Aneis", href: window.location.origin + '/collections/anel' },
+            { title: "Pulseiras", href: window.location.origin + '/collections/pulseira' },
+            { title: "Braceletes", href: window.location.origin + '/collections/bracelete' },
+            { title: "Piercings", href: window.location.origin + '/collections/piercing' },
+        ]
     },
     {
         title: "Semijoias",
         isLink: true,
-        href: window.location.origin + '/collections/semijoias'
+        href: window.location.origin + '/collections/semijoias',
+        subItems: [
+            { title: "Colares", href: window.location.origin + '/collections/colar' },
+            { title: "Brincos", href: window.location.origin + '/collections/brinco' },
+            { title: "Aneis", href: window.location.origin + '/collections/anel' },
+            { title: "Pulseiras", href: window.location.origin + '/collections/pulseira' },
+            { title: "Braceletes", href: window.location.origin + '/collections/bracelete' },
+            { title: "Piercings", href: window.location.origin + '/collections/piercing' },
+        ]
     },
     {
         title: "Acessórios",
         isLink: true,
-        href: window.location.origin + '/collections/acessorios'
-    },
-    {
-        title: "Final de ano",
-        isLink: false,
+        href: window.location.origin + '/collections/acessorios',
         subItems: [
-            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
-            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
-            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
-            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
-            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
-            { title: "Aneis", href: window.location.origin + '/collections/aneis' },
+            { title: "Porta-Joias", href: window.location.origin + '/collections/porta-joias' }
         ]
     },
     {
@@ -176,8 +190,11 @@ export const menuItems: MenuItemsProps[] = [
         ]
     },
     {
-        title: "BlackFriday",
-        isLink: true,
-        href: window.location.origin + '/collections/blackfriday'
-    }
+        title: "Final de ano",
+        isLink: false,
+        subItems: [
+            { title: "Best Sellers", href: window.location.origin + '/collections/best-sellers' },
+            { title: "Para Reveillon", href: window.location.origin + '/collections/reveillon' }
+        ]
+    },
 ]
