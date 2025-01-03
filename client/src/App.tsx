@@ -6,6 +6,7 @@ import { Provider } from './components/ui/provider';
 import Collections from './pages/collections/Collections';
 import ProductPage from './pages/product/Product';
 import { Toaster } from './components/ui/toaster';
+import CheckoutPage from './pages/checkout/CheckoutPage';
 
 function App( Component: any, pageProps: any ) {
   return (
@@ -18,6 +19,7 @@ function App( Component: any, pageProps: any ) {
             <Route path='/' element={<Home />}></Route>
             <Route path='/collections/:collection_name' element={<Collections />}></Route>
             <Route path='/product/:product_url' element={<ProductPage />}></Route>
+            <Route path='/checkout' element={<CheckoutPage />}></Route>
           </Routes>
         </BrowserRouter>
       </Provider>

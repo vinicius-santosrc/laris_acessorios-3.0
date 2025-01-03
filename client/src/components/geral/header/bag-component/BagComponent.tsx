@@ -33,6 +33,10 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
         return acc + item.desconto;
     }, 0);
 
+    const finalizeBtn = () => {
+        return window.location.href = window.location.origin + "/checkout"
+    }
+
     const total = subtotal - totalDiscount;
 
     const stats = [
@@ -98,7 +102,7 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
                                 <DataListItem className="itemFooter" key={item.label} label={item.label} value={item.value} />
                             ))}
                         </DataListRoot>
-                        <Button className="finalizeBtn">FINALIZAR COMPRA</Button>
+                        <Button onClick={finalizeBtn} className="finalizeBtn">FINALIZAR COMPRA</Button>
                     </DrawerFooter>
                 }
                 <DrawerCloseTrigger />

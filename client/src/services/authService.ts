@@ -91,7 +91,7 @@ class AuthService {
             }
             return false;
         } catch (error) {
-            return false;
+            console.error(error)
             throw error;
         }
     }

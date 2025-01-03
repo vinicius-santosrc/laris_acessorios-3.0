@@ -1,3 +1,4 @@
+import { createListCollection } from "@chakra-ui/react";
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -135,6 +136,25 @@ export interface UserAuthProps {
     nome_completo: string;
     password: string;
 }
+
+export const EnumPaymentMethod = {
+    CreditCard: 0,
+    DebitCard: 1,
+    Pix: 2
+}
+
+export interface paymentInsideMethod {
+    label: string;
+    value: number;
+}
+
+export const paymentsMethods = createListCollection({
+    items: [
+        { label: "Cartão de Crédito", value: EnumPaymentMethod.CreditCard },
+        { label: "Cartão de Débito", value: EnumPaymentMethod.DebitCard },
+        { label: "Pix", value: EnumPaymentMethod.Pix }
+    ]
+})
 
 export const menuItems: MenuItemsProps[] = [
     {
