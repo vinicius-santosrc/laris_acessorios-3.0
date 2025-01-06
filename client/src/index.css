@@ -70,12 +70,12 @@
 }
 
 html {
-  padding-top: 185px;
+  margin-top: 185px;
   background-color: white !important;
 }
 
 @media screen and (max-width: 900px) {
   html {
-    padding-top: 90px;
+    margin-top: 90px;
   }
 }

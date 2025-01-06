@@ -1,15 +1,16 @@
 /**
- * Creation Date: 13/12/2024
+ * Creation Date: 27/12/2023
  * Author: Vinícius da Silva Santos
  * Coordinator: Larissa Alves de Andrade Moreira
  * Developed by: Lari's Acessórios Team
- * Copyright 2024, LARI'S ACESSÓRIOS
+ * Copyright 2023, LARI'S ACESSÓRIOS
  * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
 */
 
 require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
+const { resolve } = require("path");
 
 const app = express();
 const cors = require('cors');
@@ -20,7 +21,13 @@ const user = process.env.DB_USER;
 const pass = process.env.DB_PASSWORD;
 const secretKey = process.env.secretKey;
 
-const connection = mysql.createPool({
+const maxRetries = 5;
+let attempts = 0;
+
+const Stripe = require('stripe');
+const stripe = Stripe('sk_test_51QRNKlGVqOlbWdKNOt6ee3r4mPRAYIqGGPykMoiBnZTWUkSZ2wPs7MnyD3st6y2mXb6EJjXQk22f4pVtZ388YdoS00lrrHHmEG');
+
+const connection = mysql.createConnection({
     host: host,
     user: user,
     password: pass,
@@ -29,12 +36,59 @@ const connection = mysql.createPool({
         rejectUnauthorized: false,
     },
     connectionLimit: 50,
-    connectTimeout: 10000,
-    waitForConnections: true,
+    waitForConnections: true
+});
+
+connection.connect((err) => {
+    if (err) {
+        if (attempts < maxRetries) {
+            console.log(`Connection failed, retrying... (${attempts + 1})`);
+            attempts++;
+            setTimeout(connectToDatabase, 3000);  // Retry after 3 seconds
+        } else {
+            console.error('Max retries reached, could not connect to the database');
+        }
+    } else {
+        console.log('Connected to the database');
+    }
 });
 
 app.use(express.json());
 app.use(cors());
+
+//*?//
+//Stripe Pagamentos
+
+app.get("/", (req, res) => {
+    const path = resolve("./index.html");
+    res.sendFile(path);
+});
+
+app.get("/config", (req, res) => {
+    res.send({
+        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+    });
+});
+
+app.post("/create-payment-intent", async (req, res) => {
+    try {
+        const paymentIntent = await stripe.paymentIntents.create({
+            currency: "EUR",
+            amount: 1999,
+            automatic_payment_methods: { enabled: true },
+        });
+
+        res.send({
+            clientSecret: paymentIntent.client_secret,
+        });
+    } catch (e) {
+        return res.status(400).send({
+            error: {
+                message: e.message,
+            },
+        });
+    }
+});
 
 app.get(`/api/v1/${secretKey}/admins`, (req, res) => {
     connection.query('SELECT * FROM administradores', (err, result) => {
@@ -265,6 +319,23 @@ app.post(`/api/v1/${secretKey}/products/add`, (req, res) => {
         }
     });
 });
+
+app.post(`/api/v1/${secretKey}/products/searchbyurl`, (req, res) => {
+    const item = req.body;
+    const url = item.url;
+
+    // Realiza a consulta no banco de dados para encontrar o produto com a URL fornecida
+    connection.query('SELECT * FROM produtos WHERE url = ?', [url], (err, result) => {
+        if (err) {
+            res.status(500).json({ error: 'Erro ao obter dados' });
+        } else if (result.length > 0) {
+            res.json(result[0]);  // Retorna o primeiro produto encontrado
+        } else {
+            res.status(404).json({ message: 'Produto não encontrado' });
+        }
+    });
+});
+
 
 //REQUISIÇÃO DE ORDERS
 

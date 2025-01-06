@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import TopBarComponent from "./topbar-component/TopBarComponent";
 import logoHeader from "../../../images/logo.svg";
 import { FavoritesIcon, SearchIcon } from "../../icons/icons";
@@ -41,6 +41,49 @@ const Header = () => {
         setIsSubMenuHovered(false);
         setSubHeaderOpen(false);
     };
+
+    if (window.location.href.includes("/checkout")) {
+        return (
+            <React.Fragment>
+                <div className="header-full-component">
+                    <TopBarComponent text="Compre pelo WhatsApp +55 35 99739-4181" />
+                    <header className="header-application header-application__wrapper">
+                        <div className="header-app-top-content header-app-top-content__wrapper">
+                            <section className="header-inside-content header-inside-content__search">
+                            </section>
+
+                            <section className="header-inside-content header-inside-content__logo">
+                                <Link to={window.location.origin} target="_parent">
+                                    <Image src={logoHeader} alt="Logotipo" className="logo-image" />
+                                </Link>
+                            </section>
+
+                            <section className="header-inside-content header-inside-content__icons">
+
+                            </section>
+                        </div>
+                    </header>
+                </div>
+
+                <header className={"header-application-mobile header-application__wrapper " + window.location.href.includes('/checkout') && "header-mobile-checkout"}>
+                    <div className="header-app-top-content header-app-top-content__wrapper">
+                        <section className="header-inside-content header-inside-content__search">
+                        </section>
+
+                        <section className="header-inside-content header-inside-content__logo">
+                            <Link to={window.location.origin} target="_parent">
+                                <Image src={logoHeader} alt="Logotipo" className="logo-image" />
+                            </Link>
+                        </section>
+
+                        <section className="header-inside-content header-inside-content__icons">
+                        </section>
+                    </div>
+                </header>
+            </React.Fragment>
+
+        )
+    }
 
     return (
         <div className="header-full-component">
