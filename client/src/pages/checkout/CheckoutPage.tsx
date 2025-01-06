@@ -4,13 +4,22 @@ import { DataListItem, DataListRoot } from "../../components/ui/data-list";
 import { Edit, ShoppingCartIcon, Trash2Icon } from "lucide-react";
 import { Product } from "../../models/product";
 import { Button } from "../../components/ui/button";
-import { StepsCompletedContent, StepsContent, StepsItem, StepsList, StepsNextTrigger, StepsRoot } from "../../components/ui/steps";
+import { StepsContent, StepsItem, StepsList, StepsNextTrigger, StepsRoot } from "../../components/ui/steps";
 import { Input } from "@chakra-ui/react";
 import { LuCalendar, LuUser, LuWallet } from "react-icons/lu";
 import { SelectContent, SelectItem, SelectLabel, SelectRoot, SelectTrigger, SelectValueText } from "../../components/ui/select";
-import { paymentsMethods } from "../../lib/utils";
+import { EnumPaymentMethod, formatarCartaoCredito, formatCEP, formatCPF, formatTelefone, getCEPJson, parcelamentosDisponiveis, paymentInsideMethod, paymentsMethods } from "../../lib/utils";
+import { toaster } from "../../components/ui/toaster";
+import { Loader } from "../../components/ui/loader";
+import authService from "../../services/authService";
+import { UserProps } from "../../models/user";
+import { CepProps } from "../../models/cep";
+import { orderService } from "../../services/orderService";
+import { PaymentElement } from "@stripe/react-stripe-js";
+import { useElements, useStripe } from "@stripe/react-stripe-js";
 
-const CheckoutPage = () => {
+
+const CheckoutPage = ({ clientSecret }: any) => {
     const [step, setStep] = useState<number>(0);
     const [items, setItems] = useState<any[]>([]);
     const [subtotal, setSubtotal] = useState<number>(0);
@@ -22,13 +31,41 @@ const CheckoutPage = () => {
     const [shippingCost, setShippingCost] = useState<number | null>(null);
     const [isCepValid, setIsCepValid] = useState<boolean>(false);
 
-    // States for Step 2
+    const [estado, setEstado] = useState<any>(null);
+    const [cidade, setcidade] = useState<any>(null);
+    const [bairro, setbairro] = useState<any>(null);
+    const [endereco, setendereco] = useState<any>(null);
+    const [numero, setnumero] = useState<any>(null);
+    const [referencia, setreferencia] = useState<any>(null);
+
+    // States for Step 0
     const [email, setEmail] = useState<string>("");
     const [name, setName] = useState<string>("");
-    const [surname, setSurname] = useState<string>("");
-    const [address, setAddress] = useState<string>("");
+    const [cpf, setCPF] = useState<string>("");
+    const [telefone, setTel] = useState<string>("");
+
+    //States for Step 1
+
+    const [paymentMethodSelected, setPaymentMethodSelected] = useState<any>();
+    const [parcelamento, setParcelamento] = useState<any>();
+    const [numeroCartao, setNumeroCartao] = useState<any>();
+    const [cardName, setNameCard] = useState<string>("");
+    const [validadeCard, setValidade] = useState<any>()
+    const [cvv, setCVV] = useState<any>();
+    const [cpfTitular, setCPFTITULAR] = useState<any>();
 
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    const [isLoading, setLoading] = useState(true);
+
+    const [userAtual, setUser] = useState<UserProps>();
+
+    const stripe = useStripe();
+    const elements = useElements();
+
+    if (!stripe || !elements) {
+        console.error("Stripe ou Elements não inicializados");
+    }
 
     const checkMobile = () => {
         setIsMobile(window.innerWidth <= 768);
@@ -43,21 +80,44 @@ const CheckoutPage = () => {
     }, []);
 
     useEffect(() => {
-        const storedItems = localStorage.getItem("sacola");
+        const fetchUserData = async () => {
+            const storedItems = localStorage.getItem("sacola");
 
-        if (storedItems) {
-            try {
-                const parsedItems = JSON.parse(storedItems);
-                if (Array.isArray(parsedItems)) {
-                    setItems(parsedItems);
-                    calculateTotal(parsedItems);
-                } else {
-                    console.warn("Formato de dados inválido para os itens da sacola");
+            setLoading(true);
+            if (storedItems) {
+                try {
+                    const parsedItems = JSON.parse(storedItems);
+                    if (Array.isArray(parsedItems)) {
+                        setItems(parsedItems);
+                        calculateTotal(parsedItems);
+
+                        try {
+                            const res = await authService.getUserData();
+                            const userContent: UserProps = await authService.getUserByEmail(res.email);
+                            setUser(userContent);
+
+                            setEmail(userContent.email);
+                            setCPF(formatCPF(userContent.cpf));
+                            setName(userContent.nome_completo);
+                        } catch (error) {
+                            console.error("Erro ao obter dados do usuário", error);
+                        }
+
+                        setLoading(false);
+                    } else {
+                        console.warn("Formato de dados inválido para os itens da sacola");
+                        setLoading(false);
+                    }
+                } catch (error) {
+                    console.error("Erro ao parsear os itens da sacola", error);
+                    setLoading(false);
                 }
-            } catch (error) {
-                console.error("Erro ao parsear os itens da sacola", error);
+            } else {
+                setLoading(false);
             }
-        }
+        };
+
+        fetchUserData();
     }, []);
 
     const calculateTotal = (items: any[]) => {
@@ -74,13 +134,8 @@ const CheckoutPage = () => {
         calculateTotal(updatedItems);
     };
 
-    const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputCep = e.target.value;
-        setCep(inputCep);
-    };
-
     const fetchShippingInfo = async () => {
-        if (cep.length !== 8) {
+        if (cep.length !== 9) {
             setIsCepValid(false);
             return;
         }
@@ -94,43 +149,115 @@ const CheckoutPage = () => {
             setShippingDays(shippingDays);
             setShippingCost(shippingCost);
             calculateTotal(items);
+
+            const cepReturned: CepProps = await getCEPJson(cep);
+
+            if (!cepReturned.localidade) {
+                toaster.create({
+                    title: "Não foi possível encontrar o cep informado, insira os dados manualmente",
+                    type: "error"
+                })
+            }
+
+            setcidade(cepReturned.localidade);
+            setEstado(cepReturned.estado);
+            setbairro(cepReturned.bairro);
+            setendereco(cepReturned.logradouro)
+
         } catch (error) {
             console.error("Erro ao buscar informações de entrega", error);
         }
     };
 
-    const handleFinalizePurchase = () => {
-        if (step == 1) {
-            return setStep(2);
+    const handleFinalizePurchase = async () => {
+
+        if (email == "" || name == "" || cpf == "" || cep == "" || telefone == "" || total == 0 || !paymentMethodSelected) {
+            toaster.create({
+                title: "Preencha todas as informações"
+            })
         }
+        else {
+            setLoading(true);
 
-        const purchaseData = {
-            email,
-            name,
-            surname,
-            address,
-            items,
-            shipping: {
-                cep,
-                shippingDays,
-                shippingCost,
-            },
-            subtotal,
-            total,
-            desconto,
-        };
+            const userNotLogged = {
+                cpf: cpf,
+                cupons: '[]',
+                cupons_usados: '[]',
+                email: email,
+                id: 2,
+                label: "default",
+                nome_completo: name,
+                photoURL: "",
+                uid: ""
+            }
 
-        console.log("Dados da compra:", JSON.stringify(purchaseData, null, 2));
+            const dadosPedido = {
+                "usuario": userAtual || userNotLogged,
+                "produtos": items,
+
+            };
+
+            const enderecoPedido = {
+                "endereço": endereco,
+                "bairro": bairro,
+                "cidade": cidade,
+                "estado": estado,
+                "cep": cep,
+                "referencia": referencia,
+                "numero": numero
+            };
+
+            const orderContent: OrderProps = {
+                enderecoPedido: enderecoPedido,
+                dadosPedido: dadosPedido,
+                precototal: total,
+                paymentOption: paymentMethodSelected.label,
+                desconto: desconto,
+                subtotal: subtotal,
+                CuponsDescontos: 0,
+                CupomAtual: ''
+            }
+
+            if (stripe && paymentMethodSelected?.value === EnumPaymentMethod.CreditCard) {
+                const elementsToPass = elements || undefined;
+
+                const { error }: any = await stripe.confirmPayment({
+                    elements: elementsToPass,
+                    clientSecret: clientSecret,
+                    confirmParams: {
+                        return_url: `${window.location.origin}/completion`,
+                    },
+                });
+
+                if (error.type === "card_error" || error.type === "validation_error") {
+                    toaster.create({
+                        title: "Não foi possível realizar a compra com seu cartão. Tente novamente com outro cartão ou aguarde.",
+                        type: "error"
+                    });
+                } else {
+                    toaster.create({
+                        title: "Algo não esperado ocorreu.",
+                        type: "error"
+                    });
+                }
+
+                setLoading(false);
+            }
+            else if (paymentMethodSelected?.value == EnumPaymentMethod.Pix) {
+                await orderService.create(orderContent)
+            }
+        }
     };
 
     return (
         <section className="checkout-page-wrapper">
-            <StepsRoot defaultValue={0} aria-valuenow={step + 1} count={3} color={"black"}>
+            {isLoading && <Loader />}
+            <StepsRoot defaultValue={0} aria-valuenow={step} count={3} color={"black"}>
                 {!isMobile &&
                     <StepsList>
-                        <StepsItem index={0} icon={<LuUser />} className="item-step" color={"black"} title="Dados pessoais" description="Dados pessoais" />
-                        <StepsItem index={1} icon={<LuWallet />} className="item-step" color={"black"} title="Pagamento" description="Escolha a forma de pagamento" />
-                        <StepsItem index={2} icon={<LuCalendar />} className="item-step" color={"black"} title="Revisão do pedido" description="Revisão final do pedido" />
+                        <StepsItem onClick={() => setStep(0)} index={0} icon={<LuUser />} className="item-step" color={"black"} title="Dados pessoais" description="Dados pessoais" />
+                        <StepsItem onClick={() => setStep(1)} index={1} icon={<LuWallet />} className="item-step" color={"black"} title="Pagamento" description="Escolha a forma de pagamento" />
+                        <StepsItem onClick={() => setStep(2)} index={2} icon={<LuCalendar />} className="item-step" color={"black"} title="Revisão do pedido" description="Revisão final do pedido" />
                     </StepsList>
                 }
 
@@ -181,19 +308,35 @@ const CheckoutPage = () => {
                                             <div className="items-component-checkout">
                                                 <div className="inputbox">
                                                     <label>E-mail</label>
-                                                    <Input placeholder="Insira o e-mail aqui" background={"#f7f7f7"} padding={2} variant={"subtle"} />
+                                                    <Input disabled={!!userAtual} value={userAtual ? userAtual.email : email} onChange={(e) => setEmail(e.target.value)} placeholder="Insira o e-mail aqui" background={"#f7f7f7"} padding={2} variant={"subtle"} />
                                                 </div>
                                                 <div className="inputbox">
                                                     <label>Nome completo</label>
-                                                    <Input placeholder="Insira o nome completo aqui" background={"#f7f7f7"} padding={2} variant={"subtle"} />
+                                                    <Input disabled={!!userAtual} value={userAtual ? userAtual.nome_completo : name} onChange={(e) => setName(e.target.value)} placeholder="Insira o nome completo aqui" background={"#f7f7f7"} padding={2} variant={"subtle"} />
                                                 </div>
                                                 <div className="inputbox">
                                                     <label>CPF</label>
-                                                    <Input placeholder="Insira o cpf aqui" background={"#f7f7f7"} padding={2} variant={"subtle"} />
+                                                    <Input
+                                                        disabled={!!userAtual}
+                                                        maxLength={14}
+                                                        value={userAtual ? formatCPF(userAtual.cpf) : formatCPF(cpf)}
+                                                        onChange={(e) => setCPF(formatCPF(e.target.value))}
+                                                        placeholder="Insira o cpf aqui" background={"#f7f7f7"}
+                                                        padding={2}
+                                                        variant={"subtle"}
+                                                    />
                                                 </div>
                                                 <div className="inputbox">
                                                     <label>Telefone para contato</label>
-                                                    <Input placeholder="Insira o telefone aqui" background={"#f7f7f7"} padding={2} variant={"subtle"} />
+                                                    <Input
+                                                        maxLength={15}
+                                                        value={formatTelefone(telefone)}
+                                                        onChange={(e) => setTel(formatTelefone(e.target.value))}
+                                                        placeholder="Insira o telefone aqui"
+                                                        background={"#f7f7f7"}
+                                                        padding={2}
+                                                        variant={"subtle"}
+                                                    />
                                                 </div>
                                             </div>
 
@@ -221,14 +364,207 @@ const CheckoutPage = () => {
                                                         <Input
                                                             type="text"
                                                             placeholder="Digite o CEP"
-                                                            value={cep}
-                                                            onChange={handleCepChange}
+                                                            value={formatCEP(cep)}
+                                                            onChange={(e) => setCep(formatCEP(e.target.value))}
                                                             onBlur={fetchShippingInfo}
                                                             background={"#f7f7f7"}
                                                             padding={2}
+                                                            maxLength={9}
                                                         />
                                                     </div>
                                                 )}
+                                                {isCepValid &&
+                                                    <React.Fragment>
+                                                        <div className="inputbox">
+                                                            <label>Cidade</label>
+                                                            <Input
+                                                                value={cidade}
+                                                                onChange={(e) => setcidade(e.target.value)}
+                                                                placeholder="Insira a cidade aqui"
+                                                                background={"#f7f7f7"}
+                                                                padding={2}
+                                                                variant={"subtle"}
+                                                            />
+                                                        </div>
+                                                        <div className="inputbox">
+                                                            <label>Estado</label>
+                                                            <Input
+                                                                value={estado}
+                                                                onChange={(e) => setEstado(e.target.value)}
+                                                                placeholder="Insira o estado aqui"
+                                                                background={"#f7f7f7"}
+                                                                padding={2}
+                                                                variant={"subtle"}
+                                                            />
+                                                        </div>
+                                                        <div className="inputbox">
+                                                            <label>Bairro</label>
+                                                            <Input
+                                                                value={bairro}
+                                                                onChange={(e) => setbairro(e.target.value)}
+                                                                placeholder="Insira o bairro aqui"
+                                                                background={"#f7f7f7"}
+                                                                padding={2}
+                                                                variant={"subtle"}
+                                                            />
+                                                        </div>
+                                                        <div className="inputbox">
+                                                            <label>Endereço</label>
+                                                            <Input
+                                                                value={endereco}
+                                                                onChange={(e) => setendereco(e.target.value)}
+                                                                placeholder="Insira o endereço aqui"
+                                                                background={"#f7f7f7"}
+                                                                padding={2}
+                                                                variant={"subtle"}
+                                                            />
+                                                        </div>
+                                                        <div className="inputbox">
+                                                            <label>Número</label>
+                                                            <Input
+                                                                value={numero}
+                                                                onChange={(e) => setnumero(e.target.value)}
+                                                                placeholder="Insira o número aqui"
+                                                                background={"#f7f7f7"}
+                                                                padding={2}
+                                                                variant={"subtle"}
+                                                            />
+                                                        </div>
+                                                        <div className="inputbox">
+                                                            <label>Referencia</label>
+                                                            <Input
+                                                                value={referencia}
+                                                                onChange={(e) => setreferencia(e.target.value)}
+                                                                placeholder="Insira a referencia aqui"
+                                                                background={"#f7f7f7"}
+                                                                padding={2}
+                                                                variant={"subtle"}
+                                                            />
+                                                        </div>
+                                                    </React.Fragment>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </StepsContent>
+                            <StepsContent index={1}>
+                                <div className="box-checkout">
+                                    <div className="box-checkout__header">
+                                        <div className="title-box-checkout">
+                                            <label id="title">Pagamento</label>
+                                        </div>
+                                        <div className="items-component-checkout">
+                                            <SelectRoot
+                                                variant={"subtle"}
+                                                onValueChange={(value) => { setPaymentMethodSelected(value.items[0]) }}
+                                                collection={paymentsMethods} size="sm" width="320px">
+                                                <SelectLabel>Selecione o método de pagamento: </SelectLabel>
+                                                <SelectTrigger>
+                                                    <SelectValueText placeholder="Selecione o pagamento" />
+                                                </SelectTrigger>
+                                                <SelectContent background={"white"}>
+                                                    {paymentsMethods.items.map((paymentMethod: any) => (
+                                                        <SelectItem item={paymentMethod} key={paymentMethod.value}>
+                                                            {paymentMethod.label}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </SelectRoot>
+                                            {paymentMethodSelected?.value == EnumPaymentMethod.CreditCard &&
+                                                <React.Fragment>
+                                                    <PaymentElement id="payment-element" />
+                                                    <Button disabled={!stripe || !elements} id="submit">
+                                                        <span id="button-text">
+                                                            {"Pay now"}
+                                                        </span>
+                                                    </Button>
+                                                </React.Fragment>
+                                            }
+                                            {paymentMethodSelected?.value == EnumPaymentMethod.Pix &&
+                                                <section className="section-payment-inside">
+                                                    <div className="header-pix-content">
+                                                        <p>1. Finalize sua compra e abra o app do banco na opção Pix</p>
+                                                        <p>2. Aponte a câmera do celular para o código ou copie e cole o código</p>
+                                                        <p>3. Confira os dados e confirme seu pagamento pelo app do banco</p>
+                                                    </div>
+                                                    <div className="logo-pix">
+                                                        <img src={"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg/2560px-Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg.png"} alt="pix" />
+                                                    </div>
+                                                </section>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </StepsContent>
+                            <StepsContent index={2}>
+                                <div className="box-checkout">
+                                    <div className="box-checkout__header">
+                                        <div className="title-box-checkout">
+                                            <label id="title">Revisão do pedido</label>
+                                        </div>
+                                    </div>
+                                    <div className="items-component-checkout">
+                                        <div className="box-checkout__header">
+                                            <label>Lista de itens</label>
+                                            <div className="items-component-checkout">
+                                                {items.map((item: Product) => {
+                                                    const photosProduct = JSON.parse(item.photoURL);
+                                                    return (
+                                                        <div className="item-cart-box" key={item.id}>
+                                                            <div className="item-cart-box__inside">
+                                                                <div className="item-info">
+                                                                    <div className="item-left-side">
+                                                                        <img src={photosProduct.length > 1 ? photosProduct[0] : photosProduct} alt={item.name_product} />
+                                                                    </div>
+                                                                    <div className="item-right-side">
+                                                                        <h1>{item.name_product} - {item.size}</h1>
+                                                                        <p>{item.type_full_label}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="item-middle">
+                                                                    <h1>R$ {(item.price - item.desconto).toFixed(2)}</h1>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div>
+
+                                        <div className="box-checkout">
+                                            <div className="box-checkout__header">
+                                                <div className="title-box-checkout">
+                                                    <label id="title">Forma de Pagamento</label>
+                                                </div>
+                                                <div className="items-component-checkout">
+                                                    <p>{paymentMethodSelected?.label || "Método de pagamento não selecionado"}</p>
+                                                    {paymentMethodSelected?.value == EnumPaymentMethod.CreditCard &&
+                                                        <React.Fragment>
+                                                            <p>{parcelamento?.label} de R$ {((total / parcelamento?.id) * parcelamento?.jurosPerc).toFixed(2)}</p>
+                                                            <p>Número do cartão: **** **** **** {numeroCartao?.slice(-4)}</p>
+                                                            <p>Nome completo: {cardName}</p>
+                                                        </React.Fragment>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="box-checkout">
+                                            <div className="box-checkout__header">
+                                                <div className="title-box-checkout">
+                                                    <label id="title">Entrega</label>
+                                                </div>
+                                                <div className="items-component-checkout">
+                                                    <p>CEP: {cep ? cep : "Cep não indicado"}</p>
+                                                    {isCepValid && (
+                                                        <div>
+                                                            <p>Receber {items.length} itens em {cep}</p>
+                                                            <p>Entrega em até {shippingDays} dias úteis</p>
+                                                            <p>Custo de entrega: R$ {shippingCost?.toFixed(2)}</p>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -247,18 +583,18 @@ const CheckoutPage = () => {
                                             <DataListItem className="item-data-list-prices-principal" label={"Total"} value={"R$ " + total.toFixed(2)} />
                                         </DataListRoot>
                                         <div className="actions-buttons">
-                                            <button className="finalize-btn" onClick={handleFinalizePurchase}>
-                                                {step != 2 ?
-                                                    <StepsNextTrigger>
+                                            {step != 2 ?
+                                                <StepsNextTrigger width={'full'} onClick={() => setStep(step + 1)}>
+                                                    <button className="finalize-btn">
                                                         <span>PROSSEGUIR PARA COMPRA</span>
-                                                    </StepsNextTrigger>
-                                                    :
-                                                    <React.Fragment>
-                                                        <ShoppingCartIcon />
-                                                        <span>Finalizar compra</span>
-                                                    </React.Fragment>
-                                                }
-                                            </button>
+                                                    </button>
+                                                </StepsNextTrigger>
+                                                :
+                                                <button className="finalize-btn" onClick={handleFinalizePurchase}>
+                                                    <ShoppingCartIcon />
+                                                    <span>Finalizar compra</span>
+                                                </button>
+                                            }
                                             <button className="continue_buyingBtn">
                                                 Continuar comprando
                                             </button>
@@ -270,39 +606,6 @@ const CheckoutPage = () => {
 
                     </div>
                 </div>
-                <StepsContent index={1}>
-                    <div className="box-checkout">
-                        <div className="box-checkout__header">
-                            <div className="title-box-checkout">
-                                <label id="title">Pagamento</label>
-                            </div>
-                            <div className="items-component-checkout">
-                            </div>
-
-                            <div className="title-box-checkout" style={{ marginTop: 20 }}>
-                                <label id="title">Entrega</label>
-                            </div>
-                            <div className="items-component-checkout">
-                                <SelectRoot collection={paymentsMethods} size="sm" width="320px">
-                                    <SelectLabel>Selecione o método de pagamento</SelectLabel>
-                                    <SelectTrigger>
-                                        <SelectValueText placeholder="Selecione o pagamento" />
-                                    </SelectTrigger>
-                                    <SelectContent background={"white"}>
-                                        {paymentsMethods.items.map((paymentMethod: any) => (
-                                            <SelectItem item={paymentMethod} key={paymentMethod.value}>
-                                                {paymentMethod.label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </SelectRoot>
-
-                            </div>
-                        </div>
-                    </div>
-                </StepsContent>
-                <StepsContent index={2}>Step 3</StepsContent>
-                <StepsCompletedContent>All steps are complete!</StepsCompletedContent>
             </StepsRoot>
 
         </section>

@@ -139,8 +139,7 @@ export interface UserAuthProps {
 
 export const EnumPaymentMethod = {
     CreditCard: 0,
-    DebitCard: 1,
-    Pix: 2
+    Pix: 1
 }
 
 export interface paymentInsideMethod {
@@ -151,10 +150,55 @@ export interface paymentInsideMethod {
 export const paymentsMethods = createListCollection({
     items: [
         { label: "Cartão de Crédito", value: EnumPaymentMethod.CreditCard },
-        { label: "Cartão de Débito", value: EnumPaymentMethod.DebitCard },
         { label: "Pix", value: EnumPaymentMethod.Pix }
     ]
 })
+
+export const parcelamentosDisponiveis = createListCollection({
+    items: [
+        { label: "1x", id: 1, juros: false, jurosPerc: 1.00 },
+        { label: "2x", id: 2, juros: false, jurosPerc: 1.00 },
+        { label: "3x", id: 3, juros: false, jurosPerc: 1.00 },
+        { label: "4x", id: 4, juros: false, jurosPerc: 1.00 },
+        { label: "5x", id: 5, juros: true, jurosPerc: 1.02 },
+        { label: "6x", id: 6, juros: true, jurosPerc: 1.03 },
+    ]
+})
+
+export const formatCPF = (value: string) => {
+    return value
+        .replace(/\D/g, '') // Remove caracteres não numéricos
+        .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o primeiro ponto
+        .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o segundo ponto
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o hífen
+};
+
+export const formatTelefone = (value: string) => {
+    return value
+        .replace(/\D/g, '') // Remove caracteres não numéricos
+        .replace(/(\d{2})(\d)/, '($1) $2') // Adiciona parênteses e espaço
+        .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o hífen
+};
+
+export const formatCEP = (value: string) => {
+    return value
+        .replace(/\D/g, '') // Remove caracteres não numéricos
+        .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o hífen
+};
+
+export const getCEPJson = async (cep: string) => {
+    const cepReturn = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const cepJSON = await cepReturn.json()
+    return cepJSON;
+}
+
+export const formatarCartaoCredito = (numeroCartao: string) => {
+    const apenasDigitos = numeroCartao.replace(/\D/g, '');
+
+    const formatado = apenasDigitos.replace(/(.{4})/g, '$1 ').trim();
+
+    return formatado;
+};
 
 export const menuItems: MenuItemsProps[] = [
     {

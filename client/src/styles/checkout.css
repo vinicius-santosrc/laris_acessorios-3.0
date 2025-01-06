@@ -187,6 +187,9 @@ label#title {
 
 }
 
+.section-payment-inside img {
+    width: 150px;
+}
 
 @media screen and (max-width: 900px) {
     .box-checkout {

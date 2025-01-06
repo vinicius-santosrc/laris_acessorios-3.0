@@ -1,1 +1,9 @@
-export const test2 = "a";
+export class paymentService {
+    constructor(
+        
+    ) { }
+
+    static new = (data: any, value: number) => {
+        
+    }
+}

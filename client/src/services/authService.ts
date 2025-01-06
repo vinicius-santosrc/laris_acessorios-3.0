@@ -12,12 +12,13 @@ import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { UserAuthProps } from '@/lib/utils';
 
+const url = process.env.REACT_APP_API_ENDPOINT;
 const endpoint = process.env.REACT_APP_API_ENDPOINT;
 //const endpoint = process.env.REACT_APP_API_ENDPOINT_TEST;
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
 const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
 
-class AuthService {
+class authService {
     private client: Client;
     private database: Databases;
 
@@ -28,7 +29,7 @@ class AuthService {
     }
 
     static register = async (user: UserAuthProps) => {
-        await createUserWithEmailAndPassword    (auth, user.email, user.password)
+        await createUserWithEmailAndPassword(auth, user.email, user.password)
             .then(async (userCredential) => {
                 await fetch(`${endpoint}${preEndpoint}${secretKey}/users/add`, {
                     method: 'POST',
@@ -71,15 +72,15 @@ class AuthService {
         const client = new Client();
         client.setEndpoint("https://cloud.appwrite.io/v1").setProject("651c17501139519bc5a2");
         const account = new Account(client);
-
+        const accountReturn = await account.get()
         try {
-            return await account.get();
+            return accountReturn;
         } catch (error) {
             console.error("Get user data error:", error);
             throw error;
         }
     }
-    
+
     static isLogged = async () => {
         const client = new Client();
         client.setEndpoint("https://cloud.appwrite.io/v1").setProject("651c17501139519bc5a2");
@@ -105,6 +106,18 @@ class AuthService {
             throw error;
         }
     }
+
+    static getUserByEmail = async (email: string) => {
+        try {
+            const response = await fetch(`${url}${preEndpoint}${secretKey}/users`);
+            const data = await response.json();
+            const foundUser = data.find((user: any) => user.email === email);
+            return foundUser;
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 }
 
-export default AuthService;
+export default authService;
