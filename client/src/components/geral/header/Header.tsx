@@ -105,7 +105,7 @@ const Header = () => {
 
                     <section className="header-inside-content header-inside-content__icons">
                         <AccountComponent />
-                        <Button variant="ghost" aria-label="Favoritos">
+                        <Button onClick={() => { window.location.href = window.location.origin + "/account#wishlist" }} variant="ghost" aria-label="Favoritos">
                             <FavoritesIcon />
                         </Button>
                         <BagComponent setBagOpen={setBagOpen} isBagOpen={isBagOpen} />

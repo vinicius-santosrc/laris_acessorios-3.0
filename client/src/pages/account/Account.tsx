@@ -25,6 +25,11 @@ const Account = () => {
             setLoading(false);
         };
 
+        // Check the URL hash to set the default section
+        if (window.location.hash === "#wishlist") {
+            setSelectedSection("favoritos");
+        }
+
         fetchUserData();
     }, []);
 

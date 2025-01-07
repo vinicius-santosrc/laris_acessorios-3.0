@@ -34,18 +34,18 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems }) 
             <DrawerFooter>
                 <section className="footer-drawer">
                     <div className="footer-drawer-content">
-                        <div className="item-footer">
+                        <Link to={window.location.origin + "/account"} onClick={closeMainDrawer} className="item-footer">
                             <User2Icon />
                             <p>Minha conta</p>
-                        </div>
-                        <div className="item-footer">
+                        </Link>
+                        <Link to={window.location.origin + "/account#wishlist"} onClick={closeMainDrawer} className="item-footer">
                             <HeartIcon />
                             <p>Lista de desejos</p>
-                        </div>
-                        <div className="item-footer">
+                        </Link>
+                        <Link to={window.location.origin} onClick={closeMainDrawer} className="item-footer">
                             <ContactIcon />
                             <p>Entre em contato</p>
-                        </div>
+                        </Link>
                     </div>
                 </section>
             </DrawerFooter>
