@@ -15,9 +15,10 @@ import authService from "../../services/authService";
 import { UserProps } from "../../models/user";
 import { CepProps } from "../../models/cep";
 import { orderService } from "../../services/orderService";
-import { PaymentElement } from "@stripe/react-stripe-js";
+import { CardElement, PaymentElement } from "@stripe/react-stripe-js";
 import { useElements, useStripe } from "@stripe/react-stripe-js";
 
+const url = process.env.REACT_APP_API_ENDPOINT;
 
 const CheckoutPage = ({ clientSecret }: any) => {
     const [step, setStep] = useState<number>(0);
@@ -60,8 +61,20 @@ const CheckoutPage = ({ clientSecret }: any) => {
 
     const [userAtual, setUser] = useState<UserProps>();
 
-    const stripe = useStripe();
-    const elements = useElements();
+    const stripe: any = useStripe();
+    const elements: any = useElements();
+    const [errorMessage, setErrorMessage] = useState<string>();
+
+    useEffect(() => {
+        fetch(`${url}/create-payment-intent`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ amount: 1 * 100 }), //total
+        })
+            .then((res) => res.json())
+    }, []);
 
     if (!stripe || !elements) {
         console.error("Stripe ou Elements não inicializados");
@@ -170,62 +183,90 @@ const CheckoutPage = ({ clientSecret }: any) => {
     };
 
     const handleFinalizePurchase = async () => {
-
         if (email == "" || name == "" || cpf == "" || cep == "" || telefone == "" || total == 0 || !paymentMethodSelected) {
             toaster.create({
                 title: "Preencha todas as informações"
             })
         }
-        else {
-            setLoading(true);
 
-            const userNotLogged = {
-                cpf: cpf,
-                cupons: '[]',
-                cupons_usados: '[]',
-                email: email,
-                id: 2,
-                label: "default",
-                nome_completo: name,
-                photoURL: "",
-                uid: ""
-            }
+        let PaymentOption = "";
 
-            const dadosPedido = {
-                "usuario": userAtual || userNotLogged,
-                "produtos": items,
+        if (!stripe || !elements) {
+            return;
+        }
 
-            };
+        setLoading(true);
 
-            const enderecoPedido = {
-                "endereço": endereco,
-                "bairro": bairro,
-                "cidade": cidade,
-                "estado": estado,
-                "cep": cep,
-                "referencia": referencia,
-                "numero": numero
-            };
+        const { error: submitError } = await elements.submit();
+        if (submitError) {
+            setErrorMessage(submitError.message);
+            setLoading(false);
+            return;
+        }
 
-            const orderContent: OrderProps = {
-                enderecoPedido: enderecoPedido,
-                dadosPedido: dadosPedido,
-                precototal: total,
-                paymentOption: paymentMethodSelected.label,
-                desconto: desconto,
-                subtotal: subtotal,
-                CuponsDescontos: 0,
-                CupomAtual: ''
-            }
+        const userNotLogged = {
+            cpf: cpf,
+            cupons: '[]',
+            cupons_usados: '[]',
+            email: email,
+            id: 2,
+            label: "default",
+            nome_completo: name,
+            photoURL: "",
+            uid: ""
+        }
 
-            if (stripe && paymentMethodSelected?.value === EnumPaymentMethod.CreditCard) {
-                const elementsToPass = elements || undefined;
+        const dadosPedido = {
+            "usuario": userAtual || userNotLogged,
+            "produtos": items,
 
-                const { error }: any = await stripe.confirmPayment({
-                    elements: elementsToPass,
-                    clientSecret: clientSecret,
+        };
+
+        const enderecoPedido = {
+            "endereço": endereco,
+            "bairro": bairro,
+            "cidade": cidade,
+            "estado": estado,
+            "cep": cep,
+            "referencia": referencia,
+            "numero": numero
+
+        };
+
+        const orderContent: OrderProps = {
+            enderecoPedido: enderecoPedido,
+            dadosPedido: dadosPedido,
+            precototal: total,
+            paymentOption: paymentMethodSelected.label === "Cartão de Crédito" ? "CART" : 'PIX',
+            desconto: desconto,
+            subtotal: subtotal,
+            CuponsDescontos: 0,
+            CupomAtual: ''
+        }
+
+        if (paymentMethodSelected?.value === EnumPaymentMethod.CreditCard) {
+            try {
+                const response = await fetch(`${url}/create-payment-intent`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ item: 1 * 100 }), //total * 100
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to create payment intent");
+                }
+
+                const { clientSecret } = await response.json();
+
+                await orderService.create(orderContent);
+
+                const { error } = await stripe.confirmPayment({
+                    elements,
+                    clientSecret,
                     confirmParams: {
-                        return_url: `${window.location.origin}/completion`,
+                        return_url: window.location.origin + `/success`, // Redirect after payment
                     },
                 });
 
@@ -240,12 +281,18 @@ const CheckoutPage = ({ clientSecret }: any) => {
                         type: "error"
                     });
                 }
-
+            } catch (error) {
+                console.error("Error finalizing purchase:", error);
+                setErrorMessage("Error finalizing purchase. Please try again.");
+                toaster.create({
+                    title: "Erro: " + error
+                })
+            } finally {
                 setLoading(false);
             }
-            else if (paymentMethodSelected?.value == EnumPaymentMethod.Pix) {
-                await orderService.create(orderContent)
-            }
+        }
+        else if (paymentMethodSelected?.value == EnumPaymentMethod.Pix) {
+            await orderService.create(orderContent)
         }
     };
 
@@ -308,7 +355,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                             <div className="items-component-checkout">
                                                 <div className="inputbox">
                                                     <label>E-mail</label>
-                                                    <Input disabled={!!userAtual} value={userAtual ? userAtual.email : email} onChange={(e) => setEmail(e.target.value)} placeholder="Insira o e-mail aqui" background={"#f7f7f7"} padding={2} variant={"subtle"} />
+                                                    <Input disabled={!!userAtual} value={userAtual ? userAtual.email : email} onChange={(e) => setEmail((e.target.value.toLowerCase()))} placeholder="Insira o e-mail aqui" background={"#f7f7f7"} padding={2} variant={"subtle"} />
                                                 </div>
                                                 <div className="inputbox">
                                                     <label>Nome completo</label>
@@ -472,14 +519,9 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                 </SelectContent>
                                             </SelectRoot>
                                             {paymentMethodSelected?.value == EnumPaymentMethod.CreditCard &&
-                                                <React.Fragment>
+                                                <form>
                                                     <PaymentElement id="payment-element" />
-                                                    <Button disabled={!stripe || !elements} id="submit">
-                                                        <span id="button-text">
-                                                            {"Pay now"}
-                                                        </span>
-                                                    </Button>
-                                                </React.Fragment>
+                                                </form>
                                             }
                                             {paymentMethodSelected?.value == EnumPaymentMethod.Pix &&
                                                 <section className="section-payment-inside">
@@ -579,7 +621,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                         <DataListRoot unstyled size={"md"} width={"full"} className="item-data-list" orientation="horizontal">
                                             <DataListItem className="item-data-list-prices" label={"Subtotal"} value={"R$ " + subtotal.toFixed(2)} />
                                             <DataListItem className="item-data-list-prices" label={"Desconto"} value={"R$ " + desconto.toFixed(2)} />
-                                            <DataListItem className="item-data-list-prices" label={"Entrega"} value={"Grátis"} />
+                                            <DataListItem className="item-data-list-prices" label={"Entrega"} value={"R$ " + shippingCost?.toFixed(2)} />
                                             <DataListItem className="item-data-list-prices-principal" label={"Total"} value={"R$ " + total.toFixed(2)} />
                                         </DataListRoot>
                                         <div className="actions-buttons">
@@ -590,7 +632,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                     </button>
                                                 </StepsNextTrigger>
                                                 :
-                                                <button className="finalize-btn" onClick={handleFinalizePurchase}>
+                                                <button className="finalize-btn" onClick={handleFinalizePurchase} >
                                                     <ShoppingCartIcon />
                                                     <span>Finalizar compra</span>
                                                 </button>

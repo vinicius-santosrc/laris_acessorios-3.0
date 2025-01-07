@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { Loader } from './components/ui/loader';
+import Success from './pages/checkout/Sucess';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 function App() {
@@ -37,7 +38,7 @@ function App() {
       try {
         const response = await fetch(`${url}/create-payment-intent`, {
           method: "POST",
-          body: JSON.stringify({}),
+          body: JSON.stringify({ "item": 1 * 100 }),
           headers: {
             'Authorization': `Bearer ${process.env.REACT_APP_STRIPE_SECRET_KEY}`,
             'Content-Type': 'application/json'
@@ -65,12 +66,13 @@ function App() {
             <Route path='/collections/:collection_name' element={<Collections />}></Route>
             <Route path='/product/:product_url' element={<ProductPage />}></Route>
             <Route path='/checkout' element={clientSecret && stripePromise ? (
-              <Elements stripe={stripePromise} options={{ clientSecret }}>
+              <Elements stripe={stripePromise} options={{ mode: "payment", amount: 50 * 100, currency: 'brl', }}>
                 <CheckoutPage clientSecret={clientSecret} />
               </Elements>
             ) : (
               <Loader />
             )}></Route>
+            <Route path='/success' element={<Success />} />
           </Routes>
         </BrowserRouter>
       </Provider>
