@@ -8,13 +8,15 @@ import { CloseButton } from "../../../components/ui/close-button";
 
 const CategoryFilter = () => {
     const [items, setItems] = useState([
-        { id: 1, title: "Coleções", options: ["LOVE"] },
-        { id: 2, title: "Seleção", options: ["PARA ELE", "PARA ELA"] },
+        { id: 1, title: "Coleções", options: [] },
+        { id: 2, title: "Seleção", options: ["PARA ELA"] },
+        { id: 3, title: "Material", options: ["Prata de lei"]}
     ]);
 
     const [selectedFilters, setSelectedFilters] = useState<any>({
         "Coleções": ["LOVE"],
-        "Seleção": ["PARA ELE", "PARA ELA"], 
+        "Seleção": ["PARA ELA"], 
+        "Material": ["Prata de lei"]
     });
 
     const handleFilterChange = (category: any, option: any) => {

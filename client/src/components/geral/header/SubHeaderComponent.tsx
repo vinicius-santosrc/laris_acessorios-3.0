@@ -3,8 +3,6 @@ import "./Header.css";
 import { Link } from "react-router-dom";
 
 const SubHeaderComponent: React.FC<any> = ({ itemHover, isOpen }) => {
-    console.warn(itemHover);
-
     return (
         isOpen && itemHover?.subItems && (
             <section className="subheader-component-wrapper">
