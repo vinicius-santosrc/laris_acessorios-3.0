@@ -71,7 +71,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ amount: 1 * 100 }), //total
+            body: JSON.stringify({ amount: total * 100 }), //total
         })
             .then((res) => res.json())
     }, []);
@@ -118,11 +118,9 @@ const CheckoutPage = ({ clientSecret }: any) => {
 
                         setLoading(false);
                     } else {
-                        console.warn("Formato de dados inválido para os itens da sacola");
                         setLoading(false);
                     }
                 } catch (error) {
-                    console.error("Erro ao parsear os itens da sacola", error);
                     setLoading(false);
                 }
             } else {
@@ -251,7 +249,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ item: 1 * 100 }), //total * 100
+                    body: JSON.stringify({ item: total * 100 }), //total * 100
                 });
 
                 if (!response.ok) {

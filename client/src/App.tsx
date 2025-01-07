@@ -12,6 +12,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { Loader } from './components/ui/loader';
 import Success from './pages/checkout/Sucess';
+import Account from './pages/account/Account';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 function App() {
@@ -73,6 +74,7 @@ function App() {
               <Loader />
             )}></Route>
             <Route path='/success' element={<Success />} />
+            <Route path='/account' element={<Account />} />
           </Routes>
         </BrowserRouter>
       </Provider>

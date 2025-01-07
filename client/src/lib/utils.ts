@@ -114,6 +114,20 @@ export const defaultsCategories: CategoriesProps[] = [
         highlightImage: "/images/banhados_a_ouro.jpg",
         urlLink: "banhados-a-ouro",
         products: []
+    },
+    {
+        highlightText: "Lançamentos",
+        highlightDescription: "Todos os nossos ultimos lançamentos.",
+        highlightImage: "/images/lancamentos.jpg",
+        urlLink: "lancamentos",
+        products: []
+    },
+    {
+        highlightText: "Acessórios",
+        highlightDescription: "Todos os nossos acessórios.",
+        highlightImage: "/images/acessorios.jpg",
+        urlLink: "acessorios",
+        products: []
     }
 
 ]
@@ -204,7 +218,7 @@ export const menuItems: MenuItemsProps[] = [
     {
         title: "Presentes",
         isLink: true,
-        href: window.location.origin + '/collections/presentes'
+        href: window.location.origin + '/collections/para-ela'
     },
     {
         title: "Lançamentos",
