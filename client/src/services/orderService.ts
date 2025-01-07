@@ -27,7 +27,7 @@ export class orderService {
                     user: JSON.stringify(order.dadosPedido.usuario),
                     totalprice: order.precototal,
                     paymentOption: order.paymentOption,
-                    situation: 'PAGO',
+                    situation: order.paymentOption === "CART" ? 'PAGO' : 'NAOPAGO',
                     desconto: order.desconto,
                     subtotal: order.subtotal,
                     cupom_desconto: order.CuponsDescontos || 0,
@@ -40,9 +40,6 @@ export class orderService {
                     title: "Pedido realizado com sucesso",
                     type: "success"
                 });
-                setTimeout(() => {
-                    window.location.href = window.location.origin + "/accounts/myaccount/orders";
-                }, 1000);
 
                 localStorage.setItem('sacola', '[]');
             } else {

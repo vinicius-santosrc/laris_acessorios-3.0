@@ -2,7 +2,7 @@ interface OrderProps {
     enderecoPedido: any;
     dadosPedido: any;
     precototal: any;
-    paymentOption: any;
+    paymentOption: "CART" | "PIX" | "DINHEIRO";
     desconto: any;
     subtotal: any;
     CuponsDescontos: any;

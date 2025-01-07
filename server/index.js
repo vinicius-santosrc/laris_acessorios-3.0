@@ -27,7 +27,7 @@ let attempts = 0;
 const Stripe = require('stripe');
 const stripe = Stripe('sk_test_51QRNKlGVqOlbWdKNOt6ee3r4mPRAYIqGGPykMoiBnZTWUkSZ2wPs7MnyD3st6y2mXb6EJjXQk22f4pVtZ388YdoS00lrrHHmEG');
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
     host: host,
     user: user,
     password: pass,
@@ -39,19 +39,24 @@ const connection = mysql.createConnection({
     waitForConnections: true
 });
 
-connection.connect((err) => {
-    if (err) {
-        if (attempts < maxRetries) {
-            console.log(`Connection failed, retrying... (${attempts + 1})`);
-            attempts++;
-            setTimeout(connectToDatabase, 3000);  // Retry after 3 seconds
+const connectToDatabase = () => {
+    pool.query((err) => {
+        if (err) {
+            if (attempts < maxRetries) {
+                console.log(`Connection failed, retrying... (${attempts + 1})`);
+                attempts++;
+                setTimeout(connectToDatabase, 3000);  // Retry after 3 seconds
+            } else {
+                console.error('Max retries reached, could not connect to the database');
+            }
         } else {
-            console.error('Max retries reached, could not connect to the database');
+            console.log('Connected to the database');
         }
-    } else {
-        console.log('Connected to the database');
-    }
-});
+    });
+};
+
+connectToDatabase();  // Call the connection function on start
+
 
 app.use(express.json());
 app.use(cors());
@@ -72,9 +77,10 @@ app.get("/config", (req, res) => {
 
 app.post("/create-payment-intent", async (req, res) => {
     try {
+        const amount = req.body.item;
         const paymentIntent = await stripe.paymentIntents.create({
-            currency: "EUR",
-            amount: 1999,
+            currency: "BRL",
+            amount: amount,
             automatic_payment_methods: { enabled: true },
         });
 
@@ -91,7 +97,7 @@ app.post("/create-payment-intent", async (req, res) => {
 });
 
 app.get(`/api/v1/${secretKey}/admins`, (req, res) => {
-    connection.query('SELECT * FROM administradores', (err, result) => {
+    pool.query('SELECT * FROM administradores', (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {
@@ -103,7 +109,7 @@ app.get(`/api/v1/${secretKey}/admins`, (req, res) => {
 //REQUISIÇÃO PLANILHAS
 
 app.get(`/api/v1/${secretKey}/planilha-despesas`, (req, res) => {
-    connection.query('SELECT * FROM `planilha-despesas`', (err, result) => {
+    pool.query('SELECT * FROM `planilha-despesas`', (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {
@@ -113,7 +119,7 @@ app.get(`/api/v1/${secretKey}/planilha-despesas`, (req, res) => {
 });
 
 app.get(`/api/v1/${secretKey}/planilha-itens`, (req, res) => {
-    connection.query('SELECT * FROM `planilha-itens`', (err, result) => {
+    pool.query('SELECT * FROM `planilha-itens`', (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {
@@ -127,7 +133,7 @@ app.get(`/api/v1/${secretKey}/planilha-itens`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/planilha-despesas/add`, (req, res) => {
     const item = req.body
-    connection.query('INSERT INTO `planilha-despesas` (descricao, valor, tipo) VALUES (?, ?, ?)', [item.descricao, item.valor, item.tipo], (err, result) => {
+    pool.query('INSERT INTO `planilha-despesas` (descricao, valor, tipo) VALUES (?, ?, ?)', [item.descricao, item.valor, item.tipo], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -139,7 +145,7 @@ app.post(`/api/v1/${secretKey}/planilha-despesas/add`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/planilha-despesas/edit`, (req, res) => {
     const item = req.body
-    connection.query('update `planilha-despesas` set descricao = ?, valor = ?, tipo = ? where id = ?', [item.descricao, item.valor, item.tipo, item.id], (err, result) => {
+    pool.query('update `planilha-despesas` set descricao = ?, valor = ?, tipo = ? where id = ?', [item.descricao, item.valor, item.tipo, item.id], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -151,7 +157,7 @@ app.post(`/api/v1/${secretKey}/planilha-despesas/edit`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/planilha-despesas/delete`, (req, res) => {
     const item = req.body
-    connection.query('delete from `planilha-despesas` where id = ?', [item.id], (err, result) => {
+    pool.query('delete from `planilha-despesas` where id = ?', [item.id], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -165,7 +171,7 @@ app.post(`/api/v1/${secretKey}/planilha-despesas/delete`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/planilha-itens/add`, (req, res) => {
     const item = req.body
-    connection.query('INSERT INTO `planilha-itens` (id, custos, detalhe, codigo, nameofitem, preco_compra, precorevenda, quantcompra, lucroporitem) VALUES (default, ?, ?, ?, ?, ?, ?, ?, ?)', [item.custos, item.detalhe, item.codigo, item.nameofitem, item.preco_compra, item.precorevenda, item.quantcompra, item.lucroporitem], (err, result) => {
+    pool.query('INSERT INTO `planilha-itens` (id, custos, detalhe, codigo, nameofitem, preco_compra, precorevenda, quantcompra, lucroporitem) VALUES (default, ?, ?, ?, ?, ?, ?, ?, ?)', [item.custos, item.detalhe, item.codigo, item.nameofitem, item.preco_compra, item.precorevenda, item.quantcompra, item.lucroporitem], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -177,7 +183,7 @@ app.post(`/api/v1/${secretKey}/planilha-itens/add`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/planilha-itens/edit`, (req, res) => {
     const item = req.body
-    connection.query('update `planilha-itens` set custos = ?, detalhe = ?, codigo = ?, nameofitem = ?, preco_compra = ?, precorevenda = ?, quantcompra = ?, lucroporitem = ? where id = ?', [item.custos, item.detalhe, item.codigo, item.nameofitem, item.preco_compra, item.precorevenda, item.quantcompra, item.lucroporitem, item.id], (err, result) => {
+    pool.query('update `planilha-itens` set custos = ?, detalhe = ?, codigo = ?, nameofitem = ?, preco_compra = ?, precorevenda = ?, quantcompra = ?, lucroporitem = ? where id = ?', [item.custos, item.detalhe, item.codigo, item.nameofitem, item.preco_compra, item.precorevenda, item.quantcompra, item.lucroporitem, item.id], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -189,7 +195,7 @@ app.post(`/api/v1/${secretKey}/planilha-itens/edit`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/planilha-itens/delete`, (req, res) => {
     const item = req.body
-    connection.query('delete from `planilha-itens` where id = ?', [item.id], (err, result) => {
+    pool.query('delete from `planilha-itens` where id = ?', [item.id], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -203,7 +209,7 @@ app.post(`/api/v1/${secretKey}/planilha-itens/delete`, (req, res) => {
 //SERVIDOR METAS
 
 app.get(`/api/v1/${secretKey}/metas`, (req, res) => {
-    connection.query('SELECT * FROM `metas`', (err, result) => {
+    pool.query('SELECT * FROM `metas`', (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {
@@ -215,7 +221,7 @@ app.get(`/api/v1/${secretKey}/metas`, (req, res) => {
 //REQUISIÇÃO DE PLANEJAMENTOS
 
 app.get(`/api/v1/${secretKey}/planejamentos`, (req, res) => {
-    connection.query('SELECT * FROM `planejamentos`', (err, result) => {
+    pool.query('SELECT * FROM `planejamentos`', (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {
@@ -228,7 +234,7 @@ app.get(`/api/v1/${secretKey}/planejamentos`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/planejamentos/add`, (req, res) => {
     const item = req.body
-    connection.query('insert into planejamentos values (default, "[]", ?)', [item.name_card], (err, result) => {
+    pool.query('insert into planejamentos values (default, "[]", ?)', [item.name_card], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -242,7 +248,7 @@ app.post(`/api/v1/${secretKey}/planejamentos/update`, (req, res) => {
     const item = req.body;
     const contentCardValue = JSON.stringify(item.list);  // Convert array to JSON string
 
-    connection.query("UPDATE planejamentos SET content_card = ? WHERE id = ?", [contentCardValue, item.id], (err, result) => {
+    pool.query("UPDATE planejamentos SET content_card = ? WHERE id = ?", [contentCardValue, item.id], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -255,7 +261,7 @@ app.post(`/api/v1/${secretKey}/planejamentos/update`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/planejamentos/delete`, (req, res) => {
     const item = req.body
-    connection.query('delete from planejamentos where id = ?', [item.id], (err, result) => {
+    pool.query('delete from planejamentos where id = ?', [item.id], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -268,7 +274,7 @@ app.post(`/api/v1/${secretKey}/planejamentos/delete`, (req, res) => {
 //REQUISIÇÃO DE USUARIOS
 
 app.get(`/api/v1/${secretKey}/users`, (req, res) => {
-    connection.query('SELECT * FROM users', (err, result) => {
+    pool.query('SELECT * FROM users', (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {
@@ -281,7 +287,7 @@ app.get(`/api/v1/${secretKey}/users`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/users/add`, (req, res) => {
     const item = req.body
-    connection.query(
+    pool.query(
         'INSERT INTO users VALUES (default, "client", ?, ?, ?, ?, "https://laris-acessorios.vercel.app/static/media/user-null.webp", "[]", "[]")',
         [item.uid, item.nome_completo, item.cpf, item.email], (err, result) => {
             if (err) {
@@ -297,7 +303,7 @@ app.post(`/api/v1/${secretKey}/users/add`, (req, res) => {
 //REQUISIÇÃO DE PRODUTOS
 
 app.get(`/api/v1/${secretKey}/products`, (req, res) => {
-    connection.query('SELECT * FROM produtos', (err, result) => {
+    pool.query('SELECT * FROM produtos', (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {
@@ -310,7 +316,7 @@ app.get(`/api/v1/${secretKey}/products`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/products/add`, (req, res) => {
     const item = req.body
-    connection.query('insert into produtos values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [item.name_product, item.price, item.desconto, item.disponibilidade, item.tamanhos, item.quantidade_disponivel, item.categoria, item.url, item.fornecedor, item.tipo, item.personalizavel, item.photoURL, item.extensor], (err, result) => {
+    pool.query('insert into produtos values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [item.name_product, item.price, item.desconto, item.disponibilidade, item.tamanhos, item.quantidade_disponivel, item.categoria, item.url, item.fornecedor, item.tipo, item.personalizavel, item.photoURL, item.extensor], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -325,7 +331,7 @@ app.post(`/api/v1/${secretKey}/products/searchbyurl`, (req, res) => {
     const url = item.url;
 
     // Realiza a consulta no banco de dados para encontrar o produto com a URL fornecida
-    connection.query('SELECT * FROM produtos WHERE url = ?', [url], (err, result) => {
+    pool.query('SELECT * FROM produtos WHERE url = ?', [url], (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else if (result.length > 0) {
@@ -340,7 +346,7 @@ app.post(`/api/v1/${secretKey}/products/searchbyurl`, (req, res) => {
 //REQUISIÇÃO DE ORDERS
 
 app.get(`/api/v1/${secretKey}/orders`, (req, res) => {
-    connection.query('SELECT * FROM orders', (err, result) => {
+    pool.query('SELECT * FROM orders', (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {
@@ -353,10 +359,10 @@ app.get(`/api/v1/${secretKey}/orders`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/orders/add`, (req, res) => {
     const item = req.body
-    connection.query('insert into orders values (default, ?, ?, ?, ?, default, ?, default, ?, ?, ?, ?, ?)', [item.address, item.items, item.user, item.totalprice, item.paymentOption, item.situation, item.desconto, item.subtotal, item.cupom_desconto, item.cupons], (err, result) => {
+    pool.query('insert into orders values (default, ?, ?, ?, ?, default, ?, default, ?, ?, ?, ?, ?)', [item.address, item.items, item.user, item.totalprice, item.paymentOption, item.situation, item.desconto, item.subtotal, item.cupom_desconto, item.cupons], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
-            res.status(500).json({ error: 'Erro ao obter dados' });
+            res.status(500).json({ error: 'Erro ao criar pedido:', err });
         } else {
             res.status(200).json({ message: 'Pedido cadastrado com sucesso' });
         }
@@ -367,7 +373,7 @@ app.post(`/api/v1/${secretKey}/orders/add`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/orders/delete`, (req, res) => {
     const item = req.body
-    connection.query('delete from orders where id = ?;', [item.id], (err, result) => {
+    pool.query('delete from orders where id = ?;', [item.id], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -380,7 +386,7 @@ app.post(`/api/v1/${secretKey}/orders/delete`, (req, res) => {
 //REQUISIÇÃO DE CUPONS
 
 app.get(`/api/v1/${secretKey}/cupons`, (req, res) => {
-    connection.query('SELECT * FROM cupons', (err, result) => {
+    pool.query('SELECT * FROM cupons', (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {
@@ -391,7 +397,7 @@ app.get(`/api/v1/${secretKey}/cupons`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/cupons/add`, (req, res) => {
     const item = req.body
-    connection.query(`INSERT INTO cupons VALUES ( DEFAULT, ?, ?, DEFAULT, ?, 'cupom-image-wrapper.webp', DEFAULT, NULL, 0, ? )`, [item.uniqueKey, item.name, item.desconto, item.private], (err, result) => {
+    pool.query(`INSERT INTO cupons VALUES ( DEFAULT, ?, ?, DEFAULT, ?, 'cupom-image-wrapper.webp', DEFAULT, NULL, 0, ? )`, [item.uniqueKey, item.name, item.desconto, item.private], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -403,7 +409,7 @@ app.post(`/api/v1/${secretKey}/cupons/add`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/cupons/remove`, (req, res) => {
     const item = req.body
-    connection.query(`DELETE FROM cupons WHERE ID = ?`, [item.id], (err, result) => {
+    pool.query(`DELETE FROM cupons WHERE ID = ?`, [item.id], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -415,7 +421,7 @@ app.post(`/api/v1/${secretKey}/cupons/remove`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/cupons/myaccount/add`, (req, res) => {
     const item = req.body
-    connection.query('UPDATE `users` SET cupons = ?, cupons_usados = ? WHERE uid = ? ', [item.cupons, item.cupom_usado, item.user_uid], (err, result) => {
+    pool.query('UPDATE `users` SET cupons = ?, cupons_usados = ? WHERE uid = ? ', [item.cupons, item.cupom_usado, item.user_uid], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -428,7 +434,7 @@ app.post(`/api/v1/${secretKey}/cupons/myaccount/add`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/products/edit`, (req, res) => {
     const item = req.body
-    connection.query('update `produtos` set name_product = ?, price = ?, desconto = ?, disponibilidade = ?, categoria = ?, url = ?, quantidade_disponivel = ?, extensor = ? where id = ?', [item.name_product, item.price, item.desconto, item.disponibilidade, item.categoria, item.url, item.quantidade_disponivel, item.extensor, item.id], (err, result) => {
+    pool.query('update `produtos` set name_product = ?, price = ?, desconto = ?, disponibilidade = ?, categoria = ?, url = ?, quantidade_disponivel = ?, extensor = ? where id = ?', [item.name_product, item.price, item.desconto, item.disponibilidade, item.categoria, item.url, item.quantidade_disponivel, item.extensor, item.id], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -440,7 +446,7 @@ app.post(`/api/v1/${secretKey}/products/edit`, (req, res) => {
 
 app.post(`/api/v1/${secretKey}/products/delete`, (req, res) => {
     const item = req.body
-    connection.query('delete from `produtos` where id = ?', [item.id], (err, result) => {
+    pool.query('delete from `produtos` where id = ?', [item.id], (err, result) => {
         if (err) {
             console.error(err);  // Log the error for debugging
             res.status(500).json({ error: 'Erro ao obter dados' });
@@ -452,5 +458,10 @@ app.post(`/api/v1/${secretKey}/products/delete`, (req, res) => {
 
 
 app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`);
+    console.log(`Server started on port ${port}`);
+    console.log('----------------------------------------------------');
+    console.log('LARIS ACESSÓRIOS - PRINCIPAL API')
+    console.log(`-> Documentation: http://localhost:${port}`)
+    console.log('----------------------------------------------------');
+    console.log('Server is running and waiting for requests...');
 });

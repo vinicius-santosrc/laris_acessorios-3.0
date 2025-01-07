@@ -1,0 +1,88 @@
+/* Estilos Gerais */
+.success-section {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 20px;
+}
+
+.success-container {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+}
+
+/* Título e Mensagem de Sucesso */
+.success-message-container {
+  margin-bottom: 30px;
+}
+
+.success-title {
+  font-size: 36px;
+  font-weight: bold;
+  color: #BE0A45;
+  margin-bottom: 10px;
+}
+
+.success-description {
+  font-size: 18px;
+  color: #555;
+}
+
+/* Detalhes do Pedido */
+.order-info-container {
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.order-info-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.order-info-list {
+  list-style: none;
+  padding-left: 0;
+  font-size: 16px;
+  color: #666;
+}
+
+/* Botões de Ação */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.button {
+  background-color: #BE0A45;
+  color: #fff;
+  padding: 12px 25px;
+  border-radius: 5px;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #9a0838;
+}
+
+/* Rodapé */
+.footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 14px;
+  color: #999;
+}
