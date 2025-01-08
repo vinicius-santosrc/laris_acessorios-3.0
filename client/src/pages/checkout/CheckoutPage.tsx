@@ -4,11 +4,11 @@ import { DataListItem, DataListRoot } from "../../components/ui/data-list";
 import { Edit, ShoppingCartIcon, Trash2Icon } from "lucide-react";
 import { Product } from "../../models/product";
 import { Button } from "../../components/ui/button";
-import { StepsContent, StepsItem, StepsList, StepsNextTrigger, StepsRoot } from "../../components/ui/steps";
+import { StepsContent, StepsItem, StepsList, StepsNextTrigger, StepsPrevTrigger, StepsRoot } from "../../components/ui/steps";
 import { Input } from "@chakra-ui/react";
 import { LuCalendar, LuUser, LuWallet } from "react-icons/lu";
 import { SelectContent, SelectItem, SelectLabel, SelectRoot, SelectTrigger, SelectValueText } from "../../components/ui/select";
-import { EnumPaymentMethod, formatarCartaoCredito, formatCEP, formatCPF, formatTelefone, getCEPJson, parcelamentosDisponiveis, paymentInsideMethod, paymentsMethods } from "../../lib/utils";
+import { EnumPaymentMethod, formatarCartaoCredito, formatCEP, formatCPF, formatTelefone, gerarUidComCaracteresENumeros, getCEPJson, parcelamentosDisponiveis, paymentInsideMethod, paymentsMethods } from "../../lib/utils";
 import { toaster } from "../../components/ui/toaster";
 import { Loader } from "../../components/ui/loader";
 import authService from "../../services/authService";
@@ -185,7 +185,9 @@ const CheckoutPage = ({ clientSecret }: any) => {
             toaster.create({
                 title: "Preencha todas as informações"
             })
+            return;
         }
+        const orderUid: string = gerarUidComCaracteresENumeros();
 
         let PaymentOption = "";
 
@@ -230,8 +232,9 @@ const CheckoutPage = ({ clientSecret }: any) => {
             "numero": numero
 
         };
-
+        
         const orderContent: OrderProps = {
+            uid: orderUid,
             enderecoPedido: enderecoPedido,
             dadosPedido: dadosPedido,
             precototal: total,
@@ -264,7 +267,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                     elements,
                     clientSecret,
                     confirmParams: {
-                        return_url: window.location.origin + `/success`, // Redirect after payment
+                        return_url: window.location.origin + `/success/` + orderUid, // Redirect after payment
                     },
                 });
 
@@ -581,9 +584,8 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                     <p>{paymentMethodSelected?.label || "Método de pagamento não selecionado"}</p>
                                                     {paymentMethodSelected?.value == EnumPaymentMethod.CreditCard &&
                                                         <React.Fragment>
-                                                            <p>{parcelamento?.label} de R$ {((total / parcelamento?.id) * parcelamento?.jurosPerc).toFixed(2)}</p>
-                                                            <p>Número do cartão: **** **** **** {numeroCartao?.slice(-4)}</p>
-                                                            <p>Nome completo: {cardName}</p>
+                                                            <p>{parcelamento?.label} R$ {total.toFixed(2)}</p>
+                                                            <p>Nome completo: {name}</p>
                                                         </React.Fragment>
                                                     }
                                                 </div>
@@ -619,7 +621,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                         <DataListRoot unstyled size={"md"} width={"full"} className="item-data-list" orientation="horizontal">
                                             <DataListItem className="item-data-list-prices" label={"Subtotal"} value={"R$ " + subtotal.toFixed(2)} />
                                             <DataListItem className="item-data-list-prices" label={"Desconto"} value={"R$ " + desconto.toFixed(2)} />
-                                            <DataListItem className="item-data-list-prices" label={"Entrega"} value={"R$ " + shippingCost?.toFixed(2)} />
+                                            <DataListItem className="item-data-list-prices" label={"Entrega"} value={"R$ " + (shippingCost ? shippingCost?.toFixed(2): "A DEFINIR")} />
                                             <DataListItem className="item-data-list-prices-principal" label={"Total"} value={"R$ " + total.toFixed(2)} />
                                         </DataListRoot>
                                         <div className="actions-buttons">
@@ -635,6 +637,11 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                     <span>Finalizar compra</span>
                                                 </button>
                                             }
+                                            <StepsPrevTrigger width={'full'} onClick={() => setStep(step - 1)}>
+                                                <button className="continue_buyingBtn">
+                                                    <span>VOLTAR</span>
+                                                </button>
+                                            </StepsPrevTrigger>
                                             <button className="continue_buyingBtn">
                                                 Continuar comprando
                                             </button>

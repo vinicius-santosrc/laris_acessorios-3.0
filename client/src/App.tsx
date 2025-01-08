@@ -13,6 +13,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Loader } from './components/ui/loader';
 import Success from './pages/checkout/Sucess';
 import Account from './pages/account/Account';
+import { SearchPage } from './pages/search/Search';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 function App() {
@@ -73,8 +74,9 @@ function App() {
             ) : (
               <Loader />
             )}></Route>
-            <Route path='/success' element={<Success />} />
+            <Route path='/success/:uid' element={<Success />} />
             <Route path='/account' element={<Account />} />
+            <Route path='/search' element={<SearchPage />} />
           </Routes>
         </BrowserRouter>
       </Provider>

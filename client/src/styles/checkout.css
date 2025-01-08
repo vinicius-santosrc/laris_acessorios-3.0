@@ -203,4 +203,8 @@ label#title {
     .checkout-page-wrapper {
         margin-top: 140px;
     }
+
+    .box-checkout-right {
+        width: 100%;
+    }
 }

@@ -1,4 +1,5 @@
 interface OrderProps {
+    uid: string;
     enderecoPedido: any;
     dadosPedido: any;
     precototal: any;
