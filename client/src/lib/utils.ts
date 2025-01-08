@@ -128,6 +128,13 @@ export const defaultsCategories: CategoriesProps[] = [
         highlightImage: "/images/acessorios.jpg",
         urlLink: "acessorios",
         products: []
+    },
+    {
+        highlightText: "Busca",
+        highlightDescription: "Procure por nossos todos os acessórios.",
+        highlightImage: "/images/search.jpg",
+        urlLink: "search",
+        products: []
     }
 
 ]
@@ -276,3 +283,15 @@ export const menuItems: MenuItemsProps[] = [
         ]
     },
 ]
+
+export function gerarUidComCaracteresENumeros(): string {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let uid = '';
+
+    for (let i = 0; i < 20; i++) {
+        const randomIndex = Math.floor(Math.random() * caracteres.length);
+        uid += caracteres[randomIndex];
+    }
+
+    return uid;
+}

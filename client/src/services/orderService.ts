@@ -56,4 +56,41 @@ export class orderService {
             });
         }
     };
+
+    static getByUid = async (uid: string) => {
+        if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
+            console.error("API endpoint ou chave secreta não configurados corretamente.");
+            return;
+        }
+
+        const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
+
+        try {
+            const request = await fetch(url);
+            const data = await request.json();
+            const orderFounded = data.find((order: any) => order.uid === uid)
+            return orderFounded;
+        }
+        catch (error) {
+            console.error("Erro ao pegar a order " + uid + ": ", error)
+        }
+    }
+
+    static getByUser = async (userId: string) => {
+        if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
+            console.error("API endpoint ou chave secreta não configurados corretamente.");
+            return;
+        }
+
+        const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
+
+        try {
+            const request = await fetch(url);
+            const data = await request.json();
+            return data;
+        }
+        catch (error) {
+            console.error("Erro ao pegar a orders", error)
+        }
+    }
 }
