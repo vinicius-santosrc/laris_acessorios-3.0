@@ -41,6 +41,9 @@ const Header = () => {
         setIsSubMenuHovered(false);
         setSubHeaderOpen(false);
     };
+    if (window.location.href.includes("/admin")) {
+        return null
+    }
 
     if (window.location.href.includes("/checkout")) {
         return (

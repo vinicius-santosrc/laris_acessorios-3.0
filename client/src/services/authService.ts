@@ -118,6 +118,10 @@ class authService {
             console.error(error)
         }
     }
+
+    static getUserByUid = async (uid: string) => {
+        return null
+    }
 }
 
 export default authService;
