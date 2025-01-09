@@ -16,6 +16,9 @@ import Account from './pages/account/Account';
 import { SearchPage } from './pages/search/Search';
 import AdminPage from './pages/admin/AdminPage';
 import AdminLogin from './pages/admin/auth/AdminAuth';
+import Institutional from './pages/institutional/Institutional';
+import { PolicyPrivacyData } from './pages/institutional/policy-privacy-data/PolicyPrivacyData';
+import Footer from './components/geral/footer/Footer';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 function App() {
@@ -81,6 +84,37 @@ function App() {
             <Route path='/search' element={<SearchPage />} />
             <Route path='/admin' element={<AdminPage />} />
             <Route path='/admin/login' element={<AdminLogin />} />
+
+            <Route path='/contact-us' element={
+              <Institutional>
+                <Footer />
+              </Institutional>
+            } />
+            <Route path='/tracking' element={
+              <Institutional>
+                <Footer />
+              </Institutional>
+            } />
+            <Route path='/care-for-jewelry' element={
+              <Institutional>
+                <Footer />
+              </Institutional>
+            } />
+            <Route path='/questions' element={
+              <Institutional>
+                <Footer />
+              </Institutional>} />
+            <Route path='/policy' element={
+              <Institutional>
+                <PolicyPrivacyData />
+                <Footer />
+              </Institutional>
+            } />
+            <Route path='/beamodel' element={
+              <Institutional>
+                <Footer />
+              </Institutional>
+            } />
           </Routes>
         </BrowserRouter>
       </Provider>
