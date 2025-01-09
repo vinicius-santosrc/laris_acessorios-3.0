@@ -22,6 +22,7 @@ export class orderService {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    uid: order.uid,
                     address: JSON.stringify(order.enderecoPedido),
                     items: JSON.stringify(order.dadosPedido.produtos),
                     user: JSON.stringify(order.dadosPedido.usuario),
