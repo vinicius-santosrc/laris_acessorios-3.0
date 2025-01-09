@@ -19,6 +19,10 @@ import AdminLogin from './pages/admin/auth/AdminAuth';
 import Institutional from './pages/institutional/Institutional';
 import { PolicyPrivacyData } from './pages/institutional/policy-privacy-data/PolicyPrivacyData';
 import Footer from './components/geral/footer/Footer';
+import { BeCarefulJewerlys } from './pages/institutional/becarefuljewerlys/BeCarefulJewerlys';
+import { Questions } from './pages/institutional/questions/Questions';
+import { BeaModelPage } from './pages/institutional/beamodel/BeAModel';
+import { ContactUs } from './pages/institutional/contact-us/ContactUs';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 function App() {
@@ -47,7 +51,7 @@ function App() {
           method: "POST",
           body: JSON.stringify({ "item": 1 * 100 }),
           headers: {
-            'Authorization': `Bearer ${process.env.REACT_APP_STRIPE_SECRET_KEY}`,
+            'Authorization': `Bearer ${process.env.REACT_APP_STRIPE_SECRET_KEY_PRODUCTION}`,
             'Content-Type': 'application/json'
           }
         });
@@ -73,7 +77,7 @@ function App() {
             <Route path='/collections/:collection_name' element={<Collections />}></Route>
             <Route path='/product/:product_url' element={<ProductPage />}></Route>
             <Route path='/checkout' element={clientSecret && stripePromise ? (
-              <Elements stripe={stripePromise} options={{ mode: "payment", amount: 50 * 100, currency: 'brl', }}>
+              <Elements stripe={stripePromise} options={{ mode: "payment", amount: 1 * 100, currency: 'brl', }}>
                 <CheckoutPage clientSecret={clientSecret} />
               </Elements>
             ) : (
@@ -87,6 +91,7 @@ function App() {
 
             <Route path='/contact-us' element={
               <Institutional>
+                <ContactUs />
                 <Footer />
               </Institutional>
             } />
@@ -97,11 +102,13 @@ function App() {
             } />
             <Route path='/care-for-jewelry' element={
               <Institutional>
+                <BeCarefulJewerlys />
                 <Footer />
               </Institutional>
             } />
             <Route path='/questions' element={
               <Institutional>
+                <Questions />
                 <Footer />
               </Institutional>} />
             <Route path='/policy' element={
@@ -112,6 +119,7 @@ function App() {
             } />
             <Route path='/beamodel' element={
               <Institutional>
+                <BeaModelPage />
                 <Footer />
               </Institutional>
             } />
