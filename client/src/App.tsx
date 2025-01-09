@@ -14,6 +14,8 @@ import { Loader } from './components/ui/loader';
 import Success from './pages/checkout/Sucess';
 import Account from './pages/account/Account';
 import { SearchPage } from './pages/search/Search';
+import AdminPage from './pages/admin/AdminPage';
+import AdminLogin from './pages/admin/auth/AdminAuth';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 function App() {
@@ -77,6 +79,8 @@ function App() {
             <Route path='/success/:uid' element={<Success />} />
             <Route path='/account' element={<Account />} />
             <Route path='/search' element={<SearchPage />} />
+            <Route path='/admin' element={<AdminPage />} />
+            <Route path='/admin/login' element={<AdminLogin />} />
           </Routes>
         </BrowserRouter>
       </Provider>
