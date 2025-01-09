@@ -13,6 +13,7 @@ import 'swiper/css/pagination';
 
 import { Pagination } from 'swiper/modules';
 import { cartService } from "../../services/cartService";
+import { CloseIcon } from "../../components/icons/icons";
 
 const ProductPage = () => {
     const { product_url } = useParams<string>();
@@ -22,6 +23,9 @@ const ProductPage = () => {
     const [sizeSelected, setTamanho] = useState<any>("");
     const [sizesAvaliable, setSizes] = useState<any>(null);
     const [photosAvaliable, setPhotos] = useState<string[]>([]);
+
+    const [isPhotoShowing, setPhotoShowing] = useState<boolean>(false);
+    const [photoShowingContent, setPhotoShowingContent] = useState<string>("");
 
     useEffect(() => {
         if (!product_url) {
@@ -52,6 +56,11 @@ const ProductPage = () => {
         }
     }
 
+    function setPhotoSelected(photo: string) {
+        setPhotoShowing(true);
+        setPhotoShowingContent(photo)
+    }
+
     if (loading) {
         return <div>Carregando...</div>;
     }
@@ -66,6 +75,19 @@ const ProductPage = () => {
 
     return (
         <React.Fragment>
+            {isPhotoShowing &&
+                <React.Fragment>
+                    <section className="photoFullScreenBackground"></section>
+                    <section className="photoFullScreen">
+                        <div className="btn-close">
+                            <button onClick={() => setPhotoShowing(false)}><CloseIcon /></button>
+                        </div>
+                        <div className="photoContent">
+                            <img src={photoShowingContent} alt="photoFullScreen" />
+                        </div>
+                    </section>
+                </React.Fragment>
+            }
             <section className="product-page-content">
                 <div className="product-page-wrapper">
                     <div className="product-page-inside">
@@ -74,14 +96,14 @@ const ProductPage = () => {
                                 <div className="product-principal-pics">
                                     {photosAvaliable.map((photo: string) => {
                                         return (
-                                            <div className="product-pics" key={photo}>
+                                            <div onClick={() => setPhotoSelected(photo)} className="product-pics" key={photo}>
                                                 <img src={photo} alt={product.name_product} />
                                             </div>
                                         )
                                     })}
                                 </div>
                                 :
-                                <div className="product-one-pic">
+                                <div onClick={() => setPhotoSelected(photosAvaliable[0])} className="product-one-pic">
                                     <img src={photosAvaliable[0]} alt={product.name_product} />
                                 </div>
                             }
@@ -99,7 +121,7 @@ const ProductPage = () => {
                                 {photosAvaliable.map((photo: string, id: number) => {
                                     return (
                                         <SwiperSlide key={id}>
-                                            <div className="product-pics" key={photo}>
+                                            <div onClick={() => setPhotoSelected(photo)} className="product-pics" key={photo}>
                                                 <img src={photo} alt={product.name_product} />
                                             </div>
                                         </SwiperSlide>
