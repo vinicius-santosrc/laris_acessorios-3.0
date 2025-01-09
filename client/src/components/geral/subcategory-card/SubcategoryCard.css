@@ -6,7 +6,7 @@
   width: 312px;
   height: 312px;
   object-fit: cover;
-  background-color: #f7f7f7;
+  background-color: var(--cinza-principal);
 }
 
 .subcategory-middle-card {
@@ -32,7 +32,7 @@
     width: 180px;
     height: 180px;
     object-fit: cover;
-    background-color: #f7f7f7;
+    background-color: var(--cinza-principal);
   }
 
   .subcategory-top-card {

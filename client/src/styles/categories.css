@@ -10,7 +10,7 @@
 .categories-page-header img {
     width: 722px;
     height: 352px;
-    background-color: #F7F7F7;
+    background-color: var(--cinza-principal);
 }
 
 .categories-page-about {

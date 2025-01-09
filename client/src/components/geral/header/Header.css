@@ -15,9 +15,14 @@
 
 .subheader-component-wrapper {
   width: 100%;
-  border-top: 1px solid #f7f7f7;
+  border-top: 1px solid var(--cinza-principal);
   padding: 24px 0px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+.redirect-item-content span {
+  font-size: 12px;
 }
 
 .subHeader {
@@ -85,6 +90,10 @@
   align-items: center;
   justify-content: center;
   gap: 56px;
+  padding-bottom: 8px;
+  width: 1400px;
+  margin: auto;
+  border-bottom: 1px solid var(--cinza-principal);
 }
 
 .header-application-mobile {
@@ -119,7 +128,7 @@
 
 .btn-empty-bag {
   border-radius: 0px;
-  border-bottom: 1px solid #be0a45;
+  border-bottom: 1px solid var(--cor-principal);
 }
 
 .modal-create-account__inside {
@@ -129,19 +138,19 @@
 }
 
 .bag-item {
-    display: flex;
-    align-items: top;
-    justify-content: space-between;
-    width: 95%;
-    margin: auto;
-    gap: 10px;
+  display: flex;
+  align-items: top;
+  justify-content: space-between;
+  width: 95%;
+  margin: auto;
+  gap: 10px;
 }
 
 .bag-item img {
   min-width: 100px;
-    width: 100px;
-    height: 100px;
-    background: #f7f7f7;
+  width: 100px;
+  height: 100px;
+  background: var(--cinza-principal);
 }
 
 .bag-items {
@@ -155,7 +164,7 @@
 }
 
 .bag-item__price {
-  color: #be0a45;
+  color: var(--cor-principal);
 }
 
 .form-field {
@@ -198,7 +207,7 @@
 
 .finalizeBtn {
   color: white;
-  background-color: #be0a45;
+  background-color: var(--cor-principal);
   margin: auto;
   border-radius: 8px;
   padding: 8px;
@@ -233,7 +242,7 @@
 
 .checkbox a {
   font-size: 10px;
-  color: #be0a45;
+  color: var(--cor-principal);
 }
 
 .finalizeBtn {
@@ -242,7 +251,7 @@
   justify-content: center;
   text-align: center;
   padding: 8px;
-  background-color: #be0a45;
+  background-color: var(--cor-principal);
   color: white;
 }
 
@@ -299,7 +308,7 @@
 
   .checkbox a {
     font-size: 12px;
-    color: #be0a45;
+    color: var(--cor-principal);
   }
 
   .dialogContentMobile {
@@ -312,7 +321,7 @@
     justify-content: center;
     text-align: center;
     padding: 12px;
-    background-color: #be0a45;
+    background-color: var(--cor-principal);
     color: white;
   }
 
@@ -339,11 +348,10 @@
   }
 
   .header-inside-component {
-  text-align: center;
-  font-size: 22px;
-  margin: 12px 0px;
-}
-
+    text-align: center;
+    font-size: 22px;
+    margin: 12px 0px;
+  }
 
   .header-inside-content {
     width: 100%;
@@ -402,7 +410,7 @@
   }
 
   .footer-drawer {
-    background-color: #be0a45;
+    background-color: var(--cor-principal);
     width: 100%;
     margin-bottom: 16px;
   }
@@ -421,7 +429,7 @@
   }
 
   .drawer-header-component {
-    border-top: 2px solid #be0a45;
+    border-top: 2px solid var(--cor-principal);
   }
 
   .drawer-menu-items {
@@ -431,13 +439,13 @@
   }
 
   .breaklineHeader {
-  font-size: 27px;
-}
+    font-size: 27px;
+  }
 
-.form-field {
+  .form-field {
     font-size: 18px;
     gap: 15px;
-}
+  }
 
   .search-btn-inside {
     display: flex;
@@ -453,8 +461,8 @@
 
   .search-btn-inside button {
     width: 155px;
-    background-color: #be0a45;
+    background-color: var(--cor-principal);
     color: white;
-    border: 1px solid #be0a45;
+    border: 1px solid var(--cor-principal);
   }
 }

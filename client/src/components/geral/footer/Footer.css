@@ -73,7 +73,7 @@
 @media screen and (max-width: 900px) {
     .footer-wrapper {
         width: 100%;
-        border-bottom: 4px solid #BE0A45;
+        border-bottom: 4px solid var(--cor-principal);
     }
 
     .footer-desktop {
@@ -82,7 +82,7 @@
 
     .footer-mobile {
         display: block;
-        background: #F7F7F7;
+        background: var(--cinza-principal);
     }
 
     .footer-inside {
@@ -124,8 +124,8 @@
 
     .footer-btn-inside button {
         width: 155px;
-        background-color: #BE0A45;
+        background-color: var(--cor-principal);
         color: white;
-        border: 1px solid #BE0A45
+        border: 1px solid var(--cor-principal)
     }
 }

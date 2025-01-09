@@ -2,7 +2,7 @@
     width: 200px;
     height: 155px;
     object-fit: cover;
-    background-color: #f7f7f7;
+    background-color: var(--cinza-principal);
 }
 
 .category-card-inside span {

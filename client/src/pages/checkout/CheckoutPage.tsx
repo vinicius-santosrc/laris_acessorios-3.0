@@ -232,7 +232,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
             "numero": numero
 
         };
-        
+
         const orderContent: OrderProps = {
             uid: orderUid,
             enderecoPedido: enderecoPedido,
@@ -356,11 +356,11 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                             <div className="items-component-checkout">
                                                 <div className="inputbox">
                                                     <label>E-mail</label>
-                                                    <Input disabled={!!userAtual} value={userAtual ? userAtual.email : email} onChange={(e) => setEmail((e.target.value.toLowerCase()))} placeholder="Insira o e-mail aqui" background={"#f7f7f7"} padding={2} variant={"subtle"} />
+                                                    <Input disabled={!!userAtual} value={userAtual ? userAtual.email : email} onChange={(e) => setEmail((e.target.value.toLowerCase()))} placeholder="Insira o e-mail aqui" background={"var(--cinza-principal)"} padding={2} variant={"subtle"} />
                                                 </div>
                                                 <div className="inputbox">
                                                     <label>Nome completo</label>
-                                                    <Input disabled={!!userAtual} value={userAtual ? userAtual.nome_completo : name} onChange={(e) => setName(e.target.value)} placeholder="Insira o nome completo aqui" background={"#f7f7f7"} padding={2} variant={"subtle"} />
+                                                    <Input disabled={!!userAtual} value={userAtual ? userAtual.nome_completo : name} onChange={(e) => setName(e.target.value)} placeholder="Insira o nome completo aqui" background={"var(--cinza-principal)"} padding={2} variant={"subtle"} />
                                                 </div>
                                                 <div className="inputbox">
                                                     <label>CPF</label>
@@ -369,7 +369,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                         maxLength={14}
                                                         value={userAtual ? formatCPF(userAtual.cpf) : formatCPF(cpf)}
                                                         onChange={(e) => setCPF(formatCPF(e.target.value))}
-                                                        placeholder="Insira o cpf aqui" background={"#f7f7f7"}
+                                                        placeholder="Insira o cpf aqui" background={"var(--cinza-principal)"}
                                                         padding={2}
                                                         variant={"subtle"}
                                                     />
@@ -381,7 +381,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                         value={formatTelefone(telefone)}
                                                         onChange={(e) => setTel(formatTelefone(e.target.value))}
                                                         placeholder="Insira o telefone aqui"
-                                                        background={"#f7f7f7"}
+                                                        background={"var(--cinza-principal)"}
                                                         padding={2}
                                                         variant={"subtle"}
                                                     />
@@ -415,7 +415,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                             value={formatCEP(cep)}
                                                             onChange={(e) => setCep(formatCEP(e.target.value))}
                                                             onBlur={fetchShippingInfo}
-                                                            background={"#f7f7f7"}
+                                                            background={"var(--cinza-principal)"}
                                                             padding={2}
                                                             maxLength={9}
                                                         />
@@ -429,7 +429,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                                 value={cidade}
                                                                 onChange={(e) => setcidade(e.target.value)}
                                                                 placeholder="Insira a cidade aqui"
-                                                                background={"#f7f7f7"}
+                                                                background={"var(--cinza-principal)"}
                                                                 padding={2}
                                                                 variant={"subtle"}
                                                             />
@@ -440,7 +440,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                                 value={estado}
                                                                 onChange={(e) => setEstado(e.target.value)}
                                                                 placeholder="Insira o estado aqui"
-                                                                background={"#f7f7f7"}
+                                                                background={"var(--cinza-principal)"}
                                                                 padding={2}
                                                                 variant={"subtle"}
                                                             />
@@ -451,7 +451,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                                 value={bairro}
                                                                 onChange={(e) => setbairro(e.target.value)}
                                                                 placeholder="Insira o bairro aqui"
-                                                                background={"#f7f7f7"}
+                                                                background={"var(--cinza-principal)"}
                                                                 padding={2}
                                                                 variant={"subtle"}
                                                             />
@@ -462,7 +462,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                                 value={endereco}
                                                                 onChange={(e) => setendereco(e.target.value)}
                                                                 placeholder="Insira o endereço aqui"
-                                                                background={"#f7f7f7"}
+                                                                background={"var(--cinza-principal)"}
                                                                 padding={2}
                                                                 variant={"subtle"}
                                                             />
@@ -473,7 +473,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                                 value={numero}
                                                                 onChange={(e) => setnumero(e.target.value)}
                                                                 placeholder="Insira o número aqui"
-                                                                background={"#f7f7f7"}
+                                                                background={"var(--cinza-principal)"}
                                                                 padding={2}
                                                                 variant={"subtle"}
                                                             />
@@ -484,7 +484,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                                                 value={referencia}
                                                                 onChange={(e) => setreferencia(e.target.value)}
                                                                 placeholder="Insira a referencia aqui"
-                                                                background={"#f7f7f7"}
+                                                                background={"var(--cinza-principal)"}
                                                                 padding={2}
                                                                 variant={"subtle"}
                                                             />
@@ -621,7 +621,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
                                         <DataListRoot unstyled size={"md"} width={"full"} className="item-data-list" orientation="horizontal">
                                             <DataListItem className="item-data-list-prices" label={"Subtotal"} value={"R$ " + subtotal.toFixed(2)} />
                                             <DataListItem className="item-data-list-prices" label={"Desconto"} value={"R$ " + desconto.toFixed(2)} />
-                                            <DataListItem className="item-data-list-prices" label={"Entrega"} value={"R$ " + (shippingCost ? shippingCost?.toFixed(2): "A DEFINIR")} />
+                                            <DataListItem className="item-data-list-prices" label={"Entrega"} value={"R$ " + (shippingCost ? shippingCost?.toFixed(2) : "A DEFINIR")} />
                                             <DataListItem className="item-data-list-prices-principal" label={"Total"} value={"R$ " + total.toFixed(2)} />
                                         </DataListRoot>
                                         <div className="actions-buttons">
