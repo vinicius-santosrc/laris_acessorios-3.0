@@ -1,5 +1,5 @@
 .topbar-wrapper {
-    background-color: #BE0A45;
+    background-color: var(--cor-principal);
     padding: 2px 0px;
 }
 

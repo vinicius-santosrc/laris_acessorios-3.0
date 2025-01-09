@@ -15,7 +15,6 @@ const Footer = () => {
             title: "Atendimento ao Cliente",
             links: [
                 { text: "Entre em contato", to: window.location.origin + "/contact-us"},
-                { text: "Rastreie sua encomenda", to: window.location.origin + "/tracking"},
                 { text: "Cuidado com as Joias", to: window.location.origin + "/care-for-jewelry" },
                 { text: "Perguntas frequentes", to: window.location.origin + "/questions" }
             ]

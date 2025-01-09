@@ -1,246 +1,244 @@
 .AdminLoginPage {
-    margin: -170px 60px;
+  margin: -170px 60px;
 }
 
 .modalFormLogin {
-    width: 100%;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 .AdminLogin-flexbox {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    width: 100%;
-    padding-left: 60px;
-    padding-right: -60px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding-left: 60px;
+  padding-right: -60px;
 }
 
 .LogoAdmin {
-    width: 120px;
-    margin: 15px 0px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin-left: 60px
+  width: 120px;
+  margin: 15px 0px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 60px;
 }
 
 .AdminLogin-top {
-    margin: 20px 0px;
+  margin: 20px 0px;
 }
 
 .AdminLogin-top h2 {
-    font-size: 28px;
-    font-weight: 400;
+  font-size: 28px;
+  font-weight: 400;
 }
 
 .AdminLogin-top p {
-    font-size: 16px;
-    color: gray;
-    
+  font-size: 16px;
+  color: gray;
 }
 
 .AdminLogin-input-box p {
-    color: rgb(0, 0, 0);
-    font-weight: 400;
+  color: rgb(0, 0, 0);
+  font-weight: 400;
 }
 
 .AdminLogin-left-side {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .AdminLogin-right-side img {
-    width: 50vw;
-    object-fit: cover;
-    height: 100vh;
-    margin-right: -60px;
-    border-radius: 50px 0px 00px 50px;
-    pointer-events: none;
+  width: 50vw;
+  object-fit: cover;
+  height: 100vh;
+  margin-right: -60px;
+  border-radius: 50px 0px 00px 50px;
+  pointer-events: none;
 }
 
 .AdminLogin-input-box input {
-    width: 100%;
-    padding: 15px 10px;
-    border-radius: 10px;
-    border: 1px solid #DFDFDF;
-    background: #ECECEC;
-    outline: none;
-    margin: 00px 00px 16px 00px;
+  width: 100%;
+  padding: 15px 10px;
+  border-radius: 10px;
+  border: 1px solid #dfdfdf;
+  background: #ececec;
+  outline: none;
+  margin: 00px 00px 16px 00px;
 }
 
 .AdminLogin-bottom {
-    text-align: center;
-    justify-content: center;
+  text-align: center;
+  justify-content: center;
 }
 
 .AdminLogin-bottom button {
-    background-color: #BE0A45;
-    width: 100%;
-    border-radius: 50px;
-    margin: 30px auto;
-    color: white;
-    padding: 10px 0px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 300ms;
-    border: 1px solid #BE0A45;
+  background-color: var(--cor-principal);
+  width: 100%;
+  border-radius: 50px;
+  margin: 30px auto;
+  color: white;
+  padding: 10px 0px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 300ms;
+  border: 1px solid var(--cor-principal);
 }
 
 .AdminLogin-bottom button:active {
-    background-color: #fdfdfd;
-    border: 1px solid #BE0A45;
-    width: 100%;
-    border-radius: 50px;
-    margin: 30px auto;
-    color: #BE0A45;
-    padding: 10px 0px;
-    cursor: pointer;
-    font-size: 16px;
+  background-color: #fdfdfd;
+  border: 1px solid var(--cor-principal);
+  width: 100%;
+  border-radius: 50px;
+  margin: 30px auto;
+  color: var(--cor-principal);
+  padding: 10px 0px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .alertComponent {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right:0;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    box-shadow: 1px 1px 5px gray;
-    z-index: 5;
-    display: flex;
-    width: 390px;
-    gap: 10px;
-    justify-content: center;
-    animation: openAlertComponent 0.2s linear;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  box-shadow: 1px 1px 5px gray;
+  z-index: 5;
+  display: flex;
+  width: 390px;
+  gap: 10px;
+  justify-content: center;
+  animation: openAlertComponent 0.2s linear;
 }
 
 .alertComponentError {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right:0;
-    margin: auto;
-    background: #fc9191;
-    padding: 20px;
-    box-shadow: 1px 1px 5px gray;
-    z-index: 5;
-    display: flex;
-    width: 100%;
-    gap: 10px;
-    justify-content: left;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background: #fc9191;
+  padding: 20px;
+  box-shadow: 1px 1px 5px gray;
+  z-index: 5;
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  justify-content: left;
 }
 
 @keyframes openAlertComponent {
-    0% {
-        width: 0px;
-        opacity: 0;
-        height: 100px;
-    }
+  0% {
+    width: 0px;
+    opacity: 0;
+    height: 100px;
+  }
 
-    100% {
-        width: 390px;
-        opacity: 1
-    }
+  100% {
+    width: 390px;
+    opacity: 1;
+  }
 }
 
 .alertComponentBackGround {
-    position: fixed;
-    width: 200vw;
-    height: 200vh;
-    margin: -70px;
-    background: rgba(0, 0, 0, 0.397);
-    z-index: 2;
+  position: fixed;
+  width: 200vw;
+  height: 200vh;
+  margin: -70px;
+  background: rgba(0, 0, 0, 0.397);
+  z-index: 2;
 }
 
 .AdminPage-DashBoard {
-    position: relative;
-    justify-content: center;
-    margin: 0 auto;
-    display: flex;
-    margin: -160px auto;
-
+  position: relative;
+  justify-content: center;
+  margin: 0 auto;
+  display: flex;
+  margin: -160px auto;
 }
 
 @media screen and (max-width: 900px) {
-    .AdminLoginPage {
-        margin: 0px 20px;
-    }
+  .AdminLoginPage {
+    margin: 0px 20px;
+  }
 
-    .AdminLogin-flexbox {
-        display: flex;
-        justify-content: space-between;
-        gap: 0px;
-        width: 100%;
-        padding-left: 0px;
-        padding-right: 0px;
-        flex-direction: column;
-        margin-top: 20px;
-    }
+  .AdminLogin-flexbox {
+    display: flex;
+    justify-content: space-between;
+    gap: 0px;
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
+    flex-direction: column;
+    margin-top: 20px;
+  }
 
-    .LogoAdmin {
-        width: 230px;
-        margin: 15px 0px;
-        position: relative;
-        display: block;
-    }
+  .LogoAdmin {
+    width: 230px;
+    margin: 15px 0px;
+    position: relative;
+    display: block;
+  }
 
-    .AdminLogin-top {
-        margin: 10px 0px;
-    }
+  .AdminLogin-top {
+    margin: 10px 0px;
+  }
 
-    .AdminLogin-top h2 {
-        font-size: 2rem;
-    }
+  .AdminLogin-top h2 {
+    font-size: 2rem;
+  }
 
-    .AdminLogin-top p {
-        font-size: 1.1rem;
-        color: gray;
-    }
+  .AdminLogin-top p {
+    font-size: 1.1rem;
+    color: gray;
+  }
 
-    .AdminLogin-input-box p {
-        color: gray;
-    }
+  .AdminLogin-input-box p {
+    color: gray;
+  }
 
-    .AdminLogin-left-side {
-        display: block;
-        align-items: center;
-    }
+  .AdminLogin-left-side {
+    display: block;
+    align-items: center;
+  }
 
-    .AdminLogin-right-side img {
-        width: 100%;;
-        pointer-events: none;
-        border-radius: 40px 40px 00px 00px;
-        margin: auto;
-        padding-top: 20px;
-        height: 46vh;
-    }
+  .AdminLogin-right-side img {
+    width: 100%;
+    pointer-events: none;
+    border-radius: 40px 40px 00px 00px;
+    margin: auto;
+    padding-top: 20px;
+    height: 46vh;
+  }
 
-    .AdminLogin-input-box input {
-        width: 100%;
-        padding: 15px 10px;
-        border-radius: 10px;
-        border: 1px solid #DFDFDF;
-        outline: none;
-        margin: 5px 0px;
-    }
+  .AdminLogin-input-box input {
+    width: 100%;
+    padding: 15px 10px;
+    border-radius: 10px;
+    border: 1px solid #dfdfdf;
+    outline: none;
+    margin: 5px 0px;
+  }
 
-    .AdminLogin-bottom {
-        text-align: center;
-        justify-content: center;
-    }
+  .AdminLogin-bottom {
+    text-align: center;
+    justify-content: center;
+  }
 
-    .AdminLogin-bottom button {
-        background-color: black;
-        width: 90%;
-        border-radius: 10px;
-        margin: 30px auto;
-        color: white;
-        padding: 10px 0px;
-        border: none;
-        cursor: pointer;
-        font-size: 1.4rem;
-    }
+  .AdminLogin-bottom button {
+    background-color: black;
+    width: 90%;
+    border-radius: 10px;
+    margin: 30px auto;
+    color: white;
+    padding: 10px 0px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+  }
 }

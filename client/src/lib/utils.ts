@@ -139,6 +139,84 @@ export const defaultsCategories: CategoriesProps[] = [
 
 ]
 
+export const modelData = [
+    {
+        question: "Como posso me tornar modelo para a LARI'S ACESSÓRIOS?",
+        answer: "Para se tornar um modelo da LARI'S ACESSÓRIOS, basta preencher o formulário de cadastro disponível em nossa página de 'Seja Modelo' e enviar algumas fotos suas. Após o envio, nossa equipe irá avaliar o seu perfil e entrar em contato caso você seja selecionada para participar de nossas campanhas."
+    },
+    {
+        question: "Quais são os requisitos para ser modelo?",
+        answer: "Não exigimos um perfil específico para ser modelo, mas buscamos pessoas que se identifiquem com nossa marca e estejam dispostas a se engajar nas campanhas. Focamos na diversidade e buscamos modelos de diferentes estilos, idades e etnias. O mais importante é que você tenha confiança e uma atitude positiva diante das câmeras."
+    },
+    {
+        question: "Quais tipos de modelos vocês procuram?",
+        answer: "Nós procuramos modelos para diferentes finalidades: fotos para o site, redes sociais, campanhas publicitárias e outros materiais promocionais. Buscamos modelos de diferentes perfis e estilos, como modelos de rosto, corpo ou ainda influenciadores digitais que possam criar conteúdo para a nossa marca."
+    },
+    {
+        question: "Preciso de experiência para me tornar modelo?",
+        answer: "A experiência anterior não é um requisito obrigatório para se tornar modelo. Valorizamos mais a atitude e a confiança que você transmite nas fotos. Se você tem paixão por moda e acessórios e está disposta a aprender, certamente terá uma boa oportunidade conosco."
+    },
+    {
+        question: "Quais são as etapas do processo de seleção?",
+        answer: "O processo de seleção é simples. Primeiro, você envia suas informações e fotos através do formulário. Em seguida, nossa equipe avalia seu perfil e, se houver interesse, entraremos em contato para agendar um casting ou uma reunião para conversar mais sobre a parceria. Após isso, você será orientada sobre os próximos passos."
+    },
+    {
+        question: "Como faço para entrar em contato com a equipe da LARI'S ACESSÓRIOS sobre ser modelo?",
+        answer: "Se você deseja saber mais ou tem dúvidas sobre o processo de seleção para ser modelo, pode entrar em contato conosco através do e-mail larisacessorios.loja@gmail.com ou pelo telefone (35) 99739-4181. Estamos disponíveis para esclarecer todas as suas questões."
+    },
+    {
+        question: "Quais tipos de campanhas a LARI'S ACESSÓRIOS realiza?",
+        answer: "A LARI'S ACESSÓRIOS realiza uma variedade de campanhas, desde produções fotográficas para novas coleções até campanhas para datas comemorativas, como Dia das Mães e Natal. Também fazemos colaborações com influenciadores e modelos para criar conteúdos exclusivos para nossas redes sociais."
+    },
+    {
+        question: "Posso compartilhar o conteúdo da campanha nas minhas redes sociais?",
+        answer: "Sim! Quando você participa de uma campanha, você pode compartilhar o conteúdo produzido nas suas próprias redes sociais, desde que siga as orientações da equipe de marketing da LARI'S ACESSÓRIOS para garantir que a campanha seja divulgada de forma correta e com a imagem da marca preservada."
+    }
+];
+
+export const faqData = [
+    {
+        question: "Como posso realizar uma compra em seu site?",
+        answer: "Para realizar uma compra, basta navegar pelo nosso site, escolher os produtos desejados, adicioná-los ao carrinho e seguir para o checkout. Você precisará fornecer algumas informações pessoais para finalizar a compra, como endereço de entrega e forma de pagamento. Aceitamos cartões de crédito, Pix e outros meios de pagamento disponíveis."
+    },
+    {
+        question: "Quais formas de pagamento vocês aceitam?",
+        answer: "Aceitamos diversas formas de pagamento, incluindo cartões de crédito, transferências via Pix e boleto bancário. Durante o processo de compra, você poderá escolher a opção que melhor se adapta às suas necessidades."
+    },
+    {
+        question: "Como posso rastrear meu pedido?",
+        answer: "Após a confirmação do pagamento, você receberá um e-mail com o número de rastreamento do seu pedido. Você pode utilizar esse número para acompanhar a entrega diretamente pelo site dos correios ou pela plataforma de transporte escolhida."
+    },
+    {
+        question: "Posso alterar ou cancelar meu pedido?",
+        answer: "Alterações ou cancelamentos podem ser feitos até o momento em que o pedido for enviado. Se precisar fazer alguma alteração, entre em contato conosco o mais rápido possível. Caso o pedido já tenha sido enviado, não será possível realizar alterações, mas você pode solicitar a devolução do produto após o recebimento."
+    },
+    {
+        question: "Quais são as políticas de troca e devolução?",
+        answer: "Você pode solicitar a troca ou devolução de um produto em até 7 dias após o recebimento, desde que o item esteja em condições originais, sem uso e com a embalagem intacta. Para mais detalhes sobre o processo, consulte nossa política de trocas e devoluções ou entre em contato com nossa equipe de atendimento ao cliente."
+    },
+    {
+        question: "Como sei que as joias e semijoias são de boa qualidade?",
+        answer: "Trabalhamos com fornecedores de confiança e selecionamos cuidadosamente todos os nossos produtos. Nossas joias e semijoias são feitas com materiais de alta qualidade, como metais nobres e pedras naturais ou de excelente procedência. Garantimos que as peças atendem a rigorosos padrões de qualidade e durabilidade."
+    },
+    {
+        question: "O que devo fazer se receber um produto com defeito?",
+        answer: "Se você recebeu um produto com defeito ou avariado, entre em contato conosco imediatamente através do nosso e-mail ou telefone. Faremos o possível para resolver o problema, seja com a substituição do item ou o reembolso, conforme nossa política de trocas e devoluções."
+    },
+    {
+        question: "Vocês entregam para todo o Brasil?",
+        answer: "Sim, realizamos entregas em todo o Brasil. O frete será calculado com base no seu endereço durante o processo de checkout, e você poderá escolher entre as opções de envio disponíveis."
+    },
+    {
+        question: "Posso acompanhar a atualização dos preços dos produtos?",
+        answer: "Os preços dos nossos produtos podem ser atualizados ocasionalmente, com base em promoções, novos lançamentos ou alterações de custo. Para garantir que você receba as melhores ofertas, recomendamos que assine nossa newsletter ou acompanhe nossas redes sociais para atualizações e promoções exclusivas."
+    },
+    {
+        question: "Como posso entrar em contato com o atendimento ao cliente?",
+        answer: "Se você tiver dúvidas ou precisar de assistência, pode entrar em contato com o nosso atendimento ao cliente pelo e-mail <strong>larisacessorios.loja@gmail.com</strong> ou pelo telefone <strong>(35) 99739-4181</strong>. Estamos disponíveis para ajudar com qualquer dúvida ou necessidade que você possa ter."
+    }
+];
+
 export interface MenuItemsProps {
     title: string;
     isLink: boolean;

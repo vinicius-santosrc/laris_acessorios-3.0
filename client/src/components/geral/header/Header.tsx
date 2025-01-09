@@ -132,7 +132,7 @@ const Header = () => {
                                                 : "javascript:;"
                                         }
                                     >
-                                        {categoria.title}
+                                        <span>{categoria.title.toUpperCase()}</span>
                                     </Button>
                                 </article>
                             );
