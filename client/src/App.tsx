@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Header from './components/geral/header/Header';
 import Home from './pages/main/home/Home';
@@ -23,11 +23,33 @@ import { BeCarefulJewerlys } from './pages/institutional/becarefuljewerlys/BeCar
 import { Questions } from './pages/institutional/questions/Questions';
 import { BeaModelPage } from './pages/institutional/beamodel/BeAModel';
 import { ContactUs } from './pages/institutional/contact-us/ContactUs';
+import { NotFoundPage } from './pages/404/404';
+import { CheckIfUserIsLogged } from './lib/firebase';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
+
+const routes = [
+  { path: '/', element: <Home /> },
+  { path: '/collections/:collection_name', element: <Collections /> },
+  { path: '/product/:product_url', element: <ProductPage /> },
+  { path: '/success/:uid', element: <Success /> },
+  { path: '/account', element: <Account /> },
+  { path: '/search/:search', element: <SearchPage /> },
+  { path: '/admin', element: <AdminPage /> },
+  { path: '/admin/login', element: <AdminLogin /> },
+  { path: '/contact-us', element: <Institutional><ContactUs /><Footer /></Institutional> },
+  { path: '/tracking', element: <Institutional><Footer /></Institutional> },
+  { path: '/care-for-jewelry', element: <Institutional><BeCarefulJewerlys /><Footer /></Institutional> },
+  { path: '/questions', element: <Institutional><Questions /><Footer /></Institutional> },
+  { path: '/policy', element: <Institutional><PolicyPrivacyData /><Footer /></Institutional> },
+  { path: '/beamodel', element: <Institutional><BeaModelPage /><Footer /></Institutional> },
+  { path: '/404', element: <NotFoundPage /> }
+];
+
 function App() {
   const [stripePromise, setStripePromise] = useState<any>(null);
   const [clientSecret, setClientSecret] = useState<any>("");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -66,6 +88,22 @@ function App() {
     createPaymentIntent();
   }, []);
 
+  useEffect(() => {
+    const checkUserLoggedIn = async () => {
+      const authenticated = await CheckIfUserIsLogged();
+      setIsAuthenticated(authenticated);
+    };
+
+    checkUserLoggedIn();
+  }, []);
+
+  const ProtectedRoute = ({ element }: any) => {
+    if (isAuthenticated === null) {
+      return <Loader />;
+    }
+
+    return isAuthenticated ? element : <Navigate to="/404" />;
+  };
   return (
     <div className="page">
       <Provider>
@@ -73,56 +111,33 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route path='/' element={<Home />}></Route>
-            <Route path='/collections/:collection_name' element={<Collections />}></Route>
-            <Route path='/product/:product_url' element={<ProductPage />}></Route>
-            <Route path='/checkout' element={clientSecret && stripePromise ? (
-              <Elements stripe={stripePromise} options={{ mode: "payment", amount: 1 * 100, currency: 'brl', }}>
-                <CheckoutPage clientSecret={clientSecret} />
-              </Elements>
-            ) : (
-              <Loader />
-            )}></Route>
-            <Route path='/success/:uid' element={<Success />} />
-            <Route path='/account' element={<Account />} />
-            <Route path='/search' element={<SearchPage />} />
-            <Route path='/admin' element={<AdminPage />} />
-            <Route path='/admin/login' element={<AdminLogin />} />
+            {routes.map((route, index) => {
+              if (route.path === '/admin') {
+                return (
+                  <Route
+                    key={index}
+                    path={route.path}
+                    element={<ProtectedRoute element={route.element} />}
+                  />
+                );
+              }
 
-            <Route path='/contact-us' element={
-              <Institutional>
-                <ContactUs />
-                <Footer />
-              </Institutional>
-            } />
-            <Route path='/tracking' element={
-              <Institutional>
-                <Footer />
-              </Institutional>
-            } />
-            <Route path='/care-for-jewelry' element={
-              <Institutional>
-                <BeCarefulJewerlys />
-                <Footer />
-              </Institutional>
-            } />
-            <Route path='/questions' element={
-              <Institutional>
-                <Questions />
-                <Footer />
-              </Institutional>} />
-            <Route path='/policy' element={
-              <Institutional>
-                <PolicyPrivacyData />
-                <Footer />
-              </Institutional>
-            } />
-            <Route path='/beamodel' element={
-              <Institutional>
-                <BeaModelPage />
-                <Footer />
-              </Institutional>
-            } />
+              return <Route key={index} path={route.path} element={route.element} />;
+            })}
+
+            <Route
+              path='/checkout'
+              element={clientSecret && stripePromise ? (
+                <Elements stripe={stripePromise} options={{ mode: "payment", amount: 1 * 100, currency: 'brl' }}>
+                  <CheckoutPage clientSecret={clientSecret} />
+                </Elements>
+              ) : (
+                <Loader />
+              )}
+            />
+
+            {/* Rota catch-all para 404 */}
+            <Route path="*" element={<Navigate to="/404" />} />
           </Routes>
         </BrowserRouter>
       </Provider>

@@ -3,7 +3,7 @@ import './Account.css';
 import { UserProps } from '../../models/user';
 import { Loader } from '../../components/ui/loader';
 import authService from '../../services/authService';
-import { formatCPF } from '../../lib/utils';
+import { formatCPF, getFirstAndLastName } from '../../lib/utils';
 
 const Account = () => {
     const fotoUsuario = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp";
@@ -25,7 +25,6 @@ const Account = () => {
             setLoading(false);
         };
 
-        // Check the URL hash to set the default section
         if (window.location.hash === "#wishlist") {
             setSelectedSection("favoritos");
         }
@@ -71,16 +70,16 @@ const Account = () => {
     };
 
     return (
-        <div className="account-container">
+        <div className="account-wrapper">
             {isLoading && <Loader />}
-            <div className="sidebar">
+            <div className="sidebarcontent-account">
                 <div className="user-info">
                     <img src={fotoUsuario} alt="Foto do usuário" className="user-photo" />
                     <div className="user-greeting">
-                        <p>Olá, {userAtual?.nome_completo}!</p>
+                        <p>Olá, {userAtual && getFirstAndLastName(userAtual?.nome_completo)}!</p>
                     </div>
                 </div>
-                <nav className="nav">
+                <nav className="navigation">
                     <ul>
                         <li onClick={() => setSelectedSection("dadosPessoais")}>Dados Pessoais</li>
                         <li onClick={() => setSelectedSection("pedidos")}>Pedidos</li>
@@ -89,7 +88,7 @@ const Account = () => {
                     </ul>
                 </nav>
             </div>
-            <div className="account-content">
+            <div className="content">
                 {renderContent()}
             </div>
         </div>

@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import { Product } from "@/models/product";
 import PrincipalProductCard from "../principal-product-card/PrincipalProductCard";
 import { PaginationItems, PaginationNextTrigger, PaginationPrevTrigger, PaginationRoot } from "../../../components/ui/pagination";
+import { Button } from "../../../components/ui/button";
+import { SearchX } from "lucide-react";
 
 const CategoryProducts: React.FC<any> = ({ products }) => {
     const validProducts = Array.isArray(products) ? products : [];
@@ -39,6 +41,14 @@ const CategoryProducts: React.FC<any> = ({ products }) => {
                         {currentProducts.map((product: Product) => (
                             <PrincipalProductCard product={product} key={product.id} />
                         ))}
+                        {currentProducts.length < 1 &&
+                            <section className="no-products">
+                                <SearchX className="search-btn" />
+                                <h1>NÃO FOI ENCONTRADO NENHUM PRODUTO REGISTRADO.</h1>
+                                <p>Por favor, tente outros parametros de busca ou tente novamente mais tarde.</p>
+                                <Button className="btnNoProducts" onClick={() => window.location.reload()}>Recarregar</Button>
+                            </section>
+                        }
                     </div>
                 </div>
                 <div className="category-products__bottom">

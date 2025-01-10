@@ -1,0 +1,66 @@
+.not-found-page {
+    display: flex;
+    justify-content: center;
+    color: BLACK; /* Texto branco para destaque */
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+.not-found-page__inside {
+    border-radius: 15px;
+    justify-self: center;
+    margin: auto;
+    width: 100%;
+}
+
+.not-found-page__title {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    color: #be0a45; /* Aplicando o tom de vermelho vibrante */
+    margin-bottom: 20px;
+}
+
+.not-found-page__inside img {
+    width: 400px;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.not-found-page__message {
+    font-size: 18px;
+    margin: auto;
+    margin-bottom: 40px;
+    color: #939292; /* Cinza claro para o texto */
+    line-height: 1.6;
+    width: 600px;
+}
+
+.not-found-page__button {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #be0a45; /* Cor de fundo vermelha */
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 25px;
+    transition: background-color 0.3s, transform 0.3s; /* Transições suaves */
+}
+
+.not-found-page__button:hover {
+    background-color: #9b0837; /* Tom de vermelho mais escuro para o hover */
+    transform: translateY(-3px); /* Efeito de elevação suave */
+}
+
+.not-found-page__button:active {
+    background-color: #8a0732; /* Tom mais escuro ao clicar */
+    transform: translateY(1px); /* Suaviza o efeito de clique */
+}
+
+@media screen and (max-width: 900px) {
+    .not-found-page__message {
+        width: 95%;
+    }
+}
