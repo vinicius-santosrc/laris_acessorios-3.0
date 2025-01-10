@@ -75,15 +75,34 @@ app.get("/config", (req, res) => {
     });
 });
 
+// Endpoint para criar o PaymentIntent
 app.post("/create-payment-intent", async (req, res) => {
     try {
-        const amount = req.body.item;
-        const paymentIntent = await stripe.paymentIntents.create({
-            currency: "BRL",
-            amount: amount,
-            automatic_payment_methods: { enabled: true },
-        });
+        const { item, paymentMethodType } = req.body; // Receber o valor e tipo de pagamento
 
+        const amount = item; // O valor que será cobrado, em centavos
+
+        // Configuração inicial do PaymentIntent
+        const paymentIntentParams = {
+            amount: amount,
+            currency: 'brl',
+            automatic_payment_methods: { enabled: true }, // Permitir métodos de pagamento automáticos (cartão, pix, etc)
+        };
+
+        // Se o tipo de pagamento for "card", habilitar parcelamento
+        if (paymentMethodType === 'card') {
+            paymentIntentParams.payment_intent_options = {
+                installments: {
+                    enabled: true,
+                    maximum_installments: 4, // Permitir até 4 vezes de parcelamento
+                },
+            };
+        }
+
+        // Criar o PaymentIntent
+        const paymentIntent = await stripe.paymentIntents.create(paymentIntentParams);
+
+        // Retornar o client_secret para o front-end
         res.send({
             clientSecret: paymentIntent.client_secret,
         });

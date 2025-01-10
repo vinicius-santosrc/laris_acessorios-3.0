@@ -128,8 +128,10 @@ function App() {
             <Route
               path='/checkout'
               element={clientSecret && stripePromise ? (
-                <Elements stripe={stripePromise} options={{ mode: "payment", amount: 1 * 100, currency: 'brl' }}>
-                  <CheckoutPage clientSecret={clientSecret} />
+                <Elements stripe={stripePromise} options={{
+                  paymentMethodTypes: ['card', 'pix'], 
+                  appearance: { variables: { colorPrimaryText: '#be0a45', colorDanger: "#be0a45" } }, mode: "payment", amount: 1 * 100, currency: 'brl',  }}>
+                  <CheckoutPage paymentMethodTypes={['card', 'pix']} clientSecret={clientSecret} />
                 </Elements>
               ) : (
                 <Loader />
