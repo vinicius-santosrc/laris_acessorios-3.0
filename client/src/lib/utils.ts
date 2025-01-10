@@ -34,7 +34,7 @@ export const defaultsCategories: CategoriesProps[] = [
     {
         highlightText: "Anéis",
         highlightDescription: "Explore nossa coleção de anéis sofisticados e modernos para todas as ocasiões.",
-        highlightImage: "/images/rings.jpg",
+        highlightImage: "https://uploaddeimagens.com.br/images/004/880/695/full/aneis-page.png?1736520426",
         urlLink: "anel",
         products: []
     },
@@ -361,6 +361,16 @@ export const menuItems: MenuItemsProps[] = [
         ]
     },
 ]
+
+export const getFirstAndLastName = (fullName: string) => {
+    const nameParts = fullName.split(" ");
+    if (nameParts.length > 1) {
+        const firstName = nameParts[0];
+        const lastName = nameParts[nameParts.length - 1];
+        return `${firstName} ${lastName}`;
+    }
+    return fullName;
+};
 
 export function gerarUidComCaracteresENumeros(): string {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

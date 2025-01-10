@@ -1,0 +1,48 @@
+.adminPage {
+    height: 100vh;
+}
+
+.react-grid-item {
+    background-color: white;
+}
+
+.dashboard-content {
+    margin-left: 250px;
+    padding-top: 120px;
+}
+
+.dashboard-header-component__inside {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 1200px;
+}
+
+.dashboard-header-component-action-btns {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.dashboard-header-component-action-btns button {
+    width: 40px !important;
+    height: 40px !important;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: gray;
+    background-color: white;
+    border-radius: 100%;
+    display: flex;
+}
+
+.widget {
+    color: black;
+}
+.dashboard-header-component {
+    margin-left: 250px;
+    position: fixed;
+    top: 0;
+    padding: 24px 0px;
+}

@@ -10,7 +10,33 @@
 .categories-page-header img {
     width: 722px;
     height: 352px;
+    object-fit: cover;
+    object-position: bottom;
     background-color: var(--cinza-principal);
+}
+
+.no-products {
+    text-align: center;
+    padding: 24px 24px;
+}
+
+.search-btn {
+    text-align: center;
+    margin: 24px auto;
+    color: var(--cor-principal);
+}
+
+.btnNoProducts {
+    margin: 12px 0px;
+    background-color: var(--cor-principal);
+    color: white;
+    border-radius: 8px;
+    padding: 8px 0px;
+    width: 200px;
+}
+
+.no-products h1 {
+    color: var(--cor-principal);
 }
 
 .categories-page-about {

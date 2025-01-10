@@ -5,7 +5,7 @@ import { FavoritesIcon, SearchIcon } from "../../icons/icons";
 import "./Header.css";
 import { Link } from "react-router-dom";
 import { Button } from "../../ui/button";
-import { Image, Input } from "@chakra-ui/react";
+import { Image, Input, InputElementProps } from "@chakra-ui/react";
 import { menuItems, MenuItemsProps } from "../../../lib/utils";
 import BagComponent from "./bag-component/BagComponent";
 import MenuComponent from "./menu-mobile/MenuComponent";
@@ -18,6 +18,8 @@ const Header = () => {
     const [isItemHover, setItemHover] = useState<MenuItemsProps | null>(null);
     const [isSubHeaderOpen, setSubHeaderOpen] = useState<boolean>(false);
     const [isSubMenuHovered, setIsSubMenuHovered] = useState<boolean>(false);
+    const [inputSearch, setInputSearch] = useState<string>("");
+    const [isFocused, setIsFocused] = useState(false);
 
     const handleMouseEnter = (categoria: MenuItemsProps) => {
         setItemHover(categoria);
@@ -31,6 +33,21 @@ const Header = () => {
                 setSubHeaderOpen(false);
             }
         }, 1500);
+    };
+
+
+    const handleFocus = () => {
+        setIsFocused(true);  // Marca o campo como focado
+    };
+
+    const handleBlur = () => {
+        setIsFocused(false);  // Marca o campo como desfocado
+    };
+
+    const handleKeyDown = (e: InputElementProps) => {
+        if (isFocused && e.key === 'Enter') {
+            window.location.href = `${window.location.origin}/search/${inputSearch}`;
+        }
     };
 
     const handleSubHeaderMouseEnter = () => {
@@ -96,7 +113,15 @@ const Header = () => {
                     <section className="header-inside-content header-inside-content__search">
                         <div className="search-box-area search-box-area__wrapper">
                             <SearchIcon />
-                            <Input className="search-input" placeholder="Buscar por produtos" />
+                            <Input
+                                className="search-input"
+                                value={inputSearch}
+                                placeholder="Buscar por produtos"
+                                onChange={(e) => setInputSearch(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                onFocus={handleFocus}
+                                onBlur={handleBlur}
+                            />
                         </div>
                     </section>
 
@@ -172,8 +197,13 @@ const Header = () => {
                     <section className="search-box-wrapper-mobile">
                         <div className="search-box-wrapper-inside">
                             <div className="search-btn-inside search-form">
-                                <Input className="search-input" placeholder="Buscar produtos" />
-                                <Button className="search-btn" variant={"outline"}>
+                                <Input value={inputSearch}
+                                    placeholder="Buscar por produtos"
+                                    onChange={(e) => setInputSearch(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    onFocus={handleFocus}
+                                    onBlur={handleBlur} />
+                                <Button onClick={() => window.location.href = `${window.location.origin}/search/${inputSearch}`} className="search-btn" variant={"outline"}>
                                     BUSCAR
                                 </Button>
                             </div>

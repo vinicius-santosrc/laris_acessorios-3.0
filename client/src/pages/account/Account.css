@@ -1,10 +1,10 @@
 /* Estilos principais */
-.account-container {
+.account-wrapper {
     display: flex;
     min-height: 100vh;
 }
 
-.sidebar {
+.sidebarcontent-account {
     width: 250px;
     padding: 20px;
     display: flex;
@@ -30,20 +30,20 @@
     font-weight: bold;
 }
 
-.nav ul {
+.navigation ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.nav li {
+.navigation li {
     margin: 20px 0;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
 }
 
-.account-content {
+.content {
     border: 1px solid #c9c6c6;
     width: 800px;
     height: 100%;
@@ -52,25 +52,25 @@
     border-radius: 4px;
 }
 
-.account-content h2 {
+.content h2 {
     font-size: 24px;
     color: #333;
     font-weight: 600;
 }
 
-.account-content p {
+.content p {
     font-size: 18px;
     color: #555;
 }
 
 /* Estilos Responsivos */
 @media (max-width: 768px) {
-    .account-container {
+    .account-wrapper {
         flex-direction: column;
         margin: auto;
     }
 
-    .sidebar {
+    .sidebarcontent-account {
         width: 100%;
         flex-direction: column;
         justify-content: space-between;
@@ -89,19 +89,19 @@
         font-size: 14px;
     }
 
-    .nav {
+    .navigation {
         width: 95%;
         margin: auto;
     }
 
-    .nav ul {
+    .navigation ul {
         display: flex;
         justify-content: space-around;
         width: 100%;
         margin: auto;
     }
 
-    .nav li {
+    .navigation li {
         margin: 0;
         font-size: 14px;
         width: 100%;
@@ -109,36 +109,36 @@
         text-align: left;
     }
 
-    .account-content {
+    .content {
         padding: 20px;
     }
 
-    .account-content {
+    .content {
         width: 95%;
         margin: 0 auto;
     }
 }
 
 @media (max-width: 480px) {
-    .account-content h2 {
+    .content h2 {
         font-size: 20px;
     }
 
-    .account-content p {
+    .content p {
         font-size: 16px;
     }
 
-    .sidebar {
+    .sidebarcontent-account {
         width: 100%;
         padding: 5px;
     }
 
-    .nav ul {
+    .navigation ul {
         flex-direction: column;
         align-items: center;
     }
 
-    .nav li {
+    .navigation li {
         margin: 10px 0;
     }
 }

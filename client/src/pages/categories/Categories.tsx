@@ -4,15 +4,25 @@ import CategoryFilter from "../../components/geral/categories-page/CategoryFilte
 import CategoryProducts from "../../components/geral/categories-page/CategoryProducts";
 import "../../styles/categories.css";
 import productService from "../../services/productService";
+import { useParams } from "react-router-dom";
+import { Product } from "@/models/product";
 
 const Categories: React.FC<any> = ({ CategoryHeaderContent }) => {
     const [categorySelected, setCategory] = useState<any>(null);
+    const { search } = useParams();
 
     useEffect(() => {
         const fetchCategoryData = async () => {
             try {
+                const searchedProducts: any = await productService.getAll();
                 const categoryData = await productService.getByCategory(CategoryHeaderContent.urlLink);
-                setCategory(categoryData);
+
+                if (searchedProducts && search && window.location.href.includes("search")) {
+                    setCategory(searchedProducts.filter((product: Product) => product.name_product.toLowerCase().includes(search?.toLocaleLowerCase())));
+                }
+                else {
+                    setCategory(categoryData)
+                }
             } catch (error) {
                 console.error("Failed to fetch category data:", error);
             }

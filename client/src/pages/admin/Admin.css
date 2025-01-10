@@ -1,11 +1,19 @@
+:root {
+  --cor-principal: #9d0731; /* cor principal */
+  --cor-cinza-claro: #f4f4f4; /* fundo cinza claro */
+  --cor-cinza-escuro: #dcdcdc; /* cor cinza para bordas e subtítulos */
+}
+
 .AdminLoginPage {
   margin: -170px 60px;
+  background-color: var(--cor-cinza-claro); /* fundo cinza claro */
 }
 
 .modalFormLogin {
   width: 100%;
   justify-content: center;
   align-items: center;
+  background-color: var(--cor-cinza-claro); /* fundo cinza claro */
 }
 
 .AdminLogin-flexbox {
@@ -15,6 +23,7 @@
   width: 100%;
   padding-left: 60px;
   padding-right: -60px;
+  background-color: var(--cor-cinza-claro); /* fundo cinza claro */
 }
 
 .LogoAdmin {
@@ -33,15 +42,16 @@
 .AdminLogin-top h2 {
   font-size: 28px;
   font-weight: 400;
+  color: #333; /* texto em cinza escuro */
 }
 
 .AdminLogin-top p {
   font-size: 16px;
-  color: gray;
+  color: #777; /* texto em cinza mais suave */
 }
 
 .AdminLogin-input-box p {
-  color: rgb(0, 0, 0);
+  color: #333; /* texto em cinza escuro */
   font-weight: 400;
 }
 
@@ -63,15 +73,20 @@
   width: 100%;
   padding: 15px 10px;
   border-radius: 10px;
-  border: 1px solid #dfdfdf;
-  background: #ececec;
+  border: 1px solid #dfdfdf; /* borda cinza clara */
+  background: #ececec; /* fundo mais claro para input */
   outline: none;
-  margin: 00px 00px 16px 00px;
+  margin: 0px 0px 16px 0px;
 }
 
 .AdminLogin-bottom {
   text-align: center;
   justify-content: center;
+}
+
+.adminpage {
+  background-color: #F3F6F8;
+  margin-top: -190px;
 }
 
 .AdminLogin-bottom button {
@@ -132,39 +147,170 @@
   justify-content: left;
 }
 
-@keyframes openAlertComponent {
-  0% {
-    width: 0px;
-    opacity: 0;
-    height: 100px;
-  }
-
-  100% {
-    width: 390px;
-    opacity: 1;
-  }
-}
-
-.alertComponentBackGround {
-  position: fixed;
-  width: 200vw;
-  height: 200vh;
-  margin: -70px;
-  background: rgba(0, 0, 0, 0.397);
-  z-index: 2;
-}
-
-.AdminPage-DashBoard {
-  position: relative;
-  justify-content: center;
-  margin: 0 auto;
+/* Estilo para o Sidebar */
+.sidebar {
+  width: 250px;
+  height: 100vh;
   display: flex;
-  margin: -160px auto;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 0 0;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.nav-link#selected svg {
+  background-color: white;
+  border-radius: 4px;
+  color: black;
+  padding: 2px;
+}
+
+.sidebar-header {
+  padding: 40px;
+  text-align: center;
+}
+
+.sidebar-header-icon img {
+  width: 160px;
+}
+
+.sidebar-nav {
+  flex-grow: 1;
+  padding: 20px 0;
+  width: 100%;
+  color: gray;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: 10px;
+}
+.nav-section {
+  margin-bottom: 15px;
+  padding: 0px 14px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 10px;
+  color: black;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease, padding-left 0.3s ease;
+}
+
+.nav-link#selected {
+  background-color: var(--cor-principal);
+  color: white;
+  font-weight: 600;
+}
+
+.nav-link:hover {
+  background-color: rgba(128, 128, 128, 0.54);
+  padding-left: 25px;
+  color: gray;
+}
+
+.sidebar-header-section h2 {
+  padding-left: 16px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: gray;
+}
+
+.nav-link svg {
+  margin-right: 10px;
+}
+
+.sidebar-footer {
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-info-content {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.user-avatar {
+  border-radius: 10%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.user-avatar-header {
+  border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+}
+
+.user-details-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: bold;
+  color: black;
+  font-size: 14px;
+}
+
+.user-role {
+  font-size: 12px;
+  color: gray;
+}
+
+
+
+.logout-link {
+  text-decoration: none;
+  color: gray;
+  display: flex;
+  align-items: center;
+}
+
+.sub-nav-link {
+  margin-left: 36px;
+}
+
+.logout-icon {
+  font-size: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.logout-link:hover .logout-icon {
+  color: gray;
 }
 
 @media screen and (max-width: 900px) {
   .AdminLoginPage {
     margin: 0px 20px;
+    background-color: var(--cor-cinza-claro); /* fundo cinza claro */
   }
 
   .AdminLogin-flexbox {
@@ -191,15 +337,16 @@
 
   .AdminLogin-top h2 {
     font-size: 2rem;
+    color: #333; /* texto em cinza escuro */
   }
 
   .AdminLogin-top p {
     font-size: 1.1rem;
-    color: gray;
+    color: #777; /* texto em cinza mais suave */
   }
 
   .AdminLogin-input-box p {
-    color: gray;
+    color: #333; /* texto em cinza escuro */
   }
 
   .AdminLogin-left-side {
@@ -223,15 +370,11 @@
     border: 1px solid #dfdfdf;
     outline: none;
     margin: 5px 0px;
-  }
-
-  .AdminLogin-bottom {
-    text-align: center;
-    justify-content: center;
+    background: #ececec; /* fundo claro */
   }
 
   .AdminLogin-bottom button {
-    background-color: black;
+    background-color: var(--cor-principal);
     width: 90%;
     border-radius: 10px;
     margin: 30px auto;
