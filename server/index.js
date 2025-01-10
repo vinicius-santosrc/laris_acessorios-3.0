@@ -273,8 +273,9 @@ app.post(`/api/v1/${secretKey}/planejamentos/delete`, (req, res) => {
 
 //REQUISIÇÃO DE USUARIOS
 
-app.get(`/api/v1/${secretKey}/users`, (req, res) => {
-    pool.query('SELECT * FROM users', (err, result) => {
+app.post(`/api/v1/${secretKey}/user`, (req, res) => {
+    const item = req.body
+    pool.query('SELECT * FROM users WHERE email = ?', [item.email], (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {
@@ -303,7 +304,7 @@ app.post(`/api/v1/${secretKey}/users/add`, (req, res) => {
 //REQUISIÇÃO DE PRODUTOS
 
 app.get(`/api/v1/${secretKey}/products`, (req, res) => {
-    pool.query('SELECT * FROM produtos', (err, result) => {
+    pool.query('SELECT id, name_product, price, desconto, disponibilidade, tamanhos, quantidade_disponivel, categoria, url, tipo, photoURL, extensor, type_full_label, categoryList FROM produtos', (err, result) => {
         if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {

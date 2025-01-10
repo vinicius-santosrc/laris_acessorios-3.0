@@ -259,9 +259,13 @@ POST /rota3</pre>
             </div>
 
             <div class="subroute">
-                <h4>Rota 15: /api/v1/{secretKey}/users</h4>
-                <pre>GET /api/v1/{secretKey}/users</pre>
-                <p>Retorna todos os usuários.</p>
+                <h4>Rota 15: /api/v1/{secretKey}/user</h4>
+                <pre>POST /api/v1/{secretKey}/user</pre>
+                <p>Retorna o usuário solicitado.</p>
+                <pre>Body:
+                {
+                    "email": "testeusuario@teste.com"
+                }</pre>
             </div>
 
             <div class="subroute">
