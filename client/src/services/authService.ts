@@ -109,10 +109,18 @@ class authService {
 
     static getUserByEmail = async (email: string) => {
         try {
-            const response = await fetch(`${url}${preEndpoint}${secretKey}/users`);
+            const response = await fetch(`${url}${preEndpoint}${secretKey}/user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email
+                })
+            }
+            );
             const data = await response.json();
-            const foundUser = data.find((user: any) => user.email === email);
-            return foundUser;
+            return data[0];
         }
         catch (error) {
             console.error(error)
