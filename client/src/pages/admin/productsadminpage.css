@@ -1,0 +1,161 @@
+/* Estilos gerais do container */
+.dashboard-laris-acessorios {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.dashboard-content {
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-table-content {
+    margin-top: 30px;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.action-button {
+    background-color: var(--cor-principal);
+    color: white;
+    border-radius: 12px;
+    width: 170px;
+    font-size: 14px;
+    padding: 8px;
+}
+
+.contentTab {
+    margin-top: 18px;
+}
+
+.rowTable {
+    border-bottom: 1px solid #f7f7f7;
+}
+
+.section-item-list-admin {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Estilos para os títulos */
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Estilos para as Tabs */
+.TabsList {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+.TabsTrigger {
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.TabsTrigger.active {
+    background-color: #ddd;
+    color: #000;
+}
+
+.TabsContent {
+    margin-top: 20px;
+}
+
+/* Estilos da Tabela */
+.table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.table-header {
+    background-color: #f8f8f8;
+    border-radius: 5px;
+}
+
+.table-header th {
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+}
+
+.table-row {
+    border-bottom: 1px solid #ddd;
+}
+
+.table-cell {
+    padding: 10px;
+}
+
+.table-cell img {
+    border-radius: 50%;
+}
+
+.table-cell .badge {
+    margin-right: 5px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+/* Estilos para Badge */
+.badge {
+    display: inline-block;
+    background-color: #e0e0e0;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: #333;
+}
+
+.badge:hover {
+    background-color: #bbb;
+}
+
+/* Estilos para preço */
+.table-cell-price {
+    text-align: end;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .dashboard-content {
+        padding: 10px;
+    }
+
+    .TabsList {
+        flex-direction: column;
+    }
+
+    .table-header th {
+        font-size: 0.9rem;
+    }
+
+    .table-cell {
+        font-size: 0.9rem;
+    }
+
+    .table-cell-price {
+        font-size: 0.9rem;
+    }
+}

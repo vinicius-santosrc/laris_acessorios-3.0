@@ -1,0 +1,106 @@
+.Card-CreateNewStart {
+    width: 270px;
+}
+
+.Card-CreateNewStart button {
+    width: 100%;
+    cursor: pointer;
+    padding: 10px;
+    background: #bababa8f;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    transition: 300ms;
+    color: black
+}
+
+.Card-CreateNewStart button:hover {
+    background: #a8a8a88f;
+}
+
+.Card-CreateNew button {
+    color: white;
+    background: #EF59A0;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.Content-Planejamentos-Card-Wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: top;
+    padding: 20px
+}
+
+.Planejamentos-Card-Wrapper {
+    background: url("https://community.atlassian.com/t5/image/serverpage/image-id/87744i93BD772B9C6A9B67?v=v2");
+    height: 85vh;
+    overflow-x: auto;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#closelist {
+    background: transparent;
+    color: black;
+}
+
+.Card-Wrapper {
+    padding: 10px;
+    background: #F1F2F4;
+    border-radius: 10px;
+    width: 270px;
+    height: 100%;
+}
+
+.contents-card {
+    background: white;
+    padding: 5px;
+    color: black;
+    margin: 5px 0px;
+    border-radius: 3px;
+    width: 100%
+}
+
+.Card-Wrapper-Top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Card-Wrapper-Top h3 {
+    font-size: 1rem;
+}
+
+.flexbox-content {
+    display: flex;
+
+}
+
+.flexbox-content button {
+    border: none;
+    background: none;
+    padding: 0px 5px;
+    color: red;
+    cursor: pointer;
+}
+
+.Card-Wrapper-Top button {
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    cursor: pointer;
+
+}
+
+.createCard {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 10px 0px;
+
+}

@@ -1,0 +1,240 @@
+
+
+.Page-Planilhas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 20px;
+    background-color: #f4f4f4;
+    /* fundo suave */
+}
+
+.button-create-planilha button {
+    border: 2px dashed #be0a45;
+    background: transparent;
+    color: #be0a45;
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.button-create-planilha button:hover {
+    background-color: #be0a45;
+    color: white;
+}
+
+.newItem {
+    margin: 30px 0px;
+    padding: 3vh;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.newItem:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.newItem h1 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.newItem p {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.exboxitem {
+    margin-top: 1.5vh;
+    padding-left: 1.5vw;
+}
+
+.boxitempla {
+    display: block;
+    padding: 12px 24px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.newItem input {
+    width: 100%;
+    background: transparent;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    padding: 10px;
+    outline: none;
+    color: #333;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.newItem input:focus {
+    border-color: #be0a45;
+}
+
+.headeritem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.headeritem button {
+    padding: 10px 20px;
+    background-color: #be0a45;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.headeritem button:hover {
+    background-color: #9d0840;
+    transform: scale(1.05);
+}
+
+.exboxitem button {
+    margin: auto;
+    margin-top: 1vh;
+    padding: 10px 20px;
+    background-color: #be0a45;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.exboxitem button:hover {
+    background-color: #9d0840;
+    transform: scale(1.05);
+}
+
+.Planilha-404-NotFound {
+    margin: auto;
+    text-align: center;
+    padding: 40px;
+}
+
+.Planilha-404-NotFound img {
+    width: 350px;
+    margin-top: 20px;
+}
+
+.item-table {
+    margin: 20px 0;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    overflow-x: auto;
+}
+
+.titlecolumns {
+    background-color: #be0a45;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.titlecolumns tr th {
+    padding: 15px;
+    text-align: left;
+}
+
+.item-table .tbody tr td:nth-child(1),
+.item-table tbody tr td:nth-child(3),
+.item-table tbody tr td:nth-child(5),
+.item-table tbody tr td:nth-child(7) {
+    background: transparent;
+    font-weight: 700;
+}
+
+#bggray {
+    background: #f9f9f9;
+}
+
+.item-table button {
+    background: transparent;
+    padding: 10px 20px;
+    border: none;
+    color: #be0a45;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.item-table button:hover {
+    color: #9d0840;
+    transform: scale(1.05);
+}
+
+#lucrolinha {
+    background-color: green;
+    font-weight: 600;
+    border-radius: 12px;
+    text-align: center;
+    color: white !important;
+}
+
+#saldoh3 {
+    color: green;
+}
+
+#entradas {
+    color: green;
+}
+
+#saidas {
+    color: #be0a45;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    color: #be0a45 !important;
+    /* cor rosa */
+}
+
+.swiper-pagination-bullet-active {
+    background: #be0a45 !important;
+}
+
+.color-green-receita {
+    color: green;
+    font-weight: 600;
+}
+
+.red-color-despesa {
+    color: #be0a45;
+    font-weight: 600;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}

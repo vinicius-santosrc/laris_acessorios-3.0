@@ -29,6 +29,65 @@ export const Categorys: CategoryProps[] = [
     { title: "PIERCINGS", redirect: "piercing", photoURL: "https://uploaddeimagens.com.br/images/004/877/938/full/piercing-palito.png?1735142864" }
 ];
 
+export const whiteListCategories: string[] = [
+    "lancamentos",
+]
+
+export interface ModelDespesas {
+    id: number;
+    descricao: string;
+    valor: number;
+    tipo: "Receita" | "Despesa";
+    created_at: Date;
+    updated_at: Date
+}
+
+export enum TypeProduct {
+    Chocker = 'Chocker',
+    Colar = 'Colar',
+    Pulseira = 'Pulseira',
+    PhoneStrap = 'Phone-Strap',
+    Chaveiros = 'Chaveiros',
+    Scrunchie = 'Scrunchie',
+    Touca = 'Touca',
+    Brincos = 'Brincos',
+    Aneis = 'Aneis',
+    Pulseiras = 'Pulseiras',
+    Braceletes = 'Braceletes',
+    Tornozeleira = 'Tornozeleira',
+    Piercing = 'Piercing'
+}
+
+export const typeProductList = createListCollection({
+    items: [
+        { label: 'Chocker', value: TypeProduct.Chocker },
+        { label: 'Colar', value: TypeProduct.Colar },
+        { label: 'Pulseira', value: TypeProduct.Pulseira },
+        { label: 'Phone-Strap', value: TypeProduct.PhoneStrap },
+        { label: 'Chaveiros', value: TypeProduct.Chaveiros },
+        { label: 'Scrunchie', value: TypeProduct.Scrunchie },
+        { label: 'Touca', value: TypeProduct.Touca },
+        { label: 'Brincos', value: TypeProduct.Brincos },
+        { label: 'Aneis', value: TypeProduct.Aneis },
+        { label: 'Pulseiras', value: TypeProduct.Pulseiras },
+        { label: 'Braceletes', value: TypeProduct.Braceletes },
+        { label: 'Tornozeleira', value: TypeProduct.Tornozeleira },
+        { label: 'Piercing', value: TypeProduct.Piercing },
+    ]
+});
+
+export interface SheetItem {
+    id: number;
+    custos: number;
+    detalhe: string;
+    codigo: string;
+    nameofitem: string;
+    preco_compra: number;
+    precorevenda: number;
+    quantcompra: number;
+    lucroporitem: number
+}
+
 export const defaultsCategories: CategoriesProps[] = [
     //PRINCIPAIS
     {
@@ -353,12 +412,9 @@ export const menuItems: MenuItemsProps[] = [
         ]
     },
     {
-        title: "Final de ano",
-        isLink: false,
-        subItems: [
-            { title: "Best Sellers", href: window.location.origin + '/collections/best-sellers' },
-            { title: "Para Reveillon", href: window.location.origin + '/collections/reveillon' }
-        ]
+        title: "Carnaval",
+        isLink: true,
+        href: window.location.origin + '/collections/carnaval'
     },
 ]
 
