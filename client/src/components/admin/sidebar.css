@@ -1,0 +1,227 @@
+/* sidebar.css */
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #fff;
+    border-top-left-radius: 24px;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    z-index: 2;
+    top: 10;
+    left: 0;
+    padding-top: 32px;
+    font-family: 'Arial', sans-serif;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    /* Cor mais suave para a linha de separação */
+}
+
+.sidebar-header__inside {
+    display: flex;
+    justify-content: center;
+}
+
+.sidebar-header-icon img {
+    max-width: 190px;
+}
+
+.sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.sidebar-header-section {
+    padding-left: 20px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #be0a45;
+    /* Cor de destaque */
+}
+
+.nav-section {
+    margin: 10px 0;
+    padding: 0px 20px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    color: #333;
+    /* Cor de texto escura para contraste */
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: #f5f5f5;
+    /* Fundo suave no hover */
+    color: #be0a45;
+    /* Cor de texto para o item ativo */
+}
+
+#selected {
+    background-color: #be0a45;
+    color: #fff;
+    /* Texto branco no item ativo */
+}
+
+.sub-menu {
+    background-color: #fafafa;
+    /* Fundo suave para o submenu */
+    padding-left: 20px;
+    margin-top: 10px;
+    border-left: 3px solid #be0a45;
+    /* Borda esquerda com cor de destaque */
+}
+
+.sub-nav-link {
+    color: #333;
+    /* Texto escuro para os itens do submenu */
+    padding: 8px 20px;
+    text-decoration: none;
+}
+
+.sub-nav-link:hover {
+    background-color: #f5f5f5;
+    /* Fundo suave no hover do submenu */
+    color: #be0a45;
+    /* Texto em vermelho no hover */
+}
+
+.sidebar-footer {
+    padding: 20px;
+    background-color: #fff;
+    /* Fundo branco no rodapé */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 2px solid #eee;
+    /* Linha de separação superior no rodapé */
+}
+
+.user-info-content {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-details-content {
+    display: flex;
+    flex-direction: column;
+    color: #333;
+    /* Texto escuro para informações do usuário */
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #888;
+    /* Cor mais suave para o cargo do usuário */
+}
+
+.logout-link {
+    color: #be0a45;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.logout-link:hover {
+    color: #fff;
+    /* Branco no hover */
+}
+
+.logout-icon {
+    width: 18px;
+    height: 18px;
+    margin-left: 5px;
+}
+
+/* Mobile menu button */
+.mobile-menu-button {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 3;
+    cursor: pointer;
+}
+
+/* Sidebar aberta */
+.sidebar.open {
+    transform: translateX(0);
+}
+
+/* Versão mobile */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        /* Sidebar escondida inicialmente */
+        width: 100%;
+        /* Largura 100% quando aberta */
+        position: fixed;
+        top: 10px;
+        border-radius: 24px 24px 0px 0px;
+    }
+
+    .mobile-menu-button {
+        position: relative;
+        top: 0;
+        left: 0;
+        padding-right: 12px;
+    }
+
+    .mobile-menu-button {
+        display: block;
+        /* Botão aparece apenas em dispositivos móveis */
+    }
+
+    .sidebar-header__inside {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    .sidebar-header-icon img {
+        max-width: 150px;
+        /* Reduzindo o tamanho do logo em dispositivos móveis */
+    }
+
+    .sidebar-nav {
+        margin-top: 20px;
+    }
+
+    .sidebar-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    .sub-menu {
+        background-color: #fafafa;
+        padding-left: 10px;
+        border-left: 3px solid #be0a45;
+    }
+}

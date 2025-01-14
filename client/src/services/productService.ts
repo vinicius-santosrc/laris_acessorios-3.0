@@ -1,3 +1,4 @@
+import { toaster } from "../components/ui/toaster";
 import { Product } from "@/models/product";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
@@ -57,6 +58,71 @@ class productService {
             throw err;
         }
     };
+
+    public static readonly deleteItemById = async (id: string) => {
+        try {
+            const response = await fetch(`${url}${preEndpoint}${secretKey}/products/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: id,
+                }),
+            });
+
+            if (!response.ok) {
+                toaster.create({
+                    title: "Oops...",
+                    description: `Não foi possível excluir o item com id: ${id}`,
+                    type: "error"
+                })
+                throw new Error(`Failed to delete item with ID: ${id}`);
+            }
+        }
+        catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    public static readonly deleteByList = async (array: any[]) => {
+        try {
+            const promises = array.map((item) => this.deleteItemById(item.toString()));
+
+            await Promise.all(promises);
+        }
+        catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    public static readonly changeVisibilityByList = async (array: any[], state: "avaliable" | "unavaliable") => {
+        try {
+            const promises = array.map((id) => fetch(`${url}${preEndpoint}${secretKey}/products/changevisibility`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    disponibilidade: state == "avaliable" ? 1 : 0,
+                    id: id,
+                }),
+            }))
+
+            await Promise.all(promises);
+        }
+        catch (error) {
+            toaster.create({
+                title: "Oops...",
+                description: `Não foi possível alterar a visibilidade dos itens.`,
+                type: "error"
+            })
+            console.error(error);
+            throw error;
+        }
+    }
 
 }
 export default productService;

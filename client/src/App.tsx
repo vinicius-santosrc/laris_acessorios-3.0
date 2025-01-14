@@ -24,7 +24,13 @@ import { Questions } from './pages/institutional/questions/Questions';
 import { BeaModelPage } from './pages/institutional/beamodel/BeAModel';
 import { ContactUs } from './pages/institutional/contact-us/ContactUs';
 import { NotFoundPage } from './pages/404/404';
-import { CheckIfUserIsLogged } from './lib/firebase';
+import authService from './services/authService';
+import { Dashboard } from './components/admin/Dashboard';
+import { ProductsAdminPage } from './pages/admin/ProductsAdminPage';
+import { UsersAdmin } from './pages/admin/UsersAdmin';
+import { Planing } from './pages/admin/Planning';
+import { SheetsPage } from './pages/admin/SheetsPage';
+import { ProductEditPage } from './pages/admin/ProductEditPage';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -35,8 +41,12 @@ const routes = [
   { path: '/success/:uid', element: <Success /> },
   { path: '/account', element: <Account /> },
   { path: '/search/:search', element: <SearchPage /> },
-  { path: '/admin', element: <AdminPage /> },
-  { path: '/admin/login', element: <AdminLogin /> },
+  { path: '/admin', isProtected: true, element: <AdminPage><Dashboard /></AdminPage> },
+  { path: '/admin/products', isProtected: true, element: (<AdminPage><ProductsAdminPage /></AdminPage>) },
+  { path: '/admin/products/:uid', isProtected: true, element: (<AdminPage><ProductEditPage /></AdminPage>) },
+  { path: '/admin/clients', isProtected: true, element: (<AdminPage><UsersAdmin /></AdminPage>) },
+  { path: '/admin/planning', isProtected: true, element: (<AdminPage><Planing /></AdminPage>) },
+  { path: '/admin/sheet/:planilha', isProtected: true, element: (<AdminPage><SheetsPage /></AdminPage>) },
   { path: '/contact-us', element: <Institutional><ContactUs /><Footer /></Institutional> },
   { path: '/tracking', element: <Institutional><Footer /></Institutional> },
   { path: '/care-for-jewelry', element: <Institutional><BeCarefulJewerlys /><Footer /></Institutional> },
@@ -49,7 +59,7 @@ const routes = [
 function App() {
   const [stripePromise, setStripePromise] = useState<any>(null);
   const [clientSecret, setClientSecret] = useState<any>("");
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -90,15 +100,21 @@ function App() {
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
-      const authenticated = await CheckIfUserIsLogged();
-      setIsAuthenticated(authenticated);
+      const authentication = await authService.getUserData();
+      if (authentication) {
+        const isAdmin = await authService.isUserAdmin(authentication.email);
+        setIsAuthenticated(isAdmin);
+      }
+      else {
+        setIsAuthenticated(false)
+      }
     };
 
     checkUserLoggedIn();
   }, []);
 
   const ProtectedRoute = ({ element }: any) => {
-    if (isAuthenticated === null) {
+    if (!isAuthenticated) {
       return <Loader />;
     }
 
@@ -112,7 +128,7 @@ function App() {
           <Header />
           <Routes>
             {routes.map((route, index) => {
-              if (route.path === '/admin') {
+              if (route.isProtected) {
                 return (
                   <Route
                     key={index}
@@ -128,8 +144,10 @@ function App() {
             <Route
               path='/checkout'
               element={clientSecret && stripePromise ? (
-                <Elements stripe={stripePromise} options={{ mode: "payment", amount: 1 * 100, currency: 'brl' }}>
-                  <CheckoutPage clientSecret={clientSecret} />
+                <Elements stripe={stripePromise} options={{
+                  paymentMethodTypes: ['card', 'pix'], 
+                  appearance: { variables: { colorPrimaryText: '#be0a45', colorDanger: "#be0a45" } }, mode: "payment", amount: 1 * 100, currency: 'brl',  }}>
+                  <CheckoutPage paymentMethodTypes={['card', 'pix']} clientSecret={clientSecret} />
                 </Elements>
               ) : (
                 <Loader />

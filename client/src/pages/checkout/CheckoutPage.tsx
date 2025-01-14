@@ -20,7 +20,7 @@ import { useElements, useStripe } from "@stripe/react-stripe-js";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
-const CheckoutPage = ({ clientSecret }: any) => {
+const CheckoutPage = ({paymentMethodTypes, clientSecret }: any) => {
     const [step, setStep] = useState<number>(0);
     const [items, setItems] = useState<any[]>([]);
     const [subtotal, setSubtotal] = useState<number>(0);
@@ -71,7 +71,7 @@ const CheckoutPage = ({ clientSecret }: any) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ amount: total * 100 }), //total
+            body: JSON.stringify({ amount: total * 100, paymentMethodType: paymentMethodTypes }), //total
         })
             .then((res) => res.json())
     }, []);

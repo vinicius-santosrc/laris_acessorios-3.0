@@ -67,7 +67,7 @@ const loginIn = async (user: any) => {
 }
 
 const CheckIfUserIsLogged = () => {
-    if (auth.currentUser && auth.currentUser.uid && auth.currentUser.email) {
+    if (auth.currentUser) {
         return true;
     } else {
         return false;

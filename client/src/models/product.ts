@@ -24,7 +24,7 @@ export interface Product {
     name_product: string; // Nome do produto
     price: number; // Preço do produto
     desconto: number; // Desconto aplicado no produto (se houver)
-    disponibilidade: boolean; // Indica se o produto está disponível ou não
+    disponibilidade: 1 | 0; // Indica se o produto está disponível ou não
     tamanhos: string; // Lista de tamanhos disponíveis para o produto
     quantidade_disponivel: number; // Quantidade disponível do produto no estoque
     categoria: string; // Categoria do produto

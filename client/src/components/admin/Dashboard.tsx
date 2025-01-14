@@ -4,7 +4,7 @@ export const Dashboard = () => {
     return (
         <section className="dashboard-laris-acessorios">
             <div className="dashboard-content">
-                <h2>Dashboard Principal</h2>
+                <h1>Acesso Rápido</h1>
             </div>
         </section>
     )

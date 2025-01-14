@@ -11,6 +11,7 @@ import { Account, Client, Databases } from 'appwrite'
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { UserAuthProps } from '@/lib/utils';
+import { UserProps } from '@/models/user';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 const endpoint = process.env.REACT_APP_API_ENDPOINT;
@@ -125,6 +126,24 @@ class authService {
         catch (error) {
             console.error(error)
         }
+    }
+
+    static isUserAdmin = async (email: string) => {
+        const response = await fetch(`${url}${preEndpoint}${secretKey}/user`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email
+            })
+        }
+        );
+        const data: UserProps[] = await response.json();
+        if (data[0] && data[0].label === "Admin") {
+            return true;
+        }
+        return false;
     }
 
     static getUserByUid = async (uid: string) => {

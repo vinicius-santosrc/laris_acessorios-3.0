@@ -1,0 +1,125 @@
+/* dashboard-header.css */
+
+.dashboard-header-component {
+    width: 83%;
+    margin-top: 10px;
+    background-color: #fff;
+    /* Fundo branco */
+    padding: 20px 40px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Linha separadora suave */
+    /* Sombra suave para dar profundidade */
+    border-top-right-radius: 24px;
+}
+
+.dashboard-header-component__inside {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.dashboard-header-component-account-details {
+    display: flex;
+    align-items: center;
+}
+
+.user-info-content {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar-header {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+}
+
+.user-details-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    /* Texto escuro */
+}
+
+.user-role {
+    font-size: 14px;
+    color: #888;
+    /* Texto mais suave */
+}
+
+.dashboard-header-component-action-btns {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.dashboard-header-component-action-btns button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #be0a45;
+    /* Cor de destaque */
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.dashboard-header-component-action-btns button:hover {
+    color: #e61a6b;
+    /* Cor de destaque ao passar o mouse */
+}
+
+.dashboard-header-component-action-btns .chakra-input {
+    background-color: #fff;
+    padding: 8px 15px;
+    width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.dashboard-header-component-action-btns .chakra-input:focus {
+    border-color: #be0a45;
+    /* Borda de destaque ao focar */
+}
+
+@media (max-width: 768px) {
+    .dashboard-header-component {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        width: 100%;
+        border-radius: 24px 24px 0px 0px;
+    }
+
+    .dashboard-header-component__inside {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dashboard-header-component-account-details {
+        margin-bottom: 15px;
+    }
+
+    .dashboard-header-component-action-btns {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .dashboard-header-component-action-btns .chakra-input {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}
