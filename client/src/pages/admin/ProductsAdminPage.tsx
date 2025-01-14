@@ -6,7 +6,6 @@ import "./productsadminpage.css";
 import { BoxIcon, Check, Edit, Undo, ViewIcon } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import {
-    ActionBarCloseTrigger,
     ActionBarContent,
     ActionBarRoot,
     ActionBarSelectionTrigger,
@@ -19,7 +18,7 @@ import {
     MenuTrigger,
 } from "../../components/ui/menu"
 import { Checkbox } from "../../components/ui/checkbox";
-import { LuShare, LuTrash2 } from "react-icons/lu";
+import { LuTrash2 } from "react-icons/lu";
 import { toaster } from "../../components/ui/toaster";
 import { Link } from "react-router-dom";
 

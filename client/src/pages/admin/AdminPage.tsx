@@ -7,7 +7,6 @@ const AdminPage = ({ children }: any) => {
     return (
         <section className="adminPage">
             <div className="backgroundAdminPage"></div>
-            <SideBar />
             <DashboardHeader />
             <section className="contentPage">
                 {children}

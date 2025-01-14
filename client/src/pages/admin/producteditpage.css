@@ -120,4 +120,81 @@
         flex: none;
         width: 100%;
     }
+
+    /* Ajustar a largura das imagens nas galerias para telas pequenas */
+    .photos-gallery {
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 10px;
+    }
+
+    .product-image {
+        height: 150px;
+        width: 150px;
+    }
+
+    /* Ajustar o título para uma largura mais adequada */
+    .page-title {
+        font-size: 1.4rem;
+        text-align: left;
+    }
+
+    /* Ajustar o formulário e a largura dos campos */
+    .product-form {
+        padding: 15px;
+    }
+
+    .form-row label {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+
+    .form-row input {
+        font-size: 0.95rem;
+        padding: 10px;
+    }
+
+    .btn-save {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+
+    /* Ajuste para o botão salvar */
+    .form-actions {
+        padding: 10px 0;
+    }
+}
+
+/* Responsividade extra para telas menores (máximo 480px) */
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 1.2rem;
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    .product-image {
+        height: 120px;
+        width: 120px;
+    }
+
+    .product-image-single {
+        height: 180px;
+    }
+
+    /* Ajuste adicional para os campos do formulário */
+    .form-row input {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    .btn-save {
+        font-size: 1rem;
+        padding: 8px 15px;
+    }
+
+    /* Ajustar os botões e inputs */
+    .form-row label {
+        font-size: 0.85rem;
+    }
 }

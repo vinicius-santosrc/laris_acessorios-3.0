@@ -6,6 +6,7 @@ import authService from "../../services/authService";
 import { getFirstAndLastName } from "../../lib/utils";
 import { Bell, Settings } from "lucide-react";
 import NotificationsComponent from "./notifications/NotificationsComponent";
+import SideBar from "./SideBar";
 
 export const DashboardHeader = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
@@ -45,6 +46,7 @@ export const DashboardHeader = () => {
             <section className="dashboard-header-component__inside">
                 <div className="dashboard-header-component-account-details">
                     <div className="user-info-content">
+                        <SideBar />
                         <img
                             src={userAtual?.photoURL}
                             alt={`Avatar de ${userAtual?.nome_completo}`}

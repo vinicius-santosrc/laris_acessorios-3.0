@@ -21,6 +21,7 @@
     align-items: center;
     gap: 12px;
 }
+
 .action-button {
     background-color: var(--cor-principal);
     color: white;
@@ -140,13 +141,30 @@
 /* Responsividade */
 @media (max-width: 768px) {
     .dashboard-content {
-        padding: 10px;
+        padding: 15px;
     }
 
+    /* Ajustar as Tabs para uma coluna em dispositivos menores */
     .TabsList {
         flex-direction: column;
     }
 
+    .TabsTrigger {
+        padding: 8px;
+        font-size: 1rem;
+    }
+
+    /* Ajustar os títulos para tamanho adequado em telas menores */
+    .title {
+        font-size: 1.6rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        margin-bottom: 15px;
+    }
+
+    /* Tamanho da fonte para as células da tabela */
     .table-header th {
         font-size: 0.9rem;
     }
@@ -157,5 +175,74 @@
 
     .table-cell-price {
         font-size: 0.9rem;
+    }
+
+    /* Ajustar a largura das ações */
+    .actions {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .action-button {
+        width: 100%;
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    /* Ajustar o comportamento da tabela */
+    .table-container {
+        margin-top: 10px;
+        padding: 0;
+    }
+
+    .table-cell img {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+/* Responsividade extra para telas menores (máximo 480px) */
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+    }
+
+    .TabsTrigger {
+        padding: 6px;
+        font-size: 0.9rem;
+    }
+
+    .table-header th {
+        font-size: 0.85rem;
+        padding: 8px;
+    }
+
+    .table-cell {
+        font-size: 0.85rem;
+        padding: 8px;
+    }
+
+    .table-cell-price {
+        font-size: 0.85rem;
+    }
+
+    .action-button {
+        font-size: 0.9rem;
+        width: 100%;
+    }
+
+    .badge {
+        font-size: 0.7rem;
+    }
+
+    .table-cell img {
+        width: 25px;
+        height: 25px;
     }
 }
