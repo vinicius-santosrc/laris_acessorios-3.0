@@ -75,6 +75,7 @@
         height: 100vh;
         margin-left: 0px;
         border-radius: 24px;
+        padding-top: 200px !important;
     }
 
     .dashboard-header-component__inside {
