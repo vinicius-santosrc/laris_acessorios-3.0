@@ -8,7 +8,7 @@
  */
 
 import { Account, Client, Databases } from 'appwrite'
-import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, signOut } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { UserAuthProps } from '@/lib/utils';
 import { UserProps } from '@/models/user';
@@ -100,11 +100,14 @@ class authService {
 
     static logout = async () => {
         try {
-            await signOut(auth);
+            const client = new Client();
+            client.setEndpoint("https://cloud.appwrite.io/v1").setProject("651c17501139519bc5a2");
+            const account = new Account(client);
+
+            await account.deleteSession('current'); 
             window.location.href = window.location.origin;
         } catch (error) {
-            console.error("Logout error:", error);
-            throw error;
+            console.error('Erro ao realizar logout:', error);
         }
     }
 

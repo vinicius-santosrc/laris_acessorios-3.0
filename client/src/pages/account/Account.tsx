@@ -4,6 +4,7 @@ import { UserProps } from '../../models/user';
 import { Loader } from '../../components/ui/loader';
 import authService from '../../services/authService';
 import { formatCPF, getFirstAndLastName } from '../../lib/utils';
+import { auth } from '@/lib/firebase';
 
 const Account = () => {
     const fotoUsuario = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp";
@@ -69,6 +70,10 @@ const Account = () => {
         }
     };
 
+    const logout = async () => {
+        await authService.logout();
+    }
+
     return (
         <div className="account-wrapper">
             {isLoading && <Loader />}
@@ -84,7 +89,7 @@ const Account = () => {
                         <li onClick={() => setSelectedSection("dadosPessoais")}>Dados Pessoais</li>
                         <li onClick={() => setSelectedSection("pedidos")}>Pedidos</li>
                         <li onClick={() => setSelectedSection("favoritos")}>Meus Favoritos</li>
-                        <li onClick={() => console.log("Sair")}>Sair</li>
+                        <li onClick={() => {logout()}}>Sair</li>
                     </ul>
                 </nav>
             </div>
