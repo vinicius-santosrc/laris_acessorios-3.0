@@ -2,9 +2,120 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  color-scheme: light
+}
+
 :root {
   --cor-principal: #be0a45;
-  --cinza-principal: #f7f7f7
+  --cinza-principal: #f7f7f7;
+
+  --chakra-colors-bg: var(--chakra-colors-white);
+  --chakra-colors-bg-subtle: var(--chakra-colors-gray-50);
+  --chakra-colors-bg-muted: var(--chakra-colors-gray-100);
+  --chakra-colors-bg-emphasized: var(--chakra-colors-gray-200);
+  --chakra-colors-bg-inverted: var(--chakra-colors-black);
+  --chakra-colors-bg-panel: var(--chakra-colors-white);
+  --chakra-colors-bg-error: var(--chakra-colors-red-50);
+  --chakra-colors-bg-warning: var(--chakra-colors-orange-50);
+  --chakra-colors-bg-success: var(--chakra-colors-green-50);
+  --chakra-colors-bg-info: var(--chakra-colors-blue-50);
+  --chakra-colors-fg: var(--chakra-colors-black);
+  --chakra-colors-fg-muted: var(--chakra-colors-gray-600);
+  --chakra-colors-fg-subtle: var(--chakra-colors-gray-400);
+  --chakra-colors-fg-inverted: var(--chakra-colors-gray-50);
+  --chakra-colors-fg-error: var(--chakra-colors-red-500);
+  --chakra-colors-fg-warning: var(--chakra-colors-orange-600);
+  --chakra-colors-fg-success: var(--chakra-colors-green-600);
+  --chakra-colors-fg-info: var(--chakra-colors-blue-600);
+  --chakra-colors-border: var(--chakra-colors-gray-200);
+  --chakra-colors-border-muted: var(--chakra-colors-gray-100);
+  --chakra-colors-border-subtle: var(--chakra-colors-gray-50);
+  --chakra-colors-border-emphasized: var(--chakra-colors-gray-300);
+  --chakra-colors-border-inverted: var(--chakra-colors-gray-800);
+  --chakra-colors-border-error: var(--chakra-colors-red-500);
+  --chakra-colors-border-warning: var(--chakra-colors-orange-500);
+  --chakra-colors-border-success: var(--chakra-colors-green-500);
+  --chakra-colors-border-info: var(--chakra-colors-blue-500);
+  --chakra-colors-gray-contrast: var(--chakra-colors-white);
+  --chakra-colors-gray-fg: var(--chakra-colors-gray-800);
+  --chakra-colors-gray-subtle: var(--chakra-colors-gray-100);
+  --chakra-colors-gray-muted: var(--chakra-colors-gray-200);
+  --chakra-colors-gray-emphasized: var(--chakra-colors-gray-300);
+  --chakra-colors-gray-solid: var(--chakra-colors-gray-900);
+  --chakra-colors-gray-focus-ring: var(--chakra-colors-gray-800);
+  --chakra-colors-red-contrast: white;
+  --chakra-colors-red-fg: var(--chakra-colors-red-700);
+  --chakra-colors-red-subtle: var(--chakra-colors-red-100);
+  --chakra-colors-red-muted: var(--chakra-colors-red-200);
+  --chakra-colors-red-emphasized: var(--chakra-colors-red-300);
+  --chakra-colors-red-solid: var(--chakra-colors-red-600);
+  --chakra-colors-red-focus-ring: var(--chakra-colors-red-600);
+  --chakra-colors-orange-contrast: white;
+  --chakra-colors-orange-fg: var(--chakra-colors-orange-700);
+  --chakra-colors-orange-subtle: var(--chakra-colors-orange-100);
+  --chakra-colors-orange-muted: var(--chakra-colors-orange-200);
+  --chakra-colors-orange-emphasized: var(--chakra-colors-orange-300);
+  --chakra-colors-orange-solid: var(--chakra-colors-orange-600);
+  --chakra-colors-orange-focus-ring: var(--chakra-colors-orange-600);
+  --chakra-colors-green-contrast: white;
+  --chakra-colors-green-fg: var(--chakra-colors-green-700);
+  --chakra-colors-green-subtle: var(--chakra-colors-green-100);
+  --chakra-colors-green-muted: var(--chakra-colors-green-200);
+  --chakra-colors-green-emphasized: var(--chakra-colors-green-300);
+  --chakra-colors-green-solid: var(--chakra-colors-green-600);
+  --chakra-colors-green-focus-ring: var(--chakra-colors-green-600);
+  --chakra-colors-blue-contrast: white;
+  --chakra-colors-blue-fg: var(--chakra-colors-blue-700);
+  --chakra-colors-blue-subtle: var(--chakra-colors-blue-100);
+  --chakra-colors-blue-muted: var(--chakra-colors-blue-200);
+  --chakra-colors-blue-emphasized: var(--chakra-colors-blue-300);
+  --chakra-colors-blue-solid: var(--chakra-colors-blue-600);
+  --chakra-colors-blue-focus-ring: var(--chakra-colors-blue-600);
+  --chakra-colors-yellow-contrast: black;
+  --chakra-colors-yellow-fg: var(--chakra-colors-yellow-800);
+  --chakra-colors-yellow-subtle: var(--chakra-colors-yellow-100);
+  --chakra-colors-yellow-muted: var(--chakra-colors-yellow-200);
+  --chakra-colors-yellow-emphasized: var(--chakra-colors-yellow-300);
+  --chakra-colors-yellow-solid: var(--chakra-colors-yellow-300);
+  --chakra-colors-yellow-focus-ring: var(--chakra-colors-yellow-300);
+  --chakra-colors-teal-contrast: white;
+  --chakra-colors-teal-fg: var(--chakra-colors-teal-700);
+  --chakra-colors-teal-subtle: var(--chakra-colors-teal-100);
+  --chakra-colors-teal-muted: var(--chakra-colors-teal-200);
+  --chakra-colors-teal-emphasized: var(--chakra-colors-teal-300);
+  --chakra-colors-teal-solid: var(--chakra-colors-teal-600);
+  --chakra-colors-teal-focus-ring: var(--chakra-colors-teal-600);
+  --chakra-colors-purple-contrast: white;
+  --chakra-colors-purple-fg: var(--chakra-colors-purple-700);
+  --chakra-colors-purple-subtle: var(--chakra-colors-purple-100);
+  --chakra-colors-purple-muted: var(--chakra-colors-purple-200);
+  --chakra-colors-purple-emphasized: var(--chakra-colors-purple-300);
+  --chakra-colors-purple-solid: var(--chakra-colors-purple-600);
+  --chakra-colors-purple-focus-ring: var(--chakra-colors-purple-600);
+  --chakra-colors-pink-contrast: white;
+  --chakra-colors-pink-fg: var(--chakra-colors-pink-700);
+  --chakra-colors-pink-subtle: var(--chakra-colors-pink-100);
+  --chakra-colors-pink-muted: var(--chakra-colors-pink-200);
+  --chakra-colors-pink-emphasized: var(--chakra-colors-pink-300);
+  --chakra-colors-pink-solid: var(--chakra-colors-pink-600);
+  --chakra-colors-pink-focus-ring: var(--chakra-colors-pink-600);
+  --chakra-colors-cyan-contrast: white;
+  --chakra-colors-cyan-fg: var(--chakra-colors-cyan-700);
+  --chakra-colors-cyan-subtle: var(--chakra-colors-cyan-100);
+  --chakra-colors-cyan-muted: var(--chakra-colors-cyan-200);
+  --chakra-colors-cyan-emphasized: var(--chakra-colors-cyan-300);
+  --chakra-colors-cyan-solid: var(--chakra-colors-cyan-600);
+  --chakra-colors-cyan-focus-ring: var(--chakra-colors-cyan-600);
+  --chakra-shadows-xs: 0px 1px 2px color-mix(in srgb, var(--chakra-colors-gray-900) 10%, transparent), 0px 0px 1px color-mix(in srgb, var(--chakra-colors-gray-900) 20%, transparent);
+  --chakra-shadows-sm: 0px 2px 4px color-mix(in srgb, var(--chakra-colors-gray-900) 10%, transparent), 0px 0px 1px color-mix(in srgb, var(--chakra-colors-gray-900) 30%, transparent);
+  --chakra-shadows-md: 0px 4px 8px color-mix(in srgb, var(--chakra-colors-gray-900) 10%, transparent), 0px 0px 1px color-mix(in srgb, var(--chakra-colors-gray-900) 30%, transparent);
+  --chakra-shadows-lg: 0px 8px 16px color-mix(in srgb, var(--chakra-colors-gray-900) 10%, transparent), 0px 0px 1px color-mix(in srgb, var(--chakra-colors-gray-900) 30%, transparent);
+  --chakra-shadows-xl: 0px 16px 24px color-mix(in srgb, var(--chakra-colors-gray-900) 10%, transparent), 0px 0px 1px color-mix(in srgb, var(--chakra-colors-gray-900) 30%, transparent);
+  --chakra-shadows-2xl: 0px 24px 40px color-mix(in srgb, var(--chakra-colors-gray-900) 16%, transparent), 0px 0px 1px color-mix(in srgb, var(--chakra-colors-gray-900) 30%, transparent);
+  --chakra-shadows-inner: inset 0 2px 4px 0 color-mix(in srgb, black 5%, transparent);
+  --chakra-shadows-inset: inset 0 0 0 1px color-mix(in srgb, black 5%, transparent);
+
 }
 
 * {
@@ -13,10 +124,6 @@
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   box-sizing: border-box;
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @layer base {
   :root {
@@ -49,42 +156,13 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-
-  .dark {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
-    --accent: 216 34% 17%;
-    --accent-foreground: 210 40% 98%;
-    --popover: 224 71% 4%;
-    --popover-foreground: 215 20.2% 65.1%;
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 1.2%;
-    --secondary: 222.2 47.4% 11.2%;
-    --secondary-foreground: 210 40% 98%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-    --ring: 216 34% 17%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
@@ -102,16 +180,6 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
 }
 
 
@@ -130,6 +198,7 @@ html {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

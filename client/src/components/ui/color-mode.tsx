@@ -18,7 +18,7 @@ export function ColorModeProvider(props: ColorModeProviderProps) {
 export function useColorMode() {
   const { resolvedTheme, setTheme } = useTheme()
   const toggleColorMode = () => {
-    setTheme(resolvedTheme === "light" ? "dark" : "light")
+    setTheme(resolvedTheme === "light" ? "light" : "light")
   }
   return {
     colorMode: resolvedTheme,
@@ -29,7 +29,7 @@ export function useColorMode() {
 
 export function useColorModeValue<T>(light: T, dark: T) {
   const { colorMode } = useColorMode()
-  return colorMode === "light" ? light : dark
+  return colorMode === "light" ? light : light
 }
 
 export function ColorModeIcon() {
