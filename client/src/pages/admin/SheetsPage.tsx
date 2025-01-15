@@ -4,34 +4,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./sheetpage.css";
 import { ModelDespesas, SheetItem } from "@/lib/utils";
+import { Tabs } from "@chakra-ui/react";
 
 export const SheetsPage = () => {
+    const [monthlyData, setMonthlyData] = useState<any>({});
+    const [totalEntradas, setTotalEntradas] = useState(0);
+    const [totalSaidas, setTotalSaidas] = useState(0);
+
     const [saldoWrap, setSaldo] = useState(0)
-    const [entradasWrap, setEntradas] = useState(0)
-    const [saidasWrap, setSaidas] = useState(0)
-
-    useEffect(() => {
-        getTotal();
-    }, []);
-
-    async function getTotal() {
-        const PlanilhaDespesa = await adminService.getSheet("planilha-despesas");
-
-        let entradas = 0;
-        let saidas = 0;
-
-        PlanilhaDespesa.forEach((r: any) => {
-            if (r.tipo === "Receita") {
-                entradas += Number(r.valor);
-            } else {
-                saidas += Number(r.valor);
-            }
-        });
-
-        setEntradas(entradas);
-        setSaidas(saidas);
-        setSaldo(entradas - saidas);
-    }
 
     const { planilha } = useParams();
 
@@ -57,8 +37,13 @@ export const SheetsPage = () => {
     });
 
     useEffect(() => {
+        getTotal();
         loadItens();
     }, []);
+
+    async function getTotal() {
+        calculateTotals(monthlyData)
+    }
 
     const handleEdit = (item: any) => {
         setCurrentItem(item);
@@ -230,10 +215,45 @@ export const SheetsPage = () => {
         }
     };
 
+    const calculateTotals = (groupedData: any) => {
+        let entradas = 0;
+        let saidas = 0;
+
+        entradas = groupedData["Tudo"]?.entradas;
+        saidas = groupedData["Tudo"]?.saidas;
+
+        setTotalEntradas(entradas);
+        setTotalSaidas(saidas);
+        setSaldo(entradas - saidas);
+    };
+
     const loadItens = async () => {
-        if (planilha == 'planilha-despesas') {
-            const Items = await adminService.getSheet("planilha-despesas");
-            setItems(Items)
+        if (planilha === 'planilha-despesas') {
+            const items = await adminService.getSheet("planilha-despesas");
+            const groupedData: any = { "Tudo": { entradas: 0, saidas: 0, items: [] } };
+
+            items.forEach((item: any) => {
+                groupedData["Tudo"].items.push(item);
+                if (item.tipo === "Receita") {
+                    groupedData["Tudo"].entradas += Number(item.valor);
+                } else {
+                    groupedData["Tudo"].saidas += Number(item.valor);
+                }
+
+                const month = new Date(item.created_at).toLocaleString('default', { month: 'long', year: 'numeric' });
+                if (!groupedData[month]) {
+                    groupedData[month] = { entradas: 0, saidas: 0, items: [] };
+                }
+                if (item.tipo === "Receita") {
+                    groupedData[month].entradas += Number(item.valor);
+                } else {
+                    groupedData[month].saidas += Number(item.valor);
+                }
+                groupedData[month].items.push(item);
+            });
+
+            setMonthlyData(groupedData);
+            calculateTotals(groupedData);
         }
         else if (planilha == 'planilha-itens') {
             const Items = await adminService.getSheet("planilha-itens");
@@ -257,10 +277,31 @@ export const SheetsPage = () => {
                                 :
                                 <>
                                     <div className="newItem">
-                                        <h3>Entradas: R$<span id="entradas">{entradasWrap.toFixed(2)}</span></h3>
-                                        <h3>Saídas: R$<span id="saidas">{saidasWrap.toFixed(2)}</span></h3>
-                                        <h3 id="saldoh3">Saldo: R$<span>{saldoWrap.toFixed(2)}</span></h3>
+                                        <h1>Esse mês</h1>
+                                        <h3>Entradas: R$<span id="entradas">{totalEntradas?.toFixed(2)}</span></h3>
+                                        <h3>Saídas: R$<span id="saidas">{totalSaidas?.toFixed(2)}</span></h3>
+                                        <h3 id="saldoh3">Saldo: R$<span>{saldoWrap?.toFixed(2)}</span></h3>
                                     </div>
+                                    <table className="item-table item-table-despesas-top">
+                                        <thead className="titlecolumns">
+                                            <tr>
+                                                <th>Mês</th>
+                                                <th>Entradas</th>
+                                                <th>Saídas</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Object.keys(monthlyData).map(month => (
+                                                <tr key={month}>
+                                                    <td>{month}</td>
+                                                    <td>R$ {monthlyData[month].entradas.toFixed(2)}</td>
+                                                    <td>R$ {monthlyData[month].saidas.toFixed(2)}</td>
+                                                    <td>R$ {(monthlyData[month].entradas.toFixed(2) - monthlyData[month].saidas.toFixed(2)).toFixed(2)}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                     <div className="newItem">
                                         <div className="headeritem">
                                             <div className="side1item">
@@ -315,43 +356,60 @@ export const SheetsPage = () => {
                                     </div>
 
 
-                                    <table className="item-table item-table-despesas">
-                                        <thead className="titlecolumns">
-                                            <tr>
-                                                <th>Descrição</th>
-                                                <th>Valor</th>
-                                                <th>Tipo</th>
-                                                <th>Ações</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {items.map((item: ModelDespesas, index) => (
-                                                <tr className={item.tipo == "Receita" ? "color-green-receita" : "red-color-despesa"} id={item.id.toString()} key={item.id}>
-                                                    <td id="bggray">{item.descricao}</td>
-                                                    <td>R$ {item.valor.toFixed(2)}</td>
-                                                    <td id="bggray">
-                                                        {item.tipo == 'Receita'
-                                                            ?
-                                                            <>
-                                                                <i className="fa-solid fa-circle-chevron-up"></i>
-                                                                <span>Entrada</span>
-                                                            </>
-                                                            :
-                                                            <>
-                                                                <i className="fa-solid fa-circle-chevron-down"></i>
-                                                                <span>Saída</span>
-                                                            </>
-                                                        }
-                                                    </td>
+                                    <table className="item-table-despesas">
+                                        <Tabs.Root lazyMount unmountOnExit defaultValue="Tudo">
+                                            <Tabs.List>
+                                                {
+                                                    Object.keys(monthlyData).map((month) => {
+                                                        return (
+                                                            <Tabs.Trigger value={month}>
+                                                                {month}
+                                                            </Tabs.Trigger>
+                                                        )
+                                                    })}
+                                            </Tabs.List>
+                                            {Object.keys(monthlyData).map((month) => {
+                                                return (
+                                                    <Tabs.Content className="contentTab" value={month} key={month}>
+                                                        <table className="item-table item-table-despesas">
+                                                            <thead className="titlecolumns">
+                                                                <tr>
+                                                                    <th>Descrição</th>
+                                                                    <th>Valor</th>
+                                                                    <th>Tipo</th>
+                                                                    <th>Ações</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {monthlyData[month].items.map((item: ModelDespesas) => (
+                                                                    <tr className={item.tipo === "Receita" ? "color-green-receita" : "red-color-despesa"} id={item.id.toString()} key={item.id}>
+                                                                        <td id="bggray">{item.descricao}</td>
+                                                                        <td>R$ {item.valor.toFixed(2)}</td>
+                                                                        <td id="bggray">
+                                                                            {item.tipo === 'Receita'
+                                                                                ? <>
+                                                                                    <i className="fa-solid fa-circle-chevron-up"></i>
+                                                                                    <span>Entrada</span>
+                                                                                </>
+                                                                                : <>
+                                                                                    <i className="fa-solid fa-circle-chevron-down"></i>
+                                                                                    <span>Saída</span>
+                                                                                </>
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            <button onClick={() => handleEdit(item)}><i className="fa-solid fa-pen-to-square"></i></button>
+                                                                            <button onClick={() => handleDelete(item)}><i className="fa-solid fa-trash"></i></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </Tabs.Content>
+                                                )
+                                            })}
+                                        </Tabs.Root>
 
-
-                                                    <td>
-                                                        <button onClick={() => handleEdit(item)}><i className="fa-solid fa-pen-to-square"></i></button>
-                                                        <button onClick={() => handleDelete(item)}><i className="fa-solid fa-trash"></i></button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
                                     </table>
                                 </>}
                         </div>

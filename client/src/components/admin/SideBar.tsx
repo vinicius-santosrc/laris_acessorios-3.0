@@ -104,16 +104,13 @@ const SideBar = () => {
 
                 {/* Seções de navegação */}
                 <nav className="sidebar-nav">
-                    <div className='sidebar-header-section'>
-                        <h2>Navegação</h2>
-                    </div>
                     {routes.map((route, index) => (
                         <div className="nav-section" key={index}>
                             <Link
                                 to={route.link}
                                 className="nav-link"
                                 id={window.location.pathname == route.link ? "selected" : ""}
-                                onClick={route.hasSubMenu ? (e) => { e.preventDefault(); handleSubMenuToggle(`submenu-${index}`); } : undefined}
+                                onClick={route.hasSubMenu ? (e) => { e.preventDefault(); handleSubMenuToggle(`submenu-${index}`); } : () => setSidebarOpen(false)}
                             >
                                 {route.section} {route.hasSubMenu && activeSubMenu === `submenu-${index}` ? <ChevronDown /> : <>{route.hasSubMenu && <ChevronRight />}</>}
                             </Link>
@@ -122,7 +119,7 @@ const SideBar = () => {
                             {route.hasSubMenu && activeSubMenu === `submenu-${index}` && (
                                 <div className="sub-menu">
                                     {route.subMenu?.map((subRoute, subIndex) => (
-                                        <Link key={subIndex} to={subRoute.link} className="nav-link sub-nav-link">
+                                        <Link key={subIndex} onClick={() => setSidebarOpen(false)} to={subRoute.link} className="nav-link sub-nav-link">
                                             {subRoute.section}
                                         </Link>
                                     ))}

@@ -122,4 +122,11 @@
         width: 100%;
         margin-bottom: 15px;
     }
+
+    .logoheadermobile {
+        width: 220px;
+        text-align: center;
+        justify-content: center;
+        padding-bottom: 24px;
+    }
 }

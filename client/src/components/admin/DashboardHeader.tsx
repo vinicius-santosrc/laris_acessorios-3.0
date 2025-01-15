@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { UserProps } from "../../models/user";
 import authService from "../../services/authService";
 import { getFirstAndLastName } from "../../lib/utils";
-import { Bell, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import NotificationsComponent from "./notifications/NotificationsComponent";
 import SideBar from "./SideBar";
+import logoHeader from '../../logo.svg';
 
 export const DashboardHeader = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
@@ -15,6 +16,29 @@ export const DashboardHeader = () => {
     const [isLoading, setLoading] = useState(true);
     const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null); // Para controlar qual submenu está aberto
     const [dateToday, setDateToday] = useState<string>("");
+    const [isMobile, setIsMobile] = useState<boolean>(false);
+    useEffect(() => {
+
+        // Função para verificar a largura da tela
+        const checkIfMobile = () => {
+            if (window.innerWidth <= 768) {
+                setIsMobile(true);
+            } else {
+                setIsMobile(false);
+            }
+        };
+
+        // Verifica ao carregar o componente
+        checkIfMobile();
+
+        // Adiciona evento para verificar mudanças na largura da tela
+        window.addEventListener("resize", checkIfMobile);
+
+        // Remove o evento ao desmontar o componente
+        return () => {
+            window.removeEventListener("resize", checkIfMobile);
+        }
+    }, []);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -44,6 +68,7 @@ export const DashboardHeader = () => {
     return (
         <header className="dashboard-header-component">
             <section className="dashboard-header-component__inside">
+                {/*isMobile && <img className="logoheadermobile" src={logoHeader} alt="LARIS-ACESSORIOS" />*/}
                 <div className="dashboard-header-component-account-details">
                     <div className="user-info-content">
                         <SideBar />
