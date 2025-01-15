@@ -219,6 +219,23 @@
         font-size: 0.9rem;
     }
 
+    .rowTable {
+        font-size: 0.8rem;
+    }
+
+    .chakra-action-bar__content {
+        padding: 12px;
+        width: 90%;
+        box-shadow: 2px 2px 12px gray;
+    }
+
+    .chakra-tabs__trigger {
+        width: 150px;
+        margin-right: 12px;
+        text-align: center;
+        justify-content: center;
+    }
+
     .table-header th {
         font-size: 0.85rem;
         padding: 8px;

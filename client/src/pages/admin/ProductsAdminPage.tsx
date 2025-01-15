@@ -25,8 +25,29 @@ import { Link } from "react-router-dom";
 export const ProductsAdminPage = () => {
     const [products, setProducts] = useState<Product[] | null>(null);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
     useEffect(() => {
         fetchCategoryData();
+
+        // Função para verificar a largura da tela
+        const checkIfMobile = () => {
+            if (window.innerWidth <= 768) {
+                setIsMobile(true);
+            } else {
+                setIsMobile(false);
+            }
+        };
+
+        // Verifica ao carregar o componente
+        checkIfMobile();
+
+        // Adiciona evento para verificar mudanças na largura da tela
+        window.addEventListener("resize", checkIfMobile);
+
+        // Remove o evento ao desmontar o componente
+        return () => {
+            window.removeEventListener("resize", checkIfMobile);
+        }
     }, []);
 
     const fetchCategoryData = async () => {
@@ -87,22 +108,18 @@ export const ProductsAdminPage = () => {
                 </div>
 
                 <div className="dashboard-table-content">
-                    <Tabs.Root defaultValue="members">
+                    <Tabs.Root lazyMount unmountOnExit defaultValue="members" >
                         <Tabs.List>
                             <Tabs.Trigger value="members">
-                                <BoxIcon />
-                                Todos os produtos
+                                Tudo
                             </Tabs.Trigger>
                             <Tabs.Trigger value="projects">
-                                <Check />
                                 Disponíveis
                             </Tabs.Trigger>
                             <Tabs.Trigger value="tasks">
-                                <Undo />
-                                Sem estoque
+                                Indisponiveis
                             </Tabs.Trigger>
                         </Tabs.List>
-
                         {/* Todos os Produtos */}
                         <Tabs.Content className="contentTab" value="members">
                             <Table.Root size="sm">
@@ -111,9 +128,9 @@ export const ProductsAdminPage = () => {
                                         <Table.ColumnHeader></Table.ColumnHeader>
                                         <Table.ColumnHeader>Foto</Table.ColumnHeader>
                                         <Table.ColumnHeader>Nome</Table.ColumnHeader>
-                                        <Table.ColumnHeader>Categorias</Table.ColumnHeader>
+                                        {!isMobile && <Table.ColumnHeader>Categorias</Table.ColumnHeader>}
                                         <Table.ColumnHeader>Tipo</Table.ColumnHeader>
-                                        <Table.ColumnHeader textAlign="end">Preço</Table.ColumnHeader>
+                                        <Table.ColumnHeader>Preço</Table.ColumnHeader>
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
@@ -140,7 +157,7 @@ export const ProductsAdminPage = () => {
                                             </Table.Cell>
                                             <Table.Cell>
                                                 <Link to={"/admin/products/" + item.id}>{item.name_product}</Link></Table.Cell>
-                                            <Table.Cell>
+                                            {!isMobile && <Table.Cell>
                                                 <Link to={"/admin/products/" + item.id}>
                                                     <div className="section-item-list-admin">
                                                         {item &&
@@ -153,7 +170,7 @@ export const ProductsAdminPage = () => {
                                                             )}
                                                     </div>
                                                 </Link>
-                                            </Table.Cell>
+                                            </Table.Cell>}
                                             <Table.Cell>{item.type_full_label}</Table.Cell>
                                             <Table.Cell textAlign="end">R$ {item.price.toFixed(2)}</Table.Cell>
                                         </Table.Row>
@@ -170,7 +187,7 @@ export const ProductsAdminPage = () => {
                                         <Table.ColumnHeader></Table.ColumnHeader>
                                         <Table.ColumnHeader>Foto</Table.ColumnHeader>
                                         <Table.ColumnHeader>Nome</Table.ColumnHeader>
-                                        <Table.ColumnHeader>Categorias</Table.ColumnHeader>
+                                        {!isMobile && <Table.ColumnHeader>Categorias</Table.ColumnHeader>}
                                         <Table.ColumnHeader>Tipo</Table.ColumnHeader>
                                         <Table.ColumnHeader textAlign="end">Preço</Table.ColumnHeader>
                                     </Table.Row>
@@ -201,7 +218,7 @@ export const ProductsAdminPage = () => {
                                                 </Table.Cell>
                                                 <Table.Cell>
                                                     <Link to={"/admin/products/" + item.id}>{item.name_product}</Link></Table.Cell>
-                                                <Table.Cell>
+                                                {!isMobile && <Table.Cell>
                                                     <Link to={"/admin/products/" + item.id}>
                                                         <div className="section-item-list-admin">
                                                             {item &&
@@ -214,7 +231,7 @@ export const ProductsAdminPage = () => {
                                                                 )}
                                                         </div>
                                                     </Link>
-                                                </Table.Cell>
+                                                </Table.Cell>}
                                                 <Table.Cell>{item.type_full_label}</Table.Cell>
                                                 <Table.Cell textAlign="end">R$ {item.price.toFixed(2)}</Table.Cell>
                                             </Table.Row>
@@ -230,7 +247,7 @@ export const ProductsAdminPage = () => {
                                     <Table.Row className="rowTable">
                                         <Table.ColumnHeader>Foto</Table.ColumnHeader>
                                         <Table.ColumnHeader>Nome</Table.ColumnHeader>
-                                        <Table.ColumnHeader>Categorias</Table.ColumnHeader>
+                                        {!isMobile && <Table.ColumnHeader>Categorias</Table.ColumnHeader>}
                                         <Table.ColumnHeader>Tipo</Table.ColumnHeader>
                                         <Table.ColumnHeader textAlign="end">Preço</Table.ColumnHeader>
                                     </Table.Row>
@@ -261,7 +278,7 @@ export const ProductsAdminPage = () => {
                                                 </Table.Cell>
                                                 <Table.Cell>
                                                     <Link to={"/admin/products/" + item.id}>{item.name_product}</Link></Table.Cell>
-                                                <Table.Cell>
+                                                {!isMobile && <Table.Cell>
                                                     <Link to={"/admin/products/" + item.id}>
                                                         <div className="section-item-list-admin">
                                                             {item &&
@@ -274,7 +291,7 @@ export const ProductsAdminPage = () => {
                                                                 )}
                                                         </div>
                                                     </Link>
-                                                </Table.Cell>
+                                                </Table.Cell>}
                                                 <Table.Cell>{item.type_full_label}</Table.Cell>
                                                 <Table.Cell textAlign="end">R$ {item.price.toFixed(2)}</Table.Cell>
                                             </Table.Row>

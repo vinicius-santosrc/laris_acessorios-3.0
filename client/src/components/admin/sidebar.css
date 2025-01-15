@@ -55,7 +55,7 @@
 .nav-link {
     display: flex;
     align-items: center;
-    color: #333;
+    color: #848484;
     /* Cor de texto escura para contraste */
     padding: 10px 20px;
     text-decoration: none;
@@ -73,8 +73,8 @@
 }
 
 #selected {
-    background-color: #be0a45;
-    color: #fff;
+    background-color: #e3e0e0;
+    color: #be0a45;
     /* Texto branco no item ativo */
 }
 

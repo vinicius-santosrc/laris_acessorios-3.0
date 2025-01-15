@@ -1,6 +1,4 @@
-import { Product } from "@/models/product"
-import productService from "../../services/productService";
-import { Badge, Image, Table, Tabs } from "@chakra-ui/react"
+import { Image, Table, Tabs } from "@chakra-ui/react"
 import { useEffect, useState } from "react";
 import "./productsadminpage.css"
 import { Users } from "lucide-react";
@@ -9,6 +7,29 @@ import { UserProps } from "../../models/user";
 
 export const UsersAdmin = () => {
     const [clients, setClients] = useState<UserProps[] | null>(null);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
+    useEffect(() => {
+
+        // Função para verificar a largura da tela
+        const checkIfMobile = () => {
+            if (window.innerWidth <= 768) {
+                setIsMobile(true);
+            } else {
+                setIsMobile(false);
+            }
+        };
+
+        // Verifica ao carregar o componente
+        checkIfMobile();
+
+        // Adiciona evento para verificar mudanças na largura da tela
+        window.addEventListener("resize", checkIfMobile);
+
+        // Remove o evento ao desmontar o componente
+        return () => {
+            window.removeEventListener("resize", checkIfMobile);
+        }
+    }, []);
 
     useEffect(() => {
         const fetchCategoryData = async () => {
@@ -48,7 +69,7 @@ export const UsersAdmin = () => {
                                         <Table.ColumnHeader>Foto</Table.ColumnHeader>
                                         <Table.ColumnHeader>Nome</Table.ColumnHeader>
                                         <Table.ColumnHeader>Tipo</Table.ColumnHeader>
-                                        <Table.ColumnHeader>E-mail</Table.ColumnHeader>
+                                        {!isMobile && <Table.ColumnHeader>E-mail</Table.ColumnHeader>}
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
@@ -62,7 +83,7 @@ export const UsersAdmin = () => {
                                                 src={user.photoURL}></Image></Table.Cell>
                                             <Table.Cell>{user.nome_completo}</Table.Cell>
                                             <Table.Cell>{user.label}</Table.Cell>
-                                            <Table.Cell>{user.email}</Table.Cell>
+                                            {!isMobile && <Table.Cell>{user.email}</Table.Cell>}
                                         </Table.Row>
                                     ))}
 
