@@ -57,10 +57,6 @@
     display: flex;
 }
 
-.widget {
-    color: black;
-}
-
 .dashboard-header-component {
     margin-left: 250px;
     position: fixed;
@@ -96,10 +92,12 @@
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
+    color: black;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
     border-left: 5px solid transparent;
     /* Default border */
+    border-radius: 24px;
 }
 
 .widget:hover {
@@ -123,6 +121,17 @@
 .widget-detail {
     font-size: 14px;
     color: #999;
+}
+
+.userContentTable {
+    display: flex;
+    align-items: center;
+    gap: 4;
+}
+
+.userContentTable img {
+    width: 20px;
+    height: 20px;
 }
 
 .widget.small {
@@ -162,10 +171,6 @@
 
 .dashboard-laris-acessorios tr:hover {
     background-color: #f1f1f1;
-}
-
-.widget {
-    border-radius: 24px;
 }
 
 /* Cores dos Widgets */

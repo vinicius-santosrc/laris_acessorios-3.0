@@ -1,4 +1,4 @@
-import { createListCollection } from "@chakra-ui/react";
+import { createListCollection, MenuItemProps } from "@chakra-ui/react";
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -357,6 +357,58 @@ export const formatarCartaoCredito = (numeroCartao: string) => {
 
     return formatado;
 };
+
+export const menuItemsAdmin: MenuItemsProps[] = [
+    {
+        title: "Dashboard",
+        isLink: true,
+        href: '/admin',
+    },
+    {
+        title: "Produtos",
+        isLink: true,
+        href: '/admin/products',
+    },
+    {
+        title: "Clientes",
+        isLink: true,
+        href: '/admin/clients',
+    },
+    {
+        title: "Planilhas",
+        isLink: false,
+        subItems: [
+            { title: "Planilha itens", href: '/admin/sheet/planilha-itens' },
+            { title: "Planilha finanças", href: '/admin/sheet/planilha-despesas' },
+        ]
+    },
+    {
+        title: "Planejamentos",
+        isLink: true,
+        href: '/admin/planning',
+    },
+    {
+        title: "Pedidos",
+        isLink: true,
+        href: '/admin/orders',
+    },
+    {
+        title: "WebFacility",
+        isLink: true,
+        href: '/admin/reports',
+    },
+    {
+        title: "Relatórios",
+        isLink: true,
+        href: '/admin/reports',
+    },
+    {
+        title: "Configurações",
+        isLink: true,
+        href: '/admin/config',
+    },
+];
+
 
 export const menuItems: MenuItemsProps[] = [
     {

@@ -6,11 +6,12 @@ import React, { useState } from "react"
 import { Link } from "react-router-dom"
 
 interface MenuComponentProps {
-    logoHeader: string,
-    menuItems: any[]
+    logoHeader: string;
+    menuItems: any[];
+    hasFooter: boolean;
 }
 
-const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems }) => {
+const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, hasFooter }) => {
     const [isMainDrawerOpen, setIsMainDrawerOpen] = useState<boolean>(false);
     const [isSubDrawerOpen, setIsSubDrawerOpen] = useState<boolean>(false);
     const [activeCollection, setActiveCollection] = useState<string | null>(null);
@@ -30,6 +31,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems }) 
     }
 
     const FooterHeader = () => {
+        if(!hasFooter) return
         return (
             <DrawerFooter>
                 <section className="footer-drawer">
@@ -148,7 +150,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems }) 
                                     ))}
                             </section>
                         </DrawerBody>
-                        <FooterHeader />
+                        {hasFooter && <FooterHeader />}
                     </DrawerContent>
                 </DrawerRoot>
             </Button>

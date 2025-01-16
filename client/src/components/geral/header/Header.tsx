@@ -11,6 +11,7 @@ import BagComponent from "./bag-component/BagComponent";
 import MenuComponent from "./menu-mobile/MenuComponent";
 import AccountComponent from "./account-component/AccountComponent";
 import SubHeaderComponent from "./SubHeaderComponent";
+import { ContactIcon, HeartIcon, User2Icon } from "lucide-react";
 
 const Header = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
@@ -169,7 +170,11 @@ const Header = () => {
             <header className="header-application-mobile header-application__wrapper">
                 <div className="header-app-top-content header-app-top-content__wrapper">
                     <section className="header-inside-content header-inside-content__search">
-                        <MenuComponent logoHeader={logoHeader} menuItems={menuItems} />
+                        <MenuComponent
+                            logoHeader={logoHeader}
+                            menuItems={menuItems}
+                            hasFooter={true}
+                        />
                         <Button
                             onClick={() => {
                                 setSearchbox(!isSearchBoxOpen);
