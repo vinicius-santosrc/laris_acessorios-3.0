@@ -3,9 +3,10 @@ import logoHeader from '../../logo.svg';
 import { UserProps } from '../../models/user';
 import authService from '../../services/authService';
 import { LayoutDashboard, Users, BoxIcon, DatabaseIcon, ChevronRight, Calendar, FactoryIcon, FileText, Settings, LogOut, ListOrdered, ChevronDown, Menu } from 'lucide-react'; // Importando ícone de Menu
-import { getFirstAndLastName } from '../../lib/utils';
+import { getFirstAndLastName, menuItemsAdmin } from '../../lib/utils';
 import './sidebar.css'; // Aponte para o arquivo CSS adequado
 import { Link } from 'react-router-dom';
+import MenuComponent from '../geral/header/menu-mobile/MenuComponent';
 
 const SideBar = () => {
     const [userAtual, setUser] = useState<UserProps>();
@@ -88,8 +89,12 @@ const SideBar = () => {
     return (
         <>
             {/* Botão para abrir a sidebar em dispositivos móveis */}
-            <div className="mobile-menu-button" onClick={() => setSidebarOpen(!isSidebarOpen)}>
-                <Menu size={24} />
+            <div className="mobile-menu-button">
+                <MenuComponent
+                    logoHeader={logoHeader}
+                    menuItems={menuItemsAdmin}
+                    hasFooter={false}
+                />
             </div>
 
             <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`} aria-label="Sidebar de navegação">

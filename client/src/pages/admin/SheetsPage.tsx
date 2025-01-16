@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./sheetpage.css";
 import { ModelDespesas, SheetItem } from "@/lib/utils";
-import { Tabs } from "@chakra-ui/react";
+import { Input, Select, Tabs } from "@chakra-ui/react";
+import { SaveIcon } from "lucide-react";
 
 export const SheetsPage = () => {
     const [monthlyData, setMonthlyData] = useState<any>({});
@@ -142,11 +143,11 @@ export const SheetsPage = () => {
                 adminService.editSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS)).then(() => {
                     loadItens();
                     getTotal();
-                    setCurrentItem({
+                    setcurrentItemDESPESAS({
                         descricao: "",
                         valor: "",
-                        tipo: "",
-                    })
+                        tipo: "Receita"
+                    });
                     setItemId(null);
 
                 })
@@ -381,6 +382,36 @@ export const SheetsPage = () => {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
+                                                                <tr>
+                                                                    <td id="bggray">
+                                                                        <Input
+                                                                            type="text"
+                                                                            placeholder="Adicione um novo item"
+                                                                            value={currentItemDESPESAS.descricao}
+                                                                            onChange={(e) => setcurrentItemDESPESAS({ ...currentItemDESPESAS, descricao: e.target.value })}
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        <Input
+                                                                            type="number"
+                                                                            placeholder="Escreva o valor"
+                                                                            value={currentItemDESPESAS.valor}
+                                                                            onChange={(e) => setcurrentItemDESPESAS({ ...currentItemDESPESAS, valor: e.target.value })}
+                                                                        />
+                                                                    </td>
+                                                                    <td id="bggray">
+                                                                        <select
+                                                                            value={currentItemDESPESAS.tipo}
+                                                                            onChange={(e) => setcurrentItemDESPESAS({ ...currentItemDESPESAS, tipo: e.target.value })}
+                                                                        >
+                                                                            <option value={'Receita'} selected>Receita</option>
+                                                                            <option value={'Despesa'}>Despesa</option>
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <button onClick={handleSave}><SaveIcon width={20}/></button>
+                                                                    </td>
+                                                                </tr>
                                                                 {monthlyData[month].items.map((item: ModelDespesas) => (
                                                                     <tr className={item.tipo === "Receita" ? "color-green-receita" : "red-color-despesa"} id={item.id.toString()} key={item.id}>
                                                                         <td id="bggray">{item.descricao}</td>
