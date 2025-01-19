@@ -140,5 +140,21 @@ class productService {
         }
     }
 
+    public static readonly createProduct = async (product: Product) => {
+        try {
+            await fetch(`${url}${preEndpoint}${secretKey}/products/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(product),
+            })
+        }
+        catch (error: any) {
+            console.error(error);
+            throw new Error(error);
+        }
+    }
+
 }
 export default productService;
