@@ -12,18 +12,22 @@ import {
     SelectRoot,
     SelectTrigger,
     SelectValueText,
-} from "../../components/ui/select"
-import { typeProductList } from "../../lib/utils";
+} from "../../components/ui/select";
+import { typeCategorys, typeProductList } from "../../lib/utils";
 import { InfoTip } from "../../components/ui/toggle-tip";
 import { ArrowLeftIcon } from "lucide-react";
 import { FileUploadList, FileUploadRoot, FileUploadTrigger } from "../../components/ui/file-upload";
 import { Button } from "../../components/ui/button";
 import { HiUpload } from "react-icons/hi";
+import { toaster } from "../../components/ui/toaster";
+import Compressor from 'compressorjs';
 
 export const ProductEditPage = () => {
     const [product, setProduct] = useState<Product | null>(null);
     const { uid } = useParams();
-    const [productPhotos, setProductPhotos] = useState<string[]>([]);
+
+    const [novoTamanho, setNovoTamanho] = useState<string>();
+    const [newPhoto, setNewPhoto] = useState<any>();
 
     useEffect(() => {
         if (uid) {
@@ -35,9 +39,62 @@ export const ProductEditPage = () => {
         if (uid) {
             const productAt: Product = await productService.getById(uid);
             setProduct(productAt);
-            setProductPhotos(JSON.parse(productAt.photoURL));
         }
     };
+
+    const handleFileUpload = async (event: any) => {
+        const file = event.target.files[0];
+        if (file) {
+            new Compressor(file, {
+                success(result: any) {
+                    const formData = new FormData();
+                    formData.append('image', result, result.name);  // Envia o arquivo compactado (não em base64)
+                    formData.append('key', "f559d2e043626a1955fb14d57caec1e2"); // Adicione sua chave de API
+
+                    // Fazendo a requisição POST
+                    fetch('https://api.imgbb.com/1/upload', {
+                        method: 'POST',
+                        body: formData,  // O corpo da requisição será o FormData
+                    })
+                        .then(response => response.json())
+                        .then(response => {
+                            if (response.success) {
+                                console.log('Upload successful:', response.data.url); // URL da imagem carregada
+
+                                setProduct((prevProduct: any) => {
+                                    let photoURLs = [];
+
+                                    try {
+                                        photoURLs = JSON.parse(prevProduct?.photoURL || '[]');
+                                    } catch (error) {
+                                        console.error("Erro ao fazer o parse de photoURL:", error);
+                                        photoURLs = [];
+                                    }
+
+                                    return {
+                                        ...prevProduct,
+                                        photoURL: JSON.stringify([
+                                            ...photoURLs,
+                                            response.data.url,
+                                        ]),
+                                    };
+                                });
+                            } else {
+                                console.error('Upload failed:', response.error.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error during upload:', error);
+                        });
+                },
+                error(err: any) {
+                    console.error('Error during image compression:', err.message);
+                }
+            });
+        }
+    };
+
+
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (product) {
@@ -49,14 +106,22 @@ export const ProductEditPage = () => {
     };
 
     const handleSave = async () => {
-        /*if (product) {
-            const updatedProduct = await productService.updateProduct(product);
-            if (updatedProduct) {
-                alert("Produto atualizado com sucesso!");
-            } else {
-                alert("Erro ao atualizar o produto.");
+        if (product) {
+            try {
+                const updatedProduct: any = await productService.updateProduct(product);
+                toaster.create({
+                    title: "Produto editado com sucesso",
+                    type: "success"
+                });
             }
-        }*/
+            catch (error) {
+                toaster.create({
+                    title: "Erro ao editar produto",
+                    type: "error"
+                });
+            }
+
+        }
     };
 
     return (
@@ -72,34 +137,29 @@ export const ProductEditPage = () => {
                             {/* Fotos */}
                             <div className="photos-box">
                                 <div className="photos-gallery">
-                                    {productPhotos.length > 1 ? (
-                                        <>{productPhotos.map((photo, key) => (
-                                            <Image
-                                                boxSize={120}
-                                                key={key}
-                                                src={photo}
-                                                alt={product?.name_product || 'Produto'}
-                                                className="product-image"
-                                            />
-                                        ))
-                                        }
-                                        </>
-                                    ) : (
-                                        <Image
-                                            src={productPhotos[0]}
-                                            alt={product?.name_product || 'Produto'}
-                                            className="product-image-single"
-                                        />
-
-                                    )}
-                                    <FileUploadRoot>
-                                        <FileUploadTrigger asChild>
-                                            <Button variant="outline" size="sm">
-                                                <HiUpload /> Upload file
-                                            </Button>
-                                        </FileUploadTrigger>
-                                        <FileUploadList />
-                                    </FileUploadRoot>
+                                    {product &&
+                                        <>
+                                            {JSON.parse(product?.photoURL).length > 1 ? (
+                                                <>
+                                                    {JSON.parse(product?.photoURL).map((photo: any, key: number) => (
+                                                        <Image
+                                                            boxSize={120}
+                                                            key={key}
+                                                            src={photo}
+                                                            alt={product?.name_product || 'Produto'}
+                                                            className="product-image"
+                                                        />
+                                                    ))}
+                                                </>
+                                            ) : (
+                                                <Image
+                                                    src={JSON.parse(product.photoURL)[0]}
+                                                    alt={product?.name_product || 'Produto'}
+                                                    className="product-image-single"
+                                                />
+                                            )}
+                                        </>}
+                                    <input type="file" onChange={(e) => handleFileUpload(e)} />
                                 </div>
                             </div>
 
@@ -107,14 +167,14 @@ export const ProductEditPage = () => {
                             <div className="info-box">
                                 {product ? (
                                     <form className="product-form">
-                                        {product &&
-                                            <Editable.Root style={{ fontWeight: 600 }} size={"lg"} defaultValue={product.name_product} activationMode="dblclick">
-                                                <Editable.Preview />
-                                                <Editable.Input />
-                                            </Editable.Root>
-                                        }
+                                        <Editable.Root style={{ fontWeight: 600 }} size={"lg"} defaultValue={product.name_product} activationMode="dblclick">
+                                            <Editable.Preview />
+                                            <Editable.Input onChange={(e) => { setProduct({ ...product, name_product: e.target.value }) }} />
+                                            <InfoTip content="Clique duas vezes para editar" />
+                                        </Editable.Root>
+
                                         <div className="form-row">
-                                            <label htmlFor="price">Preço do Produto<InfoTip content="Preço do produto. Não se esqueça que esse preço será subtraido com o desconto" /></label>
+                                            <label htmlFor="price">Preço do Produto<InfoTip content="Preço do produto. Não se esqueça que esse preço será subtraído com o desconto" /></label>
                                             <input
                                                 type="number"
                                                 id="price"
@@ -156,46 +216,65 @@ export const ProductEditPage = () => {
                                         <div className="form-row">
                                             <label htmlFor="tamanhos">Tamanhos</label>
                                             <div className="sizes-box">
-                                                {JSON.parse(product.tamanhos).map((size: string) => {
-                                                    return <Badge colorPalette="green">{size}</Badge>
-                                                })}
+                                                {JSON.parse(product.tamanhos).map((size: string) => (
+                                                    <Tag onClose={() => {
+                                                        const updatedSizes = JSON.parse(product.tamanhos).filter((item: string) => item !== size);
+                                                        setProduct({ ...product, tamanhos: JSON.stringify(updatedSizes) });
+                                                    }} colorPalette="green" key={size}>
+                                                        {size}
+                                                    </Tag>
+                                                ))}
+                                            </div>
+
+                                            <div className="add-size">
+                                                <input
+                                                    type="text"
+                                                    onChange={(e) => setNovoTamanho(e.target.value)}
+                                                    value={novoTamanho}
+                                                    placeholder="Novo Tamanho"
+                                                />
+                                                <button onClick={() => { if (novoTamanho) setProduct({ ...product, tamanhos: JSON.stringify([...JSON.parse(product.tamanhos), novoTamanho]) }); setNovoTamanho("") }}>Adicionar Tamanho</button>
                                             </div>
                                         </div>
 
                                         <div className="form-row">
-                                            <label htmlFor="tamanhos">Categorias</label>
+                                            <label htmlFor="categorias">Categorias</label>
                                             <div className="sizes-box">
-                                                {JSON.parse(product.categoryList).map((size: string) => {
-                                                    return <Tag closable>{size.toUpperCase()}</Tag>
-                                                })}
+                                                {JSON.parse(product.categoryList).map((category: string) => (
+                                                    <Tag colorPalette={"pink"} closable key={category}>{category.toUpperCase()}</Tag>
+                                                ))}
                                             </div>
-                                        </div>
-                                        <div className="form-row">
-                                            <label htmlFor="fornecedor">Fornecedor <InfoTip content="Não informado ao cliente, somente mostrado aos administradores" /></label>
-                                            <input
-                                                type="text"
-                                                id="fornecedor"
-                                                name="fornecedor"
-                                                value={product.fornecedor}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </div>
-
-                                        <div className="form-row">
-                                            <label htmlFor="tipo">Tipo</label>
-                                            <SelectRoot value={[product.tipo]} collection={typeProductList}>
+                                            <SelectRoot multiple defaultValue={JSON.parse(product.categoryList)} collection={typeCategorys} size="sm" width="320px">
                                                 <SelectTrigger>
-                                                    <SelectValueText placeholder="Selecione o tipo do produto" />
+                                                    <SelectValueText placeholder="Selecione as categorias" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {typeProductList.items.map((movie: any) => (
+                                                    {typeCategorys.items.map((category) => (
                                                         <SelectItem
-                                                            item={movie}
-                                                            key={movie.value}>
-                                                            {movie.label}
+                                                            item={category}
+                                                            onClick={() => {
+                                                                const currentCategoryList = JSON.parse(product.categoryList);
+                                                                const categoryExists = currentCategoryList.includes(category.value);
+
+                                                                // Se a categoria já existir, removemos, senão adicionamos
+                                                                if (categoryExists) {
+                                                                    setProduct({
+                                                                        ...product,
+                                                                        categoryList: JSON.stringify(currentCategoryList.filter(item => item !== category.value))
+                                                                    });
+                                                                } else {
+                                                                    setProduct({
+                                                                        ...product,
+                                                                        categoryList: JSON.stringify([...currentCategoryList, category.value])
+                                                                    });
+                                                                }
+                                                            }}
+                                                            key={category.value}
+                                                        >
+                                                            {category.label.toUpperCase()}
                                                         </SelectItem>
                                                     ))}
+
                                                 </SelectContent>
                                             </SelectRoot>
                                         </div>
@@ -207,6 +286,30 @@ export const ProductEditPage = () => {
                                                 id="type_full_label"
                                                 name="type_full_label"
                                                 value={product.type_full_label}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+
+                                        <div className="form-row">
+                                            <label htmlFor="personalizavel">Personalizável</label>
+                                            <select
+                                                id="personalizavel"
+                                                name="personalizavel"
+                                                value={product.personalizavel ? "true" : "false"}
+                                                onChange={(e) => handleInputChange({ target: { name: 'personalizavel', value: e.target.value === "true" } })}
+                                            >
+                                                <option value="true">Sim</option>
+                                                <option value="false">Não</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="form-row">
+                                            <label htmlFor="extensor">Extensor</label>
+                                            <input
+                                                type="text"
+                                                id="extensor"
+                                                name="extensor"
+                                                value={product.extensor}
                                                 onChange={handleInputChange}
                                             />
                                         </div>

@@ -58,6 +58,22 @@ export enum TypeProduct {
     Piercing = 'Piercing'
 }
 
+export const typeCategorys = createListCollection({
+    items: [
+        { label: 'para-ela', value: "para-ela" },
+        { label: 'anel', value: "anel" },
+        { label: "colar", value: "colar"},
+        { label: "brinco", value: "brinco"},
+        { label: 'pulseira', value: "pulseira" },
+        { label: 'bracelete', value: "bracelete" },
+        { label: 'piercing', value: "piercing" },
+        { label: "joias", value: "joias" },
+        { label: "semijoias", value: "semijoias" },
+        { label: "pratas", value: "pratas" },
+        { label: "banhados-a-ouro", value: "banhados-a-ouro"}
+    ]
+});
+
 export const typeProductList = createListCollection({
     items: [
         { label: 'Chocker', value: TypeProduct.Chocker },

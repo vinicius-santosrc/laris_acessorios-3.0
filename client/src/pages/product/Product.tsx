@@ -144,8 +144,11 @@ const ProductPage = () => {
                                 <span>{product.name_product}</span>
                             </div>
                             <div className="product-price-content">
-                                <p id="bold">R$ {product.price.toFixed(2)}</p>
-                                <p>Ou em até 2x de R$ {(product.price / 2).toFixed(2)}</p>
+                                {product.desconto > 0 ?
+                                    <p id="bold"><s style={{fontWeight: 400}}>R$ {product.price.toFixed(2)}</s> R$ {(product.price - product.desconto).toFixed(2)}</p>
+                                    :
+                                    <p id="bold">R$ {product.price.toFixed(2)}</p>}
+                                <p>Compre pelo cartão de crédito</p>
                             </div>
                             <div className="product-sizes-content">
                                 <p>Tamanhos</p>

@@ -124,5 +124,21 @@ class productService {
         }
     }
 
+    public static readonly updateProduct = async(product: Product) => {
+        try {
+            await fetch(`${url}${preEndpoint}${secretKey}/products/edit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(product),
+            })
+        }
+        catch (error: any) {
+            console.error(error);
+            throw new Error(error);
+        }
+    }
+
 }
 export default productService;

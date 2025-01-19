@@ -42,7 +42,11 @@ const PrincipalProductCard = ({ product }: { product: Product }) => {
                                 <li className="product-subtitle">{product.type_full_label}</li>
                             </div>
                             <div className="product-price-container">
-                                <span className="product-price">R$ {product.price.toFixed(2)}</span>
+                                {product.desconto > 0 ?
+                                    <span className="product-price"><s>R$ {product.price.toFixed(2)}</s> R$ {(product.price - product.desconto).toFixed(2)}</span>
+                                    :
+                                    <span className="product-price">R$ {product.price.toFixed(2)}</span>
+                                }
                             </div>
                         </footer>
                     </article>

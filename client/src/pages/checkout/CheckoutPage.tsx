@@ -135,7 +135,14 @@ const CheckoutPage = ({paymentMethodTypes, clientSecret }: any) => {
         const newSubtotal = items.reduce((acc, item) => acc + (item.price - (item.desconto || 0)), 0);
         setSubtotal(newSubtotal);
         const deliveryCost = shippingCost || 0;
+        items.forEach((item) => {
+            if (item.desconto > 0) {
+                setDesconto(desconto + item.desconto)
+            }
+        })
         setTotal(newSubtotal + deliveryCost);
+
+
     };
 
     const removeItemFromCart = (itemId: any) => {

@@ -30,7 +30,7 @@ export interface Product {
     categoria: string; // Categoria do produto
     url: string; // URL do produto na loja
     fornecedor: string; // Nome do fornecedor do produto
-    tipo: string; // Tipo do produto (ex: "novo", "usado", etc.)
+    tipo: string; // Tipo do produto (ex: "colar", "brinco", etc.)
     personalizavel: boolean; // Indica se o produto é personalizável
     photoURL: string; // URL da foto do produto
     extensor: string; // Campo adicional para qualquer outra informação sobre o produto
