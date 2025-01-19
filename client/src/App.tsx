@@ -31,6 +31,7 @@ import { UsersAdmin } from './pages/admin/UsersAdmin';
 import { Planing } from './pages/admin/Planning';
 import { SheetsPage } from './pages/admin/SheetsPage';
 import { ProductEditPage } from './pages/admin/ProductEditPage';
+import { ProductAddPage } from './pages/admin/ProductAddPage';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -43,6 +44,7 @@ const routes = [
   { path: '/search/:search', element: <SearchPage /> },
   { path: '/admin', isProtected: true, element: <AdminPage><Dashboard /></AdminPage> },
   { path: '/admin/products', isProtected: true, element: (<AdminPage><ProductsAdminPage /></AdminPage>) },
+  { path: '/admin/products/add', isProtected: true, element: (<AdminPage><ProductAddPage /></AdminPage>) },
   { path: '/admin/products/:uid', isProtected: true, element: (<AdminPage><ProductEditPage /></AdminPage>) },
   { path: '/admin/clients', isProtected: true, element: (<AdminPage><UsersAdmin /></AdminPage>) },
   { path: '/admin/planning', isProtected: true, element: (<AdminPage><Planing /></AdminPage>) },

@@ -20,7 +20,7 @@ import {
 import { Checkbox } from "../../components/ui/checkbox";
 import { LuTrash2 } from "react-icons/lu";
 import { toaster } from "../../components/ui/toaster";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 export const ProductsAdminPage = () => {
     const [products, setProducts] = useState<Product[] | null>(null);
@@ -69,6 +69,8 @@ export const ProductsAdminPage = () => {
         });
     };
 
+    const navigator = useNavigate()
+
     const handleChangevisibility = async (value: "avaliable" | "unavaliable") => {
         await productService.changeVisibilityByList(selectedIds, value).then(() => {
             fetchCategoryData()
@@ -102,7 +104,7 @@ export const ProductsAdminPage = () => {
 
                 {/* Botões de Ação */}
                 <div className="actions">
-                    <Button className="action-button">Adicionar Produto</Button>
+                    <Button onClick={() => navigator("/admin/products/add")} className="action-button">Adicionar Produto</Button>
                     <Button className="action-button">Filtrar Produtos</Button>
                     <Button className="action-button">Resetar Filtros</Button>
                 </div>
