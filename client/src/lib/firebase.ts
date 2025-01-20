@@ -1,9 +1,9 @@
 /**
- * Creation Date: 12/01/2024
+ * Creation Date: 12/12/2024
  * Author: Vinícius da Silva Santos
  * Coordinator: Larissa Alves de Andrade Moreira
  * Developed by: Lari's Acessórios Team
- * Copyright 2023, LARI'S ACESSÓRIOS
+ * Copyright 2024, LARI'S ACESSÓRIOS
  * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
 */
 
