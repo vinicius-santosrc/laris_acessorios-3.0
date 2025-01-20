@@ -217,7 +217,8 @@ export const ProductEditPage = () => {
                                             <label htmlFor="tamanhos">Tamanhos</label>
                                             <div className="sizes-box">
                                                 {JSON.parse(product.tamanhos).map((size: string) => (
-                                                    <Tag onClose={() => {
+                                                    <Tag onClose={(e: any) => {
+                                                        e.preventDefault()
                                                         const updatedSizes = JSON.parse(product.tamanhos).filter((item: string) => item !== size);
                                                         setProduct({ ...product, tamanhos: JSON.stringify(updatedSizes) });
                                                     }} colorPalette="green" key={size}>
@@ -233,7 +234,7 @@ export const ProductEditPage = () => {
                                                     value={novoTamanho}
                                                     placeholder="Novo Tamanho"
                                                 />
-                                                <button onClick={() => { if (novoTamanho) setProduct({ ...product, tamanhos: JSON.stringify([...JSON.parse(product.tamanhos), novoTamanho]) }); setNovoTamanho("") }}>Adicionar Tamanho</button>
+                                                <button onClick={(e: any) => { e.preventDefault();  if (novoTamanho) setProduct({ ...product, tamanhos: JSON.stringify([...JSON.parse(product.tamanhos), novoTamanho]) }); setNovoTamanho("") }}>Adicionar Tamanho</button>
                                             </div>
                                         </div>
 
