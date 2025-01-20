@@ -2,23 +2,20 @@ import { Product } from "@/models/product";
 import productService from "../../services/productService";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Badge, Editable, Image } from "@chakra-ui/react";
+import { Editable, Image } from "@chakra-ui/react";
 import "./producteditpage.css";
 import { Tag } from "../../components/ui/tag";
 import {
     SelectContent,
     SelectItem,
-    SelectLabel,
     SelectRoot,
     SelectTrigger,
     SelectValueText,
 } from "../../components/ui/select";
-import { typeCategorys, typeProductList } from "../../lib/utils";
+import { typeCategorys } from "../../lib/utils";
 import { InfoTip } from "../../components/ui/toggle-tip";
 import { ArrowLeftIcon } from "lucide-react";
-import { FileUploadList, FileUploadRoot, FileUploadTrigger } from "../../components/ui/file-upload";
 import { Button } from "../../components/ui/button";
-import { HiUpload } from "react-icons/hi";
 import { toaster } from "../../components/ui/toaster";
 import Compressor from 'compressorjs';
 import {
