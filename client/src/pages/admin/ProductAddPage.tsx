@@ -1,14 +1,13 @@
 import { Product } from "@/models/product";
 import productService from "../../services/productService";
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Badge, Editable, Image } from "@chakra-ui/react";
+import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Editable, Image } from "@chakra-ui/react";
 import "./producteditpage.css";
 import { Tag } from "../../components/ui/tag";
 import {
     SelectContent,
     SelectItem,
-    SelectLabel,
     SelectRoot,
     SelectTrigger,
     SelectValueText,
@@ -16,13 +15,11 @@ import {
 import { typeCategorys } from "../../lib/utils";
 import { InfoTip } from "../../components/ui/toggle-tip";
 import { ArrowLeftIcon } from "lucide-react";
-import { FileUploadList, FileUploadRoot, FileUploadTrigger } from "../../components/ui/file-upload";
-import { Button } from "../../components/ui/button";
-import { HiUpload } from "react-icons/hi";
 import { toaster } from "../../components/ui/toaster";
 import Compressor from 'compressorjs';
 
 export const ProductAddPage = () => {
+    const navigator = useNavigate();
     const [product, setProduct] = useState<Product>({
         id: 0, // ID ainda não atribuído, será gerado pelo backend
         name_product: "",
@@ -111,6 +108,9 @@ export const ProductAddPage = () => {
                 title: "Produto adicionado com sucesso",
                 type: "success"
             });
+            setTimeout(() => {
+                navigator("/admin/products")
+            }, 1000);
             // Redirecionar ou resetar a página após o sucesso, se necessário
         } catch (error) {
             toaster.create({
