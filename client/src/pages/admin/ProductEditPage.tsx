@@ -2,25 +2,28 @@ import { Product } from "@/models/product";
 import productService from "../../services/productService";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Badge, Editable, Image } from "@chakra-ui/react";
+import { Editable, Image } from "@chakra-ui/react";
 import "./producteditpage.css";
 import { Tag } from "../../components/ui/tag";
 import {
     SelectContent,
     SelectItem,
-    SelectLabel,
     SelectRoot,
     SelectTrigger,
     SelectValueText,
 } from "../../components/ui/select";
-import { typeCategorys, typeProductList } from "../../lib/utils";
+import { typeCategorys } from "../../lib/utils";
 import { InfoTip } from "../../components/ui/toggle-tip";
 import { ArrowLeftIcon } from "lucide-react";
-import { FileUploadList, FileUploadRoot, FileUploadTrigger } from "../../components/ui/file-upload";
 import { Button } from "../../components/ui/button";
-import { HiUpload } from "react-icons/hi";
 import { toaster } from "../../components/ui/toaster";
 import Compressor from 'compressorjs';
+import {
+    MenuContent,
+    MenuItem,
+    MenuRoot,
+    MenuTrigger,
+} from "../../components/ui/menu"
 
 export const ProductEditPage = () => {
     const [product, setProduct] = useState<Product | null>(null);
@@ -124,6 +127,24 @@ export const ProductEditPage = () => {
         }
     };
 
+    const handleDeletePhoto = (photoUrl: string) => {
+        // Se a foto não existe, não faz nada
+        if (!product) return;
+
+        // Recupera as fotos atuais e remove a URL da foto clicada
+        const updatedPhotoURLs = JSON.parse(product.photoURL || '[]').filter((url: string) => url !== photoUrl);
+
+        // Atualiza o estado do produto com as fotos restantes
+        setProduct({
+            ...product,
+            photoURL: JSON.stringify(updatedPhotoURLs),
+        });
+
+        // Opcional: Aqui você pode chamar o serviço para remover a foto do backend, se necessário.
+        // Exemplo:
+        // productService.deletePhoto(photoUrl).catch(error => console.error('Erro ao excluir foto:', error));
+    };
+
     return (
         <section className="dashboard-laris-acessorios">
             <div className="dashboard-content">
@@ -142,21 +163,55 @@ export const ProductEditPage = () => {
                                             {JSON.parse(product?.photoURL).length > 1 ? (
                                                 <>
                                                     {JSON.parse(product?.photoURL).map((photo: any, key: number) => (
-                                                        <Image
-                                                            boxSize={120}
-                                                            key={key}
-                                                            src={photo}
-                                                            alt={product?.name_product || 'Produto'}
-                                                            className="product-image"
-                                                        />
+                                                        <MenuRoot key={key}>
+                                                            <MenuTrigger asChild>
+                                                                <Image
+                                                                    boxSize={120}
+                                                                    key={key}
+                                                                    src={photo}
+                                                                    alt={product?.name_product || 'Produto'}
+                                                                    className="product-image"
+                                                                />
+                                                            </MenuTrigger>
+
+                                                            <MenuContent>
+                                                                <MenuItem
+                                                                    value="delete"
+                                                                    color="fg.error"
+                                                                    _hover={{ bg: 'bg.error', color: 'fg.error' }}
+                                                                    onClick={() => handleDeletePhoto(photo)} 
+                                                                >
+                                                                    Excluir foto
+                                                                </MenuItem>
+                                                            </MenuContent>
+                                                        </MenuRoot>
+
                                                     ))}
                                                 </>
                                             ) : (
-                                                <Image
-                                                    src={JSON.parse(product.photoURL)[0]}
-                                                    alt={product?.name_product || 'Produto'}
-                                                    className="product-image-single"
-                                                />
+                                                <MenuRoot>
+                                                    <MenuTrigger asChild>
+                                                        <Button variant="outline" size="sm">
+                                                            <Image
+                                                                src={JSON.parse(product.photoURL)[0]}
+                                                                alt={product?.name_product || 'Produto'}
+                                                                className="product-image-single"
+                                                            />
+                                                        </Button>
+                                                    </MenuTrigger>
+
+                                                    <MenuContent>
+                                                        <MenuItem
+                                                            value="delete"
+                                                            color="fg.error"
+                                                            _hover={{ bg: 'bg.error', color: 'fg.error' }}
+                                                            onClick={() => handleDeletePhoto(JSON.parse(product.photoURL)[0])} 
+                                                        >
+                                                            Excluir foto
+                                                        </MenuItem>
+                                                    </MenuContent>
+                                                </MenuRoot>
+
                                             )}
                                         </>}
                                     <input type="file" onChange={(e) => handleFileUpload(e)} />
@@ -234,7 +289,7 @@ export const ProductEditPage = () => {
                                                     value={novoTamanho}
                                                     placeholder="Novo Tamanho"
                                                 />
-                                                <button onClick={(e: any) => { e.preventDefault();  if (novoTamanho) setProduct({ ...product, tamanhos: JSON.stringify([...JSON.parse(product.tamanhos), novoTamanho]) }); setNovoTamanho("") }}>Adicionar Tamanho</button>
+                                                <button onClick={(e: any) => { e.preventDefault(); if (novoTamanho) setProduct({ ...product, tamanhos: JSON.stringify([...JSON.parse(product.tamanhos), novoTamanho]) }); setNovoTamanho("") }}>Adicionar Tamanho</button>
                                             </div>
                                         </div>
 

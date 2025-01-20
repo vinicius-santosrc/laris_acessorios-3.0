@@ -17,6 +17,13 @@ import { InfoTip } from "../../components/ui/toggle-tip";
 import { ArrowLeftIcon } from "lucide-react";
 import { toaster } from "../../components/ui/toaster";
 import Compressor from 'compressorjs';
+import {
+    MenuContent,
+    MenuItem,
+    MenuRoot,
+    MenuTrigger,
+} from "../../components/ui/menu"
+import { Button } from "../../components/ui/button";
 
 export const ProductAddPage = () => {
     const navigator = useNavigate();
@@ -120,6 +127,24 @@ export const ProductAddPage = () => {
         }
     };
 
+    const handleDeletePhoto = (photoUrl: string) => {
+        // Se a foto não existe, não faz nada
+        if (!product) return;
+
+        // Recupera as fotos atuais e remove a URL da foto clicada
+        const updatedPhotoURLs = JSON.parse(product.photoURL || '[]').filter((url: string) => url !== photoUrl);
+
+        // Atualiza o estado do produto com as fotos restantes
+        setProduct({
+            ...product,
+            photoURL: JSON.stringify(updatedPhotoURLs),
+        });
+
+        // Opcional: Aqui você pode chamar o serviço para remover a foto do backend, se necessário.
+        // Exemplo:
+        // productService.deletePhoto(photoUrl).catch(error => console.error('Erro ao excluir foto:', error));
+    };
+
     return (
         <section className="dashboard-laris-acessorios">
             <div className="dashboard-content">
@@ -138,21 +163,55 @@ export const ProductAddPage = () => {
                                             {JSON.parse(product?.photoURL).length > 1 ? (
                                                 <>
                                                     {JSON.parse(product?.photoURL).map((photo: any, key: number) => (
-                                                        <Image
-                                                            boxSize={120}
-                                                            key={key}
-                                                            src={photo}
-                                                            alt={product?.name_product || 'Produto'}
-                                                            className="product-image"
-                                                        />
+                                                        <MenuRoot key={key}>
+                                                            <MenuTrigger asChild>
+                                                                <Image
+                                                                    boxSize={120}
+                                                                    key={key}
+                                                                    src={photo}
+                                                                    alt={product?.name_product || 'Produto'}
+                                                                    className="product-image"
+                                                                />
+                                                            </MenuTrigger>
+
+                                                            <MenuContent>
+                                                                <MenuItem
+                                                                    value="delete"
+                                                                    color="fg.error"
+                                                                    _hover={{ bg: 'bg.error', color: 'fg.error' }}
+                                                                    onClick={() => handleDeletePhoto(photo)}
+                                                                >
+                                                                    Excluir foto
+                                                                </MenuItem>
+                                                            </MenuContent>
+                                                        </MenuRoot>
+
                                                     ))}
                                                 </>
                                             ) : (
-                                                <Image
-                                                    src={JSON.parse(product.photoURL)[0]}
-                                                    alt={product?.name_product || 'Produto'}
-                                                    className="product-image-single"
-                                                />
+                                                <MenuRoot>
+                                                    <MenuTrigger asChild>
+                                                        <Button variant="outline" size="sm">
+                                                            <Image
+                                                                src={JSON.parse(product.photoURL)[0]}
+                                                                alt={product?.name_product || 'Produto'}
+                                                                className="product-image-single"
+                                                            />
+                                                        </Button>
+                                                    </MenuTrigger>
+
+                                                    <MenuContent>
+                                                        <MenuItem
+                                                            value="delete"
+                                                            color="fg.error"
+                                                            _hover={{ bg: 'bg.error', color: 'fg.error' }}
+                                                            onClick={() => handleDeletePhoto(JSON.parse(product.photoURL)[0])}
+                                                        >
+                                                            Excluir foto
+                                                        </MenuItem>
+                                                    </MenuContent>
+                                                </MenuRoot>
+
                                             )}
                                         </>}
                                     <input type="file" onChange={(e) => handleFileUpload(e)} />
@@ -292,7 +351,7 @@ export const ProductAddPage = () => {
                                             type="text"
                                             id="type_full_label"
                                             name="type_full_label"
-                                            onChange={(e) => setProduct({...product, url: e.target.value})}
+                                            onChange={(e) => setProduct({ ...product, url: e.target.value })}
                                         />
                                     </div>
 
