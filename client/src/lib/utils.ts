@@ -1,3 +1,4 @@
+import { adminService } from "../services/adminService";
 import { createListCollection, MenuItemProps } from "@chakra-ui/react";
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -104,115 +105,11 @@ export interface SheetItem {
     lucroporitem: number
 }
 
-export const defaultsCategories: CategoriesProps[] = [
-    //PRINCIPAIS
-    {
-        highlightText: "Anéis",
-        highlightDescription: "Explore nossa coleção de anéis sofisticados e modernos para todas as ocasiões.",
-        highlightImage: "https://uploaddeimagens.com.br/images/004/880/695/full/aneis-page.png?1736520426",
-        urlLink: "anel",
-        products: []
-    },
-    {
-        highlightText: "Colares",
-        highlightDescription: "Descubra colares deslumbrantes, ideais para dar um toque especial ao seu look.",
-        highlightImage: "/images/necklaces.jpg",
-        urlLink: "colar",
-        products: []
-    },
-    {
-        highlightText: "Brincos",
-        highlightDescription: "Brincos que variam de elegantes a ousados, para combinar com qualquer estilo.",
-        highlightImage: "/images/earrings.jpg",
-        urlLink: "brinco",
-        products: []
-    },
-    {
-        highlightText: "Braceletes",
-        highlightDescription: "Abrace o estilo com braceletes que refletem sua personalidade e elegância.",
-        highlightImage: "/images/bracelets.jpg",
-        urlLink: "bracelete",
-        products: []
-    },
-    {
-        highlightText: "Tornozeleiras",
-        highlightDescription: "Tornozeleiras delicadas e modernas para realçar a beleza dos seus pés.",
-        highlightImage: "/images/anklets.jpg",
-        urlLink: "tornozeleira",
-        products: []
-    },
-    {
-        highlightText: "Piercings",
-        highlightDescription: "Piercings estilosos para todos os gostos, ideais para quem deseja um toque ousado.",
-        highlightImage: "/images/piercings.jpg",
-        urlLink: "piercing",
-        products: []
-    },
-    {
-        highlightText: "Pulseiras",
-        highlightDescription: "Complete seu visual com nossas pulseiras sofisticadas e versáteis, ideais para adicionar um toque de elegância e personalidade ao seu estilo. Sejam delicadas ou mais ousadas, nossas pulseiras são perfeitas para qualquer ocasião, desde o dia a dia até eventos especiais.",
-        highlightImage: "/images/pulseiras.jpg",
-        urlLink: "pulseira",
-        products: []
-    },
-    {
-        highlightText: "Joias",
-        highlightDescription: "Encante-se com nossa coleção de joias exclusivas.",
-        highlightImage: "/images/jewerlys.jpg",
-        urlLink: "joias",
-        products: []
-    },
-    {
-        highlightText: "Pratas",
-        highlightDescription: "Pratas de lei para momentos especiais.",
-        highlightImage: "/images/pratas.jpg",
-        urlLink: "pratas",
-        products: []
-    },
-    {
-        highlightText: "Semijoias",
-        highlightDescription: "Semijoias sofisticadas para complementar seu estilo.",
-        highlightImage: "/images/pratas.jpg",
-        urlLink: "semijoias",
-        products: []
-    },
-    {
-        highlightText: "Presentes para Ela",
-        highlightDescription: "Presentes encantadores para surpreender aquela pessoa especial.",
-        highlightImage: "/images/presentes_para_ela.jpg",
-        urlLink: "para-ela",
-        products: []
-    },
-    {
-        highlightText: "Banhados a Ouro",
-        highlightDescription: "Beleza e elegância com nossos banhados a ouro.",
-        highlightImage: "/images/banhados_a_ouro.jpg",
-        urlLink: "banhados-a-ouro",
-        products: []
-    },
-    {
-        highlightText: "Lançamentos",
-        highlightDescription: "Todos os nossos ultimos lançamentos.",
-        highlightImage: "/images/lancamentos.jpg",
-        urlLink: "lancamentos",
-        products: []
-    },
-    {
-        highlightText: "Acessórios",
-        highlightDescription: "Todos os nossos acessórios.",
-        highlightImage: "/images/acessorios.jpg",
-        urlLink: "acessorios",
-        products: []
-    },
-    {
-        highlightText: "Busca",
-        highlightDescription: "Procure por nossos todos os acessórios.",
-        highlightImage: "/images/search.jpg",
-        urlLink: "search",
-        products: []
-    }
-
-]
+export const defaultsCategories = async (): Promise<CategoriesProps[]> => {
+    const categories: CategoriesProps[] = await adminService.getAllCategoriesData();
+    return categories;
+}
+    
 
 export const modelData = [
     {

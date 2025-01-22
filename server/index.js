@@ -351,6 +351,55 @@ app.get(`/api/v1/${secretKey}/products`, (req, res) => {
     })
 });
 
+//REQUISIÇÃO DE CATEGORIAS
+
+app.get(`/api/v1/${secretKey}/categories`, (req, res) => {
+    pool.query('SELECT * FROM categorys', (err, result) => {
+        if (err) {
+            res.status(500).json({ error: 'Erro ao obter dados' });
+        } else {
+            res.json(result);
+        }
+    })
+});
+
+app.get(`/api/v1/${secretKey}/categoriesData`, (req, res) => {
+    pool.query('SELECT * FROM categories', (err, result) => {
+        if (err) {
+            res.status(500).json({ error: 'Erro ao obter dados' });
+        } else {
+            res.json(result);
+        }
+    })
+});
+
+app.post(`/api/v1/${secretKey}/categories/add`, (req, res) => {
+    const item = req.body;
+
+    // Primeiro INSERT para a tabela de categorias
+    pool.query(`INSERT INTO categorys (category) VALUES (?)`, [item.urlLink], (err, result) => {
+        if (err) {
+            console.error(err);
+            console.log("Erro ao adicionar uma nova categoria: ", err);
+            return res.status(500).json({ error: 'Erro ao salvar a categoria' });
+        } else {
+            console.log("Categoria adicionada com sucesso.");
+        }
+    });
+
+    // Segundo INSERT para a tabela de categorias com os dados adicionais
+    pool.query(`INSERT INTO categories (highlightText, highlightDescription, highlightImage, urlLink, products) VALUES (?, ?, ?, ?, '[]')`, [
+        item.highlightText, item.highlightDescription, item.highlightImage, item.urlLink
+    ], (err, result) => {
+        if (err) {
+            console.error(err);
+            console.log("Erro ao adicionar dados adicionais da categoria: ", err);
+            return res.status(500).json({ error: 'Erro ao salvar os dados da categoria' });
+        } else {
+            return res.status(200).json({ message: 'Categoria cadastrada com sucesso' });
+        }
+    });
+});
 //POSTS DE PRODUTOS
 
 // Endpoint para adicionar um produto

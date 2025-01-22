@@ -9,6 +9,8 @@
 
 'use strict'
 
+import Compressor from "compressorjs";
+
 const url = process.env.REACT_APP_API_ENDPOINT;
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
 const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
@@ -124,4 +126,84 @@ export class adminService {
             console.error(error);
         }
     }
+
+    // ** CATEGORYS ** //
+    static getCategorys = async () => {
+        try {
+            const response = await fetch(`${url}${preEndpoint}${secretKey}/categories`);
+            const data = await response.json();
+            return data.reverse();
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
+    static addNewCategory = async (item: any, itemData: any) => {
+        try {
+            await fetch(`${url}${preEndpoint}${secretKey}/categories/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: item,
+            })
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+    static getAllCategoriesData = async () => {
+        try {
+            const response = await fetch(`${url}${preEndpoint}${secretKey}/categoriesData`);
+            const data = await response.json();
+            return data.reverse();
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
+    static upload = async (event: any): Promise<string | null> => {
+        const file = event.target.files[0];
+        if (file) {
+            return new Promise<string | null>((resolve, reject) => {
+                new Compressor(file, {
+                    success(result: any) {
+                        const formData = new FormData();
+                        formData.append('image', result, result.name);
+                        formData.append('key', 'f559d2e043626a1955fb14d57caec1e2');
+
+                        // Fazendo a requisição POST
+                        fetch('https://api.imgbb.com/1/upload', {
+                            method: 'POST',
+                            body: formData,
+                        })
+                            .then((response) => response.json())
+                            .then((response) => {
+                                if (response.success) {
+                                    console.log('Upload successful:', response.data.url);
+                                    resolve(response.data.url); // Resolva a promessa com a URL
+                                } else {
+                                    console.error('Upload failed:', response.error.message);
+                                    resolve(null); // Resolve com null se falhar
+                                }
+                            })
+                            .catch((error) => {
+                                console.error('Error during upload:', error);
+                                resolve(null); // Resolve com null em caso de erro
+                            });
+                    },
+                    error(err: any) {
+                        console.error('Error during image compression:', err.message);
+                        resolve(null); // Resolve com null se houver erro de compressão
+                    },
+                });
+            });
+        }
+
+        return null; // Caso não haja arquivo
+    };
+
 }

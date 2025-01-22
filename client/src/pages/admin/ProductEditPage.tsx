@@ -2,7 +2,7 @@ import { Product } from "@/models/product";
 import productService from "../../services/productService";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Editable, Image } from "@chakra-ui/react";
+import { createListCollection, Editable, Image, Input } from "@chakra-ui/react";
 import "./producteditpage.css";
 import { Tag } from "../../components/ui/tag";
 import {
@@ -24,13 +24,39 @@ import {
     MenuRoot,
     MenuTrigger,
 } from "../../components/ui/menu"
+import { adminService } from "../../services/adminService";
+import {
+    DialogBackdrop,
+    DialogBody,
+    DialogCloseTrigger,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogRoot,
+    DialogTitle,
+    DialogTrigger,
+} from "../../components/ui/dialog"
 
 export const ProductEditPage = () => {
     const [product, setProduct] = useState<Product | null>(null);
     const { uid } = useParams();
+    const [typeCategorys, setTypeCategorys] = useState({ items: [] });
+    const [newCategoryName, setNewCategoryName] = useState<string>("");
 
     const [novoTamanho, setNovoTamanho] = useState<string>();
     const [newPhoto, setNewPhoto] = useState<any>();
+
+    const [itemData, setItemData] = useState<any>(
+        {
+            highlightText: null,
+            highlightDescription: null,
+            highlightImage: null,
+            urlLink: null,
+            products: "[]"
+        }
+    )
+
+    const [uploadNewPicCategory, setUploadNewPicCategory] = useState<any>("")
 
     useEffect(() => {
         if (uid) {
@@ -48,57 +74,82 @@ export const ProductEditPage = () => {
     const handleFileUpload = async (event: any) => {
         const file = event.target.files[0];
         if (file) {
-            new Compressor(file, {
-                success(result: any) {
-                    const formData = new FormData();
-                    formData.append('image', result, result.name);  // Envia o arquivo compactado (não em base64)
-                    formData.append('key', "f559d2e043626a1955fb14d57caec1e2"); // Adicione sua chave de API
+            const uploadPhoto = await adminService.upload(event)
+            setProduct((prevProduct: any) => {
+                let photoURLs = [];
 
-                    // Fazendo a requisição POST
-                    fetch('https://api.imgbb.com/1/upload', {
-                        method: 'POST',
-                        body: formData,  // O corpo da requisição será o FormData
-                    })
-                        .then(response => response.json())
-                        .then(response => {
-                            if (response.success) {
-                                console.log('Upload successful:', response.data.url); // URL da imagem carregada
-
-                                setProduct((prevProduct: any) => {
-                                    let photoURLs = [];
-
-                                    try {
-                                        photoURLs = JSON.parse(prevProduct?.photoURL || '[]');
-                                    } catch (error) {
-                                        console.error("Erro ao fazer o parse de photoURL:", error);
-                                        photoURLs = [];
-                                    }
-
-                                    return {
-                                        ...prevProduct,
-                                        photoURL: JSON.stringify([
-                                            ...photoURLs,
-                                            response.data.url,
-                                        ]),
-                                    };
-                                });
-                            } else {
-                                console.error('Upload failed:', response.error.message);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error during upload:', error);
-                        });
-                },
-                error(err: any) {
-                    console.error('Error during image compression:', err.message);
+                try {
+                    photoURLs = JSON.parse(prevProduct?.photoURL || '[]');
+                } catch (error) {
+                    console.error("Erro ao fazer o parse de photoURL:", error);
+                    photoURLs = [];
                 }
+
+                return {
+                    ...prevProduct,
+                    photoURL: JSON.stringify([
+                        ...photoURLs,
+                        uploadPhoto,
+                    ]),
+                };
             });
         }
     };
 
+    const fetchCategories = async () => {
+        try {
+            const response = await adminService.getCategorys();
+            const formattedCategories = response.map((category: any) => ({
+                label: category.category,
+                value: category.category,
+            }));
+            const collection = createListCollection({ items: formattedCategories });
+            console.log('Collection:', collection); // Debugging line
+            setTypeCategorys(collection);
+        } catch (error) {
+            console.error('Erro ao carregar categorias:', error);
+        }
+    };
+    useEffect(() => {
+
+        fetchCategories();
+    }, []);
 
 
+    const handleCategoryInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewCategoryName(e.target.value);
+    };
+
+    const addNewCategory = async () => {
+        if (!itemData.highlightText) return; // Prevent adding empty categories
+        try {
+            // Enviar a nova categoria e os dados adicionais
+            const createdCategory = await adminService.addNewCategory(
+                JSON.stringify({ label: newCategoryName, highlightText: itemData.highlightText, highlightDescription: itemData.highlightDescription, highlightImage: itemData.highlightImage, urlLink: itemData.urlLink }),
+                itemData
+            );
+
+            // Atualizar a lista de categorias
+            setTypeCategorys((prev: any) => [
+                ...prev,
+                { label: newCategoryName, value: newCategoryName }
+            ]);
+            setNewCategoryName(""); // Limpar o input após adicionar
+            setItemData({ highlightText: null, highlightDescription: null, highlightImage: null, urlLink: null, products: "[]" }); // Limpar os dados do item
+
+            toaster.create({
+                title: "Nova categoria criada com sucesso",
+                type: "error"
+            });
+            fetchCategories()
+        } catch (error) {
+            console.error(error);
+            toaster.create({
+                title: "Erro ao criar categoria",
+                type: "error"
+            });
+        }
+    };
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (product) {
             setProduct({
@@ -179,7 +230,7 @@ export const ProductEditPage = () => {
                                                                     value="delete"
                                                                     color="fg.error"
                                                                     _hover={{ bg: 'bg.error', color: 'fg.error' }}
-                                                                    onClick={() => handleDeletePhoto(photo)} 
+                                                                    onClick={() => handleDeletePhoto(photo)}
                                                                 >
                                                                     Excluir foto
                                                                 </MenuItem>
@@ -205,7 +256,7 @@ export const ProductEditPage = () => {
                                                             value="delete"
                                                             color="fg.error"
                                                             _hover={{ bg: 'bg.error', color: 'fg.error' }}
-                                                            onClick={() => handleDeletePhoto(JSON.parse(product.photoURL)[0])} 
+                                                            onClick={() => handleDeletePhoto(JSON.parse(product.photoURL)[0])}
                                                         >
                                                             Excluir foto
                                                         </MenuItem>
@@ -305,7 +356,7 @@ export const ProductEditPage = () => {
                                                     <SelectValueText placeholder="Selecione as categorias" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {typeCategorys.items.map((category) => (
+                                                    {typeCategorys && typeCategorys.items && typeCategorys.items.map((category: any) => (
                                                         <SelectItem
                                                             item={category}
                                                             onClick={() => {
@@ -330,7 +381,56 @@ export const ProductEditPage = () => {
                                                             {category.label.toUpperCase()}
                                                         </SelectItem>
                                                     ))}
-
+                                                    <DialogRoot>
+                                                        <DialogBackdrop />
+                                                        <DialogTrigger asChild>
+                                                            <Button className="createNewCategory">
+                                                                Criar categoria
+                                                            </Button>
+                                                        </DialogTrigger>
+                                                        <DialogContent paddingX={12} paddingY={4}>
+                                                            <DialogCloseTrigger />
+                                                            <DialogHeader>
+                                                                <DialogTitle>Nova categoria</DialogTitle>
+                                                            </DialogHeader>
+                                                            <DialogBody>
+                                                                <div className="add-category">
+                                                                    <Input
+                                                                        type="text"
+                                                                        value={itemData.highlightText}
+                                                                        onChange={(e) => { setItemData({ ...itemData, highlightText: e.target.value }) }}
+                                                                        placeholder="Nova categoria"
+                                                                    />
+                                                                    <Input
+                                                                        type="text"
+                                                                        value={itemData.highlightDescription}
+                                                                        onChange={(e) => { setItemData({ ...itemData, highlightDescription: e.target.value }) }}
+                                                                        placeholder="Descrição categoria"
+                                                                    />
+                                                                    <Input
+                                                                        type="text"
+                                                                        value={itemData.urlLink}
+                                                                        onChange={(e) => { setItemData({ ...itemData, urlLink: e.target.value }) }}
+                                                                        placeholder="URL categoria"
+                                                                    />
+                                                                    <Input
+                                                                        type="file"
+                                                                        onChange={async (e) => {
+                                                                            const res = await adminService.upload(e);
+                                                                            if (res) {
+                                                                                setItemData({ ...itemData, highlightImage: res });
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </DialogBody>
+                                                            <DialogFooter>
+                                                                <Button onClick={addNewCategory} className="createNewCategory">
+                                                                    Criar categoria
+                                                                </Button>
+                                                            </DialogFooter>
+                                                        </DialogContent>
+                                                    </DialogRoot>
                                                 </SelectContent>
                                             </SelectRoot>
                                         </div>
