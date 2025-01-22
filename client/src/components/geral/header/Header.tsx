@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TopBarComponent from "./topbar-component/TopBarComponent";
 import logoHeader from "../../../images/logo.svg";
 import { FavoritesIcon, SearchIcon } from "../../icons/icons";
@@ -12,6 +12,7 @@ import MenuComponent from "./menu-mobile/MenuComponent";
 import AccountComponent from "./account-component/AccountComponent";
 import SubHeaderComponent from "./SubHeaderComponent";
 import { ContactIcon, HeartIcon, User2Icon } from "lucide-react";
+import { adminService } from "../../../services/adminService";
 
 const Header = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
@@ -22,9 +23,16 @@ const Header = () => {
     const [inputSearch, setInputSearch] = useState<string>("");
     const [isFocused, setIsFocused] = useState(false);
 
-    const handleMouseEnter = (categoria: MenuItemsProps) => {
-        setItemHover(categoria);
-        setSubHeaderOpen(true);
+    const [menuItems, setMenuItems] = useState<any[]>([]);
+
+    const handleMouseEnter = (categoria: any) => {
+        if (categoria.sub_items) {
+            setItemHover({
+                ...categoria,
+                subItems: JSON.parse(categoria.sub_items), // Parse sub_items to an array
+            });
+            setSubHeaderOpen(true);
+        }
     };
 
     const handleMouseLeave = () => {
@@ -35,6 +43,19 @@ const Header = () => {
             }
         }, 1500);
     };
+    useEffect(() => {
+        const fetchMenuItems = async () => {
+            try {
+                const data = await adminService.getMenuItems();
+                console.log("Menu Items: ", data);  // Verifique se os dados estão sendo retornados corretamente
+                setMenuItems(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchMenuItems();
+    }, []);
 
 
     const handleFocus = () => {
@@ -143,28 +164,32 @@ const Header = () => {
 
                 <nav className="header-app-bottom-content header-app-bottom-content__wrapper">
                     <div className="header-inside-bottom-content header-inside-bottom-content__redirects">
-                        {menuItems.map((categoria: MenuItemsProps) => {
-                            return (
+                        {menuItems.length > 0 ? (
+                            menuItems.map((categoria) => (
                                 <article
                                     key={categoria.title}
                                     className="redirect-item-content redirect-item-content__gifts"
-                                    onMouseEnter={() => handleMouseEnter(categoria)} // Ativar hover
-                                    onMouseLeave={handleMouseLeave} // Desativar hover
+                                    onMouseEnter={() => handleMouseEnter(categoria)}
+                                    onMouseLeave={handleMouseLeave}
                                 >
-                                    <Button
-                                        onClick={() =>
-                                            categoria.isLink
-                                                ? (window.location.href = categoria.href)
-                                                : "javascript:;"
+                                    <Link
+                                        target={categoria.is_link === 1 ? "_parent" : "_self"}
+                                        to={
+                                            categoria.is_link === 1
+                                                ? window.location.origin + categoria.href
+                                                : ""
                                         }
                                     >
                                         <span>{categoria.title.toUpperCase()}</span>
-                                    </Button>
+                                    </Link>
                                 </article>
-                            );
-                        })}
+                            ))
+                        ) : (
+                            <p>Carregando menu...</p> // Exibe uma mensagem de loading enquanto o menu não é carregado
+                        )}
                     </div>
                 </nav>
+
             </header>
 
             <header className="header-application-mobile header-application__wrapper">

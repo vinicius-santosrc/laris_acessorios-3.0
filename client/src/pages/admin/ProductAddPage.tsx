@@ -1,8 +1,8 @@
 import { Product } from "@/models/product";
 import productService from "../../services/productService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Editable, Image } from "@chakra-ui/react";
+import { createListCollection, Editable, Image } from "@chakra-ui/react";
 import "./producteditpage.css";
 import { Tag } from "../../components/ui/tag";
 import {
@@ -12,7 +12,6 @@ import {
     SelectTrigger,
     SelectValueText,
 } from "../../components/ui/select";
-import { typeCategorys } from "../../lib/utils";
 import { InfoTip } from "../../components/ui/toggle-tip";
 import { ArrowLeftIcon } from "lucide-react";
 import { toaster } from "../../components/ui/toaster";
@@ -24,6 +23,7 @@ import {
     MenuTrigger,
 } from "../../components/ui/menu"
 import { Button } from "../../components/ui/button";
+import { adminService } from "../../services/adminService";
 
 export const ProductAddPage = () => {
     const navigator = useNavigate();
@@ -46,7 +46,20 @@ export const ProductAddPage = () => {
         tipo: "" // Tipo de produto, inicializado como string vazia
     });
 
+    const [itemData, setItemData] = useState<any>(
+        {
+            highlightText: null,
+            highlightDescription: null,
+            highlightImage: null,
+            urlLink: null,
+            products: "[]"
+        }
+    )
+
     const [novoTamanho, setNovoTamanho] = useState<string>("");
+
+    const [typeCategorys, setTypeCategorys] = useState<any[]>();
+    const [newCategoryName, setNewCategoryName] = useState<string>("");
 
     const handleFileUpload = async (event: any) => {
         const file = event.target.files[0];
@@ -143,6 +156,46 @@ export const ProductAddPage = () => {
         // Opcional: Aqui você pode chamar o serviço para remover a foto do backend, se necessário.
         // Exemplo:
         // productService.deletePhoto(photoUrl).catch(error => console.error('Erro ao excluir foto:', error));
+    };
+
+    useEffect(() => {
+        // Requisição para obter as categorias
+        const fetchCategories = async () => {
+            try {
+                const response = await adminService.getCategorys(); // Obtém as categorias via serviço
+                const formattedCategories = response.map((category: any) => ({
+                    label: category.category,  // Presumindo que `category` seja o nome da categoria
+                    value: category.category,  // Presumindo que `id` seja o identificador da categoria
+                }));
+                setTypeCategorys(createListCollection({ items: formattedCategories }));
+            } catch (error) {
+                console.error('Erro ao carregar categorias:', error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+    const handleCategoryInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewCategoryName(e.target.value);
+    };
+
+    const addNewCategory = async () => {
+        if (!newCategoryName) return; // Prevent adding empty categories
+        try {
+            const createdCategory = await adminService.addNewCategory(JSON.stringify({ label: newCategoryName }, itemData));
+            setTypeCategorys((prev) => [
+                ...prev,
+                { label: newCategoryName, value: newCategoryName }
+            ]);
+            setNewCategoryName(""); // Clear the input after adding
+        } catch (error) {
+            console.error(error);
+            toaster.create({
+                title: "Erro ao criar categoria",
+                type: "error"
+            });
+        }
     };
 
     return (
@@ -306,7 +359,7 @@ export const ProductAddPage = () => {
                                                 <SelectValueText placeholder="Selecione as categorias" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {typeCategorys.items.map((category) => (
+                                                {typeCategorys?.items.map((category: any) => (
                                                     <SelectItem
                                                         item={category}
                                                         onClick={() => {
@@ -317,7 +370,7 @@ export const ProductAddPage = () => {
                                                             if (categoryExists) {
                                                                 setProduct({
                                                                     ...product,
-                                                                    categoryList: JSON.stringify(currentCategoryList.filter(item => item !== category.value))
+                                                                    categoryList: JSON.stringify(currentCategoryList.filter((item) => item !== category.value))
                                                                 });
                                                             } else {
                                                                 setProduct({
