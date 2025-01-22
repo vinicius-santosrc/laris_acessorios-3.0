@@ -384,30 +384,6 @@ export const ProductAddPage = () => {
                                                         {category.label.toUpperCase()}
                                                     </SelectItem>
                                                 ))}
-
-                                                <div className="add-category">
-                                                    <input
-                                                        type="text"
-                                                        value={itemData.highlightText}
-                                                        onChange={(e) => { setItemData({ ...itemData, highlightText: e.target.value }) }}
-                                                        placeholder="Nova categoria"
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        value={itemData.highlightDescription}
-                                                        onChange={(e) => { setItemData({ ...itemData, highlightDescription: e.target.value }) }}
-                                                        placeholder="Descrição categoria"
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        value={itemData.urlLink}
-                                                        onChange={(e) => { setItemData({ ...itemData, urlLink: e.target.value }) }}
-                                                        placeholder="URL categoria"
-                                                    />
-                                                    <Button onClick={addNewCategory} className="createNewCategory">
-                                                        Criar categoria
-                                                    </Button>
-                                                </div>
                                             </SelectContent>
                                         </SelectRoot>
                                     </div>

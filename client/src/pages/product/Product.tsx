@@ -104,7 +104,7 @@ const ProductPage = () => {
                                 </div>
                                 :
                                 <div onClick={() => setPhotoSelected(photosAvaliable[0])} className="product-one-pic">
-                                    <img src={photosAvaliable[0]} alt={product.name_product} />
+                                    <img id="uniquephoto" src={photosAvaliable[0]} alt={product.name_product} />
                                 </div>
                             }
                         </div>

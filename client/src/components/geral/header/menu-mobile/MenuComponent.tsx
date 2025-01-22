@@ -80,7 +80,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
                         <DrawerBody className="drawer-header-component__body">
                             <section className="drawer-menu-items">
                                 {menuItems.map((item, id) => {
-                                    if (item.isLink) {
+                                    if (item.is_link === 1) {
                                         return (
                                             <Link onClick={closeMainDrawer} to={item.href || "javascript:;"} key={id}>
                                                 <div className="drawer-menu__item">

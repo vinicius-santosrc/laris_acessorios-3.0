@@ -122,6 +122,12 @@ export const ProductEditPage = () => {
 
     const addNewCategory = async () => {
         if (!itemData.highlightText) return; // Prevent adding empty categories
+        if (!itemData.highlightImage) {
+            toaster.create({
+                title: "A foto não foi carregada corretamente. Tente novamente e espere alguns segundos antes de criar a categoria",
+                type: "error"
+            });
+        }
         try {
             // Enviar a nova categoria e os dados adicionais
             const createdCategory = await adminService.addNewCategory(
@@ -351,88 +357,90 @@ export const ProductEditPage = () => {
                                                     <Tag colorPalette={"pink"} closable key={category}>{category.toUpperCase()}</Tag>
                                                 ))}
                                             </div>
-                                            <SelectRoot multiple defaultValue={JSON.parse(product.categoryList)} collection={typeCategorys} size="sm" width="320px">
-                                                <SelectTrigger>
-                                                    <SelectValueText placeholder="Selecione as categorias" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {typeCategorys && typeCategorys.items && typeCategorys.items.map((category: any) => (
-                                                        <SelectItem
-                                                            item={category}
-                                                            onClick={() => {
-                                                                const currentCategoryList = JSON.parse(product.categoryList);
-                                                                const categoryExists = currentCategoryList.includes(category.value);
+                                            {typeCategorys && typeCategorys.items &&
+                                                <SelectRoot multiple defaultValue={JSON.parse(product.categoryList)} collection={typeCategorys} size="sm" width="320px">
+                                                    <SelectTrigger>
+                                                        <SelectValueText placeholder="Selecione as categorias" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {typeCategorys.items.map((category: any) => (
+                                                            <SelectItem
+                                                                item={category}
+                                                                onClick={() => {
+                                                                    const currentCategoryList = JSON.parse(product.categoryList);
+                                                                    const categoryExists = currentCategoryList.includes(category.value);
 
-                                                                // Se a categoria já existir, removemos, senão adicionamos
-                                                                if (categoryExists) {
-                                                                    setProduct({
-                                                                        ...product,
-                                                                        categoryList: JSON.stringify(currentCategoryList.filter(item => item !== category.value))
-                                                                    });
-                                                                } else {
-                                                                    setProduct({
-                                                                        ...product,
-                                                                        categoryList: JSON.stringify([...currentCategoryList, category.value])
-                                                                    });
-                                                                }
-                                                            }}
-                                                            key={category.value}
-                                                        >
-                                                            {category.label.toUpperCase()}
-                                                        </SelectItem>
-                                                    ))}
-                                                    <DialogRoot>
-                                                        <DialogBackdrop />
-                                                        <DialogTrigger asChild>
-                                                            <Button className="createNewCategory">
-                                                                Criar categoria
-                                                            </Button>
-                                                        </DialogTrigger>
-                                                        <DialogContent paddingX={12} paddingY={4}>
-                                                            <DialogCloseTrigger />
-                                                            <DialogHeader>
-                                                                <DialogTitle>Nova categoria</DialogTitle>
-                                                            </DialogHeader>
-                                                            <DialogBody>
-                                                                <div className="add-category">
-                                                                    <Input
-                                                                        type="text"
-                                                                        value={itemData.highlightText}
-                                                                        onChange={(e) => { setItemData({ ...itemData, highlightText: e.target.value }) }}
-                                                                        placeholder="Nova categoria"
-                                                                    />
-                                                                    <Input
-                                                                        type="text"
-                                                                        value={itemData.highlightDescription}
-                                                                        onChange={(e) => { setItemData({ ...itemData, highlightDescription: e.target.value }) }}
-                                                                        placeholder="Descrição categoria"
-                                                                    />
-                                                                    <Input
-                                                                        type="text"
-                                                                        value={itemData.urlLink}
-                                                                        onChange={(e) => { setItemData({ ...itemData, urlLink: e.target.value }) }}
-                                                                        placeholder="URL categoria"
-                                                                    />
-                                                                    <Input
-                                                                        type="file"
-                                                                        onChange={async (e) => {
-                                                                            const res = await adminService.upload(e);
-                                                                            if (res) {
-                                                                                setItemData({ ...itemData, highlightImage: res });
-                                                                            }
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            </DialogBody>
-                                                            <DialogFooter>
-                                                                <Button onClick={addNewCategory} className="createNewCategory">
+                                                                    // Se a categoria já existir, removemos, senão adicionamos
+                                                                    if (categoryExists) {
+                                                                        setProduct({
+                                                                            ...product,
+                                                                            categoryList: JSON.stringify(currentCategoryList.filter(item => item !== category.value))
+                                                                        });
+                                                                    } else {
+                                                                        setProduct({
+                                                                            ...product,
+                                                                            categoryList: JSON.stringify([...currentCategoryList, category.value])
+                                                                        });
+                                                                    }
+                                                                }}
+                                                                key={category.value}
+                                                            >
+                                                                {category.label.toUpperCase()}
+                                                            </SelectItem>
+                                                        ))}
+                                                        <DialogRoot>
+                                                            <DialogBackdrop />
+                                                            <DialogTrigger asChild>
+                                                                <Button className="createNewCategory">
                                                                     Criar categoria
                                                                 </Button>
-                                                            </DialogFooter>
-                                                        </DialogContent>
-                                                    </DialogRoot>
-                                                </SelectContent>
-                                            </SelectRoot>
+                                                            </DialogTrigger>
+                                                            <DialogContent paddingX={12} paddingY={4}>
+                                                                <DialogCloseTrigger />
+                                                                <DialogHeader>
+                                                                    <DialogTitle>Nova categoria</DialogTitle>
+                                                                </DialogHeader>
+                                                                <DialogBody>
+                                                                    <div className="add-category">
+                                                                        <Input
+                                                                            type="text"
+                                                                            value={itemData.highlightText}
+                                                                            onChange={(e) => { setItemData({ ...itemData, highlightText: e.target.value }) }}
+                                                                            placeholder="Nova categoria"
+                                                                        />
+                                                                        <Input
+                                                                            type="text"
+                                                                            value={itemData.highlightDescription}
+                                                                            onChange={(e) => { setItemData({ ...itemData, highlightDescription: e.target.value }) }}
+                                                                            placeholder="Descrição categoria"
+                                                                        />
+                                                                        <Input
+                                                                            type="text"
+                                                                            value={itemData.urlLink}
+                                                                            onChange={(e) => { setItemData({ ...itemData, urlLink: e.target.value }) }}
+                                                                            placeholder="URL categoria"
+                                                                        />
+                                                                        <Input
+                                                                            type="file"
+                                                                            onChange={async (e) => {
+                                                                                const res = await adminService.upload(e);
+                                                                                if (res) {
+                                                                                    setItemData({ ...itemData, highlightImage: res });
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </DialogBody>
+                                                                <DialogFooter>
+                                                                    <Button onClick={addNewCategory} className="createNewCategory">
+                                                                        Criar categoria
+                                                                    </Button>
+                                                                </DialogFooter>
+                                                            </DialogContent>
+                                                        </DialogRoot>
+                                                    </SelectContent>
+                                                </SelectRoot>
+                                            }
                                         </div>
 
                                         <div className="form-row">

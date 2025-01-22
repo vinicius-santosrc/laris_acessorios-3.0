@@ -323,65 +323,10 @@ export const menuItemsAdmin: MenuItemsProps[] = [
 ];
 
 
-export const menuItems: MenuItemsProps[] = [
-    {
-        title: "Presentes",
-        isLink: true,
-        href: window.location.origin + '/collections/para-ela'
-    },
-    {
-        title: "Lançamentos",
-        isLink: true,
-        href: window.location.origin + '/collections/lancamentos',
-    },
-    {
-        title: "Joias",
-        isLink: true,
-        href: window.location.origin + '/collections/joias',
-        subItems: [
-            { title: "Colares", href: window.location.origin + '/collections/colar' },
-            { title: "Brincos", href: window.location.origin + '/collections/brinco' },
-            { title: "Aneis", href: window.location.origin + '/collections/anel' },
-            { title: "Pulseiras", href: window.location.origin + '/collections/pulseira' },
-            { title: "Braceletes", href: window.location.origin + '/collections/bracelete' },
-            { title: "Piercings", href: window.location.origin + '/collections/piercing' },
-        ]
-    },
-    {
-        title: "Semijoias",
-        isLink: true,
-        href: window.location.origin + '/collections/semijoias',
-        subItems: [
-            { title: "Colares", href: window.location.origin + '/collections/colar' },
-            { title: "Brincos", href: window.location.origin + '/collections/brinco' },
-            { title: "Aneis", href: window.location.origin + '/collections/anel' },
-            { title: "Pulseiras", href: window.location.origin + '/collections/pulseira' },
-            { title: "Braceletes", href: window.location.origin + '/collections/bracelete' },
-            { title: "Piercings", href: window.location.origin + '/collections/piercing' },
-        ]
-    },
-    {
-        title: "Acessórios",
-        isLink: true,
-        href: window.location.origin + '/collections/acessorios',
-        subItems: [
-            { title: "Porta-Joias", href: window.location.origin + '/collections/porta-joias' }
-        ]
-    },
-    {
-        title: "Coleções",
-        isLink: false,
-        subItems: [
-            { title: "Coleção A", href: "/colecao-a" },
-            { title: "Coleção B", href: "/colecao-b" }
-        ]
-    },
-    {
-        title: "Carnaval",
-        isLink: true,
-        href: window.location.origin + '/collections/carnaval'
-    },
-]
+export const menuItems = async (): any => {
+    const getMenuItems = await adminService.getMenuItems();
+    return getMenuItems;
+}
 
 export const getFirstAndLastName = (fullName: string) => {
     const nameParts = fullName.split(" ");

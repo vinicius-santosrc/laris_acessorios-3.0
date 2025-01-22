@@ -206,4 +206,23 @@ export class adminService {
         return null; // Caso não haja arquivo
     };
 
+    static getMenuItems = async () => {
+        try {
+            const response = await fetch(`${url}${preEndpoint}${secretKey}/menuItems`);
+            let data = await response.json();
+            let newData: any = [];
+            data.map((categoria: any) => {
+                newData.push({
+                    ...categoria,
+                    subItems: JSON.parse(categoria.sub_items),
+                })
+            })
+
+            return newData;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
 }
