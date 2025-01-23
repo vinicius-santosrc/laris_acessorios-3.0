@@ -30,7 +30,7 @@ const Home = () => {
     return (
         <React.Fragment>
             <Carousel
-                url={isMobile ? "https://uploaddeimagens.com.br/images/004/878/193/full/WhatsApp_Image_2024-12-26_at_11.01.30.jpeg?1735260472" : "https://uploaddeimagens.com.br/images/004/878/192/full/WhatsApp_Image_2024-12-26_at_10.49.53.jpeg?1735260341"}
+                url={isMobile ? "https://i.ibb.co/10XNSy5/Whats-App-Image-2024-12-26-at-11-01-30.jpg" : "https://i.ibb.co/VqYVzsr/Whats-App-Image-2024-12-26-at-10-49-53.jpg"}
             />
             <SubCategorys />
             <SectionComponent
