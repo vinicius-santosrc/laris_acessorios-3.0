@@ -27,15 +27,12 @@
     border-radius: 5px;
 }
 
-.Content-Planejamentos-Card-Wrapper {
+.Planejamentos-Card-Wrapper {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     align-items: top;
-    padding: 20px
-}
-
-.Planejamentos-Card-Wrapper {
+    padding: 20px;
     background: url("https://community.atlassian.com/t5/image/serverpage/image-id/87744i93BD772B9C6A9B67?v=v2");
     height: 85vh;
     overflow-x: auto;
