@@ -8,9 +8,12 @@ import { Badge, Table } from '@chakra-ui/react';
 import { adminService } from '../../services/adminService';
 import { UserProps } from '../../models/user';
 import { formatCPF, getFirstAndLastName } from '../../lib/utils';
-import ApexCharts from 'react-apexcharts';  // Importando ApexCharts
+import ApexCharts from 'react-apexcharts';
 import { Product } from '@/models/product';
 import { Link } from 'react-router-dom';
+import { OrderAfterBuyProps } from '@/models/order';
+import { orderService } from '../../services/orderService';
+import GraficoPrecos from './dashboard/WidgetGrafico';
 
 export const Dashboard = () => {
     const [lucroAtual, setLucro] = useState<number>(0);
@@ -19,16 +22,22 @@ export const Dashboard = () => {
     const [users, setUsers] = useState([]);
     const [products, setProducts] = useState([]);
     const [expenses, setExpenses] = useState([]);
+    const [orders, setOrders] = useState<OrderAfterBuyProps[]>([]);
+    const [valores, setValores] = useState([])
 
     // Função para pegar os itens de vendas, clientes e despesas
     const getItems = async () => {
         const products = await productService.getAll();
         const clients = await clientsService.getAll();
         const expensesSheet = await adminService.getSheet("planilha-despesas");
+        const orders = await orderService.getAll();
+        const sheetValues = await adminService.getSheet("planilha-despesas")
 
         setProducts(products);
         setUsers(clients);
         setExpenses(expensesSheet);
+        setOrders(orders)
+        setValores(sheetValues.reverse())
 
         const totalSales = sales.reduce((acc: number, sale: any) => acc + sale.price, 0);
         const totalExpenses = expenses.reduce((acc: number, expense: any) => acc + expense.amount, 0);
@@ -173,7 +182,38 @@ export const Dashboard = () => {
         },
         {
             title: 'Pedidos',
-            content: <p>{sales.length} pedidos</p>,  // Supondo que "sales" seja a lista de pedidos
+            content: <Table.Root>
+                <Table.Header>
+                    <Table.ColumnHeader></Table.ColumnHeader>
+                    <Table.ColumnHeader></Table.ColumnHeader>
+                    <Table.ColumnHeader>Nome</Table.ColumnHeader>
+                    <Table.ColumnHeader>Total</Table.ColumnHeader>
+                    <Table.ColumnHeader className='hide-mobile'>Situação</Table.ColumnHeader>
+                    <Table.ColumnHeader className='hide-mobile'>Situação</Table.ColumnHeader>
+                    <Table.ColumnHeader className='hide-mobile'>Pagamento</Table.ColumnHeader>
+                </Table.Header>
+
+                {orders.map((order: OrderAfterBuyProps) => {
+                    const items = JSON.parse(order.items);
+                    const address = JSON.parse(order.address);
+                    const user = JSON.parse(order.user);
+
+                    const previewImageItem = items[0];
+                    const previewImage = JSON.parse(previewImageItem.photoURL)[0]
+
+                    return (
+                        <Table.Body key={order.id}>
+                            <Table.Cell>{ order.id }</Table.Cell>
+                            <Table.Cell><img className='previewimage' src={previewImage} alt={order.id.toString()} /></Table.Cell>
+                            <Table.Cell><p>{user.nome_completo}</p></Table.Cell>
+                            <Table.Cell><p>{order.order_totalprice.toFixed(2)}</p></Table.Cell>
+                            <Table.Cell className='hide-mobile'><p>{order.situation}</p></Table.Cell>
+                            <Table.Cell className='hide-mobile'><p>{order.state}</p></Table.Cell>
+                            <Table.Cell className='hide-mobile'><p>{order.paymentOption === "CART" ? "Cartão" : "Pix"}</p></Table.Cell>
+                        </Table.Body>
+                    )
+                })}
+            </Table.Root>,  // Supondo que "sales" seja a lista de pedidos
             className: 'widget medium orders mobile'
         },
         {
@@ -190,7 +230,17 @@ export const Dashboard = () => {
                 </div>
             ),
             value: `Entradas: R$ ${profitData.currentMonth ? profitData.currentMonth.entradas : 0} | Saídas: R$ ${profitData.currentMonth ? profitData.currentMonth.saidas : 0}`,
-            className: 'widget small activity mobile'
+            className: 'widget small mobile'
+        },
+        {
+            title: 'Atividade',
+            content: (
+                <div className="graphicwidget">
+                    <GraficoPrecos valores={valores} />
+                </div>
+            ),
+            value: ``,
+            className: 'widget full mobile'
         },
         {
             title: 'Total de Usuários',

@@ -8,6 +8,19 @@
     margin: 0 auto;
 }
 
+.back-button {
+    margin: 12px auto;
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+}
+
+.back-button-inside {
+    display: flex;
+    align-items: center;
+    gap: 12px
+}
+
 /* Resumo do Pedido */
 .order-summary {
     background-color: #fff;
@@ -40,16 +53,18 @@
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
+    width: 100%;
 }
 
-.order-item {
+.order-item-content {
     display: flex;
     align-items: center;
+    width: 100% !important;
     padding: 15px 0;
     border-bottom: 1px solid #eee;
 }
 
-.order-item img {
+.order-item-content img {
     width: 100px;
     height: 100px;
     object-fit: cover;

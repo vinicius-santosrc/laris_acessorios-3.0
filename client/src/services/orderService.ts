@@ -68,6 +68,24 @@ export class orderService {
         }
     };
 
+    static getAll = async () => {
+        if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
+            console.error("API endpoint ou chave secreta não configurados corretamente.");
+            return;
+        }
+
+        const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
+
+        try {
+            const request = await fetch(url);
+            const data = await request.json();
+            return data;
+        }
+        catch (error) {
+            console.error("Erro ao pegar todas as orders", error);
+        }
+    }
+
     static getByUid = async (uid: string) => {
         if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");

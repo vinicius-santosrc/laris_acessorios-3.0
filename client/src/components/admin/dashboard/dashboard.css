@@ -17,6 +17,15 @@
     background-color: white;
 }
 
+.previewimage {
+    width: 50px;
+    height: 50px;
+}
+
+.graphic-Component {
+    width: 100%;
+}
+
 .dashboard-content {
     margin-top: -90px;
     border-top-right-radius: 24px;
@@ -29,6 +38,8 @@
     height: 100vh;
     margin-left: 250px;
     border-radius: 24px;
+    padding: 30px;
+    /* Adicionando padding */
 }
 
 .dashboard-header-component__inside {
@@ -65,13 +76,6 @@
 }
 
 /* Estilo do Dashboard */
-.dashboard-laris-acessorios {
-    padding: 30px;
-    background-color: #fff;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
 .dashboard-laris-acessorios h1 {
     text-align: left;
     font-size: 26px;
@@ -83,9 +87,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
-    grid-template-areas:
-        "users products sales"
-        "orders products stock";
 }
 
 .widget {
@@ -96,8 +97,6 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
     border-left: 5px solid transparent;
-    /* Default border */
-    border-radius: 24px;
 }
 
 .widget:hover {
@@ -108,14 +107,12 @@
     font-size: 22px;
     margin-bottom: 15px;
     color: #be0a45;
-    /* Cor principal no título */
 }
 
 .widget-value {
     font-size: 36px;
     font-weight: bold;
     color: #be0a45;
-    /* Cor principal no valor */
 }
 
 .widget-detail {
@@ -174,19 +171,11 @@
 }
 
 /* Cores dos Widgets */
-.widget.users {
+.widget.users,
+.widget.products,
+.widget.sales,
+.widget.orders {
     background-color: #f7f7f7;
-    /* Cor principal */
-}
-
-.widget.products {
-    background-color: #f7f7f7;
-    /* Cor principal */
-}
-
-.widget.sales {
-    background-color: #f7f7f7;
-    /* Cor principal */
 }
 
 .widget.cash {
@@ -200,26 +189,27 @@
     color: white !important;
 }
 
-
-.widget.orders {
-    background-color: #f7f7f7;
-    /* Cor principal */
-}
-
 .widget.stock {
     background-color: #f7f7f7;
     border-left: 5px solid #be0a45;
-    /* Cor principal */
 }
 
 /* Efeitos de Hover */
 .widget:hover {
-    /* Cor principal no hover */
     /* Cor suave de fundo ao passar o mouse */
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
+    .dashboard-laris-acessorios {
+        width: 100%;
+        /* Ajustar a largura para 100% */
+        margin-left: 0;
+        /* Remover margem à esquerda */
+        padding: 20px;
+        /* Ajustar o padding */
+    }
+
     .dashboard-widgets {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
@@ -227,19 +217,28 @@
 
 @media (max-width: 480px) {
     .dashboard-laris-acessorios {
-        padding: 20px;
+        padding: 15px;
+        /* Ajustar o padding */
     }
 
     .dashboard-laris-acessorios h1 {
-        font-size: 22px;
+        font-size: 20px;
+        /* Ajustar o tamanho da fonte */
     }
 
     .widget h2 {
-        font-size: 20px;
+        font-size: 18px;
+        /* Ajustar o tamanho da fonte */
     }
 
     .widget-value {
-        font-size: 30px;
+        font-size: 24px;
+        /* Ajustar o tamanho da fonte */
+    }
+
+    .dashboard-header-component {
+        padding: 10px;
+        /* Ajustar o padding */
     }
 }
 
@@ -247,14 +246,22 @@
     .dashboard-laris-acessorios {
         background-color: #f7f7f7;
         width: 100%;
-        height: 100vh;
-        margin-left: 0px;
+        height: auto;
+        /* Ajustar a altura para auto */
+        margin-left: 0;
+        /* Remover margem à esquerda */
         border-radius: 24px;
-        padding-top: 200px !important;
+        padding-top: 20px;
+        /* Ajustar o padding */
+    }
+
+    .hide-mobile {
+        display: none
     }
 
     .dashboard-widgets {
         grid-template-columns: 1fr;
+        /* Todos os widgets ocupam uma linha inteira */
         grid-template-areas:
             "users"
             "products"
@@ -264,12 +271,11 @@
             "mobile";
     }
 
-
     .widget.small,
     .widget.medium,
     .widget.full {
         grid-column: span 1;
-        /* Todos os widgets devem ocupar uma linha inteira no mobile */
+        /* Todos os widgets ocupam uma linha inteira no mobile */
     }
 
     .dashboard-header-component__inside {
@@ -280,9 +286,11 @@
     }
 
     .dashboard-header-component {
-        margin-left: 0px;
+        margin-left: 0;
+        /* Remover margem à esquerda */
         position: fixed;
         top: 0;
-        padding: 24px 0px;
+        padding: 10px 0;
+        /* Ajustar o padding */
     }
 }
