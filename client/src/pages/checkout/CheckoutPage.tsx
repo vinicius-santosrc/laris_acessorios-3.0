@@ -17,6 +17,7 @@ import { CepProps } from "../../models/cep";
 import { orderService } from "../../services/orderService";
 import { CardElement, PaymentElement } from "@stripe/react-stripe-js";
 import { useElements, useStripe } from "@stripe/react-stripe-js";
+import { OrderProps } from "../../models/order";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -131,7 +132,7 @@ const CheckoutPage = ({paymentMethodTypes, clientSecret }: any) => {
         fetchUserData();
     }, []);
 
-    const calculateTotal = (items: any[]) => {
+    const calculateTotal = (items: Product[]) => {
         const newSubtotal = items.reduce((acc, item) => acc + (item.price - (item.desconto || 0)), 0);
         setSubtotal(newSubtotal);
         const deliveryCost = shippingCost || 0;

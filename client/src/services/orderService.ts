@@ -7,6 +7,7 @@
  * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
  */
 
+import { OrderAfterBuyProps, OrderProps } from "../models/order";
 import { toaster } from "../components/ui/toaster";
 
 export class orderService {
@@ -86,6 +87,32 @@ export class orderService {
         }
     }
 
+    static getById = async (id: any) => {
+        if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
+            console.error("API endpoint ou chave secreta não configurados corretamente.");
+            return;
+        }
+
+        const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/getOrderById`;
+
+        try {
+            const request = await fetch(url, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: id
+                })
+            });
+            const data = await request.json();
+            return data[0];
+        }
+        catch (error) {
+            console.error("Erro ao pegar a orders", error)
+        }
+    }
+
     static getByUser = async (userId: string) => {
         if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
@@ -97,6 +124,11 @@ export class orderService {
         try {
             const request = await fetch(url);
             const data = await request.json();
+            const filteredData = data.filter((order: OrderAfterBuyProps) => {
+                const orderUser = JSON.parse(order.user);
+
+                return orderUser.uid === userId ? order : null;
+            })
             return data;
         }
         catch (error) {

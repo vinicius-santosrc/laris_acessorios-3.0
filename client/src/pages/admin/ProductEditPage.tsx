@@ -74,7 +74,7 @@ export const ProductEditPage = () => {
     const handleFileUpload = async (event: any) => {
         const file = event.target.files[0];
         if (file) {
-            const uploadPhoto = await adminService.upload(event)
+            const uploadPhoto = await adminService.upload(event);
             setProduct((prevProduct: any) => {
                 let photoURLs = [];
 

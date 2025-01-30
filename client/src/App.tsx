@@ -15,7 +15,6 @@ import Success from './pages/checkout/Sucess';
 import Account from './pages/account/Account';
 import { SearchPage } from './pages/search/Search';
 import AdminPage from './pages/admin/AdminPage';
-import AdminLogin from './pages/admin/auth/AdminAuth';
 import Institutional from './pages/institutional/Institutional';
 import { PolicyPrivacyData } from './pages/institutional/policy-privacy-data/PolicyPrivacyData';
 import Footer from './components/geral/footer/Footer';
@@ -32,6 +31,8 @@ import { Planing } from './pages/admin/Planning';
 import { SheetsPage } from './pages/admin/SheetsPage';
 import { ProductEditPage } from './pages/admin/ProductEditPage';
 import { ProductAddPage } from './pages/admin/ProductAddPage';
+import { Facilitys } from './pages/admin/Facilitys';
+import AccountOrders from './pages/account/AccountOrders';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -41,6 +42,7 @@ const routes = [
   { path: '/product/:product_url', element: <ProductPage /> },
   { path: '/success/:uid', element: <Success /> },
   { path: '/account', element: <Account /> },
+  { path: '/account/orders/:order', element: <AccountOrders /> },
   { path: '/search/:search', element: <SearchPage /> },
   { path: '/admin', isProtected: true, element: <AdminPage><Dashboard /></AdminPage> },
   { path: '/admin/products', isProtected: true, element: (<AdminPage><ProductsAdminPage /></AdminPage>) },
@@ -48,6 +50,7 @@ const routes = [
   { path: '/admin/products/:uid', isProtected: true, element: (<AdminPage><ProductEditPage /></AdminPage>) },
   { path: '/admin/clients', isProtected: true, element: (<AdminPage><UsersAdmin /></AdminPage>) },
   { path: '/admin/planning', isProtected: true, element: (<AdminPage><Planing /></AdminPage>) },
+  { path: '/admin/facilitys', isProtected: true, element: (<AdminPage><Facilitys /></AdminPage>) },
   { path: '/admin/sheet/:planilha', isProtected: true, element: (<AdminPage><SheetsPage /></AdminPage>) },
   { path: '/contact-us', element: <Institutional><ContactUs /><Footer /></Institutional> },
   { path: '/tracking', element: <Institutional><Footer /></Institutional> },

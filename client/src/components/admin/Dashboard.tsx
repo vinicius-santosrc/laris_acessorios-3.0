@@ -9,6 +9,8 @@ import { adminService } from '../../services/adminService';
 import { UserProps } from '../../models/user';
 import { formatCPF, getFirstAndLastName } from '../../lib/utils';
 import ApexCharts from 'react-apexcharts';  // Importando ApexCharts
+import { Product } from '@/models/product';
+import { Link } from 'react-router-dom';
 
 export const Dashboard = () => {
     const [lucroAtual, setLucro] = useState<number>(0);
@@ -128,7 +130,7 @@ export const Dashboard = () => {
                 </>
             ),
             value: `R$ ${profitData.profit}`,
-            className: 'widget large cash mobile'
+            className: 'widget small cash mobile'
         },
         {
             title: 'Report de Vendas',
@@ -153,7 +155,7 @@ export const Dashboard = () => {
                 </div>
             ),
             value: `R$ ${sales.reduce((acc: number, sale: any) => acc + sale.price, 0).toFixed(2)}`,
-            className: 'widget large sales mobile'
+            className: 'widget small sales mobile'
         },
         {
             title: 'Feedbacks',
@@ -167,7 +169,7 @@ export const Dashboard = () => {
                 </div>
             ),
             value: `${feedbacks.length} feedbacks`,
-            className: 'widget large feedbacks mobile'
+            className: 'widget small feedbacks mobile'
         },
         {
             title: 'Pedidos',
@@ -188,7 +190,7 @@ export const Dashboard = () => {
                 </div>
             ),
             value: `Entradas: R$ ${profitData.currentMonth ? profitData.currentMonth.entradas : 0} | Saídas: R$ ${profitData.currentMonth ? profitData.currentMonth.saidas : 0}`,
-            className: 'widget large activity mobile'
+            className: 'widget small activity mobile'
         },
         {
             title: 'Total de Usuários',
@@ -215,14 +217,36 @@ export const Dashboard = () => {
         },
         {
             title: 'Produtos',
-            content: <p>{products.length} produtos cadastrados</p>,
-            className: 'medium products mobile'
+            content: <Table.Root>
+                <Table.Header>
+                    <Table.ColumnHeader></Table.ColumnHeader>
+                    <Table.ColumnHeader>Nome</Table.ColumnHeader>
+                    <Table.ColumnHeader>Preço</Table.ColumnHeader>
+                </Table.Header>
+                <Table.Body>
+                    {products.splice(1, 10).map((product: Product, index: number) => {
+
+                        const photo = JSON.parse(product.photoURL)[0]
+
+                        return (
+                            <Table.Row key={index}>
+                                <Table.Cell className='userContentTable'>
+                                    <Link to={"/admin/products/" + product.id}><img src={photo} alt={product.name_product} /></Link>
+                                </Table.Cell>
+                                <Table.Cell><Link to={"/admin/products/" + product.id}>{product.name_product} </Link></Table.Cell>
+                                <Table.Cell>{(product.price - product.desconto).toFixed(2)}</Table.Cell>
+                            </Table.Row>
+                        )
+                    })}
+                </Table.Body>
+            </Table.Root>,
+            className: 'widget medium products mobile'
         }
     ];
 
     useEffect(() => {
         getItems();
-    }, [sales, feedbacks, users, products, expenses]);
+    }, []);
 
     return (
         <section className="dashboard-laris-acessorios">

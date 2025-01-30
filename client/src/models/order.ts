@@ -1,4 +1,4 @@
-interface OrderProps {
+export interface OrderProps {
     uid: string;
     enderecoPedido: any;
     dadosPedido: any;
@@ -8,4 +8,22 @@ interface OrderProps {
     subtotal: any;
     CuponsDescontos: any;
     CupomAtual: any;
+}
+
+export interface OrderAfterBuyProps {
+    id: number,
+    uid: string;
+    address: string;
+    items: string;
+    user: string;
+    order_totalprice: number;
+    createdAt: any;
+    paymentOption: 'CART' | 'PIX' | 'DINHEIRO';
+    state: 'PREPARANDO' | 'ENTREGA' | 'FINALIZADO';
+    situation: "PAGO" | "NAOPAGO";
+    desconto: number;
+    subtotal: number;
+    cupom_desconto: number;
+    cupom_name: string;
+
 }

@@ -71,7 +71,7 @@ const SideBar = () => {
         },
         {
             section: <><FactoryIcon /> WebFacility</>,
-            link: '/admin/reports',
+            link: '/admin/facilitys',
             hasSubMenu: false
         },
         {

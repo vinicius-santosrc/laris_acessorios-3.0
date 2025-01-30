@@ -6,12 +6,11 @@ import "./Header.css";
 import { Link } from "react-router-dom";
 import { Button } from "../../ui/button";
 import { Image, Input, InputElementProps } from "@chakra-ui/react";
-import { menuItems, MenuItemsProps } from "../../../lib/utils";
+import { MenuItemsProps } from "../../../lib/utils";
 import BagComponent from "./bag-component/BagComponent";
 import MenuComponent from "./menu-mobile/MenuComponent";
 import AccountComponent from "./account-component/AccountComponent";
 import SubHeaderComponent from "./SubHeaderComponent";
-import { ContactIcon, HeartIcon, User2Icon } from "lucide-react";
 import { adminService } from "../../../services/adminService";
 
 const Header = () => {

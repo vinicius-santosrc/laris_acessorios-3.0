@@ -5,11 +5,15 @@ import { Loader } from '../../components/ui/loader';
 import authService from '../../services/authService';
 import { formatCPF, getFirstAndLastName } from '../../lib/utils';
 import { auth } from '@/lib/firebase';
+import { OrderAfterBuyProps } from '@/models/order';
+import { orderService } from '../../services/orderService';
+import { Link } from 'react-router-dom';
 
 const Account = () => {
     const fotoUsuario = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp";
 
     const [userAtual, setUser] = useState<UserProps>();
+    const [userOrders, setOrders] = useState<OrderAfterBuyProps[]>()
     const [isLoading, setLoading] = useState(true);
     const [selectedSection, setSelectedSection] = useState("dadosPessoais");
 
@@ -19,7 +23,9 @@ const Account = () => {
             try {
                 const res = await authService.getUserData();
                 const userContent: UserProps = await authService.getUserByEmail(res.email);
+                const userOrders: OrderAfterBuyProps[] = await orderService.getByUser(res.$id)
                 setUser(userContent);
+                setOrders(userOrders)
             } catch (error) {
                 console.error("Erro ao obter dados do usuário", error);
             }
@@ -28,6 +34,10 @@ const Account = () => {
 
         if (window.location.hash === "#wishlist") {
             setSelectedSection("favoritos");
+        }
+
+        if (window.location.hash === "#orders") {
+            setSelectedSection("pedidos");
         }
 
         fetchUserData();
@@ -49,9 +59,61 @@ const Account = () => {
                     <div>
                         <h2>Meus Pedidos</h2>
                         <p>Aqui você pode visualizar seus pedidos anteriores.</p>
-                        {/* Implementar pedidos */}
+                        <div className="orders-content">
+                            <div className="orders-list">
+                                {userOrders?.map((order: OrderAfterBuyProps) => {
+                                    const items = JSON.parse(order.items); // Transformar o JSON de items em um objeto
+                                    const address = JSON.parse(order.address); // Transformar o JSON de endereço em um objeto
+                                    const user = JSON.parse(order.user); // Transformar o JSON de usuário em um objeto
+
+                                    return (
+                                        <div key={order.id} className="order-card">
+                                            <Link to={window.location.origin + "/account/orders/" + order.id}>
+                                                <div className="order-header">
+                                                    <h3>Pedido #{order.id}</h3>
+                                                    <p>Status: {order.state}</p>
+                                                </div>
+
+                                                <div className="order-info">
+                                                    <div className="order-details">
+                                                        <h4>Detalhes do Pedido</h4>
+                                                        <p><strong>Data:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
+                                                        <p><strong>Forma de Pagamento:</strong> {order.paymentOption}</p>
+                                                        <p><strong>Valor Total:</strong> R${order.order_totalprice.toFixed(2)}</p>
+                                                        <p><strong>Desconto:</strong> R${order.desconto.toFixed(2)}</p>
+                                                        <p><strong>Endereço de entrega:</strong> {address.endereço}, {address.numero}, {address.bairro} - {address.cidade}/{address.estado} ({address.cep})</p>
+                                                        <p><strong>Referência:</strong> {address.referencia}</p>
+                                                    </div>
+
+                                                    <div className="order-items">
+                                                        <h4>Produtos</h4>
+                                                        {items.map((item: any, index: number) => {
+                                                            const photo = JSON.parse(item.photoURL)[0];
+                                                            return (
+                                                                <div key={index} className="order-item">
+                                                                    <img src={photo} alt={item.name_product} />
+                                                                    <div className="item-details">
+                                                                        <h5>{item.name_product}</h5>
+                                                                        <p><strong>Categoria:</strong> {item.categoria}</p>
+                                                                        <p><strong>Tamanho:</strong> {item.tamanhos}</p>
+                                                                        <p><strong>Preço:</strong> R${item.price.toFixed(2)}</p>
+                                                                        <p><strong>Desconto:</strong> R${item.desconto.toFixed(2)}</p>
+                                                                        <p><strong>Disponibilidade:</strong> {item.disponibilidade ? 'Disponível' : 'Indisponível'}</p>
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 );
+
             case "favoritos":
                 return (
                     <div>
@@ -89,7 +151,7 @@ const Account = () => {
                         <li onClick={() => setSelectedSection("dadosPessoais")}>Dados Pessoais</li>
                         <li onClick={() => setSelectedSection("pedidos")}>Pedidos</li>
                         <li onClick={() => setSelectedSection("favoritos")}>Meus Favoritos</li>
-                        <li onClick={() => {logout()}}>Sair</li>
+                        <li onClick={() => { logout() }}>Sair</li>
                     </ul>
                 </nav>
             </div>
