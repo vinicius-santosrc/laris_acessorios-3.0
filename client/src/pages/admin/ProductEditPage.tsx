@@ -17,7 +17,6 @@ import { InfoTip } from "../../components/ui/toggle-tip";
 import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { toaster } from "../../components/ui/toaster";
-import Compressor from 'compressorjs';
 import {
     MenuContent,
     MenuItem,
@@ -40,7 +39,9 @@ import {
 export const ProductEditPage = () => {
     const [product, setProduct] = useState<Product | null>(null);
     const { uid } = useParams();
-    const [typeCategorys, setTypeCategorys] = useState({ items: [] });
+    const [typeCategorys, setTypeCategorys] = useState(createListCollection({
+        items: []
+    }));
     const [newCategoryName, setNewCategoryName] = useState<string>("");
 
     const [novoTamanho, setNovoTamanho] = useState<string>();
@@ -98,14 +99,13 @@ export const ProductEditPage = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await adminService.getCategorys();
+            const response = await adminService.getCategorys(); // Certifique-se de que este método retorna um array de categorias
             const formattedCategories = response.map((category: any) => ({
                 label: category.category,
                 value: category.category,
             }));
-            const collection = createListCollection({ items: formattedCategories });
-            console.log('Collection:', collection); // Debugging line
-            setTypeCategorys(collection);
+
+            setTypeCategorys(createListCollection({ items: formattedCategories }));
         } catch (error) {
             console.error('Erro ao carregar categorias:', error);
         }
@@ -357,7 +357,7 @@ export const ProductEditPage = () => {
                                                     <Tag colorPalette={"pink"} closable key={category}>{category.toUpperCase()}</Tag>
                                                 ))}
                                             </div>
-                                            {typeCategorys && typeCategorys.items &&
+                                            {typeCategorys &&
                                                 <SelectRoot multiple defaultValue={JSON.parse(product.categoryList)} collection={typeCategorys} size="sm" width="320px">
                                                     <SelectTrigger>
                                                         <SelectValueText placeholder="Selecione as categorias" />
