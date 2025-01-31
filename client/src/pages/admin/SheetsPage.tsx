@@ -565,6 +565,75 @@ export const SheetsPage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <tr>
+                                            <td id="bggray">
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Adicione um novo item"
+                                                    value={currentItem.codigo}
+                                                    onChange={(e) => setCurrentItem({ ...currentItem, codigo: e.target.value })}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Nome do item"
+                                                    value={currentItem.nameofitem}
+                                                    onChange={(e) => setCurrentItem({ ...currentItem, nameofitem: e.target.value })}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Detalhe"
+                                                    value={currentItem.detalhe}
+                                                    onChange={(e) => setCurrentItem({ ...currentItem, detalhe: e.target.value })}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="Preço de compra"
+                                                    value={currentItem.preco_compra}
+                                                    onChange={(e) => setCurrentItem({ ...currentItem, preco_compra: e.target.value })}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="Custos"
+                                                    value={currentItem.custos}
+                                                    onChange={(e) => setCurrentItem({ ...currentItem, custos: e.target.value })}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="Preço de revenda"
+                                                    value={currentItem.precorevenda}
+                                                    onChange={(e) => setCurrentItem({ ...currentItem, precorevenda: e.target.value })}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="Qtd. Compra"
+                                                    value={currentItem.quantcompra}
+                                                    onChange={(e) => setCurrentItem({ ...currentItem, quantcompra: e.target.value })}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="Lucro por item"
+                                                    value={currentItem.lucroporitem}
+                                                    onChange={(e) => setCurrentItem({ ...currentItem, lucroporitem: e.target.value })}
+                                                />
+                                            </td>
+                                            <td>
+                                                <button onClick={handleSave}><SaveIcon width={20} /></button>
+                                            </td>
+                                        </tr>
                                         {items.map((item: SheetItem, index) => (
                                             <tr id={item.id.toString()} key={item.id}>
                                                 <td id="bggray">{item.codigo}</td>
