@@ -1,3 +1,4 @@
+@import url(https://db.onlinewebfonts.com/c/3604f4825ccb062a5d820dbc27e48be2?family=Brilliant+Cut+Pro+Medium);
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,6 +6,7 @@
 * {
   color-scheme: light
 }
+
 
 :root {
   --cor-principal: #be0a45;
@@ -121,7 +123,7 @@
 * {
   padding: 0;
   margin: 0;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Brilliant Cut Pro Medium";
   box-sizing: border-box;
 }
 

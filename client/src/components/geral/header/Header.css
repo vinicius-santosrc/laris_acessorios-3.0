@@ -1,6 +1,6 @@
 .search-box-area {
-  border-bottom: 1px solid black;
-  width: 200px;
+  border-bottom: 1px solid lightgray ;
+  width: 250px;
   display: flex;
   align-items: center;
   gap: 4px;

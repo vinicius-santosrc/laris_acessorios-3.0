@@ -180,7 +180,7 @@ const ProductPage = () => {
                             </div>
                             <div className="product-description-content">
                                 <h2>Descrição e Detalhes</h2>
-                                <p>Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom Lorem ipsom.</p>
+                                <p>{product.description }</p>
                                 <div className="description-tec">
                                     <li>{product.type_full_label}</li>
                                     <li>Tamanhos: {sizesAvaliable.map((size: string) => { return <>{size} </> })}</li>

@@ -33,6 +33,7 @@ import { ProductEditPage } from './pages/admin/ProductEditPage';
 import { ProductAddPage } from './pages/admin/ProductAddPage';
 import { Facilitys } from './pages/admin/Facilitys';
 import AccountOrders from './pages/account/AccountOrders';
+import Orders from './pages/admin/Orders';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -49,6 +50,7 @@ const routes = [
   { path: '/admin/products/add', isProtected: true, element: (<AdminPage><ProductAddPage /></AdminPage>) },
   { path: '/admin/products/:uid', isProtected: true, element: (<AdminPage><ProductEditPage /></AdminPage>) },
   { path: '/admin/clients', isProtected: true, element: (<AdminPage><UsersAdmin /></AdminPage>) },
+  { path: '/admin/orders', isProtected: true, element: (<AdminPage><Orders /></AdminPage>) },
   { path: '/admin/planning', isProtected: true, element: (<AdminPage><Planing /></AdminPage>) },
   { path: '/admin/facilitys', isProtected: true, element: (<AdminPage><Facilitys /></AdminPage>) },
   { path: '/admin/sheet/:planilha', isProtected: true, element: (<AdminPage><SheetsPage /></AdminPage>) },

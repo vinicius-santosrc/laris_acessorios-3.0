@@ -153,4 +153,43 @@ export class orderService {
             console.error("Erro ao pegar a orders", error)
         }
     }
+
+    static update = async (order: any) => {
+        if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
+            console.error("API endpoint ou chave secreta não configurados corretamente.");
+            return;
+        }
+
+        const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders/edit`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(order),
+            });
+
+            if (response.ok) {
+                toaster.create({
+                    title: `Pedido ${order.id} atualizado com sucesso`,
+                    type: "success"
+                });
+
+                localStorage.setItem('sacola', '[]');
+            } else {
+                toaster.create({
+                    title: "Erro ao atualizar pedido",
+                    type: "error"
+                });
+            }
+        } catch (error) {
+            console.error("Erro ao criar o pedido:", error);
+            toaster.create({
+                title: "Erro de conexão",
+                type: "error"
+            });
+        }
+    }
 }

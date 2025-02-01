@@ -7,16 +7,32 @@ import { TimelineConnector, TimelineContent, TimelineDescription, TimelineItem, 
 import { LuCheck, LuPackage, LuShip } from "react-icons/lu";
 import { StepsCompletedContent, StepsContent, StepsItem, StepsList, StepsRoot } from "../../components/ui/steps";
 import { Button } from "../../components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, DollarSignIcon } from "lucide-react";
+import authService from "../../services/authService";
+import { Loader } from "../../components/ui/loader";
 
 const AccountOrders = () => {
     const [orderAtual, setOrderAtual] = useState<OrderAfterBuyProps | null>(null);
+    const [isAdmin, setIsAuthenticated] = useState<boolean>(false);
     const { order } = useParams(); // Pega o ID do pedido da URL
     const [currentStep, setCurrentStep] = useState(1);
     const steps = ["Preparando", "Enviado", "Entregue"];
 
     useEffect(() => {
         getOrderAtual();
+
+        const checkUserLoggedIn = async () => {
+            const authentication = await authService.getUserData();
+            if (authentication) {
+                const isAdmin = await authService.isUserAdmin(authentication.email);
+                setIsAuthenticated(isAdmin);
+            }
+            else {
+                setIsAuthenticated(false)
+            }
+        };
+
+        checkUserLoggedIn();
     }, [order]);
 
     async function getOrderAtual() {
@@ -24,6 +40,20 @@ const AccountOrders = () => {
             if (order) {
                 const fetchedOrder = await orderService.getById(order);
                 setOrderAtual(fetchedOrder);
+
+                if (fetchedOrder.state === "PREPARANDO") {
+                    setCurrentStep(1);
+                }
+                else if (fetchedOrder.state === "ENTREGA") {
+                    setCurrentStep(2);
+                }
+                else {
+                    setCurrentStep(3);
+                }
+
+                if (fetchedOrder.situation === "NAOPAGO") {
+                    setCurrentStep(0)
+                }
             }
         } catch (error) {
             console.error("Erro ao carregar o pedido:", error);
@@ -31,7 +61,7 @@ const AccountOrders = () => {
     }
 
     if (!orderAtual) {
-        return <div>Carregando pedido...</div>;
+        return <Loader></Loader>;
     }
 
     function formatOrderDate(createdAt: string): string {
@@ -92,31 +122,31 @@ const AccountOrders = () => {
                     <TimelineRoot>
                         <TimelineItem>
                             <TimelineConnector>
-                                <LuCheck />
+                                {orderAtual.state === 'PREPARANDO' && orderAtual.situation != "NAOPAGO" ? <LuCheck /> : <DollarSignIcon style={{ opacity: 0.5 }} />}
                             </TimelineConnector>
                             <TimelineContent>
                                 <TimelineTitle>Pedido Confirmado</TimelineTitle>
-                                <TimelineDescription>{formatOrderDate(orderAtual.createdAt)}</TimelineDescription>
+                                <TimelineDescription>{orderAtual.situation != "NAOPAGO" ? <>{formatOrderDate(orderAtual.createdAt)}</> : "Pendente" }</TimelineDescription>
                             </TimelineContent>
                         </TimelineItem>
 
                         <TimelineItem>
                             <TimelineConnector>
-                                <LuShip />
+                                {orderAtual.state === 'ENTREGA' || orderAtual.state === 'FINALIZADO' && orderAtual.situation != "NAOPAGO" ? <LuCheck /> : <LuShip style={{ opacity: 0.5 }} />}
                             </TimelineConnector>
                             <TimelineContent>
                                 <TimelineTitle>Produto Enviado</TimelineTitle>
-                                <TimelineDescription>Pendente</TimelineDescription>
+                                <TimelineDescription>{orderAtual.state === 'ENTREGA' || orderAtual.state === 'FINALIZADO' && orderAtual.situation != "NAOPAGO" ? "" : 'Pendente'}</TimelineDescription>
                             </TimelineContent>
                         </TimelineItem>
 
                         <TimelineItem>
                             <TimelineConnector>
-                                <LuPackage />
+                                {orderAtual.state === 'FINALIZADO' ? <LuCheck /> : <LuPackage style={{ opacity: 0.5 }} />}
                             </TimelineConnector>
                             <TimelineContent>
                                 <TimelineTitle>Pedido Entregue</TimelineTitle>
-                                <TimelineDescription>Pendente</TimelineDescription>
+                                <TimelineDescription>{orderAtual.state === 'FINALIZADO' ? "" : 'Pendente'}</TimelineDescription>
                             </TimelineContent>
                         </TimelineItem>
                     </TimelineRoot>

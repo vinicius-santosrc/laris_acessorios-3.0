@@ -75,6 +75,14 @@ export const typeCategorys = createListCollection({
     ]
 });
 
+export const OrderStates = createListCollection({
+    items: [
+        { label: 'Preparando', value: "PREPARANDO"},
+        { label: 'Fase de Entrega', value: "ENTREGA" },
+        { label: 'Finalizado', value: "FINALIZADO" },
+    ]
+});
+
 export const typeProductList = createListCollection({
     items: [
         { label: 'Chocker', value: TypeProduct.Chocker },

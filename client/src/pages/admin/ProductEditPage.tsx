@@ -165,6 +165,17 @@ export const ProductEditPage = () => {
         }
     };
 
+    const handleInputChangeTextArea = (e: React.ChangeEvent<any>) => {
+        if (product) {
+            setProduct({
+                ...product,
+                [e.target.name]: e.currentTarget.value,
+            });
+
+            console.log(product)
+        }
+    };
+
     const handleSave = async () => {
         if (product) {
             try {
@@ -451,6 +462,16 @@ export const ProductEditPage = () => {
                                                 name="type_full_label"
                                                 value={product.type_full_label}
                                                 onChange={handleInputChange}
+                                            />
+                                        </div>
+
+                                        <div className="form-row">
+                                            <label htmlFor="type_full_label">Descrição do Produto</label>
+                                            <textarea
+                                                id="description"
+                                                name="description"
+                                                value={product.description}
+                                                onChange={handleInputChangeTextArea}
                                             />
                                         </div>
 

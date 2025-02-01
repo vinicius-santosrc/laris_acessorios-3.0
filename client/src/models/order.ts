@@ -14,8 +14,8 @@ export interface OrderAfterBuyProps {
     id: number,
     uid: string;
     address: string;
-    items: string;
-    user: string;
+    items: any;
+    user: any;
     order_totalprice: number;
     createdAt: any;
     paymentOption: 'CART' | 'PIX' | 'DINHEIRO';
