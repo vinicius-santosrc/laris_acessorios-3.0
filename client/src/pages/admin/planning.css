@@ -20,7 +20,7 @@
 
 .Card-CreateNew button {
     color: white;
-    background: #EF59A0;
+    background: var(--cor-principal);
     padding: 5px 10px;
     cursor: pointer;
     border: none;
@@ -49,8 +49,8 @@
     padding: 10px;
     background: #F1F2F4;
     border-radius: 10px;
-    width: 270px;
-    height: 100%;
+    width: auto;
+    height: auto;
 }
 
 .contents-card {

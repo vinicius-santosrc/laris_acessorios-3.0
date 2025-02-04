@@ -2,30 +2,14 @@ import { adminService } from "../../services/adminService";
 import { toaster } from "../../components/ui/toaster";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import CardItem from "../../components/admin/planning/CardItem"; // Importando o novo componente CardItem
 import "./planning.css";
-
-const CardItem = ({ item, index, removeItem }) => {
-    return (
-        <Draggable key={item} draggableId={item} index={index}>
-            {(provided) => (
-                <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="flexbox-content">
-                    <div className="contents-card">{item}</div>
-                    <button onClick={removeItem}><i className="fa-solid fa-minus"></i></button>
-                </div>
-            )}
-        </Draggable>
-    );
-};
 
 export const Planing = () => {
     const [boxCreateNewVisible, setboxCreateNewVisible] = useState(false);
-    const [ContentCards, setContentCards] = useState([]);
-    const [NameOfNewList, setNameOfNewList] = useState(null);
+    const [ContentCards, setContentCards] = useState<any[]>([]);
+    const [NameOfNewList, setNameOfNewList] = useState<string | null>(null);
     const [newItems, setNewItems] = useState('');
-
-    const secretKey = process.env.REACT_APP_API_SECRET_KEY;
-    const endpoint = process.env.REACT_APP_API_ENDPOINT;
-    const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
 
     useEffect(() => {
         getCards();
@@ -33,7 +17,8 @@ export const Planing = () => {
         return () => clearInterval(interval);
     }, []);
 
-    async function deleteThatCard(id) {
+    // Funções do CRUD
+    async function deleteThatCard(id: any) {
         try {
             await adminService.planningDeleteById(id);
             getCards();
@@ -69,7 +54,7 @@ export const Planing = () => {
         }
     }
 
-    async function addListDB(id, content_card) {
+    async function addListDB(id: any, content_card: any) {
         const itensantigos = JSON.parse(content_card);
         if (!newItems) return;
 
@@ -87,7 +72,7 @@ export const Planing = () => {
         }
     }
 
-    async function removeAtt(index, id, content_card) {
+    async function removeAtt(index: number, id: any, content_card: string) {
         const contentCardArray = JSON.parse(content_card);
         if (index >= 0 && index < contentCardArray.length) {
             contentCardArray.splice(index, 1);
@@ -121,9 +106,6 @@ export const Planing = () => {
 
         const sourceCard = ContentCards[sourceCardIndex];
         const destinationCard = ContentCards[destinationCardIndex];
-
-        console.log(sourceCard)
-        console.log(destinationCard)
 
         const sourceItems = JSON.parse(sourceCard.content_card);
         const destinationItems = JSON.parse(destinationCard.content_card);

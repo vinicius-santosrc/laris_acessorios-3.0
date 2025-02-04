@@ -34,6 +34,8 @@ import { ProductAddPage } from './pages/admin/ProductAddPage';
 import { Facilitys } from './pages/admin/Facilitys';
 import AccountOrders from './pages/account/AccountOrders';
 import Orders from './pages/admin/Orders';
+import Reports from './pages/admin/Reports';
+import Config from './pages/admin/Config';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -53,6 +55,8 @@ const routes = [
   { path: '/admin/orders', isProtected: true, element: (<AdminPage><Orders /></AdminPage>) },
   { path: '/admin/planning', isProtected: true, element: (<AdminPage><Planing /></AdminPage>) },
   { path: '/admin/facilitys', isProtected: true, element: (<AdminPage><Facilitys /></AdminPage>) },
+  { path: '/admin/reports', isProtected: true, element: (<AdminPage><Reports /></AdminPage>) },
+  { path: '/admin/config', isProtected: true, element: (<AdminPage><Config /></AdminPage>) },
   { path: '/admin/sheet/:planilha', isProtected: true, element: (<AdminPage><SheetsPage /></AdminPage>) },
   { path: '/contact-us', element: <Institutional><ContactUs /><Footer /></Institutional> },
   { path: '/tracking', element: <Institutional><Footer /></Institutional> },
