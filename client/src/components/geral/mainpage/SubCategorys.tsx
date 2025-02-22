@@ -33,13 +33,13 @@ const SubCategorys = () => {
         {
             title: "Presentes para ela",
             redirect: "/para-ela",
-            photoURL: "https://uploaddeimagens.com.br/images/004/877/966/full/processed-5EF3B05D-B8F3-4B16-892C-E8508CCD0A48.jpeg?1735149543"
+            photoURL: "https://i.ibb.co/Tq7pLjTV/Brinco-Asa.png"
         },
         lastCategory ?
             { 
                 title: lastCategory.highlightText,
                 redirect: `/${lastCategory.urlLink}`,
-                photoURL: lastCategory.highlightImage || "", 
+                photoURL: "https://i.ibb.co/bRP1xP28/anel-cora-o-com-zirc-nia-1.png", 
             }
             : {
                 title: "Presentes para ele",  // Caso contrário, mantém a categoria original
@@ -49,12 +49,12 @@ const SubCategorys = () => {
         {
             title: "Banhado a ouro",
             redirect: "/banhados-a-ouro",
-            photoURL: "https://uploaddeimagens.com.br/images/004/877/991/full/Brinco-Asa.png?1735179720"
+            photoURL: "https://i.ibb.co/JFbfsHWX/IMG-4658-removebg-preview.png"
         },
         {
             title: "Pratas Brilhantes",
             redirect: "/pratas",
-            photoURL: "https://uploaddeimagens.com.br/images/004/877/971/full/processed-3D859BD8-1459-4679-8CBA-2AA437141FAB_%281%29.jpeg?1735151183"
+            photoURL: "https://i.ibb.co/Z1gTMHcR/brinco-com-veneziana.png"
         },
     ];
 

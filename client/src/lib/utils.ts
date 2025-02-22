@@ -22,12 +22,12 @@ export interface CategoryProps {
 }
 
 export const Categorys: CategoryProps[] = [
-    { title: "COLARES", redirect: "colar", photoURL: "https://uploaddeimagens.com.br/images/004/877/952/full/chocker_quadradinho_%281%29.png?1735146528" },
-    { title: "BRINCOS", redirect: "brinco", photoURL: "https://uploaddeimagens.com.br/images/004/877/931/full/Brinco_Heart.png?1735141030" },
-    { title: "ANÉIS", redirect: "anel", photoURL: "https://uploaddeimagens.com.br/images/004/877/944/full/anel_corac%CC%A7a%CC%83o_cravejado.png?1735144015" },
-    { title: "PULSEIRAS", redirect: "pulseira", photoURL: "https://uploaddeimagens.com.br/images/004/877/957/full/pulseira_nossa_senhora_%281%29.png?1735147752" },
-    { title: "BRACELETES", redirect: "bracelete", photoURL: "https://uploaddeimagens.com.br/images/004/877/949/full/bracelete_oval.png?1735145171" },
-    { title: "PIERCINGS", redirect: "piercing", photoURL: "https://uploaddeimagens.com.br/images/004/877/938/full/piercing-palito.png?1735142864" }
+    { title: "COLARES", redirect: "colar", photoURL: "https://i.ibb.co/q8WH3k9/chocker-quadradinho.png" },
+    { title: "BRINCOS", redirect: "brinco", photoURL: "https://i.ibb.co/cXrtMChH/brinco-mini-ponto-de-luz-verde.png" },
+    { title: "ANÉIS", redirect: "anel", photoURL: "https://i.ibb.co/bRP1xP28/anel-cora-o-com-zirc-nia-1.png" },
+    { title: "PULSEIRAS", redirect: "pulseira", photoURL: "https://i.ibb.co/j9RvfVFP/IMG-4663-removebg-preview.png" },
+    { title: "BRACELETES", redirect: "bracelete", photoURL: "https://i.ibb.co/VyK52Xh/bracelete-oval.png" },
+    { title: "PIERCINGS", redirect: "piercing", photoURL: "https://i.ibb.co/JFbfsHWX/IMG-4658-removebg-preview.png" }
 ];
 
 export const whiteListCategories: string[] = [

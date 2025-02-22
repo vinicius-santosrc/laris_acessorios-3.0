@@ -383,6 +383,18 @@ app.get(`/api/v1/${secretKey}/menuItems`, (req, res) => {
     })
 });
 
+app.get(`/api/v1/${secretKey}/facilitys`, (req, res) => {
+    pool.query(`SELECT * FROM facilitys`, (err, result) => {
+        console.log("[FACILITYS] Realizando consulta")
+        if (err) {
+            res.status(500).json({ error: "Erro ao obter facilitys" });
+        }
+        else {
+            res.json(result);
+        }
+    })
+})
+
 app.post(`/api/v1/${secretKey}/categories/add`, (req, res) => {
     const item = req.body;
 

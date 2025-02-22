@@ -9,7 +9,7 @@ import ProductsMainPage from "../../../components/geral/mainpage/ProductsMainPag
 import ShowCaseCollection from "../../../components/geral/mainpage/ShowCaseCollection"
 
 const Home = () => {
-    const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
 
     const checkMobileView = () => {
         if (window.innerWidth <= 768) {
@@ -26,7 +26,7 @@ const Home = () => {
         return () => {
             window.removeEventListener("resize", checkMobileView);
         };
-    }, []);
+    }, []); 
 
     return (
         <React.Fragment>
@@ -39,25 +39,6 @@ const Home = () => {
                 description="Explore nossas categorias e encontre a joia que reflete sua essência. Cada peça é única e carrega consigo uma história especial. Descubra a sua!"
                 hasDescription={true}
                 component={<CategoryList />} />
-            {/*
-            <ShowCaseCollection
-                items={[
-                    {
-                        url: "https://cartier.vteximg.com.br/arquivos/banneresquerdahome.jpg?v=638714397670800000",
-                        redirect: "/redirect1",
-                        title: "Título 1",
-                        description: "Descrição 1",
-                    },
-                    {
-                        url: "https://pandorajoias.vtexassets.com/assets/vtex.file-manager-graphql/images/187a102f-c3a3-472f-ace3-71efc3ad91c3___4d78bf766f80c77e48bee99b655f4474.jpg",
-                        redirect: "/redirect2",
-                        title: "Título 2",
-                        description: "Descrição 2",
-                    },
-                ]}
-                type="Grid"
-            />
-            */}
             <SectionComponent
                 title="Torne sua WishList realidade"
                 description='"Encontre as peças dos seus sonhos aqui"'

@@ -39,7 +39,7 @@ const CategoryList = () => {
                     className="mySwiper"
                 >
                     {Categorys.map((item, id) => (
-                        <SwiperSlide>
+                        <SwiperSlide key={id}>
                             <CategoryCard title={item.title} redirect={item.redirect} key={id} photoURL={item.photoURL} />
                         </SwiperSlide>
                     ))}
