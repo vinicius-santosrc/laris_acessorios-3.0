@@ -26,7 +26,7 @@ const Home = () => {
         return () => {
             window.removeEventListener("resize", checkMobileView);
         };
-    }, []); 
+    }, []);
 
     return (
         <React.Fragment>
@@ -39,6 +39,23 @@ const Home = () => {
                 description="Explore nossas categorias e encontre a joia que reflete sua essência. Cada peça é única e carrega consigo uma história especial. Descubra a sua!"
                 hasDescription={true}
                 component={<CategoryList />} />
+            <ShowCaseCollection
+                items={[
+                    {
+                        url:  "https://i.ibb.co/tTWBKdS3/IMG-1309.jpg",
+                        redirect: "/collections/pulseira",
+                        title: "Pulseira de Ouro Elegante",
+                        description: "Um toque de sofisticação e elegância ao seu estilo.",
+                    },
+                    {
+                        url: "https://i.ibb.co/0jphgqRb/IMG-1322.jpg",
+                        redirect: "/collections/lancamentos",
+                        title: "Ultimos lançamentos",
+                        description: "Confira nossas ultimas novidades",
+                    },
+                ]}
+                type="Grid"
+            />
             <SectionComponent
                 title="Torne sua WishList realidade"
                 description='"Encontre as peças dos seus sonhos aqui"'

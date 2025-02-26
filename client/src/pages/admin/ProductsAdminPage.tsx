@@ -3,7 +3,7 @@ import productService from "../../services/productService";
 import { Badge, Image, Table, Tabs } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import "./productsadminpage.css";
-import { BoxIcon, Check, Edit, Undo, ViewIcon } from "lucide-react";
+import { ViewIcon } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import {
     ActionBarContent,
@@ -20,7 +20,7 @@ import {
 import { Checkbox } from "../../components/ui/checkbox";
 import { LuTrash2 } from "react-icons/lu";
 import { toaster } from "../../components/ui/toaster";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const ProductsAdminPage = () => {
     const [products, setProducts] = useState<Product[] | null>(null);

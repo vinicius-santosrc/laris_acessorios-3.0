@@ -252,6 +252,7 @@
         /* Remover margem à esquerda */
         border-radius: 24px;
         padding-top: 20px;
+        margin-top: 160px;
         /* Ajustar o padding */
     }
 

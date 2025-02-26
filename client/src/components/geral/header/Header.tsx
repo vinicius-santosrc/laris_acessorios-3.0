@@ -28,7 +28,7 @@ const Header = () => {
         if (categoria.sub_items) {
             setItemHover({
                 ...categoria,
-                subItems: JSON.parse(categoria.sub_items), // Parse sub_items to an array
+                subItems: JSON.parse(categoria.sub_items),
             });
             setSubHeaderOpen(true);
         }
@@ -46,7 +46,6 @@ const Header = () => {
         const fetchMenuItems = async () => {
             try {
                 const data = await adminService.getMenuItems();
-                console.log("Menu Items: ", data);  // Verifique se os dados estão sendo retornados corretamente
                 setMenuItems(data);
             } catch (error) {
                 console.error(error);
@@ -58,11 +57,11 @@ const Header = () => {
 
 
     const handleFocus = () => {
-        setIsFocused(true);  // Marca o campo como focado
+        setIsFocused(true);
     };
 
     const handleBlur = () => {
-        setIsFocused(false);  // Marca o campo como desfocado
+        setIsFocused(false);
     };
 
     const handleKeyDown = (e: InputElementProps) => {

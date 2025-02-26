@@ -165,5 +165,20 @@ class productService {
         }
     }
 
+    public static readonly getByRelatedCategory = async (category: string[]) => {
+        try {
+            const response = await fetch(`${url}${preEndpoint}${secretKey}/products`);
+            const data = await response.json() || [];
+            let dataByCategory: any[] = []
+            data.forEach((product: Product) => {
+                dataByCategory.push(JSON.parse(product.categoryList).includes(category) && product)
+            })
+            return dataByCategory.reverse();
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
 }
 export default productService;

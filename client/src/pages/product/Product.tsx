@@ -195,7 +195,7 @@ const ProductPage = () => {
                 title={"Sugestões para você"}
                 description={null}
                 hasDescription={false}
-                component={<RelatedProducts />}
+                component={<RelatedProducts category={JSON.parse(product.categoryList)} />}
             />
             <Footer />
         </React.Fragment>

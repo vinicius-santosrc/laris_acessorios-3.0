@@ -1,5 +1,5 @@
 .search-box-area {
-  border-bottom: 1px solid lightgray ;
+  border-bottom: 1px solid lightgray;
   width: 250px;
   display: flex;
   align-items: center;
@@ -23,6 +23,12 @@
 
 .redirect-item-content span {
   font-size: 12px;
+  border-bottom: 2px solid white;
+}
+
+.redirect-item-content span:hover {
+  font-weight: 800;
+  border-bottom: 2px solid var(--cor-principal);
 }
 
 .subHeader {

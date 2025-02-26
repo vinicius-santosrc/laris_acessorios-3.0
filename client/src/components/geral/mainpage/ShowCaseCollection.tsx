@@ -1,5 +1,5 @@
 import "./ShowCaseCollection.css";
-import { Link } from 'react-router-dom'; // Se não tiver, adicionar o import do Link
+import { Link } from 'react-router-dom';
 
 interface ShowcaseItem {
     url: string;
@@ -18,17 +18,16 @@ const ShowCaseCollection = ({ items, type }: ShowCaseCollectionProps) => {
         <section className="showcase-component">
             {type != "Showcase" ?
                 <div className="showcase-inside">
-
                     {items.map((item, index) => (
-                            <div key={index} className="showcase-box">
-                                <Link to={item.redirect}>
-                                    <img src={item.url} alt={`Showcase category ${index + 1}`} />
-                                    <div className="descriptionshowcase">
-                                        <h1>{item.title}</h1>
-                                        <p>{item.description}</p>
-                                    </div>
-                                </Link>
-                            </div>
+                        <div key={index} className="showcase-box">
+                            <Link to={item.redirect}>
+                                <img src={item.url} alt={`Showcase category ${index + 1}`} />
+                                <div className="descriptionshowcase">
+                                    <h1>{item.title}</h1>
+                                    <p>{item.description}</p>
+                                </div>
+                            </Link>
+                        </div>
 
                     ))}
 

@@ -45,3 +45,46 @@
     height: 500px;
     object-fit: cover;
 }
+
+@media screen and (max-width: 900px) {
+    .showcase-inside-full {
+        display: block;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .showcase-box-full {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .showcase-box-full img {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+    }
+
+    .showcase-box {
+        width: 95%;
+        margin: auto;
+        margin-bottom: 80px;
+    }
+
+    .showcase-inside {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        text-align: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .showcase-component {
+        width: 100%;
+        padding: 32px 0px;
+    }
+
+    .descriptionshowcase {
+        padding: 10px;
+    }
+}

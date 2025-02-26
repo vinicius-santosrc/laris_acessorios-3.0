@@ -1,0 +1,10 @@
+.categoryImage {
+    width: 416px;
+    height: 203px;
+}
+
+@media screen and (max-width: 900px) {
+    .categoryImage {
+        width: 100%;
+    }
+}

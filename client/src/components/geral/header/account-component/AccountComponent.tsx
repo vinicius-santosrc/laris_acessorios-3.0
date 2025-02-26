@@ -35,7 +35,7 @@ const AccountComponent = () => {
     const FormLoginAccount = [{
         label: <span>ENTRE EM NOSSO GRUPO E CONCORRA A <br /><span className="breaklineHeader">CUPONS EXCLUSIVOS</span></span>,
         btnLabel: "Entrar",
-        photoURL: "https://uploaddeimagens.com.br/images/004/878/465/full/IMG_7323.png?1735408579",
+        photoURL: "https://i.ibb.co/xthR2SMM/IMG-7323.png",
         btnForm: [
             { label: "E-mail", value: "", json: 'email', required: true },
             { label: "Senha", value: "", json: 'senha', required: true },
@@ -45,7 +45,7 @@ const AccountComponent = () => {
     const FormRegisterAccount = [{
         label: <span>NA SUA PRIMEIRA COMPRA, <br /><span className="breaklineHeader">VOCÊ GANHA 15% OFF</span><br /> Com o cupom BEMVINDO</span>,
         btnLabel: "Cadastrar",
-        photoURL: "https://uploaddeimagens.com.br/images/004/878/465/full/IMG_7323.png?1735408579",
+        photoURL: "https://i.ibb.co/xthR2SMM/IMG-7323.png",
         btnForm: [
             { label: "Nome completo", value: "", json: 'name', required: true },
             { label: "E-mail", value: "", json: 'email', required: true },

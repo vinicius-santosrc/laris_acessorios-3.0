@@ -291,6 +291,11 @@ export const menuItemsAdmin: MenuItemsProps[] = [
         href: '/admin/products',
     },
     {
+        title: "Categorias",
+        isLink: true,
+        href: '/admin/categories',
+    },
+    {
         title: "Clientes",
         isLink: true,
         href: '/admin/clients',
@@ -331,7 +336,7 @@ export const menuItemsAdmin: MenuItemsProps[] = [
 ];
 
 
-export const menuItems = async (): any => {
+export const menuItems: any = async () => {
     const getMenuItems = await adminService.getMenuItems();
     return getMenuItems;
 }
