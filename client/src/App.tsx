@@ -31,7 +31,7 @@ import { Planing } from './pages/admin/Planning';
 import { SheetsPage } from './pages/admin/SheetsPage';
 import { ProductEditPage } from './pages/admin/ProductEditPage';
 import { ProductAddPage } from './pages/admin/ProductAddPage';
-import { Facilitys } from './pages/admin/Facilitys';
+import { FacilitysPage } from './pages/admin/Facilitys';
 import AccountOrders from './pages/account/AccountOrders';
 import Orders from './pages/admin/Orders';
 import Reports from './pages/admin/Reports';
@@ -55,7 +55,7 @@ const routes = [
   { path: '/admin/clients', isProtected: true, element: (<AdminPage><UsersAdmin /></AdminPage>) },
   { path: '/admin/orders', isProtected: true, element: (<AdminPage><Orders /></AdminPage>) },
   { path: '/admin/planning', isProtected: true, element: (<AdminPage><Planing /></AdminPage>) },
-  { path: '/admin/facilitys', isProtected: true, element: (<AdminPage><Facilitys /></AdminPage>) },
+  { path: '/admin/facilitys', isProtected: true, element: (<AdminPage><FacilitysPage /></AdminPage>) },
   { path: '/admin/reports', isProtected: true, element: (<AdminPage><Reports /></AdminPage>) },
   { path: '/admin/config', isProtected: true, element: (<AdminPage><Config /></AdminPage>) },
   { path: '/admin/categories', isProtected: true, element: (<AdminPage><CategoriesAdmin /></AdminPage>) },

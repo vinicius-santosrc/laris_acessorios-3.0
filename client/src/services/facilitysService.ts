@@ -23,7 +23,6 @@ export class Facilitys {
         try {
             const response = await fetch(`${url}${preEndpoint}${secretKey}/facilitys`);
             const data = await response.json();
-            console.log(data)
             const retornData = data.find((item: any) => item.reference == reference);
             return retornData;
         }
@@ -32,6 +31,22 @@ export class Facilitys {
             throw err;
         }
     }
+
+    public static async save(item: any) {
+        try {
+            await fetch(`${url}${preEndpoint}${secretKey}/facilitys/edit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(item)
+            })
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
     public static remvoe() {
 
     }

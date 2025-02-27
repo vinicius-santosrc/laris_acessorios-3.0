@@ -1,15 +1,17 @@
-import "./Main.css"
-import React, { useEffect, useState } from "react"
-import SubCategorys from "../../../components/geral/mainpage/SubCategorys"
-import Carousel from "../../../components/geral/mainpage/Carousel"
-import SectionComponent from "../../../components/geral/mainpage/SectionComponent"
-import CategoryList from "../../../components/geral/category-list/CategoryList"
-import Footer from "../../../components/geral/footer/Footer"
-import ProductsMainPage from "../../../components/geral/mainpage/ProductsMainPage"
-import ShowCaseCollection from "../../../components/geral/mainpage/ShowCaseCollection"
+import "./Main.css";
+import React, { useEffect, useState } from "react";
+import SubCategorys from "../../../components/geral/mainpage/SubCategorys";
+import Carousel from "../../../components/geral/mainpage/Carousel";
+import SectionComponent from "../../../components/geral/mainpage/SectionComponent";
+import CategoryList from "../../../components/geral/category-list/CategoryList";
+import Footer from "../../../components/geral/footer/Footer";
+import ProductsMainPage from "../../../components/geral/mainpage/ProductsMainPage";
+import ShowCaseCollection from "../../../components/geral/mainpage/ShowCaseCollection";
+import { Facilitys } from "../../../services/facilitysService";
 
 const Home = () => {
     const [isMobile, setIsMobile] = useState<boolean>(false);
+    const [banner, setBanner] = useState<any>();
 
     const checkMobileView = () => {
         if (window.innerWidth <= 768) {
@@ -21,6 +23,7 @@ const Home = () => {
 
     useEffect(() => {
         checkMobileView();
+        getFacilitys();
         window.addEventListener("resize", checkMobileView);
 
         return () => {
@@ -28,11 +31,25 @@ const Home = () => {
         };
     }, []);
 
+    const getFacilitys = async () => {
+        try {
+            const facility = await Facilitys.get("banner-principal");
+            setBanner(facility)
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <React.Fragment>
-            <Carousel
-                url={isMobile ? "https://i.ibb.co/10XNSy5/Whats-App-Image-2024-12-26-at-11-01-30.jpg" : "https://i.ibb.co/VqYVzsr/Whats-App-Image-2024-12-26-at-10-49-53.jpg"}
-            />
+            {banner ?
+                <Carousel
+                    url={isMobile ? banner.dataMobile : banner.data}
+                />
+                :
+                null
+            }
             <SubCategorys />
             <SectionComponent
                 title="Compre por categoria"
@@ -42,7 +59,7 @@ const Home = () => {
             <ShowCaseCollection
                 items={[
                     {
-                        url:  "https://i.ibb.co/tTWBKdS3/IMG-1309.jpg",
+                        url: "https://i.ibb.co/tTWBKdS3/IMG-1309.jpg",
                         redirect: "/collections/pulseira",
                         title: "Pulseira de Ouro Elegante",
                         description: "Um toque de sofisticação e elegância ao seu estilo.",
