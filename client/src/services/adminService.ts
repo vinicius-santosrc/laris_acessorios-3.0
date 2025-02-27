@@ -9,6 +9,7 @@
 
 'use strict'
 
+import { CategoriesProps } from "@/lib/utils";
 import Compressor from "compressorjs";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
@@ -165,6 +166,16 @@ export class adminService {
         }
     }
 
+    static updateByCategory = async (category: CategoriesProps) => {
+        await fetch(`${url}${preEndpoint}${secretKey}/categories/edit`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(category)
+        })
+    }
+
     static upload = async (event: any): Promise<string | null> => {
         const file = event.target.files[0];
         if (file) {
@@ -205,6 +216,7 @@ export class adminService {
 
         return null; // Caso não haja arquivo
     };
+
 
     static getMenuItems = async () => {
         try {

@@ -395,6 +395,19 @@ app.get(`/api/v1/${secretKey}/facilitys`, (req, res) => {
     })
 })
 
+app.post(`/api/v1/${secretKey}/categories/edit`, (req, res) => {
+    const item = req.body
+    pool.query(
+        'UPDATE categories SET highlightText = ?, highlightDescription = ?, highlightImage = ?, urlLink = ? WHERE ID = ?', [item.highlightText, item.highlightDescription, item.highlightImage, item.urlLink, item.id], (err, result) => {
+            if (err) {
+                console.error(err);  // Log the error for debugging
+                res.status(500).json({ error: 'Erro ao obter dados' });
+            } else {
+                res.status(200).json({ message: 'Categoria editada com sucesso' });
+            }
+        });
+});
+
 app.post(`/api/v1/${secretKey}/categories/add`, (req, res) => {
     const item = req.body;
 

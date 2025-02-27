@@ -3,6 +3,12 @@
     height: 203px;
 }
 
+.savebtn, .createNewCategoryBtn {
+    background-color: var(--cor-principal);
+    color: white;
+    padding: 7px;
+    border-radius: 12px;
+}
 @media screen and (max-width: 900px) {
     .categoryImage {
         width: 100%;
