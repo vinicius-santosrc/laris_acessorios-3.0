@@ -184,6 +184,7 @@
   border: 1px solid #ebebeb;
   outline: none;
   padding: 8px;
+  width: 100%;
 }
 
 .modal-right-side {
@@ -283,6 +284,13 @@
 
 .header-mobile-checkout {
   display: none;
+}
+
+.form-input-values {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap !important;
 }
 
 @media screen and (max-width: 900px) {

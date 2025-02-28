@@ -9,7 +9,7 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { AccountIcon } from "../../../../components/icons/icons";
+import { AccountIcon } from "../../../../components/icons/icons"; // Importando EyeOffIcon
 import { Button } from "../../../../components/ui/button";
 import {
     DialogBody,
@@ -24,13 +24,17 @@ import "../Header.css";
 import LogoHeader from "../../../../images/logo.webp";
 import authService from "../../../../services/authService";
 import { toaster } from "../../../../components/ui/toaster";
-import { UserAuthProps } from "@/lib/utils";
+import { formatCPF, UserAuthProps } from "../../../../lib/utils";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 const AccountComponent = () => {
     const [isRegistering, setIsRegistering] = useState<boolean>(false);
     const [formValues, setFormValues] = useState<any>({});
     const [error, setError] = useState<string | null>(null);
     const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 768);
+    const [isChecked, setIsChecked] = useState(false);  // Verificar se a checkbox está marcada
+    const [showPassword, setShowPassword] = useState(false);  // Para mostrar ou esconder a senha
+    const [isFormValid, setIsFormValid] = useState(true);  // Para habilitar ou desabilitar o botão
 
     const FormLoginAccount = [{
         label: <span>ENTRE EM NOSSO GRUPO E CONCORRA A <br /><span className="breaklineHeader">CUPONS EXCLUSIVOS</span></span>,
@@ -59,10 +63,18 @@ const AccountComponent = () => {
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
-        setFormValues({
-            ...formValues,
-            [field]: e.target.value,
-        });
+        if (field === "CPF") {
+            setFormValues({
+                ...formValues,
+                [field]: formatCPF(e.target.value),
+            });
+        }
+        else {
+            setFormValues({
+                ...formValues,
+                [field]: e.target.value,
+            });
+        }
     };
 
     const handleSubmit = () => {
@@ -71,6 +83,8 @@ const AccountComponent = () => {
 
         if (missingFields.length > 0) {
             setError("Preencha todos os campos obrigatórios.");
+        } else if (isRegistering && !isChecked) {
+            setError("Você precisa aceitar os termos de privacidade.");
         } else {
             setError(null);
             const email: string = formValues["E-mail"];
@@ -81,7 +95,7 @@ const AccountComponent = () => {
             const User: UserAuthProps = {
                 nome_completo: nome_completo,
                 email: email,
-                cpf: cpf,
+                cpf: formatCPF(cpf),
                 password: password
             }
 
@@ -122,9 +136,20 @@ const AccountComponent = () => {
         if (isLogged) {
             window.location.href = window.location.origin + '/account';
         }
-
     }
 
+    const formData = isRegistering ? FormRegisterAccount : FormLoginAccount;
+
+    useEffect(() => {
+        const fields = formData[0].btnForm;
+        const missingFields = fields.filter((field: any) => field.required && !formValues[field.label]);
+
+        if (missingFields.length > 0 || (isRegistering && !isChecked)) {
+            setIsFormValid(false);
+        } else {
+            setIsFormValid(true);
+        }
+    }, [formValues, isRegistering, isChecked, formData]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -135,8 +160,6 @@ const AccountComponent = () => {
 
         return () => window.removeEventListener("resize", handleResize);
     }, []);
-
-    const formData = isRegistering ? FormRegisterAccount : FormLoginAccount;
 
     return (
         <DialogRoot size={"lg"} motionPreset="slide-in-bottom" placement="center">
@@ -159,21 +182,34 @@ const AccountComponent = () => {
                                     {formData[0].btnForm.map((field: any, index) => (
                                         <div key={index} className="form-field">
                                             <label>{field.label}</label>
-                                            <input
-                                                type={field.label === "Senha" ? "password" : "text"}
-                                                value={formValues[field.label] || ""}
-                                                onChange={(e) => handleInputChange(e, field.label)}
-                                            />
+                                            <div className="form-input-values">
+                                                <input
+                                                    type={field.label === "Senha" && !showPassword ? "password" : "text"}
+                                                    value={formValues[field.label] || ""}
+                                                    maxLength={field.label === "CPF" ? 14 : 100}
+                                                    onChange={(e) => handleInputChange(e, field.label)}
+                                                />
+                                                {field.label === "Senha" ?
+                                                    <Button onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword) }} variant="ghost">
+                                                        {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                                                    </Button>
+                                                    : null}
+                                            </div>
                                         </div>
                                     ))}
                                     {isRegistering && (
-                                        <Checkbox variant={"subtle"} className="checkbox">
-                                            <span>Estou ciente e aceito os termos da <Link to={window.location.origin}>Politica de Privacidade</Link></span>
+                                        <Checkbox
+                                            variant={"subtle"}
+                                            className="checkbox"
+                                            checked={isChecked}
+                                            onChange={() => setIsChecked(!isChecked)}
+                                        >
+                                            <span>Estou ciente e aceito os termos da <Link to={window.location.origin}>Política de Privacidade</Link></span>
                                         </Checkbox>
                                     )}
                                     {error && <div style={{ color: "red" }}>{error}</div>}
                                 </form>
-                                <Button onClick={handleSubmit} className="finalizeBtn">{formData[0].btnLabel}</Button>
+                                <Button onClick={handleSubmit} className="finalizeBtn" disabled={!isFormValid}>{formData[0].btnLabel}</Button>
                                 <div className="btnBottom">
                                     <Button variant="link" onClick={handleToggleForm}>
                                         {isRegistering ? "Já tem conta? Entrar" : "Não tem conta? Cadastre-se"}
