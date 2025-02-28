@@ -95,7 +95,7 @@ const AccountComponent = () => {
             const User: UserAuthProps = {
                 nome_completo: nome_completo,
                 email: email,
-                cpf: formatCPF(cpf),
+                cpf: cpf,
                 password: password
             }
 

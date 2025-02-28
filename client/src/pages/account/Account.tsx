@@ -28,6 +28,7 @@ const Account = () => {
                 setOrders(userOrders)
             } catch (error) {
                 console.error("Erro ao obter dados do usuário", error);
+                window.location.href = window.location.origin
             }
             setLoading(false);
         };
