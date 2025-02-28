@@ -32,6 +32,18 @@ export class Facilitys {
         }
     }
 
+    public static async getAll() {
+        try {
+            const response = await fetch(`${url}${preEndpoint}${secretKey}/facilitys`);
+            const data = await response.json();
+            return data;
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
     public static async save(item: any) {
         try {
             await fetch(`${url}${preEndpoint}${secretKey}/facilitys/edit`, {

@@ -2,7 +2,7 @@ import { adminService } from "../../services/adminService";
 import { toaster } from "../../components/ui/toaster";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import CardItem from "../../components/admin/planning/CardItem"; // Importando o novo componente CardItem
+import CardItem from "../../components/admin/planning/CardItem";
 import "./planning.css";
 
 export const Planing = () => {
@@ -17,7 +17,6 @@ export const Planing = () => {
         return () => clearInterval(interval);
     }, []);
 
-    // Funções do CRUD
     async function deleteThatCard(id: any) {
         try {
             await adminService.planningDeleteById(id);
@@ -113,14 +112,12 @@ export const Planing = () => {
         const [movedItem] = sourceItems.splice(result.source.index, 1);
         destinationItems.splice(result.destination.index, 0, movedItem);
 
-        // Atualizar o estado local
         const updatedCards: any = [...ContentCards];
         updatedCards[sourceCardIndex].content_card = sourceItems;
         updatedCards[destinationCardIndex].content_card = destinationItems;
 
         setContentCards(updatedCards);
 
-        // Atualizar o banco de dados
         try {
             await adminService.updatedCard(updatedCards[sourceCardIndex].content_card, updatedCards[sourceCardIndex].id);
             await adminService.updatedCard(updatedCards[destinationCardIndex].content_card, updatedCards[destinationCardIndex].id);

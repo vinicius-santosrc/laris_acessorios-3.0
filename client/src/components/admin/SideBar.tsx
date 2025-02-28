@@ -4,7 +4,7 @@ import { UserProps } from '../../models/user';
 import authService from '../../services/authService';
 import { LayoutDashboard, Users, BoxIcon, DatabaseIcon, ChevronRight, Calendar, FactoryIcon, FileText, Settings, LogOut, ListOrdered, ChevronDown, Menu, ListIcon } from 'lucide-react'; // Importando ícone de Menu
 import { getFirstAndLastName, menuItemsAdmin } from '../../lib/utils';
-import './sidebar.css'; // Aponte para o arquivo CSS adequado
+import './sidebar.css';
 import { Link } from 'react-router-dom';
 import MenuComponent from '../geral/header/menu-mobile/MenuComponent';
 import { LuList } from 'react-icons/lu';
@@ -76,7 +76,7 @@ const SideBar = () => {
             hasSubMenu: false
         },
         {
-            section: <><FactoryIcon /> WebFacility</>,
+            section: <><FactoryIcon /> Facilitys</>,
             link: '/admin/facilitys',
             hasSubMenu: false
         },

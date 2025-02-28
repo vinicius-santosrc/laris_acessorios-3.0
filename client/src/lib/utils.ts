@@ -22,12 +22,12 @@ export interface CategoryProps {
 }
 
 export const Categorys: CategoryProps[] = [
-    { title: "COLARES", redirect: "colar", photoURL: "https://i.ibb.co/q8WH3k9/chocker-quadradinho.png" },
-    { title: "BRINCOS", redirect: "brinco", photoURL: "https://i.ibb.co/cXrtMChH/brinco-mini-ponto-de-luz-verde.png" },
-    { title: "ANÉIS", redirect: "anel", photoURL: "https://i.ibb.co/bRP1xP28/anel-cora-o-com-zirc-nia-1.png" },
-    { title: "PULSEIRAS", redirect: "pulseira", photoURL: "https://i.ibb.co/j9RvfVFP/IMG-4663-removebg-preview.png" },
-    { title: "BRACELETES", redirect: "bracelete", photoURL: "https://i.ibb.co/VyK52Xh/bracelete-oval.png" },
-    { title: "PIERCINGS", redirect: "piercing", photoURL: "https://i.ibb.co/JFbfsHWX/IMG-4658-removebg-preview.png" }
+    { title: "COLARES", redirect: "colar", photoURL: "colares-minibanner" },
+    { title: "BRINCOS", redirect: "brinco", photoURL: "brincos-minibanner" },
+    { title: "ANÉIS", redirect: "anel", photoURL: "aneis-minibanner" },
+    { title: "PULSEIRAS", redirect: "pulseira", photoURL: "pulseiras-minibanner" },
+    { title: "BRACELETES", redirect: "bracelete", photoURL: "braceletes-minibanner" },
+    { title: "PIERCINGS", redirect: "piercing", photoURL: "piercings-minibanner" }
 ];
 
 export const whiteListCategories: string[] = [
