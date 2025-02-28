@@ -173,7 +173,7 @@ const Header = () => {
                                     <Link
                                         target={categoria.is_link === 1 ? "_parent" : "_self"}
                                         to={
-                                            categoria.is_link === 1
+                                            categoria.is_link === 0
                                                 ? window.location.origin + categoria.href
                                                 : ""
                                         }
@@ -183,7 +183,7 @@ const Header = () => {
                                 </article>
                             ))
                         ) : (
-                            <p>Carregando menu...</p> // Exibe uma mensagem de loading enquanto o menu não é carregado
+                            <p>Carregando menu...</p>
                         )}
                     </div>
                 </nav>
