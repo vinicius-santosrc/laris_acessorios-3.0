@@ -201,7 +201,7 @@
     .photos-mobile img {
         width: 100%;
         height: 430px;
-        object-fit: cover;
+        object-fit: contain;
     }
 
     .photos-desktop {
