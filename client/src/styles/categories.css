@@ -89,6 +89,11 @@
     gap: 16px;
 }
 
+.categor-bottom {
+    display: flex;
+    align-items: center;
+}
+
 .category-body-content {
     display: flex;
     justify-content: space-between;
@@ -165,15 +170,27 @@
     }
 
     .category-filter-content {
-        display: none;
+        display: block;
+        margin: auto;
     }
 
     .category-body-content {
         width: 100%;
+        flex-direction: column;
+    }
+
+    .body-category-mobile {
+        padding: 12px 12px;
+        border-top: 1px solid lightgray;
+    }
+
+    .mobile-filter-button {
+        display: flex;
     }
 
     .categories-page-header {
         gap: 0;
+        margin: auto;
     }
 
     .categories-page-image {

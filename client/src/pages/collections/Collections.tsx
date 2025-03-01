@@ -15,7 +15,6 @@ const Collections = () => {
 
     async function getCollections() {
         const categorys = await adminService.getAllCategoriesData();
-        console.log(categorys)
         setCategorie(categorys?.find((category: CategoriesProps) => category.urlLink === collection_name))
     }
 

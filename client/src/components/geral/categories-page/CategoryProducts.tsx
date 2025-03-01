@@ -1,24 +1,49 @@
 import { HStack } from "@chakra-ui/react";
 import { Radio, RadioGroup } from "../../../components/ui/radio";
 import "../../../styles/categories.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Product } from "@/models/product";
 import PrincipalProductCard from "../principal-product-card/PrincipalProductCard";
 import { PaginationItems, PaginationNextTrigger, PaginationPrevTrigger, PaginationRoot } from "../../../components/ui/pagination";
 import { Button } from "../../../components/ui/button";
 import { SearchX } from "lucide-react";
 
-const CategoryProducts: React.FC<any> = ({ products }) => {
+const CategoryProducts: React.FC<any> = ({ products, priceOrder, selectedFilters }) => {
     const validProducts = Array.isArray(products) ? products : [];
     const pageSize = 20;
     const [currentPage, setCurrentPage] = useState(1);
+    const [sortedProducts, setSortedProducts] = useState<Product[]>(validProducts);
 
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    const currentProducts = validProducts.slice(startIndex, endIndex);
+
+    const filteredProducts = sortedProducts.filter((product: Product) => {
+        let matchesMaterial = true;
+        if (selectedFilters.Material?.length > 0) {
+            const productCategoryList = JSON.parse(product.categoryList || '[]');
+            matchesMaterial = selectedFilters.Material.some((material: any) =>
+                productCategoryList.includes(material.value)
+            );
+        }
+        return matchesMaterial;
+    });
+
+    useEffect(() => {
+        const sorted = [...validProducts];
+        if (priceOrder === "1") {
+            sorted.sort((a: Product, b: Product) => b.price - a.price);
+        } else if (priceOrder === "2") {
+            sorted.sort((a: Product, b: Product) => a.price - b.price);
+        }
+        setSortedProducts(sorted);
+    }, [priceOrder, validProducts]);
+
+    const currentPageProducts = filteredProducts.slice(startIndex, endIndex);
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
+        if (page >= 1 && page <= Math.ceil(filteredProducts.length / pageSize)) {
+            setCurrentPage(page);
+        }
     };
 
     return (
@@ -26,7 +51,7 @@ const CategoryProducts: React.FC<any> = ({ products }) => {
             <div className="category-products-wrapper">
                 <div className="category-products__header">
                     <div className="category-left-products">
-                        <p>{validProducts.length} modelos</p>
+                        <p>{filteredProducts.length} modelos</p>
                     </div>
                     <div className="category-right-products">
                         <RadioGroup defaultValue="1">
@@ -38,22 +63,22 @@ const CategoryProducts: React.FC<any> = ({ products }) => {
                 </div>
                 <div className="category-products__body">
                     <div className="category-products__content">
-                        {currentProducts.map((product: Product) => (
+                        {currentPageProducts.map((product: Product) => (
                             <PrincipalProductCard product={product} key={product.id} />
                         ))}
-                        {currentProducts.length < 1 &&
+                        {currentPageProducts.length < 1 && (
                             <section className="no-products">
                                 <SearchX className="search-btn" />
                                 <h1>NÃO FOI ENCONTRADO NENHUM PRODUTO REGISTRADO.</h1>
                                 <p>Por favor, tente outros parametros de busca ou tente novamente mais tarde.</p>
                                 <Button className="btnNoProducts" onClick={() => window.location.reload()}>Recarregar</Button>
                             </section>
-                        }
+                        )}
                     </div>
                 </div>
                 <div className="category-products__bottom">
                     <PaginationRoot
-                        count={validProducts.length}
+                        count={filteredProducts.length}
                         pageSize={pageSize}
                         defaultPage={currentPage}
                         onPageChange={(e) => setCurrentPage(e.page)}
