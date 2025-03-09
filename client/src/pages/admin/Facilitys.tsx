@@ -19,6 +19,11 @@ interface FacilityItem {
     hasMobile: boolean;
 }
 
+interface FacilityProps {
+    title: string;
+    content: any;
+}
+
 export const FacilitysPage = () => {
     const [banners, setBanners] = useState<FacilityItem[]>([]);
 
@@ -71,47 +76,65 @@ export const FacilitysPage = () => {
         }
     }
 
+    const FacilitysContent: FacilityProps[] = [
+        {
+            title: "Imagens",
+            content: <div>
+                {banners.length > 0 ? (
+                    <AccordionRoot spaceY="4" variant="plain" collapsible>
+                        {banners.map((banner, index) => (
+                            <AccordionItem key={banner.reference} value={banner.reference}>
+                                <Box position="relative">
+                                    <AccordionItemTrigger indicatorPlacement="start">
+                                        {banner.reference}
+                                    </AccordionItemTrigger>
+                                </Box>
+                                <AccordionItemContent>
+                                    <div>
+                                        <h2>{banner.hasMobile ? "PC" : "Imagem geral (PC/MOBILE)"}</h2>
+                                        <img className="categoryImageFacilitys" src={banner.data} alt="Imagem da Categoria" />
+                                        <input type="file" onChange={(e) => changeImage(e, index, false)} />
+                                    </div>
+
+                                    {banner.hasMobile ?
+
+                                        <div>
+                                            <h2>MOBILE</h2>
+                                            <img className="categoryImageFacilitys" src={banner.dataMobile} alt="Imagem da Categoria" />
+                                            <input type="file" onChange={(e) => changeImage(e, index, true)} />
+                                        </div>
+                                        : null}
+                                </AccordionItemContent>
+                            </AccordionItem>
+                        ))}
+                    </AccordionRoot>
+                ) : null}
+            </div>
+        }
+    ]
+
     return (
         <section className="dashboard-laris-acessorios">
             <div className="dashboard-content">
                 <div className="Facility-Content-Page">
                     <div className="header">
                         <h1 className="title">Facilitys</h1>
-                        <p className="subtitle">Gerencie as imagens do website.</p>
+                        <p className="subtitle">Gerencie os componentes e as imagens do website.</p>
                         <div className="actions">
                             <Button onClick={saveFacilitys} className="savebtn">Salvar alterações</Button>
                         </div>
                     </div>
 
-                    {banners.length > 0 ? (
-                        <AccordionRoot spaceY="4" variant="plain" collapsible>
-                            {banners.map((banner, index) => (
-                                <AccordionItem key={banner.reference} value={banner.reference}>
-                                    <Box position="relative">
-                                        <AccordionItemTrigger indicatorPlacement="start">
-                                            {banner.reference}
-                                        </AccordionItemTrigger>
-                                    </Box>
-                                    <AccordionItemContent>
-                                        <div>
-                                            <h2>{banner.hasMobile ? "PC" : "Imagem geral (PC/MOBILE)"}</h2>
-                                            <img className="categoryImageFacilitys" src={banner.data} alt="Imagem da Categoria" />
-                                            <input type="file" onChange={(e) => changeImage(e, index, false)} />
-                                        </div>
-
-                                        {banner.hasMobile ?
-
-                                            <div>
-                                                <h2>MOBILE</h2>
-                                                <img className="categoryImageFacilitys" src={banner.dataMobile} alt="Imagem da Categoria" />
-                                                <input type="file" onChange={(e) => changeImage(e, index, true)} />
-                                            </div>
-                                        : null}
-                                    </AccordionItemContent>
-                                </AccordionItem>
-                            ))}
-                        </AccordionRoot>
-                    ) : null}
+                    {FacilitysContent.map((facilityItem: FacilityProps) => {
+                        return (
+                            <>
+                                <div className="contentPage">
+                                    <h1>{facilityItem.title}</h1>
+                                </div>
+                                {facilityItem.content}
+                            </>
+                        )
+                    })}
                 </div>
             </div>
         </section>
