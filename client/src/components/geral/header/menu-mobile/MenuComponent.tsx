@@ -2,8 +2,9 @@ import { DrawerDescription } from "@chakra-ui/react"
 import { Button } from "../../../../components/ui/button"
 import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger, DrawerRoot } from "../../../../components/ui/drawer"
 import { ChevronRightIcon, ContactIcon, HeartIcon, MenuIcon, User2Icon, ChevronLeftIcon } from "lucide-react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import authService from "../../../../services/authService"
 
 interface MenuComponentProps {
     logoHeader: string;
@@ -15,7 +16,11 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
     const [isMainDrawerOpen, setIsMainDrawerOpen] = useState<boolean>(false);
     const [isSubDrawerOpen, setIsSubDrawerOpen] = useState<boolean>(false);
     const [activeCollection, setActiveCollection] = useState<string | null>(null);
+    const [isLogged, setIsLogged] = useState(false);
 
+    useEffect(() => {
+        checkIfIsLogged();
+    }, [])
     const closeMainDrawer = () => {
         setIsMainDrawerOpen(false);
     }
@@ -30,20 +35,29 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
         setActiveCollection(null);
     }
 
+    async function checkIfIsLogged() {
+        const isLogged: boolean = await authService.isLogged();
+        setIsLogged(isLogged)
+    }
+
     const FooterHeader = () => {
-        if(!hasFooter) return
+        if (!hasFooter) return
         return (
             <DrawerFooter>
                 <section className="footer-drawer">
                     <div className="footer-drawer-content">
-                        <Link to={window.location.origin + "/account"} onClick={closeMainDrawer} className="item-footer">
-                            <User2Icon />
-                            <p>Minha conta</p>
-                        </Link>
-                        <Link to={window.location.origin + "/account#wishlist"} onClick={closeMainDrawer} className="item-footer">
-                            <HeartIcon />
-                            <p>Lista de desejos</p>
-                        </Link>
+                        {isLogged &&
+                            <React.Fragment>
+                                <Link to={window.location.origin + "/account"} onClick={closeMainDrawer} className="item-footer">
+                                    <User2Icon />
+                                    <p>Minha conta</p>
+                                </Link>
+                                <Link to={window.location.origin + "/account#wishlist"} onClick={closeMainDrawer} className="item-footer">
+                                    <HeartIcon />
+                                    <p>Lista de desejos</p>
+                                </Link>
+                            </React.Fragment>
+                        }
                         <Link to={window.location.origin} onClick={closeMainDrawer} className="item-footer">
                             <ContactIcon />
                             <p>Entre em contato</p>

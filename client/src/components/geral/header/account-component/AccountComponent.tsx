@@ -35,6 +35,7 @@ const AccountComponent = () => {
     const [isChecked, setIsChecked] = useState(false);  // Verificar se a checkbox está marcada
     const [showPassword, setShowPassword] = useState(false);  // Para mostrar ou esconder a senha
     const [isFormValid, setIsFormValid] = useState(true);  // Para habilitar ou desabilitar o botão
+    const [isLogged, setIsLogged] = useState(false);
 
     const FormLoginAccount = [{
         label: <span>ENTRE EM NOSSO GRUPO E CONCORRA A <br /><span className="breaklineHeader">CUPONS EXCLUSIVOS</span></span>,
@@ -104,7 +105,10 @@ const AccountComponent = () => {
                     toaster.create({
                         title: "Usuário logado com sucesso",
                         type: "success",
-                    });
+                    })
+                    setTimeout(() => {
+                        window.location.href = window.location.origin + "/account"
+                    }, 1000);
                 }).catch(error => {
                     toaster.create({
                         title: "Ocorreu um erro durante o credenciamento: " + error,
@@ -132,15 +136,13 @@ const AccountComponent = () => {
 
     async function checkIfIsLogged() {
         const isLogged: boolean = await authService.isLogged();
-
-        if (isLogged) {
-            window.location.href = window.location.origin + '/account';
-        }
+        setIsLogged(isLogged)
     }
 
     const formData = isRegistering ? FormRegisterAccount : FormLoginAccount;
 
     useEffect(() => {
+        checkIfIsLogged()
         const fields = formData[0].btnForm;
         const missingFields = fields.filter((field: any) => field.required && !formValues[field.label]);
 
@@ -164,11 +166,17 @@ const AccountComponent = () => {
     return (
         <DialogRoot size={"lg"} motionPreset="slide-in-bottom" placement="center">
             <DialogTrigger asChild>
-                <Button onClick={checkIfIsLogged} variant="ghost" aria-label="Conta">
-                    <AccountIcon />
-                </Button>
+                {!isLogged ?
+                    <Button onClick={checkIfIsLogged} variant="ghost" aria-label="Conta">
+                        <AccountIcon />
+                    </Button>
+                    :
+                    <Link to={window.location.origin + "/account"} aria-label="Conta">
+                        <AccountIcon />
+                    </Link>
+                }
             </DialogTrigger>
-            <DialogContent backgroundColor={"white"} className={isMobile ? "dialogContentMobile" : ""}>
+            {!isLogged && <DialogContent backgroundColor={"white"} className={isMobile ? "dialogContentMobile" : ""}>
                 <DialogBody>
                     <FormAccount
                         photoRef={formData[0].photoURL}
@@ -221,6 +229,7 @@ const AccountComponent = () => {
                 </DialogBody>
                 <DialogCloseTrigger />
             </DialogContent>
+            }
         </DialogRoot>
     );
 };

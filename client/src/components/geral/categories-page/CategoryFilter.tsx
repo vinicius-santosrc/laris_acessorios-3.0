@@ -9,7 +9,7 @@ import { CloseButton } from "../../../components/ui/close-button";
 import { DialogRoot, DialogTrigger, DialogContent, DialogBody, DialogCloseTrigger } from "../../../components/ui/dialog";  // Ajuste no uso do Modal
 import { FilterIcon } from "lucide-react";
 
-const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }) => {
+const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }: any) => {
     const [items, setItems] = useState([
         { id: 1, title: "Coleções", options: [] },
         { id: 2, title: "Seleção", options: [{ label: "Presentes para Ela", value: "para-ela" }] },
@@ -105,7 +105,7 @@ const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }) => {
                                     <FilterIcon /> FILTRAR
                                 </Button>
                             </DialogTrigger>
-                            <DialogContent paddingY={24} paddingX={4} backgroundColor={"white"}>
+                            <DialogContent paddingY={20} marginTop={24} paddingX={4} backgroundColor={"white"}>
                                 <DialogTitle fontSize={24}>
                                     JOALHERIA
                                 </DialogTitle>
@@ -148,7 +148,7 @@ const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }) => {
                                         </Button>
                                     </div>
                                 </DialogBody>
-                                <DialogCloseTrigger />
+                                <DialogCloseTrigger WebkitAppearance={"button"}  appearance={"button"} color={"black"} />
                             </DialogContent>
                         </DialogRoot>
                     </div>
