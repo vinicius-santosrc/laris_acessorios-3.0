@@ -18,10 +18,12 @@ import { orderService } from "../../services/orderService";
 import { CardElement, PaymentElement } from "@stripe/react-stripe-js";
 import { useElements, useStripe } from "@stripe/react-stripe-js";
 import { OrderProps } from "../../models/order";
+import { cartService } from "../../services/cartService";
+import productService from "../../services/productService";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
-const CheckoutPage = ({paymentMethodTypes, clientSecret }: any) => {
+const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     const [step, setStep] = useState<number>(0);
     const [items, setItems] = useState<any[]>([]);
     const [subtotal, setSubtotal] = useState<number>(0);
@@ -95,12 +97,20 @@ const CheckoutPage = ({paymentMethodTypes, clientSecret }: any) => {
 
     useEffect(() => {
         const fetchUserData = async () => {
-            const storedItems = localStorage.getItem("sacola");
+            const itemsCart = await cartService.get();
+            const storedItems: any = await Promise.all(
+                itemsCart.map(async (item) => {
+                    const product = await productService.getById(item.id);
+                    return { ...product, size: item.size };
+                })
+            );
+
+            console.log(storedItems)
 
             setLoading(true);
             if (storedItems) {
                 try {
-                    const parsedItems = JSON.parse(storedItems);
+                    const parsedItems = (storedItems);
                     if (Array.isArray(parsedItems)) {
                         setItems(parsedItems);
                         calculateTotal(parsedItems);

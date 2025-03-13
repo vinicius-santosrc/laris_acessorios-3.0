@@ -1,11 +1,12 @@
 import { cartService } from "../../../../services/cartService";
-import { AccountIcon, SacolaIcon } from "../../../../components/icons/icons"
-import { Button } from "../../../../components/ui/button"
-import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTitle, DrawerTrigger } from "../../../../components/ui/drawer"
-import React, { useEffect, useState } from "react"
+import { SacolaIcon } from "../../../../components/icons/icons";
+import { Button } from "../../../../components/ui/button";
+import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerRoot, DrawerTrigger } from "../../../../components/ui/drawer";
+import React, { useEffect, useState } from "react";
 import { Product } from "../../../../models/product";
 import { TrashIcon } from "lucide-react";
 import { DataListItem, DataListRoot } from "../../../../components/ui/data-list";
+import productService from "../../../../services/productService";
 
 interface BagComponentProps {
     setBagOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,15 +14,25 @@ interface BagComponentProps {
 }
 
 const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) => {
-    const [bagItems, setBagItems] = useState<Product[]>(cartService.get());
+    const [bagItems, setBagItems] = useState<Product[]>([]);
 
     useEffect(() => {
-        setBagItems(cartService.get());
+        const fetchBagItems = async () => {
+            const items = await cartService.get();
+            const products = await Promise.all(
+                items.map(async (item) => {
+                    const product = await productService.getById(item.id);
+                    return { ...product, size: item.size };
+                })
+            );
+            setBagItems(products);
+        };
+        fetchBagItems();
     }, [isBagOpen]);
 
-    const handleRemove = (productId: any) => {
-        cartService.remove(productId);
-        setBagItems(cartService.get());
+    const handleRemove = async (productId: any) => {
+        await cartService.remove(productId);
+        setBagItems(await cartService.get());
     };
 
     const subtotal = bagItems.reduce((acc, item) => {
@@ -34,8 +45,8 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
     }, 0);
 
     const finalizeBtn = () => {
-        return window.location.href = window.location.origin + "/checkout"
-    }
+        window.location.href = window.location.origin + "/checkout";
+    };
 
     const total = subtotal - totalDiscount;
 
@@ -95,7 +106,7 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
                         </section>
                     )}
                 </DrawerBody>
-                {bagItems.length === 0 ? null :
+                {bagItems.length === 0 ? null : (
                     <DrawerFooter className="footerBag">
                         <DataListRoot unstyled size={"md"} width={"full"} className="footerItems" orientation="horizontal">
                             {stats.map((item) => (
@@ -104,11 +115,11 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
                         </DataListRoot>
                         <Button onClick={finalizeBtn} className="finalizeBtn">FINALIZAR COMPRA</Button>
                     </DrawerFooter>
-                }
+                )}
                 <DrawerCloseTrigger />
             </DrawerContent>
         </DrawerRoot>
     );
-}
+};
 
 export default BagComponent;
