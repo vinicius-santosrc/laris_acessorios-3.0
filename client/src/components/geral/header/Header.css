@@ -64,7 +64,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 40px;
+  gap: 30px;
 }
 
 .header-inside-content:nth-child(1) {
@@ -150,6 +150,10 @@
   width: 95%;
   margin: auto;
   gap: 10px;
+}
+
+.logo-image {
+  width: 260px;
 }
 
 .bag-item img {

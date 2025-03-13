@@ -50,17 +50,17 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
                             <React.Fragment>
                                 <Link to={window.location.origin + "/account"} onClick={closeMainDrawer} className="item-footer">
                                     <User2Icon />
-                                    <p>Minha conta</p>
+                                    <p>MINHA CONTA</p>
                                 </Link>
                                 <Link to={window.location.origin + "/account#wishlist"} onClick={closeMainDrawer} className="item-footer">
                                     <HeartIcon />
-                                    <p>Lista de desejos</p>
+                                    <p>LISTA DE DESEJOS</p>
                                 </Link>
                             </React.Fragment>
                         }
                         <Link to={window.location.origin} onClick={closeMainDrawer} className="item-footer">
                             <ContactIcon />
-                            <p>Entre em contato</p>
+                            <p>ENTRE EM CONTATO</p>
                         </Link>
                     </div>
                 </section>
@@ -99,7 +99,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
                                             <Link onClick={closeMainDrawer} to={item.href || "javascript:;"} key={id}>
                                                 <div className="drawer-menu__item">
                                                     <div>
-                                                        <p>{item.title}</p>
+                                                        <p>{item.title.toUpperCase()}</p>
                                                     </div>
                                                     <div>
                                                         <ChevronRightIcon />
@@ -112,7 +112,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
                                             <div key={id}>
                                                 <div className="drawer-menu__item" onClick={() => openSubDrawer(item.title)}>
                                                     <div>
-                                                        <p>{item.title}</p>
+                                                        <p>{item.title.toUpperCase()}</p>
                                                     </div>
                                                     <div>
                                                         <ChevronRightIcon />

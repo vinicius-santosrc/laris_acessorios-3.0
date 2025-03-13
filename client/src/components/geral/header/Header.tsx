@@ -175,7 +175,7 @@ const Header = () => {
                                         to={
                                             categoria.is_link === 0
                                                 ? window.location.origin + categoria.href
-                                                : ""
+                                                : (categoria.href ? window.location.origin + categoria.href : "javascript:;")
                                         }
                                     >
                                         <span>{categoria.title.toUpperCase()}</span>
