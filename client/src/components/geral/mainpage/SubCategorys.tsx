@@ -54,7 +54,7 @@ const SubCategories = () => {
         },
         {
             title: "Lançamentos",
-            redirect: "/",
+            redirect: "/lancamentos",
             photoURL: "lancamentos-minibanner",
         },
         {
