@@ -149,6 +149,8 @@
 
 .photoFullScreen img {
     margin: auto;
+    max-height: 100vh;
+    max-width: 85vw;
     justify-content: center;
     display: flex;
     text-align: center;
@@ -176,7 +178,8 @@
         display: flex;
         text-align: center;
         background-color: white;
-        object-fit: cover;
+        object-fit: contain;
+        max-height: 100vh;
     }
 
         .photoFullScreen {
