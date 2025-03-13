@@ -4,16 +4,20 @@ import "./Success.css";
 import { orderService } from "../../services/orderService";
 import { Loader } from "../../components/ui/loader";
 import { Product } from "../../models/product";
+import { Copy } from "lucide-react";
+import {QrCode} from "@chakra-ui/react";
+import { OrderAfterBuyProps } from "@/models/order";
 
 const Success = () => {
-    const { uid } = useParams<any>();
-    const [order, setOrder] = useState<any>(null);
+    const { uid } = useParams();
+    const [order, setOrder] = useState<OrderAfterBuyProps>();
     const [endereco, setEndereco] = useState<any>(null);
     const [items, setItems] = useState<any>(null);
-    const [userComprador, setUserComprador] = useState<any>(null)
+    const [userComprador, setUserComprador] = useState<any>(null);
+    const [copied, setCopied] = useState(false);
+    const [pixCode, setPixCode] = useState("");
 
     useEffect(() => {
-        // Função para buscar a ordem usando o uid
         const fetchOrder = async () => {
             if (uid) {
                 try {
@@ -21,13 +25,12 @@ const Success = () => {
                     setOrder(currentOrder);
                     setEndereco(JSON.parse(currentOrder.address));
                     setItems(JSON.parse(currentOrder.items));
-                    setUserComprador(JSON.parse(currentOrder.user))
+                    setUserComprador(JSON.parse(currentOrder.user));
                 } catch (error) {
                     console.error("Erro ao buscar a ordem:", error);
                 }
             }
         };
-
         fetchOrder();
     }, [uid]);
 
@@ -41,20 +44,24 @@ const Success = () => {
     }
 
     if (!order) {
-        return <Loader />
+        return <Loader />;
     }
 
     return (
         <section className="success-page">
             <div className="success-container">
                 <div className="success-header">
-                    <h1 className="success-title">Compra Realizada com Sucesso!</h1>
+                    {order.paymentOption === "CART" ? (
+                        <h1 className="success-title">Compra Realizada com Sucesso!</h1>
+                    ) : (
+                        <h1 className="success-title">Aguardando o pagamento do seu pedido...</h1>
+                    )}
                     <p className="success-description">
-                        Parabéns! Seu pedido foi confirmado e está sendo preparado com muito
-                        carinho. Em breve, você receberá sua joia exclusiva.
+                        {order.paymentOption === "CART"
+                            ? "Parabéns! Seu pedido foi confirmado e está sendo preparado."
+                            : "Estamos aguardando o pagamento do seu pedido. Escaneie o QRCode abaixo ou copie o código Pix."}
                     </p>
                 </div>
-
                 <div className="order-info-wrapper">
                     <div className="order-info-left">
                         <div className="order-info-card">
@@ -81,7 +88,6 @@ const Success = () => {
                             </ul>
                         </div>
                     </div>
-
                     <div className="order-info-right">
                         <div className="order-items-card">
                             <h3>Itens do Pedido</h3>

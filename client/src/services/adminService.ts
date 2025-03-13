@@ -194,7 +194,6 @@ export class adminService {
                             .then((response) => response.json())
                             .then((response) => {
                                 if (response.success) {
-                                    console.log('Upload successful:', response.data.url);
                                     resolve(response.data.url); // Resolva a promessa com a URL
                                 } else {
                                     console.error('Upload failed:', response.error.message);

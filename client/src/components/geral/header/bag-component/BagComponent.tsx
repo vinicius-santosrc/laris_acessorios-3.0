@@ -36,7 +36,7 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
     };
 
     const subtotal = bagItems.reduce((acc, item) => {
-        const priceWithDiscount = item.price - item.desconto;
+        const priceWithDiscount = item.price;
         return acc + priceWithDiscount;
     }, 0);
 
@@ -51,9 +51,9 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
     const total = subtotal - totalDiscount;
 
     const stats = [
-        { label: "Subtotal", value: `R$ ${subtotal.toFixed(2)}`, helpText: "Valor dos pedidos" },
-        { label: "Desconto", value: `R$ ${totalDiscount.toFixed(2)}`, helpText: "Valor dos descontos" },
-        { label: "Total", value: `R$ ${total.toFixed(2)}`, helpText: "Valor total da compra" },
+        { label: "SUBTOTAL", value: `R$ ${subtotal.toFixed(2)}`, helpText: "Valor dos pedidos" },
+        { label: "DESCONTO", value: `R$ ${totalDiscount.toFixed(2)}`, helpText: "Valor dos descontos" },
+        { label: "TOTAL", value: `R$ ${total.toFixed(2)}`, helpText: "Valor total da compra" },
     ];
 
     return (
@@ -66,7 +66,7 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
             </DrawerTrigger>
             <DrawerContent className="drawer-header-component">
                 <DrawerHeader className="drawer-header-component__header">
-                    <DrawerTitle>{bagItems.length === 0 ? "Meus acessórios" : `MINHA SACOLA (${bagItems.length})`}</DrawerTitle>
+                    <DrawerTitle>{bagItems.length === 0 ? "MEUS ACESSÓRIOS" : `MINHA SACOLA (${bagItems.length})`}</DrawerTitle>
                 </DrawerHeader>
                 <DrawerBody className="drawer-header-component__body">
                     {bagItems.length === 0 ? (
@@ -88,7 +88,11 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
                                             <p className="bag-item__name">{item.name_product}</p>
                                             <p className="bag-item__size">Tamanho: {item.size}</p>
                                             <p className="bag-item__price">
-                                                {`R$ ${priceWithDiscount.toFixed(2)}`}
+                                                {item.desconto > 0 ?
+                                                    <><s style={{ color: "gray" }}> {`R$ ${item.price.toFixed(2)}`}</s><br></br>{`R$ ${priceWithDiscount.toFixed(2)}`}</>
+                                                    :
+                                                    <>{`R$ ${priceWithDiscount.toFixed(2)}`}</>
+                                                }
                                             </p>
                                         </div>
                                         <div>

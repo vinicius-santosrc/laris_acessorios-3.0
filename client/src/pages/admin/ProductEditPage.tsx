@@ -171,8 +171,6 @@ export const ProductEditPage = () => {
                 ...product,
                 [e.target.name]: e.currentTarget.value,
             });
-
-            console.log(product)
         }
     };
 

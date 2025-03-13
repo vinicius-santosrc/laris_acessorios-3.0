@@ -28,8 +28,6 @@ const CategoryList = () => {
         Categorys.forEach((item) => {
             getFacilitys(item.photoURL);
         });
-
-        console.log(Categorys)
     }, []);
 
     return (

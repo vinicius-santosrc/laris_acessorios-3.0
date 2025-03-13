@@ -78,8 +78,6 @@ export const ProductAddPage = () => {
                         .then(response => response.json())
                         .then(response => {
                             if (response.success) {
-                                console.log('Upload successful:', response.data.url); // URL da imagem carregada
-
                                 setProduct((prevProduct: any) => {
                                     let photoURLs = [];
 

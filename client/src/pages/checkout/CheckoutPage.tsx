@@ -105,8 +105,6 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                 })
             );
 
-            console.log(storedItems)
-
             setLoading(true);
             if (storedItems) {
                 try {
@@ -143,17 +141,20 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     }, []);
 
     const calculateTotal = (items: Product[]) => {
-        const newSubtotal = items.reduce((acc, item) => acc + (item.price - (item.desconto || 0)), 0);
-        setSubtotal(newSubtotal);
-        const deliveryCost = shippingCost || 0;
+        const newSubtotal = items.reduce((acc, item) => acc + item.price, 0);
+        let descontoTotal = 0;
+
+        // Resetar o desconto antes de calcular
         items.forEach((item) => {
             if (item.desconto > 0) {
-                setDesconto(desconto + item.desconto)
+                descontoTotal += item.desconto;
             }
-        })
-        setTotal(newSubtotal + deliveryCost);
+        });
 
-
+        setSubtotal(newSubtotal);
+        setDesconto(descontoTotal);
+        const deliveryCost = shippingCost || 0;
+        setTotal(newSubtotal - descontoTotal + deliveryCost);
     };
 
     const removeItemFromCart = (itemId: any) => {
@@ -192,6 +193,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
             setEstado(cepReturned.estado);
             setbairro(cepReturned.bairro);
             setendereco(cepReturned.logradouro)
+            setTotal(total + shippingCost)
 
         } catch (error) {
             console.error("Erro ao buscar informações de entrega", error);
@@ -311,9 +313,25 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
             }
         }
         else if (paymentMethodSelected?.value == EnumPaymentMethod.Pix) {
-            await orderService.create(orderContent)
+            try {
+                await orderService.create(orderContent)
+                    .then((res) => {
+                        window.location.href = window.location.origin + `/success/` + orderUid;
+                })
+            }
+            catch (error) {
+                console.error("Error finalizing purchase:", error);
+                setErrorMessage("Error finalizing purchase. Please try again.");
+                toaster.create({
+                    title: "Erro: " + error
+                })
+            }
         }
     };
+
+    if (items.length <= 0) {
+        return
+    }
 
     return (
         <section className="checkout-page-wrapper">
@@ -354,7 +372,11 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="item-middle">
-                                                                    <h1>R$ {(item.price - item.desconto).toFixed(2)}</h1>
+                                                                    {item.desconto > 0 ?
+                                                                        <h1><s style={{ color: "gray" }}> R$ {(item.price).toFixed(2)}</s> R$ {(item.price - item.desconto).toFixed(2)}</h1>
+                                                                        :
+                                                                        <h1>R$ {(item.price - item.desconto).toFixed(2)}</h1>
+                                                                    }
                                                                     <div className="item-right">
                                                                         <Button onClick={() => removeItemFromCart(item.id)}><Trash2Icon /></Button>
                                                                     </div>
