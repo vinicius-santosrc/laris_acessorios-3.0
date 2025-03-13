@@ -37,6 +37,7 @@ import Orders from './pages/admin/Orders';
 import Reports from './pages/admin/Reports';
 import Config from './pages/admin/Config';
 import CategoriesAdmin from './pages/admin/CategoriesAdmin';
+import PolicyCookies from './pages/institutional/PolicyCookies';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -167,10 +168,10 @@ function App() {
               )}
             />
 
-            {/* Rota catch-all para 404 */}
             <Route path="*" element={<Navigate to="/404" />} />
           </Routes>
         </BrowserRouter>
+        <PolicyCookies />
       </Provider>
     </div>
   );

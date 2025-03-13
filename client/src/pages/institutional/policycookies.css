@@ -1,0 +1,50 @@
+.laris-cookies-drawer-content {
+    padding: 45px 90px;
+}
+
+.laris-cookies-drawer-title {
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.laris-cookies-drawer-button-allow {
+    padding: 12px 24px;
+    background-color: rgb(29, 29, 29);
+    color: white;
+}
+
+.laris-cookies-drawer-button-reject {
+    background-color: transparent;
+    border: 1px solid black;
+    padding: 12px 24px;
+    color: black;
+}
+
+.laris-cookies-drawer-footer {
+    margin-top: 24px;
+}
+
+.laris-cookies-drawer-body {
+    color: rgb(106, 105, 105);
+}
+
+@media screen and (max-width: 900px) {
+    .laris-cookies-drawer-content {
+        padding: 24px 24px;
+        border-radius: 0 !important;
+    }
+
+    .laris-cookies-drawer-body {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .laris-cookies-drawer-footer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .laris-cookies-drawer-footer button {
+        width: 100%;
+    }
+}
