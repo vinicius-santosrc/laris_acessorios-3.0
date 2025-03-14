@@ -1,7 +1,7 @@
 .carousel-wrapper {
   max-height: 660px;
   height: 660px;
-  width: 1400px;
+  width: 100%;
   margin: auto;
   position: relative;
   background-color: var(--cinza-principal);
