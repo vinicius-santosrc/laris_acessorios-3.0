@@ -21,6 +21,7 @@ const host = process.env.DB_HOST;
 const user = process.env.DB_USER;
 const pass = process.env.DB_PASSWORD;
 const secretKey = process.env.secretKey;
+const databaseKey = process.env.database
 
 const maxRetries = 5;
 let attempts = 0;
@@ -32,7 +33,7 @@ const pool = mysql.createPool({
     host: host,
     user: user,
     password: pass,
-    database: 'u637683078_laris_acc',
+    database: databaseKey,
     ssl: {
         rejectUnauthorized: false,
     },
@@ -65,8 +66,6 @@ app.use(cors());
 
 app.use(bodyParser.json({ limit: '50mb' })); // Aumenta o limite para 50MB
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-
-
 
 //*?//
 //Stripe Pagamentos
