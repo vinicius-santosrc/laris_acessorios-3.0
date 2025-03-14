@@ -8,7 +8,7 @@
  */
 
 import { Account, Client, Databases } from 'appwrite'
-import { createUserWithEmailAndPassword, getAuth, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { UserAuthProps } from '@/lib/utils';
 import { UserProps } from '@/models/user';
@@ -19,13 +19,16 @@ const endpoint = process.env.REACT_APP_API_ENDPOINT;
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
 const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
 
+const endPointAppWrite: string | undefined = process.env.REACT_APP_API_ENDPOINT_APPWRITE;
+const projectAppWrite: string | undefined = process.env.REACT_APP_API_PROJECT_APPWRITE;
+
 class authService {
     private client: Client;
     private database: Databases;
 
     constructor() {
         this.client = new Client();
-        this.client.setEndpoint("https://cloud.appwrite.io/v1").setProject("651c17501139519bc5a2");
+        if(endPointAppWrite && projectAppWrite) this.client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
         this.database = new Databases(this.client);
     }
 
