@@ -67,8 +67,8 @@ const Success = () => {
                         <div className="order-info-card">
                             <h3>Informações do Comprador</h3>
                             <ul>
-                                <li><strong>Nome:</strong> {userComprador.nome_completo}</li>
-                                <li><strong>Email:</strong> {userComprador.email}</li>
+                                <li><strong>Nome:</strong> {userComprador && userComprador.nome_completo}</li>
+                                <li><strong>Email:</strong> {userComprador && userComprador.email}</li>
                             </ul>
                         </div>
                         <div className="order-info-card">

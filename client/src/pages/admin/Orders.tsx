@@ -56,6 +56,7 @@ const Orders = () => {
                             <Table.ColumnHeader>Data</Table.ColumnHeader>
                             <Table.ColumnHeader>Total</Table.ColumnHeader>
                             <Table.ColumnHeader>Status</Table.ColumnHeader>
+                            <Table.ColumnHeader>Situação</Table.ColumnHeader>
                             <Table.ColumnHeader>Ações</Table.ColumnHeader>
                         </Table.Header>
                         <Table.Body>
@@ -93,6 +94,7 @@ const Orders = () => {
                                                 </SelectContent>
                                             </SelectRoot>
                                         </Table.Cell>
+                                        <Table.Cell>{order.situation}</Table.Cell>
                                         <Table.Cell>
                                             <button onClick={() => window.open(window.location.origin + "/account/orders/" + order.id)} className="action-button">Ver Detalhes</button>
                                         </Table.Cell>
