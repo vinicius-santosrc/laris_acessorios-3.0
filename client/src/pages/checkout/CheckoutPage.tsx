@@ -15,11 +15,12 @@ import authService from "../../services/authService";
 import { UserProps } from "../../models/user";
 import { CepProps } from "../../models/cep";
 import { orderService } from "../../services/orderService";
-import { CardElement, PaymentElement } from "@stripe/react-stripe-js";
+import { PaymentElement } from "@stripe/react-stripe-js";
 import { useElements, useStripe } from "@stripe/react-stripe-js";
 import { OrderProps } from "../../models/order";
 import { cartService } from "../../services/cartService";
 import productService from "../../services/productService";
+import Footer from "../../components/geral/footer/Footer";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -317,7 +318,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                 await orderService.create(orderContent)
                     .then((res) => {
                         window.location.href = window.location.origin + `/success/` + orderUid;
-                })
+                    })
             }
             catch (error) {
                 console.error("Error finalizing purchase:", error);
@@ -330,7 +331,20 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     };
 
     if (items.length <= 0) {
-        return
+        return <>
+            <section className="not-found-page">
+                <div className="not-found-page__inside">
+                    <h1 className="not-found-page__title">SUA SACOLA ESTÁ VAZIA.</h1>
+                    <p className="not-found-page__message">
+                        Para continuar comprando, navegue pelas categorias do site ou faça uma busca pelo seu produto.
+                    </p>
+                    <a href="/" className="not-found-page__button">
+                        Escolher produtos
+                    </a>
+                </div>
+            </section>
+            <Footer />
+        </>
     }
 
     return (

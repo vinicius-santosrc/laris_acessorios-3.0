@@ -64,7 +64,7 @@ const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }: any)
                                             {item?.options?.map((option, optionIndex) => (
                                                 <div key={optionIndex} className="option-container">
                                                     <Checkbox
-                                                        checked={selectedFilters[item.title]?.includes(option.value)} // Mudamos para usar 'value'
+                                                        checked={selectedFilters[item.title]?.includes(option)} // Mudamos para usar 'value'
                                                         onChange={() => onFilterChange(item.title, option)} // Passando o valor correto
                                                     >
                                                         {option.label}

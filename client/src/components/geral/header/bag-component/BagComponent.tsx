@@ -57,7 +57,7 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
     ];
 
     return (
-        <DrawerRoot>
+        <DrawerRoot size={"xs"}>
             <DrawerBackdrop />
             <DrawerTrigger>
                 <Button onClick={() => setBagOpen(!isBagOpen)} variant="ghost" aria-label="Sacola de Compras">

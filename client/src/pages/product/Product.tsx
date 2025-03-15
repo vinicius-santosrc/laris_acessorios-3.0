@@ -36,11 +36,13 @@ const ProductPage = () => {
 
         const fetchProduct = async () => {
             try {
-                const fetchedProduct = await productService.getByURL(product_url);
+                const fetchedProduct: Product = await productService.getByURL(product_url);
                 setProduct(fetchedProduct);
                 setSizes(JSON.parse(fetchedProduct.tamanhos))
                 setPhotos(JSON.parse(fetchedProduct.photoURL));
                 setLoading(false);
+
+                document.title = `${fetchedProduct.name_product} - LARIS ACESSÓRIOS`
             } catch (err: any) {
                 setError(err.toString());
                 setLoading(false);

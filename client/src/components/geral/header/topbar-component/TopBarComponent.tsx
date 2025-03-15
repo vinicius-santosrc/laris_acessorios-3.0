@@ -10,6 +10,10 @@ interface TopBarComponentProps {
 const TopBarComponent: React.FC<TopBarComponentProps> = ({ text }) => {
 
     const [isShowing, setShowing] = useState<boolean>(true);
+
+    if (window.location.href.includes("checkout")) {
+        return 
+    }
     
     return (
         <section className="topbar-wrapper">

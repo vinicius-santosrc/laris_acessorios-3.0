@@ -26,9 +26,11 @@ const Home = () => {
         getFacilitys();
         window.addEventListener("resize", checkMobileView);
 
+        document.title = `LARIS ACESSÓRIOS - Acessórios baratos, Entrega Rápida`;
         return () => {
             window.removeEventListener("resize", checkMobileView);
         };
+
     }, []);
 
     const getFacilitys = async () => {
