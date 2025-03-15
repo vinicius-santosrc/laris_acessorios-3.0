@@ -247,6 +247,7 @@ export const ProductsAdminPage = () => {
                             <Table.Root size="sm">
                                 <Table.Header>
                                     <Table.Row className="rowTable">
+                                        <Table.ColumnHeader></Table.ColumnHeader>
                                         <Table.ColumnHeader>Foto</Table.ColumnHeader>
                                         <Table.ColumnHeader>Nome</Table.ColumnHeader>
                                         {!isMobile && <Table.ColumnHeader>Categorias</Table.ColumnHeader>}
