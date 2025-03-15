@@ -10,7 +10,7 @@
 .product-principal-pics .product-pics img {
     width: 430px;
     height: 430px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .product-principal-pics .product-one-pic img {
