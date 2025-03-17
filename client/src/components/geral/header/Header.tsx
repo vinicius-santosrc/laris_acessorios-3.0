@@ -146,7 +146,7 @@ const Header = () => {
                     </section>
 
                     <section className="header-inside-content header-inside-content__logo">
-                        <Link to={window.location.origin}>
+                        <Link to={window.location.origin} target="_parent">
                             <Image src={logoHeader} alt="Logotipo" className="logo-image" />
                         </Link>
                     </section>
@@ -171,7 +171,7 @@ const Header = () => {
                                     onMouseLeave={handleMouseLeave}
                                 >
                                     <Link
-                                        target={categoria.is_link === 1 ? "_parent" : "_self"}
+                                        target={categoria.is_link === 1 ? "_parent" : "_parent"}
                                         to={
                                             categoria.is_link === 0
                                                 ? window.location.origin + categoria.href
@@ -210,7 +210,7 @@ const Header = () => {
                     </section>
 
                     <section className="header-inside-content header-inside-content__logo">
-                        <Link to={window.location.origin}>
+                        <Link to={window.location.origin} target="_parent">
                             <Image src={logoHeader} alt="Logotipo" className="logo-image" />
                         </Link>
                     </section>

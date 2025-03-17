@@ -15,13 +15,13 @@ const SubHeaderComponent: React.FC<any> = ({ itemHover, isOpen }) => {
                             {itemHover?.subItems.map((item: any, id: number) => {
                                 return (
                                     <div key={id} className="item-component">
-                                        <Link to={item.href}><h1>{item.title}</h1></Link>
+                                        <Link target="_parent" to={item.href}><h1>{item.title}</h1></Link>
                                     </div>
                                 );
                             })}
                         </div>
                         <div className="subheader-bottom">
-                            <Link to={window.location.origin}><span><b>Conheça todos nossos produtos</b></span></Link>
+                            <Link target="_parent" to={window.location.origin}><span><b>Conheça todos nossos produtos</b></span></Link>
                         </div>
                     </div>
                     <div className="subheader-right-side">

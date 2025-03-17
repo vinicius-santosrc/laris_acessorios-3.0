@@ -96,7 +96,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
                                 {menuItems?.map((item, id) => {
                                     if (!item.is_link) {
                                         return (
-                                            <Link onClick={closeMainDrawer} to={item.href || "javascript:;"} key={id}>
+                                            <Link target="_parent" onClick={closeMainDrawer} to={item.href || "javascript:;"} key={id}>
                                                 <div className="drawer-menu__item">
                                                     <div>
                                                         <p>{item.title.toUpperCase()}</p>
@@ -151,7 +151,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
                                 {menuItems
                                     .find(item => item.title === activeCollection)
                                     ?.subItems?.map((subItem: any, subId: number) => (
-                                        <Link onClick={closeSubDrawer} to={subItem.href || "javascript:;"} key={subId}>
+                                        <Link target="_parent" onClick={closeSubDrawer} to={subItem.href || "javascript:;"} key={subId}>
                                             <div className="drawer-menu__item">
                                                 <div>
                                                     <p>{subItem.title}</p>
