@@ -10,6 +10,7 @@ import { Button } from "../../components/ui/button";
 import { ArrowLeft, DollarSignIcon } from "lucide-react";
 import authService from "../../services/authService";
 import { Loader } from "../../components/ui/loader";
+import { Separator } from "@chakra-ui/react";
 
 const AccountOrders = () => {
     const [orderAtual, setOrderAtual] = useState<OrderAfterBuyProps | null>(null);
@@ -79,7 +80,6 @@ const AccountOrders = () => {
     const items = JSON.parse(orderAtual.items);
     const address = JSON.parse(orderAtual.address);
     const user = JSON.parse(orderAtual.user);
-
     return (
         <React.Fragment>
             <div className="back-button">
@@ -111,10 +111,15 @@ const AccountOrders = () => {
                     <p><strong>Forma de Pagamento:</strong> {orderAtual.paymentOption === "CART" ? "Cartão de Crédito" : "Pix"}</p>
                     <p><strong>Valor Total:</strong> R${orderAtual.order_totalprice.toFixed(2)}</p>
                     <p><strong>Desconto Aplicado:</strong> R${orderAtual.desconto.toFixed(2)}</p>
+                    <Separator />
+                    <br />
+                    <p><strong>Nome: </strong> {user.nome_completo}</p>
+                    <p><strong>CPF:</strong> {user.cpf}</p>
+                    <p><strong>Telefone para contato:</strong> {user?.telefone}</p>
                 </div>
                 {/* Resumo do Pedido */}
                 <div className="order-summary">
-                    <h2>Endereço de Entrega</h2>
+                    <h2>Entrega</h2>
                     <p><strong>Endereço de Entrega:</strong> {address.endereço}, {address.numero}, {address.bairro} - {address.cidade}/{address.estado} ({address.cep})</p>
                     <p><strong>Referência:</strong> {address.referencia}</p>
 

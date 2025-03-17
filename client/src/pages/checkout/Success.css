@@ -14,6 +14,13 @@
   border-radius: 8px;
 }
 
+.pix-instructions {
+  margin: auto;
+  padding-left: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 .success-header {
   text-align: center;
   margin-bottom: 40px;

@@ -174,8 +174,8 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
         setIsCepValid(true);
 
         try {
-            const shippingDays = Math.floor(Math.random() * 10) + 1;
-            const shippingCost = 10.0;
+            const shippingDays = Math.floor(Math.random() * 10) + 1; // PREVISAO DE ENTREGA
+            const shippingCost = 0; //PRECO DE ENVIO TODO
 
             setShippingDays(shippingDays);
             setShippingCost(shippingCost);
@@ -238,9 +238,11 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
         }
 
         const dadosPedido = {
-            "usuario": userAtual || userNotLogged,
+            "usuario": {
+                ...userAtual || userNotLogged,
+                "telefone": telefone
+            },
             "produtos": items,
-
         };
 
         const enderecoPedido = {
@@ -452,11 +454,8 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                         <div className="typeAddressSelected">
                                                             <div className="addressItem">
                                                                 <div className="addressItem__insideleft">
-                                                                    <p>Correios</p>
-                                                                    <p>Em até {shippingDays} dias úteis</p>
-                                                                </div>
-                                                                <div className="addressItem__insideright">
-                                                                    <p>R$ {shippingCost?.toFixed(2)}</p>
+                                                                    <p>Atenção</p>
+                                                                    <p>Após efetuar a compra, entraremos em contato via WhatsApp para combinar a entrega</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -567,6 +566,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                 </SelectTrigger>
                                                 <SelectContent background={"white"}>
                                                     {paymentsMethods.items.map((paymentMethod: any) => (
+                                                        !paymentMethod.disabled &&
                                                         <SelectItem item={paymentMethod} key={paymentMethod.value}>
                                                             {paymentMethod.label}
                                                         </SelectItem>
@@ -581,9 +581,11 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                             {paymentMethodSelected?.value == EnumPaymentMethod.Pix &&
                                                 <section className="section-payment-inside">
                                                     <div className="header-pix-content">
-                                                        <p>1. Finalize sua compra e abra o app do banco na opção Pix</p>
-                                                        <p>2. Aponte a câmera do celular para o código ou copie e cole o código</p>
-                                                        <p>3. Confira os dados e confirme seu pagamento pelo app do banco</p>
+                                                        <p>1. Conclua sua compra.</p>
+                                                        <p>2. Aguarde nosso contato para definir os detalhes da entrega e o valor final.</p>
+                                                        <p>3. Realize o pagamento via Pix utilizando o QR Code enviado pela nossa equipe.</p>
+                                                        <p>4. Envie o comprovante de pagamento pelo WhatsApp para a pessoa que entrou em contato com você.</p>
+                                                        <p>5. Agora é só aguardar ansiosamente pelo seu pedido da Laris! 💖</p>
                                                     </div>
                                                     <div className="logo-pix">
                                                         <img src={"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg/2560px-Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg.png"} alt="pix" />
@@ -656,8 +658,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                     {isCepValid && (
                                                         <div>
                                                             <p>Receber {items.length} itens em {cep}</p>
-                                                            <p>Entrega em até {shippingDays} dias úteis</p>
-                                                            <p>Custo de entrega: R$ {shippingCost?.toFixed(2)}</p>
+                                                            <p>Custo de entrega: A COMBINAR PELO WHATSAPP</p>
                                                         </div>
                                                     )}
                                                 </div>

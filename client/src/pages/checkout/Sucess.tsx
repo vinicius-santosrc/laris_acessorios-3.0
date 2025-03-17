@@ -4,8 +4,6 @@ import "./Success.css";
 import { orderService } from "../../services/orderService";
 import { Loader } from "../../components/ui/loader";
 import { Product } from "../../models/product";
-import { Copy } from "lucide-react";
-import {QrCode} from "@chakra-ui/react";
 import { OrderAfterBuyProps } from "@/models/order";
 
 const Success = () => {
@@ -14,8 +12,6 @@ const Success = () => {
     const [endereco, setEndereco] = useState<any>(null);
     const [items, setItems] = useState<any>(null);
     const [userComprador, setUserComprador] = useState<any>(null);
-    const [copied, setCopied] = useState(false);
-    const [pixCode, setPixCode] = useState("");
 
     useEffect(() => {
         const fetchOrder = async () => {
@@ -60,8 +56,18 @@ const Success = () => {
                     <p className="success-description">
                         {order.paymentOption === "CART"
                             ? "Parabéns! Seu pedido foi confirmado e está sendo preparado."
-                            : "Estamos aguardando o pagamento do seu pedido. Escaneie o QRCode abaixo ou copie o código Pix."}
+                            : "Estamos aguardando o pagamento do seu pedido. Entraremos em contato para combinar a entrega e enviar o QRCode para o pagamento via pix."}
                     </p>
+                </div>
+                <div className="pix-instructions">
+                    {order.paymentOption === "PIX" &&
+                        <>
+                            <p>1. Aguarde nosso contato para definir os detalhes da entrega e o valor final.</p>
+                            <p>2. Realize o pagamento via Pix utilizando o QR Code enviado pela nossa equipe.</p>
+                            <p>3. Envie o comprovante de pagamento pelo WhatsApp para a pessoa que entrou em contato com você.</p>
+                            <p>4. Agora é só aguardar ansiosamente pelo seu pedido da Laris! 💖</p>
+                        </>
+                    }
                 </div>
                 <div className="order-info-wrapper">
                     <div className="order-info-left">
