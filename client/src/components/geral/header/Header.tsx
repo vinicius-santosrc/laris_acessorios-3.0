@@ -150,7 +150,7 @@ const Header = () => {
                     </section>
 
                     <section className="header-inside-content header-inside-content__icons">
-                        <AccountComponent />
+                        <AccountComponent checkoutBtn={false} />
                         <Button onClick={() => { window.location.href = window.location.origin + "/account#wishlist" }} variant="ghost" aria-label="Favoritos">
                             <FavoritesIcon />
                         </Button>

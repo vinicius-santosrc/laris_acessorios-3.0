@@ -7,6 +7,8 @@ import { Product } from "../../../../models/product";
 import { TrashIcon } from "lucide-react";
 import { DataListItem, DataListRoot } from "../../../../components/ui/data-list";
 import productService from "../../../../services/productService";
+import AccountComponent from "../account-component/AccountComponent";
+import authService from "../../../../services/authService";
 
 interface BagComponentProps {
     setBagOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,8 +17,10 @@ interface BagComponentProps {
 
 const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) => {
     const [bagItems, setBagItems] = useState<Product[]>([]);
+    const [isLogged, setIsLogged] = useState(false);
 
     useEffect(() => {
+        checkIfIsLogged()
         const fetchBagItems = async () => {
             const items = await cartService.get();
             const products = await Promise.all(
@@ -29,6 +33,11 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
         };
         fetchBagItems();
     }, [isBagOpen]);
+
+    async function checkIfIsLogged() {
+        const isLogged: boolean = await authService.isLogged();
+        setIsLogged(isLogged)
+    }
 
     const handleRemove = async (productId: any) => {
         await cartService.remove(productId);
@@ -117,7 +126,11 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
                                 <DataListItem className="itemFooter" key={item.label} label={item.label} value={item.value} />
                             ))}
                         </DataListRoot>
-                        <Button onClick={finalizeBtn} className="finalizeBtn">FINALIZAR COMPRA</Button>
+                        {!isLogged ?
+                            <AccountComponent checkoutBtn={true} />
+                            :
+                            <Button onClick={finalizeBtn} aria-label="Ir para checkout" className="finalizeBtn">FINALIZAR COMPRA</Button>
+                        }
                     </DrawerFooter>
                 )}
                 <DrawerCloseTrigger />

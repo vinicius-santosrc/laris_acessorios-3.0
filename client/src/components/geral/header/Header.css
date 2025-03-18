@@ -266,6 +266,16 @@
   color: white;
 }
 
+.finalizeBtnCheckout {
+  width: 100% !important;
+  margin: 10px 0px;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+  background-color: var(--cor-principal);
+  color: white;
+}
+
 .finalizeBtn:disabled {
   width: 100%;
   margin: 10px 0px;
@@ -317,7 +327,7 @@
     z-index: 1000;
   }
 
-  .header-mobile-checkout .header-inside-content__logo img{
+  .header-mobile-checkout .header-inside-content__logo img {
     width: 240px;
     padding-left: 24px;
   }

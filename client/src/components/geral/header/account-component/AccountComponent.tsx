@@ -27,7 +27,7 @@ import { toaster } from "../../../../components/ui/toaster";
 import { formatCPF, UserAuthProps } from "../../../../lib/utils";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
-const AccountComponent = () => {
+const AccountComponent = ({ checkoutBtn }: any) => {
     const [isRegistering, setIsRegistering] = useState<boolean>(false);
     const [formValues, setFormValues] = useState<any>({});
     const [error, setError] = useState<string | null>(null);
@@ -107,7 +107,12 @@ const AccountComponent = () => {
                         type: "success",
                     })
                     setTimeout(() => {
-                        window.location.href = window.location.origin + "/account"
+                        if (checkoutBtn) {
+                            window.location.href = window.location.origin + "/checkout"
+                        }
+                        else {
+                            window.location.href = window.location.origin + "/account"
+                        }
                     }, 1000);
                 }).catch(error => {
                     toaster.create({
@@ -166,15 +171,23 @@ const AccountComponent = () => {
     return (
         <DialogRoot size={"lg"} motionPreset="slide-in-bottom" placement="center">
             <DialogTrigger asChild>
-                {!isLogged ?
-                    <Button onClick={checkIfIsLogged} variant="ghost" aria-label="Conta">
-                        <AccountIcon />
-                    </Button>
-                    :
-                    <Link to={window.location.origin + "/account"} aria-label="Conta">
-                        <AccountIcon />
-                    </Link>
-                }
+                <span style={checkoutBtn ? {width: "100%"}:null}>
+                    {!checkoutBtn ? (
+                        !isLogged ? (
+                            <Button onClick={checkIfIsLogged} variant="ghost" aria-label="Conta">
+                                <AccountIcon />
+                            </Button>
+                        ) : (
+                            <Link to={window.location.origin + "/account"} aria-label="Conta">
+                                <AccountIcon />
+                            </Link>
+                        )
+                    ) : (
+                        <Button onClick={checkIfIsLogged} variant="ghost" style={{ width: "100% !important" }} aria-label="Ir para checkout" className="finalizeBtn">
+                            FINALIZAR COMPRA
+                        </Button>
+                    )}
+                </span>
             </DialogTrigger>
             {!isLogged && <DialogContent backgroundColor={"white"} className={isMobile ? "dialogContentMobile" : ""}>
                 <DialogBody>

@@ -80,7 +80,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ amount: total * 100, paymentMethodType: paymentMethodTypes }), //total
+            body: JSON.stringify({ amount: total * 100, paymentMethodType: paymentMethodTypes }),
         })
             .then((res) => res.json())
     }, []);
@@ -128,11 +128,13 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                             const userContent: UserProps = await authService.getUserByEmail(res.email);
                             setUser(userContent);
 
+
                             setEmail(userContent.email);
                             setCPF(formatCPF(userContent.cpf));
                             setName(userContent.nome_completo);
                         } catch (error) {
                             console.error("Erro ao obter dados do usuário", error);
+                            window.location.href = window.location.origin
                         }
 
                         setLoading(false);
