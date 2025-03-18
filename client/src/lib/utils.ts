@@ -228,7 +228,7 @@ export interface paymentInsideMethod {
 
 export const paymentsMethods = createListCollection({
     items: [
-        { label: "Cartão de Crédito", value: EnumPaymentMethod.CreditCard, disabled: true },
+        { label: "Cartão de Crédito", value: EnumPaymentMethod.CreditCard, disabled: false },
         { label: "Pix", value: EnumPaymentMethod.Pix, disabled: false }
     ]
 })

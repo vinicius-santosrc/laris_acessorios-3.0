@@ -5,7 +5,7 @@ import { Edit, ShoppingCartIcon, Trash2Icon } from "lucide-react";
 import { Product } from "../../models/product";
 import { Button } from "../../components/ui/button";
 import { StepsContent, StepsItem, StepsList, StepsNextTrigger, StepsPrevTrigger, StepsRoot } from "../../components/ui/steps";
-import { Input } from "@chakra-ui/react";
+import { Checkbox, Input } from "@chakra-ui/react";
 import { LuCalendar, LuUser, LuWallet } from "react-icons/lu";
 import { SelectContent, SelectItem, SelectLabel, SelectRoot, SelectTrigger, SelectValueText } from "../../components/ui/select";
 import { EnumPaymentMethod, formatarCartaoCredito, formatCEP, formatCPF, formatTelefone, gerarUidComCaracteresENumeros, getCEPJson, parcelamentosDisponiveis, paymentInsideMethod, paymentsMethods } from "../../lib/utils";
@@ -21,6 +21,8 @@ import { OrderProps } from "../../models/order";
 import { cartService } from "../../services/cartService";
 import productService from "../../services/productService";
 import Footer from "../../components/geral/footer/Footer";
+import { ShippingService } from "../../services/shippingService";
+import { ShippingItem } from "@/models/shipping";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -32,8 +34,8 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     const [desconto, setDesconto] = useState<number>(0);
     const [cep, setCep] = useState<string>("");
 
-    const [shippingDays, setShippingDays] = useState<number | null>(null);
-    const [shippingCost, setShippingCost] = useState<number | null>(null);
+    const [shippingDays, setShippingDays] = useState<any>(null);
+    const [shippingCost, setShippingCost] = useState<any>(null);
     const [isCepValid, setIsCepValid] = useState<boolean>(false);
 
     const [estado, setEstado] = useState<any>(null);
@@ -48,6 +50,9 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     const [name, setName] = useState<string>("");
     const [cpf, setCPF] = useState<string>("");
     const [telefone, setTel] = useState<string>("");
+
+    const [shippingDetails, setShippingDetails] = useState<ShippingItem[]>([]);
+    const [shipMethodSelected, setShipMethod] = useState<ShippingItem>();
 
     //States for Step 1
 
@@ -95,6 +100,10 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
             window.removeEventListener('resize', checkMobile);
         };
     }, []);
+
+    useEffect(() => {
+        calculateTotal(items);
+    }, [shippingCost, subtotal, items]);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -145,7 +154,6 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
         const newSubtotal = items.reduce((acc, item) => acc + item.price, 0);
         let descontoTotal = 0;
 
-        // Resetar o desconto antes de calcular
         items.forEach((item) => {
             if (item.desconto > 0) {
                 descontoTotal += item.desconto;
@@ -154,8 +162,15 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
 
         setSubtotal(newSubtotal);
         setDesconto(descontoTotal);
-        const deliveryCost = shippingCost || 0;
+        const deliveryCost = Number(shippingCost) || 0;
         setTotal(newSubtotal - descontoTotal + deliveryCost);
+    };
+
+    const selectShippingMethod = (shippingItem: ShippingItem) => {
+        setShipMethod(shippingItem);
+        setShippingDays(shippingItem.delivery_time);
+        setShippingCost(shippingItem.price);
+        calculateTotal(items);
     };
 
     const removeItemFromCart = (itemId: any) => {
@@ -174,14 +189,13 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
         setIsCepValid(true);
 
         try {
-            const shippingDays = Math.floor(Math.random() * 10) + 1; // PREVISAO DE ENTREGA
-            const shippingCost = 0; //PRECO DE ENVIO TODO
-
-            setShippingDays(shippingDays);
-            setShippingCost(shippingCost);
-            calculateTotal(items);
-
             const cepReturned: CepProps = await getCEPJson(cep);
+            const detailsShipping: any = await ShippingService.getShippingOptionsByCep(cep);
+            setShippingDetails(detailsShipping);
+            calculateTotal(items);
+            if (!cepReturned.localidade) {
+                setIsCepValid(false);
+            }
 
             if (!cepReturned.localidade) {
                 toaster.create({
@@ -202,7 +216,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     };
 
     const handleFinalizePurchase = async () => {
-        if (email == "" || name == "" || cpf == "" || cep == "" || telefone == "" || total == 0 || !paymentMethodSelected) {
+        if (email == "" || name == "" || cpf == "" || cep == "" || telefone == "" || total == 0 || !paymentMethodSelected || !shipMethodSelected?.id) {
             toaster.create({
                 title: "Preencha todas as informações"
             })
@@ -252,8 +266,11 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
             "estado": estado,
             "cep": cep,
             "referencia": referencia,
-            "numero": numero
-
+            "numero": numero,
+            "shippingMethodSelected": shipMethodSelected,
+            "shippingCust": shipMethodSelected?.price,
+            "shippingDeliveryTime": shipMethodSelected?.delivery_time,
+            "codigoRastreio": ""
         };
 
         const orderContent: OrderProps = {
@@ -391,7 +408,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                                     {item.desconto > 0 ?
                                                                         <h1><s style={{ color: "gray" }}> R$ {(item.price).toFixed(2)}</s> R$ {(item.price - item.desconto).toFixed(2)}</h1>
                                                                         :
-                                                                        <h1>R$ {(item.price - item.desconto).toFixed(2)}</h1>
+                                                                        <h1 style={{ color: "#be0a45"}}>R$ {(item.price - item.desconto).toFixed(2)}</h1>
                                                                     }
                                                                     <div className="item-right">
                                                                         <Button onClick={() => removeItemFromCart(item.id)}><Trash2Icon /></Button>
@@ -451,13 +468,30 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                 {isCepValid ? (
                                                     <>
                                                         <label><b>Receber</b> {items.length} itens em <span>{cep}</span> <Button onClick={() => { setIsCepValid(false) }}><Edit /></Button></label>
+                                                        {!shipMethodSelected?.id && <label style={{ color: "red" }}>* Selecione uma opção de frete</label>}
                                                         <div className="typeAddressSelected">
-                                                            <div className="addressItem">
-                                                                <div className="addressItem__insideleft">
-                                                                    <p>Atenção</p>
-                                                                    <p>Após efetuar a compra, entraremos em contato via WhatsApp para combinar a entrega</p>
-                                                                </div>
-                                                            </div>
+                                                            {shippingDetails.map((item: ShippingItem) => {
+                                                                return (
+                                                                    <div key={item.name}>
+                                                                        <Checkbox.Root width={"full"} checked={shipMethodSelected?.id === item.id}>
+                                                                            <Checkbox.HiddenInput />
+                                                                            <Checkbox.Control />
+                                                                            <Checkbox.Label width={"full"} style={{width: "100% !importabt"}} cursor={"pointer"} color={"black"}>
+                                                                                <div onClick={() => selectShippingMethod(item)} className="addressItem">
+                                                                                    <div className="addressItem">
+                                                                                        <div className="addressItem__insideleft">
+                                                                                            <p>{item.company.name}</p>
+                                                                                            <p>Em até {item.delivery_time} dias úteis</p>
+                                                                                        </div>
+                                                                                        <div className="addressItem__insideright">
+                                                                                            <p>{item.currency} {item.price}</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div></Checkbox.Label>
+                                                                        </Checkbox.Root>
+                                                                    </div>
+                                                                )
+                                                            })}
                                                         </div>
                                                     </>
                                                 ) : (
@@ -657,8 +691,10 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                     <p>CEP: {cep ? cep : "Cep não indicado"}</p>
                                                     {isCepValid && (
                                                         <div>
-                                                            <p>Receber {items.length} itens em {cep}</p>
-                                                            <p>Custo de entrega: A COMBINAR PELO WHATSAPP</p>
+                                                            <p>Receber {items.length} itens em {cep} ({cidade} / {bairro} / {endereco})</p>
+                                                            <p>Seu pedido será entregue em {shipMethodSelected?.delivery_time} dias após ser enviado.</p>
+                                                            <p>{shipMethodSelected?.company.name} - {shipMethodSelected?.name}</p>
+                                                            <p>Custo de entrega: {shipMethodSelected?.currency} {shipMethodSelected?.price}</p>
                                                         </div>
                                                     )}
                                                 </div>
@@ -676,13 +712,13 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                         <DataListRoot unstyled size={"md"} width={"full"} className="item-data-list" orientation="horizontal">
                                             <DataListItem className="item-data-list-prices" label={"Subtotal"} value={"R$ " + subtotal.toFixed(2)} />
                                             <DataListItem className="item-data-list-prices" label={"Desconto"} value={"R$ " + desconto.toFixed(2)} />
-                                            <DataListItem className="item-data-list-prices" label={"Entrega"} value={"R$ " + (shippingCost ? shippingCost?.toFixed(2) : "A DEFINIR")} />
+                                            <DataListItem className="item-data-list-prices" label={"Entrega"} value={"R$ " + (shippingCost ? shippingCost : "A DEFINIR")} />
                                             <DataListItem className="item-data-list-prices-principal" label={"Total"} value={"R$ " + total.toFixed(2)} />
                                         </DataListRoot>
                                         <div className="actions-buttons">
                                             {step != 2 ?
                                                 <StepsNextTrigger width={'full'} onClick={() => setStep(step + 1)}>
-                                                    <button className="finalize-btn">
+                                                    <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="finalize-btn">
                                                         <span>PROSSEGUIR PARA COMPRA</span>
                                                     </button>
                                                 </StepsNextTrigger>
@@ -697,7 +733,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                     <span>VOLTAR</span>
                                                 </button>
                                             </StepsPrevTrigger>
-                                            <button className="continue_buyingBtn">
+                                            <button onClick={() => window.location.href = window.location.origin} className="continue_buyingBtn">
                                                 Continuar comprando
                                             </button>
                                         </div>
@@ -709,7 +745,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                     </div>
                 </div>
             </StepsRoot>
-
+            <Footer />
         </section>
     )
 }

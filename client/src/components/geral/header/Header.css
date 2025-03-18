@@ -309,6 +309,17 @@
 
   .header-mobile-checkout {
     display: block;
+    top: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    background-color: white;
+    z-index: 1000;
+  }
+
+  .header-mobile-checkout .header-inside-content__logo img{
+    width: 240px;
+    padding-left: 24px;
   }
 
   .modal-left-side {

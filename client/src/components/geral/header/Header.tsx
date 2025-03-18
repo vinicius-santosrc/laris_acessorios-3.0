@@ -99,7 +99,7 @@ const Header = () => {
                             </section>
 
                             <section className="header-inside-content header-inside-content__icons">
-
+                                <Image src={"https://pandorajoiasio.vteximg.com.br/arquivos/ambienteseguro.png"} alt="Ambiente seguro" />
                             </section>
                         </div>
                     </header>
@@ -107,16 +107,14 @@ const Header = () => {
 
                 <header className={"header-application-mobile header-application__wrapper " + window.location.href.includes('/checkout') && "header-mobile-checkout"}>
                     <div className="header-app-top-content header-app-top-content__wrapper">
-                        <section className="header-inside-content header-inside-content__search">
-                        </section>
 
                         <section className="header-inside-content header-inside-content__logo">
                             <Link to={window.location.origin} target="_parent">
                                 <Image src={logoHeader} alt="Logotipo" className="logo-image" />
                             </Link>
                         </section>
-
                         <section className="header-inside-content header-inside-content__icons">
+                            <Image src={"https://pandorajoiasio.vteximg.com.br/arquivos/ambienteseguro.png"} alt="Ambiente seguro" />
                         </section>
                     </div>
                 </header>

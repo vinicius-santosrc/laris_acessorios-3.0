@@ -21,7 +21,8 @@ const host = process.env.DB_HOST;
 const user = process.env.DB_USER;
 const pass = process.env.DB_PASSWORD;
 const secretKey = process.env.secretKey;
-const databaseKey = process.env.database
+const databaseKey = process.env.database;
+const bearerTokenMelhorEnvio = process.env.bearerTokenMelhorEnvio;
 
 const maxRetries = 5;
 let attempts = 0;
@@ -342,7 +343,7 @@ app.post(`/api/v1/${secretKey}/users/add`, (req, res) => {
 
 app.get(`/api/v1/${secretKey}/products`, (req, res) => {
     pool.query('SELECT id, name_product, price, desconto, disponibilidade, tamanhos, quantidade_disponivel, categoria, url, tipo, photoURL, extensor, type_full_label, categoryList, description FROM produtos', (err, result) => {
-    if (err) {
+        if (err) {
             res.status(500).json({ error: 'Erro ao obter dados' });
         } else {
             res.json(result);
@@ -718,6 +719,38 @@ app.post(`/api/v1/${secretKey}/products/changevisibility`, (req, res) => {
     });
 })
 
+//SHIPPING 
+
+app.post("/shipping/calculate", async (req, res) => {
+    const body = req.body;
+    const fromCep = "37558-610";
+    const toCep = body.to.postal_code;
+
+    try {
+        const response = await fetch(`https://www.melhorenvio.com.br/api/v2/me/shipment/calculate?`, {
+            headers: {
+                "Authorization": `Bearer ${bearerTokenMelhorEnvio}`,
+                "User-Agent": "Aplicação larisacessorios.loja@gmail.com"
+            },
+            method: "POST",
+            body: JSON.stringify({
+                "from": { "postal_code": fromCep },
+                "to": { "postal_code": toCep },
+                "package": {
+                    "height": 2,
+                    "width": 12,
+                    "length": 17,
+                    "weight": 0.5
+                }
+            })
+        });
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        console.error("Erro ao calcular frete:", error);
+        res.status(500).json({ error: "Erro ao calcular frete." });
+    }
+});
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);

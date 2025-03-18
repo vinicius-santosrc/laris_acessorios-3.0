@@ -33,6 +33,41 @@ const Footer = () => {
         }
     ];
 
+    if (window.location.href.includes("/checkout")) {
+        return (
+            <footer className="checkout-footer">
+                <div className="checkout-footer-container">
+                    <div className="checkout-footer-item">
+                        <h3>ENTREGAS & TROCAS</h3>
+                        <p>A Laris Acessórios oferece entregas via Correios e Jadlog para todas as entregas e a possibilidade de trocar ou devolver suas criações sem nenhum custo em até 7 dias.</p>
+                        <div className="checkout-footer-links">
+                            <Link to="?entrega">Ver entrega</Link>
+                            <Link to="?devolucoes">Ver devoluções</Link>
+                        </div>
+                    </div>
+                    <div className="checkout-footer-item">
+                        <h3>EMBALAGEM</h3>
+                        <p>Seu pedido será enviado em uma caixa e dentro, uma icônica embalagem Laris Acessórios.</p>
+                    </div>
+                    <div className="checkout-footer-item">
+                        <h3>PAGAMENTO E ENVIO 100% SEGURO</h3>
+                        <p>A Laris Acessórios garante a segurança no pagamento e envio de seu pedido.</p>
+                        <div className="checkout-footer-payment-icons">
+                            <span>Visa</span>
+                            <span>MasterCard</span>
+                            <span>Elo</span>
+                            <span>Pix</span>
+                        </div>
+                    </div>
+                    <div className="checkout-footer-item">
+                        <h3>GARANTIA DE AUTENTICIDADE</h3>
+                        <p>A Laris Acessórios assegura a autenticidade de todos os produtos comprados em nossa e-Boutique.</p>
+                    </div>
+                </div>
+            </footer>
+        )
+    }
+
     return (
         <React.Fragment>
             <footer className="footer-group footer-desktop footer-wrapper">

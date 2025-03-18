@@ -120,6 +120,10 @@ const AccountOrders = () => {
                 {/* Resumo do Pedido */}
                 <div className="order-summary">
                     <h2>Entrega</h2>
+                    <p><strong>{address?.shippingMethodSelected?.company.name} - {address?.shippingMethodSelected?.name}</strong></p>
+                    <p><strong>Seu pedido será entregue em {address?.shippingMethodSelected?.delivery_time} dias após ser enviado.</strong></p>
+                    <p><strong>Código para rastreio do pedido: <u>{address?.codigoRastreio}</u></strong></p>
+                    <br />
                     <p><strong>Endereço de Entrega:</strong> {address.endereço}, {address.numero}, {address.bairro} - {address.cidade}/{address.estado} ({address.cep})</p>
                     <p><strong>Referência:</strong> {address.referencia}</p>
 

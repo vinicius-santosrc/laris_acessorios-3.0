@@ -73,21 +73,63 @@
 
 .items-component-checkout label span {
   color: var(--cor-principal);
+  width: 100% !important;
 }
 
 .typeAddressSelected {
-  border: 1px solid #d8d8d8;
-  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  width: 100%;
+  border-radius: 8px;
+  background-color: #f9f9f9;
 }
 
 .addressItem {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
+  padding: 12px;
+  width: 100% !important;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
+.addressItem:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.addressItem__insideleft p:first-child {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.addressItem__insideleft p:last-child {
+  font-size: 12px;
+  color: #777;
+}
+
+.addressItem__insideright p {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+input[type="checkbox"]:checked::after {
+  content: '\2713';
+  font-size: 14px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 label#title {
   font-size: 18px;
 }
@@ -199,7 +241,7 @@ label#title {
   }
 
   .checkout-page-wrapper {
-    margin-top: 140px;
+    margin-top: 00px;
   }
 
   .box-checkout-right {
