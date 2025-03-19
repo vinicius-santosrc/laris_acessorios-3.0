@@ -30,7 +30,7 @@ export class ShippingService {
             }
 
             const data: ShippingItem[] = await response.json();
-            const dataFiltered = data.filter((item: ShippingItem) => item.name == "SEDEX" || item.name == ".Package");
+            const dataFiltered = data.filter((item: ShippingItem) => item.error == undefined && item.company.name == "Correios" || item.name == ".Package");
             return dataFiltered;
         } catch (error) {
             console.error("Erro ao buscar opções de frete:", error);

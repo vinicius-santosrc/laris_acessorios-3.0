@@ -541,7 +541,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                                                 <div onClick={() => selectShippingMethod(item)} className="addressItem">
                                                                                     <div className="addressItem">
                                                                                         <div className="addressItem__insideleft">
-                                                                                            <p>{item.company.name}</p>
+                                                                                            <p>{item.company.name} ({item.name})</p>
                                                                                             {item.company.name != "Retirada" ? <p>Em até {item.delivery_time} dias úteis</p> : <>Retire o produto em Pouso Alegre - MG</>}
                                                                                         </div>
                                                                                         <div className="addressItem__insideright">
