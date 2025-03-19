@@ -97,7 +97,7 @@ function App() {
           method: "POST",
           body: JSON.stringify({ "item": 1 * 100 }),
           headers: {
-            'Authorization': `Bearer ${process.env.REACT_APP_STRIPE_SECRET_KEY_PRODUCTION}`,
+            'Authorization': `Bearer ${process.env.REACT_APP_STRIPE_SECRET_KEY_PRODUCTION}`, //USE REACT_APP_STRIPE_SECRET_KEY_PRODUCTION para producao
             'Content-Type': 'application/json'
           }
         });
@@ -159,9 +159,9 @@ function App() {
               path='/checkout'
               element={clientSecret && stripePromise ? (
                 <Elements stripe={stripePromise} options={{
-                  paymentMethodTypes: ['card', 'pix'], 
+                  paymentMethodTypes: ['card'], 
                   appearance: { variables: { colorPrimaryText: '#be0a45', colorDanger: "#be0a45" } }, mode: "payment", amount: 1 * 100, currency: 'brl',  }}>
-                  <CheckoutPage paymentMethodTypes={['card', 'pix']} clientSecret={clientSecret} />
+                  <CheckoutPage paymentMethodTypes={['card']} clientSecret={clientSecret} />
                 </Elements>
               ) : (
                 <Loader />

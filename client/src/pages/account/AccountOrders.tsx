@@ -121,10 +121,10 @@ const AccountOrders = () => {
                 <div className="order-summary">
                     <h2>Entrega</h2>
                     <p><strong>{address?.shippingMethodSelected?.company.name} - {address?.shippingMethodSelected?.name}</strong></p>
-                    <p><strong>Seu pedido será entregue em {address?.shippingMethodSelected?.delivery_time} dias após ser enviado.</strong></p>
-                    <p><strong>Código para rastreio do pedido: <u>{address?.codigoRastreio}</u></strong></p>
+                    {address?.shippingMethodSelected?.company.name != "Retirada" ? <p><strong>Seu pedido será entregue em {address?.shippingMethodSelected?.delivery_time} dias após ser enviado.</strong></p> : "Entraremos em contato via WhatsApp para definir um local em Pouso Alegre MG para retirada de seu produto"}
+                    {address?.shippingMethodSelected?.company.name != "Retirada" && <p><strong>Código para rastreio do pedido: <u>{address?.codigoRastreio}</u></strong></p>}
                     <br />
-                    <p><strong>Endereço de Entrega:</strong> {address.endereço}, {address.numero}, {address.bairro} - {address.cidade}/{address.estado} ({address.cep})</p>
+                    <p><strong>Endereço {address?.shippingMethodSelected?.company.name != "Retirada" ? "de Entrega" : ""}:</strong> {address.endereço}, {address.numero}, {address.bairro} - {address.cidade}/{address.estado} ({address.cep})</p>
                     <p><strong>Referência:</strong> {address.referencia}</p>
 
                     {/* Timeline de Status do Pedido */}

@@ -1,6 +1,5 @@
 /* Estilos principais para a página de sucesso */
 .success-page {
-  background-color: var(--cinza-principal);
   padding: 40px 0;
   font-family: "Arial", sans-serif;
 }
@@ -9,8 +8,6 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
 
@@ -28,7 +25,7 @@
 
 .success-title {
   font-size: 36px;
-  color: var(--cor-principal);
+  color: black;
   font-weight: bold;
 }
 
@@ -55,16 +52,13 @@
 }
 
 .order-info-card {
-  background-color: #f9f9f9;
-  border: 1px solid #e0e0e0;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .order-info-card h3 {
   font-size: 20px;
-  color: var(--cor-principal);
+  color: black;
   margin-bottom: 10px;
 }
 
@@ -90,18 +84,38 @@
 }
 
 .order-items-card {
-  background-color: #f9f9f9;
-  border: 1px solid #e0e0e0;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 500px;
 }
 
+.success {
+  text-align: center;
+  margin: auto;
+  border-radius: 100%;
+  background-color: green;
+  width: 60px;
+  height: 60px;
+  font-size: 30px;
+  margin-bottom: 42px;
+}
+
+.warning {
+  text-align: center;
+  margin: auto;
+  border-radius: 100%;
+  background-color: green;
+  width: 60px;
+  height: 60px;
+  font-size: 25px;
+  padding: 2px;
+  margin-bottom: 42px;
+}
+
 .order-items-card h3 {
   font-size: 20px;
-  color: var(--cor-principal);
+  color: black;
   margin-bottom: 10px;
 }
 

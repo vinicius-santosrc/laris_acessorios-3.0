@@ -5,6 +5,8 @@ import { orderService } from "../../services/orderService";
 import { Loader } from "../../components/ui/loader";
 import { Product } from "../../models/product";
 import { OrderAfterBuyProps } from "@/models/order";
+import { CheckIcon, LoaderCircle, LoaderIcon, LoaderPinwheel } from "lucide-react";
+import { FaMoneyBill, FaMoneyBillWave } from "react-icons/fa";
 
 const Success = () => {
     const { uid } = useParams();
@@ -33,7 +35,7 @@ const Success = () => {
 
     function getPaymentMethodLabel(paymentMethod: any) {
         if (paymentMethod === 'CART') {
-            return "Cartão"
+            return "Cartão de Crédito"
         }
         else {
             return "Pix"
@@ -47,15 +49,18 @@ const Success = () => {
     return (
         <section className="success-page">
             <div className="success-container">
+                <div className="success-icon">
+                    {order.paymentOption === "CART" ? (<CheckIcon className="success" color="white" />) : (<FaMoneyBillWave className="warning" color="white" />)}
+                </div>
                 <div className="success-header">
                     {order.paymentOption === "CART" ? (
-                        <h1 className="success-title">Compra Realizada com Sucesso!</h1>
+                        <h1 className="success-title">OBRIGADO, {userComprador?.nome_completo.toUpperCase()}!</h1>
                     ) : (
                         <h1 className="success-title">Aguardando o pagamento do seu pedido...</h1>
                     )}
                     <p className="success-description">
                         {order.paymentOption === "CART"
-                            ? "Parabéns! Seu pedido foi confirmado e está sendo preparado."
+                            ? "Seu pedido foi confirmado e será enviado uma confirmação para você no seu e-mail. Após o produto ser enviado, você também receberá um e-mail com o código de rastreamento."
                             : "Estamos aguardando o pagamento do seu pedido. Entraremos em contato para combinar a entrega e enviar o QRCode para o pagamento via pix."}
                     </p>
                 </div>
@@ -86,6 +91,19 @@ const Success = () => {
                                 <li><strong>Cidade:</strong> {endereco?.cidade} - {endereco?.estado}</li>
                                 <li><strong>CEP:</strong> {endereco?.cep}</li>
                                 <li><strong>Referência:</strong> {endereco?.referencia}</li>
+                                <br />
+                                {endereco?.shippingMethodSelected?.company.name != "Retirada" ?
+                                    <>
+                                        <li><strong>{endereco?.shippingMethodSelected?.company.name} - {endereco?.shippingMethodSelected?.name}</strong></li>
+                                        <li><strong>Seu pedido será entregue em {endereco?.shippingMethodSelected?.delivery_time} dias após ser enviado.</strong></li>
+                                    </>
+                                    :
+                                    <>
+                                        <li><strong>{endereco?.shippingMethodSelected?.company.name}</strong></li>
+                                        <li><strong>Enviaremos um e-mail e entraremos em contato via WhatsApp para combinar o local de retirada.</strong></li>
+                                    </>
+                                }
+
                             </ul>
                         </div>
                         <div className="order-info-card">
@@ -97,7 +115,7 @@ const Success = () => {
                     </div>
                     <div className="order-info-right">
                         <div className="order-items-card">
-                            <h3>Itens do Pedido</h3>
+                            <h3>Produtos</h3>
                             <ul>
                                 {items.map((item: Product) => {
 

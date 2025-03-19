@@ -193,6 +193,41 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
         try {
             const cepReturned: CepProps = await getCEPJson(cep);
             const detailsShipping: any = await ShippingService.getShippingOptionsByCep(cep);
+            detailsShipping.push({
+                id: 4,
+                name: "Retirada",
+                price: "0.00",
+                custom_price: "0.00",
+                discount: "0.00",
+                currency: "R$",
+                delivery_time: 0,
+                delivery_range: {
+                    min: 0,
+                    max: 0
+                },
+                custom_delivery_time: 0,
+                custom_delivery_range: {
+                    min: 0,
+                    max: 0
+                },
+                packages: [],
+                additional_services: {
+                    receipt: false,
+                    own_hand: false,
+                    collect: false
+                },
+                additional: {
+                    unit: {
+                        price: 0,
+                        delivery: 0
+                    }
+                },
+                company: {
+                    id: 3,
+                    name: "Retirada",
+                    picture: ""
+                }
+            });
             setShippingDetails(detailsShipping);
             calculateTotal(items);
             if (!cepReturned.localidade) {
@@ -218,15 +253,14 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     };
 
     const handleFinalizePurchase = async () => {
-        if (email == "" || name == "" || cpf == "" || cep == "" || telefone == "" || total == 0 || !paymentMethodSelected || !shipMethodSelected?.id) {
+        if (email === "" || name === "" || cpf === "" || cep === "" || telefone === "" || total === 0 || !paymentMethodSelected || !shipMethodSelected?.id) {
             toaster.create({
                 title: "Preencha todas as informações"
-            })
+            });
             return;
         }
-        const orderUid: string = gerarUidComCaracteresENumeros();
 
-        let PaymentOption = "";
+        const orderUid = gerarUidComCaracteresENumeros();
 
         if (!stripe || !elements) {
             return;
@@ -251,7 +285,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
             nome_completo: name,
             photoURL: "",
             uid: ""
-        }
+        };
 
         const dadosPedido = {
             "usuario": {
@@ -285,7 +319,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
             subtotal: subtotal,
             CuponsDescontos: 0,
             CupomAtual: ''
-        }
+        };
 
         if (paymentMethodSelected?.value === EnumPaymentMethod.CreditCard) {
             try {
@@ -294,7 +328,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ item: total * 100 }), //total * 100
+                    body: JSON.stringify({ item: total * 100 }),
                 });
 
                 if (!response.ok) {
@@ -303,50 +337,44 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
 
                 const { clientSecret } = await response.json();
 
-                await orderService.create(orderContent);
-
                 const { error } = await stripe.confirmPayment({
                     elements,
                     clientSecret,
                     confirmParams: {
                         return_url: window.location.origin + `/success/` + orderUid, // Redirect after payment
                     },
+                    redirect: "if_required",
                 });
 
-                if (error.type === "card_error" || error.type === "validation_error") {
+                if (error) {
+                    console.error(error);
                     toaster.create({
                         title: "Não foi possível realizar a compra com seu cartão. Tente novamente com outro cartão ou aguarde.",
                         type: "error"
                     });
                 } else {
-                    toaster.create({
-                        title: "Algo não esperado ocorreu.",
-                        type: "error"
-                    });
+                    await orderService.create(orderContent);
+                    window.location.href = window.location.origin + `/success/` + orderUid;
                 }
             } catch (error) {
                 console.error("Error finalizing purchase:", error);
                 setErrorMessage("Error finalizing purchase. Please try again.");
                 toaster.create({
                     title: "Erro: " + error
-                })
+                });
             } finally {
                 setLoading(false);
             }
-        }
-        else if (paymentMethodSelected?.value == EnumPaymentMethod.Pix) {
+        } else if (paymentMethodSelected?.value === EnumPaymentMethod.Pix) {
             try {
-                await orderService.create(orderContent)
-                    .then((res) => {
-                        window.location.href = window.location.origin + `/success/` + orderUid;
-                    })
-            }
-            catch (error) {
+                await orderService.create(orderContent);
+                window.location.href = window.location.origin + `/success/` + orderUid;
+            } catch (error) {
                 console.error("Error finalizing purchase:", error);
                 setErrorMessage("Error finalizing purchase. Please try again.");
                 toaster.create({
                     title: "Erro: " + error
-                })
+                });
             }
         }
     };
@@ -410,7 +438,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                                     {item.desconto > 0 ?
                                                                         <h1><s style={{ color: "gray" }}> R$ {(item.price).toFixed(2)}</s> R$ {(item.price - item.desconto).toFixed(2)}</h1>
                                                                         :
-                                                                        <h1 style={{ color: "#be0a45"}}>R$ {(item.price - item.desconto).toFixed(2)}</h1>
+                                                                        <h1 style={{ color: "#be0a45" }}>R$ {(item.price - item.desconto).toFixed(2)}</h1>
                                                                     }
                                                                     <div className="item-right">
                                                                         <Button onClick={() => removeItemFromCart(item.id)}><Trash2Icon /></Button>
@@ -478,15 +506,15 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                                         <Checkbox.Root width={"full"} checked={shipMethodSelected?.id === item.id}>
                                                                             <Checkbox.HiddenInput />
                                                                             <Checkbox.Control />
-                                                                            <Checkbox.Label width={"full"} style={{width: "100% !importabt"}} cursor={"pointer"} color={"black"}>
+                                                                            <Checkbox.Label width={"full"} style={{ width: "100% !importabt" }} cursor={"pointer"} color={"black"}>
                                                                                 <div onClick={() => selectShippingMethod(item)} className="addressItem">
                                                                                     <div className="addressItem">
                                                                                         <div className="addressItem__insideleft">
                                                                                             <p>{item.company.name}</p>
-                                                                                            <p>Em até {item.delivery_time} dias úteis</p>
+                                                                                            {item.company.name != "Retirada" ? <p>Em até {item.delivery_time} dias úteis</p> : <>Retire o produto em Pouso Alegre - MG</>}
                                                                                         </div>
                                                                                         <div className="addressItem__insideright">
-                                                                                            <p>{item.currency} {item.price}</p>
+                                                                                            {item.company.name != "Retirada" ? <p>{item.currency} {item.price}</p> : <></>}
                                                                                         </div>
                                                                                     </div>
                                                                                 </div></Checkbox.Label>
@@ -694,9 +722,9 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                     {isCepValid && (
                                                         <div>
                                                             <p>Receber {items.length} itens em {cep} ({cidade} / {bairro} / {endereco})</p>
-                                                            <p>Seu pedido será entregue em {shipMethodSelected?.delivery_time} dias após ser enviado.</p>
-                                                            <p>{shipMethodSelected?.company.name} - {shipMethodSelected?.name}</p>
-                                                            <p>Custo de entrega: {shipMethodSelected?.currency} {shipMethodSelected?.price}</p>
+                                                            {shipMethodSelected?.company.name != "Retirada" && <p>Seu pedido será entregue em {shipMethodSelected?.delivery_time} dias após ser enviado.</p>}
+                                                            {shipMethodSelected?.company.name != "Retirada" ? <p>{shipMethodSelected?.company.name} - {shipMethodSelected?.name}</p> : <p>{shipMethodSelected?.name} em Pouso Alegre</p>}
+                                                            {shipMethodSelected?.company.name != "Retirada" && <p>Custo de entrega: {shipMethodSelected?.currency} {shipMethodSelected?.price}</p>}
                                                         </div>
                                                     )}
                                                 </div>
@@ -730,11 +758,13 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                                     <span>Finalizar compra</span>
                                                 </button>
                                             }
-                                            <StepsPrevTrigger width={'full'} onClick={() => setStep(step - 1)}>
-                                                <button className="continue_buyingBtn">
-                                                    <span>VOLTAR</span>
-                                                </button>
-                                            </StepsPrevTrigger>
+                                            {step != 0 &&
+                                                <StepsPrevTrigger width={'full'} onClick={() => setStep(step - 1)}>
+                                                    <button className="continue_buyingBtn">
+                                                        <span>VOLTAR</span>
+                                                    </button>
+                                                </StepsPrevTrigger>
+                                            }
                                             <button onClick={() => window.location.href = window.location.origin} className="continue_buyingBtn">
                                                 Continuar comprando
                                             </button>
