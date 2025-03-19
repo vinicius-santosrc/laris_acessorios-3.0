@@ -347,11 +347,42 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                 });
 
                 if (error) {
-                    console.error(error);
-                    toaster.create({
-                        title: "Não foi possível realizar a compra com seu cartão. Tente novamente com outro cartão ou aguarde.",
-                        type: "error"
-                    });
+                    if (error.code === "card_declined") {
+                        toaster.create({
+                            title: `${error.message} Tente novamente com outro cartão ou aguarde.`,
+                            type: "error"
+                        });
+                    } else if (error.code === "expired_card") {
+                        toaster.create({
+                            title: "O cartão expirou. Utilize um cartão válido.",
+                            type: "error"
+                        });
+                    } else if (error.code === "incorrect_cvc") {
+                        toaster.create({
+                            title: "O código de segurança do cartão está incorreto.",
+                            type: "error"
+                        });
+                    } else if (error.code === "insufficient_funds") {
+                        toaster.create({
+                            title: "Saldo insuficiente. Utilize outro cartão ou verifique com seu banco.",
+                            type: "error"
+                        });
+                    } else if (error.code === "processing_error") {
+                        toaster.create({
+                            title: "Ocorreu um erro no processamento do pagamento. Tente novamente.",
+                            type: "error"
+                        });
+                    } else if (error.code === "incorrect_number") {
+                        toaster.create({
+                            title: "O número do cartão está incorreto. Verifique e tente novamente.",
+                            type: "error"
+                        });
+                    } else {
+                        toaster.create({
+                            title: "Não foi possível realizar a compra com seu cartão. Tente novamente com outro cartão ou aguarde.",
+                            type: "error"
+                        });
+                    }
                 } else {
                     await orderService.create(orderContent);
                     window.location.href = window.location.origin + `/success/` + orderUid;
