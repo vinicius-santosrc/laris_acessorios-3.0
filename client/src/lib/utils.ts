@@ -233,6 +233,11 @@ export const paymentsMethods = createListCollection({
     ]
 })
 
+export enum templateId {
+    confirmationBuy = "template_k59ac7n",
+    adminConfirmationBuy = "template_k0ve0za"
+}
+
 export const parcelamentosDisponiveis = createListCollection({
     items: [
         { label: "1x", id: 1, juros: false, jurosPerc: 1.00 },

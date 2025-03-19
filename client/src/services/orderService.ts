@@ -9,7 +9,8 @@
 
 import { OrderAfterBuyProps, OrderProps } from "../models/order";
 import { toaster } from "../components/ui/toaster";
-
+import emailService from "./emailService";
+import { templateId } from "../lib/utils";
 export class orderService {
     private static endpoint = process.env.REACT_APP_API_ENDPOINT;
     private static secretKey = process.env.REACT_APP_API_SECRET_KEY;
@@ -47,6 +48,23 @@ export class orderService {
             });
 
             if (response.ok) {
+                await emailService.send(templateId.confirmationBuy, {
+                    link_rastreio: window.location.origin + "/account#orders",
+                    userComprador: order.dadosPedido.usuario,
+                    endereco: order.enderecoPedido,
+                    methodPayment: order.paymentOption,
+                    items: order.dadosPedido.produtos,
+                    order: order,
+                    to_email: order.dadosPedido.usuario.email,
+                    principal_message: order.paymentOption != "PIX" ? "Seu pedido foi confirmado com sucesso. Em breve, você receberá atualizações sobre o envio. Assim que o produto for despachado, enviaremos um e-mail com o código de rastreamento para que você possa acompanhar a entrega." : "Estamos aguardando o pagamento do seu pedido. Entraremos em contato para combinar a entrega e enviar o QRCode para o pagamento via pix."
+                });
+                
+                await emailService.send(templateId.adminConfirmationBuy, {
+                    link_rastreio: "https://www.larisacessorios.com.br/admin/orders",
+                    userComprador: order.dadosPedido.usuario,
+                    endereco: order.enderecoPedido,
+                    methodPayment: order.paymentOption,
+                });
                 toaster.create({
                     title: "Pedido realizado com sucesso",
                     type: "success"
