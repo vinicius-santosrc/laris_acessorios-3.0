@@ -30,12 +30,22 @@ const CategoryProducts: React.FC<any> = ({ products, priceOrder, selectedFilters
 
     useEffect(() => {
         const sorted = [...validProducts];
+
+        // Separar produtos com e sem disponibilidade
+        const availableProducts = sorted.filter(product => product.disponibilidade !== 0);
+        const unavailableProducts = sorted.filter(product => product.disponibilidade === 0);
+
+        // Ordenar produtos disponíveis por preço
         if (priceOrder === "1") {
-            sorted.sort((a: Product, b: Product) => b.price - a.price);
+            availableProducts.sort((a: Product, b: Product) => b.price - a.price);
+            unavailableProducts.sort((a: Product, b: Product) => b.price - a.price);
         } else if (priceOrder === "2") {
-            sorted.sort((a: Product, b: Product) => a.price - b.price);
+            availableProducts.sort((a: Product, b: Product) => a.price - b.price);
+            unavailableProducts.sort((a: Product, b: Product) => a.price - b.price);
         }
-        setSortedProducts(sorted);
+
+        // Concatenar produtos disponíveis e indisponíveis
+        setSortedProducts([...availableProducts, ...unavailableProducts]);
     }, [priceOrder, validProducts]);
 
     const currentPageProducts = filteredProducts.slice(startIndex, endIndex);

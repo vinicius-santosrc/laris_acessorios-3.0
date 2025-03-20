@@ -38,7 +38,37 @@
 
 .product-card-footer {
   padding-top: 30px;
-  padding-bottom: 60px;
+}
+
+.btnSection {
+  text-align: center;
+  margin: auto;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.btnSection select {
+  border: 1px solid black;
+  padding: 4px 0px;
+  text-align: center;
+  outline: none;
+  font-size: 12px;
+  width: 80%;
+}
+
+.btnSection button {
+  text-align: center;
+  background-color: black;
+  color: white;
+  width: 80%;
+  padding: 8px 0px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 @media screen and (max-width: 900px) {

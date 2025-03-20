@@ -1,21 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./PrincipalProductCard.css";
 import { Link } from "react-router-dom";
 import { Image } from "@chakra-ui/react";
 import { FavoritesIcon } from "../../../components/icons/icons";
 import { Product } from "@/models/product";
+import { cartService } from "../../../services/cartService";
 
 const PrincipalProductCard = ({ product }: { product: Product }) => {
     const [isHover, setHover] = useState<boolean>(false);
+    const [productMouseIn, setProductMouseIn] = useState<boolean>(false);
+    const [isBuying, setIsBuying] = useState<boolean>(false);
+    const [tamanhoSelected, setTamanhoSelect] = useState<any>();
+    const tamanhos = product.tamanhos ? JSON.parse(product.tamanhos) : [];
+    const Images = product.photoURL ? JSON.parse(product.photoURL) : [];
 
+
+    useEffect(() => {
+        if (tamanhos && tamanhos.length > 0) {
+            setTamanhoSelect(tamanhos[0]);
+        }
+    }, [tamanhos]);
     if (!product) {
         return null;
     }
 
-    const Images = JSON.parse(product.photoURL);
-
     return (
-        <div className="product-card-wrapper">
+        <div className="product-card-wrapper" style={productMouseIn ? { border: "1px solid lightgray" } : { border: "1px solid white" }} onMouseEnter={() => setProductMouseIn(true)} onMouseLeave={() => setProductMouseIn(false)}>
             <section className="product-card">
                 <Link to={window.location.origin + "/product/" + product.url} className="product-link">
                     <article className="product-card-article">
@@ -48,6 +58,47 @@ const PrincipalProductCard = ({ product }: { product: Product }) => {
                                     <span className="product-price">R$ {product.price.toFixed(2)}</span>
                                 }
                             </div>
+                            <div className="btnSection" onClick={(e) => e.preventDefault()}>
+                                {isBuying ? (
+                                    <>
+                                        <select
+                                            title="TAMANHO"
+                                            value={tamanhoSelected || tamanhos?.[0] || ""}
+                                            onChange={(e) => setTamanhoSelect(e.target.value)}
+                                        >
+                                            {tamanhos?.map((item: string, index: number) => {
+                                                return (
+                                                    <option key={index} value={item}>
+                                                        {item}
+                                                    </option>
+                                                )
+                                            })}
+                                        </select>
+                                        <button onClick={() => tamanhoSelected != "" && cartService.add(product, tamanhoSelected)}>
+                                            ADICIONAR A SACOLA
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                            {product?.disponibilidade != 0 ? <button
+                                                onClick={() => setIsBuying(true)}
+                                                style={{ display: productMouseIn ? "block" : "none" }}
+                                            >
+                                                COMPRAR
+                                            </button>
+                                                :
+                                                <button
+                                                    disabled={true}
+                                                    style={{ display: productMouseIn ? "block" : "none" }}
+                                                >
+                                                    INDISPONÍVEL
+                                                </button>
+                                            }
+                                    </>
+
+                                )}
+                            </div>
+
                         </footer>
                     </article>
                 </Link>
