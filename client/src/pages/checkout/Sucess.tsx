@@ -20,6 +20,7 @@ const Success = () => {
             if (uid) {
                 try {
                     const currentOrder = await orderService.getByUid(uid);
+                    console.log(currentOrder)
                     setOrder(currentOrder);
                     setEndereco(JSON.parse(currentOrder.address));
                     setItems(JSON.parse(currentOrder.items));
@@ -61,7 +62,7 @@ const Success = () => {
                     <p className="success-description">
                         {order.paymentOption === "CART"
                             ? "Seu pedido foi confirmado e será enviado uma confirmação para você no seu e-mail. Após o produto ser enviado, você também receberá um e-mail com o código de rastreamento."
-                            : "Estamos aguardando o pagamento do seu pedido. Entraremos em contato para combinar a entrega e enviar o QRCode para o pagamento via pix."}
+                            : "Estamos aguardando o pagamento do seu pedido. Entraremos em contato para enviar o QRCode para o pagamento via pix."}
                     </p>
                 </div>
                 <div className="pix-instructions">

@@ -11,8 +11,6 @@ import { SelectContent, SelectItem, SelectLabel, SelectRoot, SelectTrigger, Sele
 import { EnumPaymentMethod, formatarCartaoCredito, formatCEP, formatCPF, formatTelefone, gerarUidComCaracteresENumeros, getCEPJson, parcelamentosDisponiveis, paymentInsideMethod, paymentsMethods } from "../../lib/utils";
 import { toaster } from "../../components/ui/toaster";
 import { Loader } from "../../components/ui/loader";
-import authService from "../../services/authService";
-import { UserProps } from "../../models/user";
 import { CepProps } from "../../models/cep";
 import { orderService } from "../../services/orderService";
 import { PaymentElement } from "@stripe/react-stripe-js";
@@ -23,6 +21,7 @@ import productService from "../../services/productService";
 import Footer from "../../components/geral/footer/Footer";
 import { ShippingService } from "../../services/shippingService";
 import { ShippingItem } from "@/models/shipping";
+import { useUser } from "../../contexts/UserContext";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -68,7 +67,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
 
     const [isLoading, setLoading] = useState(true);
 
-    const [userAtual, setUser] = useState<UserProps>();
+    const { user, loading } = useUser();
 
     const stripe: any = useStripe();
     const elements: any = useElements();
@@ -106,6 +105,10 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     }, [shippingCost, subtotal, items]);
 
     useEffect(() => {
+        setLoading(loading);
+    }, [loading])
+
+    useEffect(() => {
         const fetchUserData = async () => {
             const itemsCart = await cartService.get();
             const storedItems: any = await Promise.all(
@@ -124,14 +127,9 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                         calculateTotal(parsedItems);
 
                         try {
-                            const res = await authService.getUserData();
-                            const userContent: UserProps = await authService.getUserByEmail(res.email);
-                            setUser(userContent);
-
-
-                            setEmail(userContent.email);
-                            setCPF(formatCPF(userContent.cpf));
-                            setName(userContent.nome_completo);
+                            setEmail(user?.email ?? "");
+                            setCPF(formatCPF(user?.cpf ?? ""));
+                            setName(user?.nome_completo ?? "");
                         } catch (error) {
                             console.error("Erro ao obter dados do usuário", error);
                             window.location.href = window.location.origin
@@ -151,6 +149,12 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
 
         fetchUserData();
     }, []);
+
+    useEffect(() => {
+        setEmail(user?.email ?? "");
+        setCPF(formatCPF(user?.cpf ?? ""));
+        setName(user?.nome_completo ?? "");
+    }, [user])
 
     const calculateTotal = (items: Product[]) => {
         const newSubtotal = items.reduce((acc, item) => acc + item.price, 0);
@@ -289,7 +293,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
 
         const dadosPedido = {
             "usuario": {
-                ...userAtual || userNotLogged,
+                ...user || userNotLogged,
                 "telefone": telefone
             },
             "produtos": items,
@@ -490,18 +494,18 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                                             <div className="items-component-checkout">
                                                 <div className="inputbox">
                                                     <label>E-mail</label>
-                                                    <Input disabled={!!userAtual} value={userAtual ? userAtual.email : email} onChange={(e) => setEmail((e.target.value.toLowerCase()))} placeholder="Insira o e-mail aqui" background={"var(--cinza-principal)"} padding={2} variant={"subtle"} />
+                                                    <Input disabled={!!user} value={user ? user.email : email} onChange={(e) => setEmail((e.target.value.toLowerCase()))} placeholder="Insira o e-mail aqui" background={"var(--cinza-principal)"} padding={2} variant={"subtle"} />
                                                 </div>
                                                 <div className="inputbox">
                                                     <label>Nome completo</label>
-                                                    <Input disabled={!!userAtual} value={userAtual ? userAtual.nome_completo : name} onChange={(e) => setName(e.target.value)} placeholder="Insira o nome completo aqui" background={"var(--cinza-principal)"} padding={2} variant={"subtle"} />
+                                                    <Input disabled={!!user} value={user ? user.nome_completo : name} onChange={(e) => setName(e.target.value)} placeholder="Insira o nome completo aqui" background={"var(--cinza-principal)"} padding={2} variant={"subtle"} />
                                                 </div>
                                                 <div className="inputbox">
                                                     <label>CPF</label>
                                                     <Input
-                                                        disabled={!!userAtual}
+                                                        disabled={!!user}
                                                         maxLength={14}
-                                                        value={userAtual ? formatCPF(userAtual.cpf) : formatCPF(cpf)}
+                                                        value={user ? formatCPF(user.cpf) : formatCPF(cpf)}
                                                         onChange={(e) => setCPF(formatCPF(e.target.value))}
                                                         placeholder="Insira o cpf aqui" background={"var(--cinza-principal)"}
                                                         padding={2}

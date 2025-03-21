@@ -38,6 +38,7 @@ import Reports from './pages/admin/Reports';
 import Config from './pages/admin/Config';
 import CategoriesAdmin from './pages/admin/CategoriesAdmin';
 import PolicyCookies from './pages/institutional/PolicyCookies';
+import { UserProvider } from './contexts/UserContext';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -138,39 +139,42 @@ function App() {
     <div className="page">
       <Provider>
         <Toaster />
-        <BrowserRouter>
-          <Header />
-          <Routes>
-            {routes.map((route, index) => {
-              if (route.isProtected) {
-                return (
-                  <Route
-                    key={index}
-                    path={route.path}
-                    element={<ProtectedRoute element={route.element} />}
-                  />
-                );
-              }
+        <UserProvider>
+          <BrowserRouter>
+            <Header />
+            <Routes>
+              {routes.map((route, index) => {
+                if (route.isProtected) {
+                  return (
+                    <Route
+                      key={index}
+                      path={route.path}
+                      element={<ProtectedRoute element={route.element} />}
+                    />
+                  );
+                }
 
-              return <Route key={index} path={route.path} element={route.element} />;
-            })}
+                return <Route key={index} path={route.path} element={route.element} />;
+              })}
 
-            <Route
-              path='/checkout'
-              element={clientSecret && stripePromise ? (
-                <Elements stripe={stripePromise} options={{
-                  paymentMethodTypes: ['card'], 
-                  appearance: { variables: { colorPrimaryText: '#be0a45', colorDanger: "#be0a45" } }, mode: "payment", amount: 1 * 100, currency: 'brl',  }}>
-                  <CheckoutPage paymentMethodTypes={['card']} clientSecret={clientSecret} />
-                </Elements>
-              ) : (
-                <Loader />
-              )}
-            />
+              <Route
+                path='/checkout'
+                element={clientSecret && stripePromise ? (
+                  <Elements stripe={stripePromise} options={{
+                    paymentMethodTypes: ['card'],
+                    appearance: { variables: { colorPrimaryText: '#be0a45', colorDanger: "#be0a45" } }, mode: "payment", amount: 1 * 100, currency: 'brl',
+                  }}>
+                    <CheckoutPage paymentMethodTypes={['card']} clientSecret={clientSecret} />
+                  </Elements>
+                ) : (
+                  <Loader />
+                )}
+              />
 
-            <Route path="*" element={<Navigate to="/404" />} />
-          </Routes>
-        </BrowserRouter>
+              <Route path="*" element={<Navigate to="/404" />} />
+            </Routes>
+            </BrowserRouter>
+        </UserProvider>
         <PolicyCookies />
       </Provider>
     </div>

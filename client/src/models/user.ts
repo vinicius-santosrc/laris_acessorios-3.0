@@ -8,4 +8,6 @@ export interface UserProps {
     nome_completo: string;
     photoURL: string;
     uid: string;
+    favorites: string;
+    orders?: any;
 }

@@ -8,31 +8,15 @@ import { auth } from '@/lib/firebase';
 import { OrderAfterBuyProps } from '@/models/order';
 import { orderService } from '../../services/orderService';
 import { Link } from 'react-router-dom';
+import { useUser } from '../../contexts/UserContext';
 
 const Account = () => {
     const fotoUsuario = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp";
-
-    const [userAtual, setUser] = useState<UserProps>();
-    const [userOrders, setOrders] = useState<OrderAfterBuyProps[]>()
-    const [isLoading, setLoading] = useState(true);
     const [selectedSection, setSelectedSection] = useState("dadosPessoais");
+    const { user, loading } = useUser();
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            setLoading(true);
-            try {
-                const res = await authService.getUserData();
-                const userContent: UserProps = await authService.getUserByEmail(res.email);
-                const userOrders: OrderAfterBuyProps[] = await orderService.getByUser(res.$id)
-                setUser(userContent);
-                setOrders(userOrders)
-            } catch (error) {
-                console.error("Erro ao obter dados do usuário", error);
-                window.location.href = window.location.origin
-            }
-            setLoading(false);
-        };
-
         if (window.location.hash === "#wishlist") {
             setSelectedSection("favoritos");
         }
@@ -41,8 +25,14 @@ const Account = () => {
             setSelectedSection("pedidos");
         }
 
-        fetchUserData();
+        if (!user) {
+            window.location.href = window.location.origin;
+        }
     }, []);
+
+    useEffect(() => {
+        setLoading(loading);
+    }, [loading]);
 
     const renderContent = () => {
         switch (selectedSection) {
@@ -50,9 +40,9 @@ const Account = () => {
                 return (
                     <div>
                         <h2>Dados Pessoais</h2>
-                        <p>Nome: {userAtual?.nome_completo}</p>
-                        <p>Email: {userAtual?.email}</p>
-                        <p>CPF: {userAtual && formatCPF(userAtual?.cpf)}</p>
+                        <p>Nome: {user?.nome_completo}</p>
+                        <p>Email: {user?.email}</p>
+                        <p>CPF: {user && formatCPF(user?.cpf)}</p>
                     </div>
                 );
             case "pedidos":
@@ -62,7 +52,7 @@ const Account = () => {
                         <p>Aqui você pode visualizar seus pedidos anteriores.</p>
                         <div className="orders-content">
                             <div className="orders-list">
-                                {userOrders?.map((order: OrderAfterBuyProps) => {
+                                {user?.orders.map((order: OrderAfterBuyProps) => {
                                     const items = JSON.parse(order.items); // Transformar o JSON de items em um objeto
                                     const address = JSON.parse(order.address); // Transformar o JSON de endereço em um objeto
                                     const user = JSON.parse(order.user); // Transformar o JSON de usuário em um objeto
@@ -144,7 +134,7 @@ const Account = () => {
                 <div className="user-info">
                     <img src={fotoUsuario} alt="Foto do usuário" className="user-photo" />
                     <div className="user-greeting">
-                        <p>Olá, {userAtual && getFirstAndLastName(userAtual?.nome_completo)}!</p>
+                        <p>Olá, {user && getFirstAndLastName(user?.nome_completo)}!</p>
                     </div>
                 </div>
                 <nav className="navigation">

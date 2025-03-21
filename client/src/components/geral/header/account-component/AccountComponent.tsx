@@ -26,6 +26,8 @@ import authService from "../../../../services/authService";
 import { toaster } from "../../../../components/ui/toaster";
 import { formatCPF, UserAuthProps } from "../../../../lib/utils";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useUser } from "../../../../contexts/UserContext";
+import { Loader } from "../../../../components/ui/loader";
 
 const AccountComponent = ({ checkoutBtn }: any) => {
     const [isRegistering, setIsRegistering] = useState<boolean>(false);
@@ -35,7 +37,8 @@ const AccountComponent = ({ checkoutBtn }: any) => {
     const [isChecked, setIsChecked] = useState(false);  // Verificar se a checkbox está marcada
     const [showPassword, setShowPassword] = useState(false);  // Para mostrar ou esconder a senha
     const [isFormValid, setIsFormValid] = useState(true);  // Para habilitar ou desabilitar o botão
-    const [isLogged, setIsLogged] = useState(false);
+    const { user, loading } = useUser();
+    const [isLoading, setLoading] = useState<boolean>(true);
 
     const FormLoginAccount = [{
         label: <span>ENTRE EM NOSSO GRUPO E CONCORRA A <br /><span className="breaklineHeader">CUPONS EXCLUSIVOS</span></span>,
@@ -46,6 +49,10 @@ const AccountComponent = ({ checkoutBtn }: any) => {
             { label: "Senha", value: "", json: 'senha', required: true },
         ]
     }];
+
+    useEffect(() => {
+        setLoading(loading)
+    }, [loading])
 
     const FormRegisterAccount = [{
         label: <span>NA SUA PRIMEIRA COMPRA, <br /><span className="breaklineHeader">VOCÊ GANHA 15% OFF</span><br /> Com o cupom BEMVINDO</span>,
@@ -138,16 +145,9 @@ const AccountComponent = ({ checkoutBtn }: any) => {
             }
         }
     };
-
-    async function checkIfIsLogged() {
-        const isLogged: boolean = await authService.isLogged();
-        setIsLogged(isLogged)
-    }
-
     const formData = isRegistering ? FormRegisterAccount : FormLoginAccount;
 
     useEffect(() => {
-        checkIfIsLogged()
         const fields = formData[0].btnForm;
         const missingFields = fields.filter((field: any) => field.required && !formValues[field.label]);
 
@@ -168,13 +168,17 @@ const AccountComponent = ({ checkoutBtn }: any) => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    if (isLoading) {
+        return <Loader />
+    }
+
     return (
         <DialogRoot size={"lg"} motionPreset="slide-in-bottom" placement="center">
             <DialogTrigger asChild>
                 <span style={checkoutBtn ? {width: "100%"}:null}>
                     {!checkoutBtn ? (
-                        !isLogged ? (
-                            <Button onClick={checkIfIsLogged} variant="ghost" aria-label="Conta">
+                        !user ? (
+                            <Button variant="ghost" aria-label="Conta">
                                 <AccountIcon />
                             </Button>
                         ) : (
@@ -183,13 +187,13 @@ const AccountComponent = ({ checkoutBtn }: any) => {
                             </Link>
                         )
                     ) : (
-                        <Button onClick={checkIfIsLogged} variant="ghost" style={{ width: "100% !important" }} aria-label="Ir para checkout" className="finalizeBtn">
+                        <Button variant="ghost" style={{ width: "100% !important" }} aria-label="Ir para checkout" className="finalizeBtn">
                             FINALIZAR COMPRA
                         </Button>
                     )}
                 </span>
             </DialogTrigger>
-            {!isLogged && <DialogContent backgroundColor={"white"} className={isMobile ? "dialogContentMobile" : ""}>
+            {!user && <DialogContent backgroundColor={"white"} className={isMobile ? "dialogContentMobile" : ""}>
                 <DialogBody>
                     <FormAccount
                         photoRef={formData[0].photoURL}

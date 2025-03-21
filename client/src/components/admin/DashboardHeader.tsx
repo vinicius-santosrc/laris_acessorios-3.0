@@ -8,11 +8,12 @@ import { Settings } from "lucide-react";
 import NotificationsComponent from "./notifications/NotificationsComponent";
 import SideBar from "./SideBar";
 import logoHeader from '../../logo.svg';
+import { useUser } from "../../contexts/UserContext";
 
 export const DashboardHeader = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
 
-    const [userAtual, setUser] = useState<UserProps>();
+    const { user, loading } = useUser();
     const [isLoading, setLoading] = useState(true);
     const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null); // Para controlar qual submenu está aberto
     const [dateToday, setDateToday] = useState<string>("");
@@ -41,17 +42,6 @@ export const DashboardHeader = () => {
     }, []);
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            setLoading(true);
-            try {
-                const res = await authService.getUserData();
-                const userContent: UserProps = await authService.getUserByEmail(res.email);
-                setUser(userContent);
-            } catch (error) {
-                console.error("Erro ao obter dados do usuário", error);
-            }
-            setLoading(false);
-        };
         const today = new Date();
         const formattedDate = new Intl.DateTimeFormat('pt-BR', {
             weekday: 'long', // Nome completo do dia
@@ -61,8 +51,6 @@ export const DashboardHeader = () => {
         }).format(today);
 
         setDateToday(formattedDate); // Atualiza o estado com a data formatad
-
-        fetchUserData();
     }, []);
 
     return (
@@ -73,13 +61,13 @@ export const DashboardHeader = () => {
                     <div className="user-info-content">
                         <SideBar />
                         <img
-                            src={userAtual?.photoURL}
-                            alt={`Avatar de ${userAtual?.nome_completo}`}
+                            src={user?.photoURL}
+                            alt={`Avatar de ${user?.nome_completo}`}
                             className="user-avatar-header"
                         />
                         <div className="user-details-content">
                             <p className="user-name">
-                                {userAtual && userAtual.nome_completo ? (<span>Olá, {getFirstAndLastName(userAtual.nome_completo)}</span>) : 'Carregando...'}
+                                {user && user.nome_completo ? (<span>Olá, {getFirstAndLastName(user.nome_completo)}</span>) : 'Carregando...'}
                             </p>
                             <p className="user-role">{dateToday}</p>
                         </div>

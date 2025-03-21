@@ -56,7 +56,7 @@ export class orderService {
                     items: order.dadosPedido.produtos,
                     order: order,
                     to_email: order.dadosPedido.usuario.email,
-                    principal_message: order.paymentOption != "PIX" ? "Seu pedido foi confirmado com sucesso. Em breve, você receberá atualizações sobre o envio. Assim que o produto for despachado, enviaremos um e-mail com o código de rastreamento para que você possa acompanhar a entrega." : "Estamos aguardando o pagamento do seu pedido. Entraremos em contato para combinar a entrega e enviar o QRCode para o pagamento via pix."
+                    principal_message: order.paymentOption != "PIX" ? "Seu pedido foi confirmado com sucesso. Em breve, você receberá atualizações sobre o envio. Assim que o produto for despachado, enviaremos um e-mail com o código de rastreamento para que você possa acompanhar a entrega." : "Estamos aguardando o pagamento do seu pedido. Entraremos em contato para enviar o QRCode para o pagamento via pix."
                 });
                 
                 await emailService.send(templateId.adminConfirmationBuy, {

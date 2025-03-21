@@ -61,7 +61,7 @@ class authService {
 
     static login = async (email: string, password: string) => {
         const client = new Client();
-        client.setEndpoint("https://cloud.appwrite.io/v1").setProject("651c17501139519bc5a2");
+        if (endPointAppWrite && projectAppWrite) client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
         const account = new Account(client);
 
         try {
@@ -74,7 +74,7 @@ class authService {
 
     static getUserData = async () => {
         const client = new Client();
-        client.setEndpoint("https://cloud.appwrite.io/v1").setProject("651c17501139519bc5a2");
+        if (endPointAppWrite && projectAppWrite) client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
         const account = new Account(client);
         const accountReturn = await account.get()
         try {
@@ -87,7 +87,7 @@ class authService {
 
     static isLogged = async () => {
         const client = new Client();
-        client.setEndpoint("https://cloud.appwrite.io/v1").setProject("651c17501139519bc5a2");
+        if (endPointAppWrite && projectAppWrite) client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
         const account = new Account(client);
 
         try {
@@ -104,7 +104,7 @@ class authService {
     static logout = async () => {
         try {
             const client = new Client();
-            client.setEndpoint("https://cloud.appwrite.io/v1").setProject("651c17501139519bc5a2");
+            if (endPointAppWrite && projectAppWrite) client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
             const account = new Account(client);
 
             await account.deleteSession('current'); 
