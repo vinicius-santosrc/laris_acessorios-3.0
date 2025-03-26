@@ -12,6 +12,7 @@
     color: white;
     width: 1400px;
     margin: auto;
+    font-size: 12px;
 }
 
 @media screen and (max-width: 900px) {

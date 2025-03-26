@@ -15,10 +15,11 @@ import PrincipalProductCard from "../principal-product-card/PrincipalProductCard
 const RelatedProducts = ({ category }: any) => {
     const [allProducts, setProducts] = useState<Product[]>([])
 
+    
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const fetchedProducts: Product[] = await productService.getByRelatedCategory(category);
+                const fetchedProducts: Product[] = await productService.getByRelatedCategory(category[2]);
                 setProducts(fetchedProducts);
             } catch (err: any) {
                 console.error(err)

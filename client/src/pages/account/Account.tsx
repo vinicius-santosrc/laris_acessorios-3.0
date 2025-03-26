@@ -17,6 +17,7 @@ const Account = () => {
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
+        window.document.title = "Conta - Lari's Acessórios"
         if (window.location.hash === "#wishlist") {
             setSelectedSection("favoritos");
         }

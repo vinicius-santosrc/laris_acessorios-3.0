@@ -42,7 +42,7 @@ const ProductPage = () => {
                 setPhotos(JSON.parse(fetchedProduct.photoURL));
                 setLoading(false);
 
-                document.title = `${fetchedProduct.name_product} - LARIS ACESSÓRIOS`
+                document.title = `${fetchedProduct.name_product.toUpperCase()} - LARIS ACESSÓRIOS`
             } catch (err: any) {
                 setError(err.toString());
                 setLoading(false);

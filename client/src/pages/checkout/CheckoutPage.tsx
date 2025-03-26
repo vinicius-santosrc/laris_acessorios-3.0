@@ -74,6 +74,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     const [errorMessage, setErrorMessage] = useState<string>();
 
     useEffect(() => {
+        window.document.title = "Finalizar compra"
         fetch(`${url}/create-payment-intent`, {
             method: "POST",
             headers: {

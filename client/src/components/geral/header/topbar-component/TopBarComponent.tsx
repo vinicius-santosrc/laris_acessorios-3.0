@@ -23,7 +23,7 @@ const TopBarComponent: React.FC<TopBarComponentProps> = ({ text }) => {
 
                     </div>
                     <div className="topbar-content-inside">
-                        <span>{text}</span>
+                        <span>{text.toUpperCase()}</span>
                     </div>
                     <div className="topbar-content-inside">
                         <Button title="Fechar" onClick={() => setShowing(!isShowing)} variant={"ghost"}><CloseIcon /></Button>

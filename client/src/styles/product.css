@@ -11,16 +11,19 @@
     width: 430px;
     height: 430px;
     object-fit: contain;
+    cursor: crosshair;
 }
 
 .product-principal-pics .product-one-pic img {
     width: 873px;
     height: 873px;
     object-fit: cover;
+    cursor: crosshair;
 }
 
 #uniquephoto {
     width: 750px;
+    cursor: crosshair;
 }
 
 .product-page-inside {

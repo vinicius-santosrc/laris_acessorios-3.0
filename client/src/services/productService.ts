@@ -171,7 +171,11 @@ class productService {
             const data = await response.json() || [];
             let dataByCategory: any[] = []
             data.forEach((product: Product) => {
-                dataByCategory.push(JSON.parse(product.categoryList).includes(category) && product)
+                if (window.location.pathname == "/product/" + product.url) {
+                    console.log(window.location.pathname)
+                    return
+                }
+                else dataByCategory.push(JSON.parse(product.categoryList).includes(category) && product)
             })
             return dataByCategory.reverse();
         } catch (err) {

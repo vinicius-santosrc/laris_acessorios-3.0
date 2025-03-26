@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { CategoriesProps, defaultsCategories } from "../../lib/utils";
+import { CategoriesProps } from "../../lib/utils";
 import Categories from "../categories/Categories";
 import "./Search.css";
 import { adminService } from "../../services/adminService";
 import { Loader } from "../../components/ui/loader";
 
 export const SearchPage = () => {
-    const [categorie, setCategorie] = useState<CategoriesProps | null>(null); // Initialize with null
+    const [categorie, setCategorie] = useState<CategoriesProps | null>(null);
 
     useEffect(() => {
         getCollections();
@@ -18,7 +18,7 @@ export const SearchPage = () => {
     }
 
     if (!categorie) {
-        return <div><Loader /></div>; // Show loading state until categorie is fetched
+        return <div><Loader /></div>;
     }
 
     return (
