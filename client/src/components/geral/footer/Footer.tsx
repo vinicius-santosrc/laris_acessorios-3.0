@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "../../ui/button";
 import "./Footer.css";
-import { Input } from "@chakra-ui/react";
 import React from "react";
 import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from "../../../components/ui/accordion";
 
@@ -86,10 +85,9 @@ const Footer = () => {
                     </section>
                     <section className="footer-right-side-content footer-section">
                         <h2 className="footer-heading">Receba novidades da LARI'S</h2>
-                        <p className="footer-description">Seja o primeiro a receber notícias sobre novos produtos e promoções ativas.</p>
+                        <p className="footer-description">Seja o primeiro a receber notícias sobre novos produtos e promoções ativas. Entre agora em nosso grupo no WhatsApp</p>
                         <div className="footer-btn-inside footer-form">
-                            <Input className="footer-input" placeholder="E-mail" />
-                            <Button className="footer-btn" variant={"outline"}>Inscrever-se</Button>
+                            <Button onClick={() => window.open("https://chat.whatsapp.com/HiQ2vdNPoLiFgK7SMZPlIK")} className="footer-btn" variant={"outline"}>ENTRAR NO GRUPO</Button>
                         </div>
                     </section>
                 </div>
@@ -102,10 +100,9 @@ const Footer = () => {
                 <div className="footer-inside">
                     <section className="footer-right-side-content footer-section">
                         <h2 className="footer-heading">Receba novidades da LARI'S</h2>
-                        <p className="footer-description">Seja o primeiro a receber notícias sobre novos produtos e promoções ativas.</p>
+                        <p className="footer-description">Seja o primeiro a receber notícias sobre novos produtos e promoções ativas. Entre agora em nosso grupo no WhatsApp</p>
                         <div className="footer-btn-inside footer-form">
-                            <Input className="footer-input" placeholder="E-mail" />
-                            <Button className="footer-btn" variant={"outline"}>Inscrever-se</Button>
+                            <Button onClick={() => window.open("https://chat.whatsapp.com/HiQ2vdNPoLiFgK7SMZPlIK")} className="footer-btn" variant={"outline"}>ENTRAR NO GRUPO</Button>
                         </div>
                     </section>
                     <div className="accordion">
