@@ -324,9 +324,9 @@ export const menuItemsAdmin: MenuItemsProps[] = [
         href: '/admin/orders',
     },
     {
-        title: "WebFacility",
+        title: "Facilitys",
         isLink: true,
-        href: '/admin/reports',
+        href: '/admin/facilitys',
     },
     {
         title: "Relatórios",

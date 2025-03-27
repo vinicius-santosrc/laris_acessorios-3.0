@@ -1,4 +1,4 @@
-import { Input } from "@chakra-ui/react";
+import { Button, Input } from "@chakra-ui/react";
 import './dashboard/dashboard-header.css'
 import { useEffect, useState } from "react";
 import { UserProps } from "../../models/user";
@@ -75,7 +75,7 @@ export const DashboardHeader = () => {
                 </div>
                 <div className="dashboard-header-component-action-btns">
                     <Input placeholder="Buscar" background={"white"} padding={2} width={400} variant={"subtle"} />
-                    <button><Settings /></button>
+                    <Button disabled><Settings /></Button>
                     <NotificationsComponent setBagOpen={setBagOpen} isBagOpen={isBagOpen} />
                 </div>
             </section>

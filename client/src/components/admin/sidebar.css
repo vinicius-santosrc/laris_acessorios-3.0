@@ -1,7 +1,7 @@
 /* sidebar.css */
 
 .sidebar {
-    width: 250px;
+    width: 260px;
     height: 100vh;
     background-color: #fff;
     border-top-left-radius: 24px;
@@ -16,6 +16,12 @@
     font-family: 'Arial', sans-serif;
 }
 
+.titleSection {
+    margin-left: 24px;
+    color: gray;
+    font-size: 16px;
+}
+
 .sidebar-header {
     display: flex;
     justify-content: center;
@@ -27,6 +33,13 @@
 .sidebar-header__inside {
     display: flex;
     justify-content: center;
+}
+
+.sectionTitle {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
 }
 
 .sidebar-header-icon img {
@@ -47,9 +60,24 @@
     /* Cor de destaque */
 }
 
-.nav-section {
-    margin: 10px 0;
+.nav-section-select {
+    margin: 24px 0;
     padding: 0px 20px;
+    width: 100%;
+}
+
+.nav-section {
+    margin: 0px 12px;
+    padding: 12px 0px;
+    border-left: 1px solid lightgray;
+}
+
+.nav-section-select h2 {
+    color: rgb(95, 93, 93);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
 }
 
 .nav-link {
@@ -59,21 +87,18 @@
     /* Cor de texto escura para contraste */
     padding: 10px 20px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     border-radius: 5px;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .nav-link:hover {
-    background-color: #f5f5f5;
-    /* Fundo suave no hover */
     color: #be0a45;
     /* Cor de texto para o item ativo */
 }
 
 #selected {
-    background-color: #e3e0e0;
     color: #be0a45;
     /* Texto branco no item ativo */
 }
@@ -96,20 +121,31 @@
 
 .sub-nav-link:hover {
     background-color: #f5f5f5;
-    /* Fundo suave no hover do submenu */
     color: #be0a45;
-    /* Texto em vermelho no hover */
+}
+
+.groupTitle {
+    margin-left: 18px;
+    color: gray;
 }
 
 .sidebar-footer {
-    padding: 20px;
+    padding: 12px 20px;
     background-color: #fff;
-    /* Fundo branco no rodapé */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top: 2px solid #eee;
-    /* Linha de separação superior no rodapé */
+    cursor: pointer;
+    border-radius: 12px;
+    margin: 24px auto;
+    position: fixed;
+    bottom: 0px;
+    left: 5px;
+    width: 260px;
+}
+
+.sidebar-footer:hover {
+    background-color: #f4f4f4;
 }
 
 .user-info-content {
@@ -120,7 +156,7 @@
 .user-avatar {
     width: 35px;
     height: 35px;
-    border-radius: 50%;
+    border-radius: 6px;
     margin-right: 10px;
 }
 

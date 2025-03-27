@@ -6,9 +6,10 @@ import "./adminOrders.css";
 import { TimelineConnector, TimelineContent, TimelineDescription, TimelineItem, TimelineRoot, TimelineTitle } from "../../components/ui/timeline";
 import { LuCheck, LuPackage, LuShip } from "react-icons/lu";
 import { StepsItem, StepsList, StepsRoot } from "../../components/ui/steps";
-import { ArrowLeft, DollarSignIcon } from "lucide-react";
+import { ArrowLeft, DollarSignIcon, DotSquareIcon, ListIcon } from "lucide-react";
 import { Loader } from "../../components/ui/loader";
-import { Button, Input, Separator } from "@chakra-ui/react";
+import { Button, Input, Portal, Separator } from "@chakra-ui/react";
+import { Menu } from "@chakra-ui/react"
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -109,8 +110,7 @@ const AdminOrders = () => {
                 </div>
                 <div className="order-details-page">
                     <h1>Você está visualizando os detalhes do pedido #{orderAtual.id}</h1>
-                    <button onClick={updateOrder}>Atualizar alterações</button>
-                    <button>Excluir pedido</button>
+                    <button className="btn-contact" onClick={updateOrder}>Atualizar alterações</button>
                     <StepsRoot
                         py="6"
                         defaultStep={currentStep}
@@ -137,8 +137,15 @@ const AdminOrders = () => {
                         <Separator />
                         <br />
                         <p><strong>Nome: </strong> {user.nome_completo}</p>
+                        <p><strong>E-mail: </strong> {user.email}</p>
                         <p><strong>CPF:</strong> {user.cpf}</p>
                         <p><strong>Telefone para contato:</strong> {user?.telefone}</p>
+                        <br />
+
+                        <Separator />
+
+                        <button className="btn-contact">Entrar em contato por WhatsApp</button> <br />
+                        <button className="btn-contact">Entrar em contato por E-mail</button>
                     </div>
                     {/* Resumo do Pedido */}
                     <div className="order-summary">
@@ -219,11 +226,32 @@ const AdminOrders = () => {
                             return (
                                 <div key={index} className="order-item-content">
                                     <img src={photo || "/default-image.jpg"} alt={item.name_product} />
-                                    <div className="item-details">
+                                    <Link target="_blank" to={window.location.origin + "/product/" + item.url} className="item-details">
                                         <h4>{item.name_product}</h4>
                                         <p><strong>Tamanho:</strong> {item.tamanhos}</p>
                                         <p><strong>Preço:</strong> R${item.price.toFixed(2)}</p>
                                         <p><strong>Desconto:</strong> R${item.desconto.toFixed(2)}</p>
+                                    </Link>
+                                    <div className="icon-btn">
+                                        <Menu.Root>
+                                            <Menu.Trigger asChild>
+                                                <Button variant="outline" size="sm">
+                                                    <ListIcon />
+                                                </Button>
+                                            </Menu.Trigger>
+                                            <Portal>
+                                                <Menu.Positioner>
+                                                    <Menu.Content>
+                                                        <Menu.Item value="new-txt-a">
+                                                            Tornar {item.disponibilidade == 0 ? "Disponivel" : "Indisponivel"}
+                                                        </Menu.Item>
+                                                        <Menu.Item value="new-txt-b">
+                                                            Entrar na página do produto
+                                                        </Menu.Item>
+                                                    </Menu.Content>
+                                                </Menu.Positioner>
+                                            </Portal>
+                                        </Menu.Root>
                                     </div>
                                 </div>
                             );

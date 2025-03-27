@@ -120,3 +120,12 @@
     font-weight: bold;
     color: #333;
 }
+
+.btn-contact {
+    padding: 12px;
+    width: 350px;
+    background-color: var(--cor-principal);
+    margin-bottom: 4px;
+    color: white;
+    border-radius: 12px;
+}
