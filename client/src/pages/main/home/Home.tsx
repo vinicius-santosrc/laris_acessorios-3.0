@@ -12,6 +12,7 @@ import { Facilitys } from "../../../services/facilitysService";
 const Home = () => {
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [banner, setBanner] = useState<any>();
+    const [bannerInfos, setBannerInfos] = useState<any>();
 
     const checkMobileView = () => {
         if (window.innerWidth <= 768) {
@@ -36,7 +37,9 @@ const Home = () => {
     const getFacilitys = async () => {
         try {
             const facility = await Facilitys.get("banner-principal");
-            setBanner(facility)
+            const facilityInfo = await Facilitys.get("banner-principal-texts");
+            setBanner(facility);
+            setBannerInfos({ ...facilityInfo, data: JSON.parse(facilityInfo.data) });
         }
         catch (error) {
             console.error(error);
@@ -48,6 +51,9 @@ const Home = () => {
             {banner ?
                 <Carousel
                     url={isMobile ? banner.dataMobile : banner.data}
+                    maintext={bannerInfos?.data?.mainText}
+                    description={bannerInfos?.data?.description}
+                    href={bannerInfos?.data?.href}
                 />
                 :
                 null

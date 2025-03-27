@@ -5,7 +5,7 @@ import {
     AccordionItemTrigger,
     AccordionRoot,
 } from "../../components/ui/accordion";
-import { Box } from "@chakra-ui/react";
+import { Box, Input } from "@chakra-ui/react";
 import { adminService } from "../../services/adminService";
 import { useEffect, useState } from "react";
 import { Facilitys } from "../../services/facilitysService";
@@ -15,8 +15,9 @@ import { toaster } from "../../components/ui/toaster";
 interface FacilityItem {
     reference: string;
     data: string;
-    dataMobile: string;
+    dataMobile?: string;
     hasMobile: boolean;
+    type: "IMAGE" | "TEXT";
 }
 
 interface FacilityProps {
@@ -30,6 +31,25 @@ export const FacilitysPage = () => {
     useEffect(() => {
         getFacilitys();
     }, []);
+
+    const changeText = (banner: FacilityItem, key: string, value: string) => {
+        const bannerCopy = { ...banner };
+        const dataObject = JSON.parse(bannerCopy.data);
+
+        if (dataObject.hasOwnProperty(key)) {
+            dataObject[key] = value;
+        } else {
+            console.warn(`A propriedade '${key}' não existe em banner.data`);
+        }
+
+        bannerCopy.data = JSON.stringify(dataObject);
+
+        setBanners((prev) =>
+            prev.map((item) =>
+                item.reference === banner.reference ? bannerCopy : item
+            )
+        );
+    };
 
     const getFacilitys = async () => {
         try {
@@ -79,39 +99,73 @@ export const FacilitysPage = () => {
     const FacilitysContent: FacilityProps[] = [
         {
             title: "Imagens",
-            content: <div>
-                {banners.length > 0 ? (
-                    <AccordionRoot spaceY="4" variant="plain" collapsible>
-                        {banners.map((banner, index) => (
-                            <AccordionItem key={banner.reference} value={banner.reference}>
-                                <Box position="relative">
-                                    <AccordionItemTrigger indicatorPlacement="start">
-                                        {banner.reference}
-                                    </AccordionItemTrigger>
-                                </Box>
-                                <AccordionItemContent>
-                                    <div>
-                                        <h2>{banner.hasMobile ? "PC" : "Imagem geral (PC/MOBILE)"}</h2>
-                                        <img className="categoryImageFacilitys" src={banner.data} alt="Imagem da Categoria" />
-                                        <input type="file" onChange={(e) => changeImage(e, index, false)} />
-                                    </div>
-
-                                    {banner.hasMobile ?
-
-                                        <div>
-                                            <h2>MOBILE</h2>
-                                            <img className="categoryImageFacilitys" src={banner.dataMobile} alt="Imagem da Categoria" />
-                                            <input type="file" onChange={(e) => changeImage(e, index, true)} />
-                                        </div>
-                                        : null}
-                                </AccordionItemContent>
-                            </AccordionItem>
-                        ))}
-                    </AccordionRoot>
-                ) : null}
-            </div>
-        }
-    ]
+            content: (
+                <div>
+                    {banners.some((banner) => banner.type === "IMAGE") && (
+                        <AccordionRoot spaceY="4" variant="plain" collapsible>
+                            {banners.map((banner, index) => (
+                                banner.type === "IMAGE" && (
+                                    <AccordionItem key={banner.reference} value={banner.reference}>
+                                        <Box position="relative">
+                                            <AccordionItemTrigger indicatorPlacement="start">
+                                                {banner.reference}
+                                            </AccordionItemTrigger>
+                                        </Box>
+                                        <AccordionItemContent>
+                                            <div>
+                                                <h2>{banner.hasMobile ? "PC" : "Imagem geral (PC/MOBILE)"}</h2>
+                                                <img className="categoryImageFacilitys" src={banner.data} alt="Imagem da Categoria" />
+                                                <input type="file" onChange={(e) => changeImage(e, index, false)} />
+                                            </div>
+                                            {banner.hasMobile && (
+                                                <div>
+                                                    <h2>MOBILE</h2>
+                                                    <img className="categoryImageFacilitys" src={banner.dataMobile} alt="Imagem da Categoria" />
+                                                    <input type="file" onChange={(e) => changeImage(e, index, true)} />
+                                                </div>
+                                            )}
+                                        </AccordionItemContent>
+                                    </AccordionItem>
+                                )
+                            ))}
+                        </AccordionRoot>
+                    )}
+                </div>
+            ),
+        },
+        {
+            title: "Textos",
+            content: (
+                <div>
+                    {banners.some((banner) => banner.type === "TEXT") && (
+                        <AccordionRoot spaceY="4" variant="plain" collapsible>
+                            {banners.map((banner) => (
+                                banner.type === "TEXT" && (
+                                    <AccordionItem key={banner.reference} value={banner.reference}>
+                                        <Box position="relative">
+                                            <AccordionItemTrigger indicatorPlacement="start">
+                                                {banner.reference}
+                                            </AccordionItemTrigger>
+                                        </Box>
+                                        <AccordionItemContent>
+                                            {Object.entries(JSON.parse(banner?.data)).map(([key, value]) => (
+                                                <Input
+                                                    key={key}
+                                                    value={value}
+                                                    placeholder={`Digite ${key}`}
+                                                    onChange={(e) => changeText(banner, key, e.target.value)}
+                                                />
+                                            ))}
+                                        </AccordionItemContent>
+                                    </AccordionItem>
+                                )
+                            ))}
+                        </AccordionRoot>
+                    )}
+                </div>
+            ),
+        },
+    ];
 
     return (
         <section className="dashboard-laris-acessorios">
@@ -124,17 +178,12 @@ export const FacilitysPage = () => {
                             <Button onClick={saveFacilitys} className="savebtn">Salvar alterações</Button>
                         </div>
                     </div>
-
-                    {FacilitysContent.map((facilityItem: FacilityProps) => {
-                        return (
-                            <>
-                                <div className="contentPage">
-                                    <h1>{facilityItem.title}</h1>
-                                </div>
-                                {facilityItem.content}
-                            </>
-                        )
-                    })}
+                    {FacilitysContent.map((facilityItem: FacilityProps, index) => (
+                        <div key={index} className="contentPage">
+                            <h1>{facilityItem.title}</h1>
+                            {facilityItem.content}
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>
