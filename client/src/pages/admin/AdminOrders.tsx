@@ -102,6 +102,10 @@ const AdminOrders = () => {
     const address = JSON.parse(orderAtual.address);
     const user = JSON.parse(orderAtual.user);
 
+    function formatTelefoneToLink(telefone: string) {
+        return telefone.replace(/\D/g, '');
+    }
+
     return (
         <section className="dashboard-laris-acessorios">
             <div className="dashboard-content">
@@ -144,8 +148,8 @@ const AdminOrders = () => {
 
                         <Separator />
 
-                        <button className="btn-contact">Entrar em contato por WhatsApp</button> <br />
-                        <button className="btn-contact">Entrar em contato por E-mail</button>
+                        <button onClick={() => window.open(`https://wa.me/55${formatTelefoneToLink(user.telefone)}`)} className="btn-contact">Entrar em contato por WhatsApp</button> <br />
+                        <button onClick={() => window.location.href = "mailto:" + user.email} className="btn-contact">Entrar em contato por E-mail</button>
                     </div>
                     {/* Resumo do Pedido */}
                     <div className="order-summary">
