@@ -567,9 +567,11 @@ app.post(`/api/v1/${secretKey}/orders/edit`, (req, res) => {
 
     pool.query(
         'UPDATE `orders` SET ' +
-        'state = ? ' +
+        'state = ?, ' +
+        'situation = ?, ' +
+        'codigoRastreio = ? ' +
         'WHERE id = ?',
-        [item.state, item.id],
+        [item.state, item.situation, item.codigoRastreio, item.id],
         (err, result) => {
             if (err) {
                 console.error(err);

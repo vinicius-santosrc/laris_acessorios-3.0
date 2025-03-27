@@ -39,6 +39,7 @@ import Config from './pages/admin/Config';
 import CategoriesAdmin from './pages/admin/CategoriesAdmin';
 import PolicyCookies from './pages/institutional/PolicyCookies';
 import { UserProvider } from './contexts/UserContext';
+import AdminOrders from './pages/admin/AdminOrders';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -56,6 +57,7 @@ const routes = [
   { path: '/admin/products/:uid', isProtected: true, element: (<AdminPage><ProductEditPage /></AdminPage>) },
   { path: '/admin/clients', isProtected: true, element: (<AdminPage><UsersAdmin /></AdminPage>) },
   { path: '/admin/orders', isProtected: true, element: (<AdminPage><Orders /></AdminPage>) },
+  { path: '/admin/orders/:order', isProtected: true, element: (<AdminPage><AdminOrders /></AdminPage>)},
   { path: '/admin/planning', isProtected: true, element: (<AdminPage><Planing /></AdminPage>) },
   { path: '/admin/facilitys', isProtected: true, element: (<AdminPage><FacilitysPage /></AdminPage>) },
   { path: '/admin/reports', isProtected: true, element: (<AdminPage><Reports /></AdminPage>) },

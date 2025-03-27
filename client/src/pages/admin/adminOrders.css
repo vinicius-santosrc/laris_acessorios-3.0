@@ -1,0 +1,122 @@
+/* Página de Detalhes do Pedido */
+.order-details-page {
+    font-family: 'Lora', serif;
+    color: #4B4B4B;
+    background-color: #f8f8f8;
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.back-button {
+    margin: 12px auto;
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+}
+
+.back-button-inside {
+    display: flex;
+    align-items: center;
+    gap: 12px
+}
+
+/* Resumo do Pedido */
+.order-summary {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    border-left: 2px solid #ccc;
+    padding-left: 10px;
+}
+
+.timeline-item .timeline-connector {
+    width: 10px;
+    height: 10px;
+    background-color: #007BFF;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+/* Itens do Pedido */
+.order-items {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.order-item-content {
+    display: flex;
+    align-items: center;
+    width: 100% !important;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.order-item-content img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+}
+
+.item-details {
+    margin-left: 20px;
+    flex: 1;
+}
+
+.item-details h4 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.item-details p {
+    font-size: 1rem;
+    color: #666;
+}
+
+.item-details strong {
+    font-weight: bold;
+    color: #000;
+}
+
+/* Informações do Cliente */
+.order-user {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.order-user img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: #f1f1f1;
+    margin-bottom: 15px;
+}
+
+.order-user p {
+    font-size: 1rem;
+    color: #555;
+}
+
+.order-user strong {
+    font-weight: bold;
+    color: #333;
+}

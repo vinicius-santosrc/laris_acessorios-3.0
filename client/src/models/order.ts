@@ -25,5 +25,6 @@ export interface OrderAfterBuyProps {
     subtotal: number;
     cupom_desconto: number;
     cupom_name: string;
+    codigoRastreio: string;
 
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { OrderAfterBuyProps } from "../../models/order";
 import { orderService } from "../../services/orderService";
 import { Table } from '@chakra-ui/react';
-import './Orders.css'; // Importando o arquivo CSS para estilos
+import './Orders.css';
 import { OrderStates } from "../../lib/utils";
 import {
     SelectContent,
@@ -11,6 +11,7 @@ import {
     SelectTrigger,
     SelectValueText,
 } from "../../components/ui/select";
+import { Link } from "react-router-dom";
 
 const Orders = () => {
     const [orders, setOrders] = useState<OrderAfterBuyProps[]>([]);
@@ -18,7 +19,6 @@ const Orders = () => {
     const getAllOrders = async () => {
         try {
             const orders = await orderService.getAll();
-            // Se o campo user for uma string JSON, converta-o
             const parsedOrders = orders.map((order: OrderAfterBuyProps) => {
                 order.user = JSON.parse(order.user);
                 order.items = JSON.parse(order.items);
@@ -96,7 +96,7 @@ const Orders = () => {
                                         </Table.Cell>
                                         <Table.Cell>{order.situation}</Table.Cell>
                                         <Table.Cell>
-                                            <button onClick={() => window.open(window.location.origin + "/account/orders/" + order.id)} className="action-button">Ver Detalhes</button>
+                                            <Link to={window.location.origin + "/admin/orders/" + order.id} className="action-button">Detalhes</Link>
                                         </Table.Cell>
                                     </Table.Row>
                                 )

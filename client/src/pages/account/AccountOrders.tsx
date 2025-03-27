@@ -1,7 +1,7 @@
 import { OrderAfterBuyProps } from "../../models/order";
 import { orderService } from "../../services/orderService";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./accountOrders.css"; // Estilos para página
 import { TimelineConnector, TimelineContent, TimelineDescription, TimelineItem, TimelineRoot, TimelineTitle } from "../../components/ui/timeline";
 import { LuCheck, LuPackage, LuShip } from "react-icons/lu";
@@ -87,7 +87,6 @@ const AccountOrders = () => {
             </div>
             <div className="order-details-page">
                 <h2>Detalhes do Pedido #{orderAtual.id}</h2>
-
                 <StepsRoot
                     py="6"
                     defaultStep={currentStep}
@@ -122,7 +121,7 @@ const AccountOrders = () => {
                     <h2>Entrega</h2>
                     <p><strong>{address?.shippingMethodSelected?.company.name} - {address?.shippingMethodSelected?.name}</strong></p>
                     {address?.shippingMethodSelected?.company.name != "Retirada" ? <p><strong>Seu pedido será entregue em {address?.shippingMethodSelected?.delivery_time} dias após ser enviado.</strong></p> : "Entraremos em contato via WhatsApp para definir um local em Pouso Alegre MG para retirada de seu produto"}
-                    {address?.shippingMethodSelected?.company.name != "Retirada" && <p><strong>Código para rastreio do pedido: <u>{address?.codigoRastreio}</u></strong></p>}
+                    {address?.shippingMethodSelected?.company.name != "Retirada" && <p><strong>Código para rastreio do pedido: <Link target="_blank" to={"https://rastreamento.correios.com.br/app/index.php"}><u>{orderAtual?.codigoRastreio}</u></Link></strong></p>}
                     <br />
                     <p><strong>Endereço {address?.shippingMethodSelected?.company.name != "Retirada" ? "de Entrega" : ""}:</strong> {address.endereço}, {address.numero}, {address.bairro} - {address.cidade}/{address.estado} ({address.cep})</p>
                     <p><strong>Referência:</strong> {address.referencia}</p>
