@@ -137,7 +137,7 @@ const Header = () => {
         return (
             <React.Fragment>
                 <div className="header-full-component">
-                    <TopBarComponent text="Compre pelo WhatsApp +55 35 99739-4181" />
+                    <TopBarComponent isTransparent={isTransparent} text="Compre pelo WhatsApp +55 35 99739-4181" />
                     <header className="header-application header-application__wrapper">
                         <div className="header-app-top-content header-app-top-content__wrapper">
                             <section className="header-inside-content header-inside-content__search">
@@ -261,7 +261,8 @@ const Header = () => {
 
                     <section className="header-inside-content header-inside-content__logo">
                         <Link to={window.location.origin} target="_parent">
-                            <Image src={logoHeader} alt="Logotipo" className="logo-image" />
+                            {/* <Image src={logoHeader} alt="Logotipo" className="logo-image" /> */}
+                            <h1 className="logoTipoH1">LARIS ACESSÓRIOS</h1>
                         </Link>
                     </section>
 
