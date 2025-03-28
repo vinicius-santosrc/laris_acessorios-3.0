@@ -14,6 +14,8 @@ const CategoryProducts: React.FC<any> = ({ products, priceOrder, selectedFilters
     const [currentPage, setCurrentPage] = useState(1);
     const [sortedProducts, setSortedProducts] = useState<Product[]>(validProducts);
 
+    const [view, setView] = useState<any>(1);
+
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
 
@@ -64,17 +66,20 @@ const CategoryProducts: React.FC<any> = ({ products, priceOrder, selectedFilters
                         <p>{filteredProducts.length} modelos</p>
                     </div>
                     <div className="category-right-products">
-                        <RadioGroup defaultValue="1">
+                        <RadioGroup onChange={(e) => setView(e.target.defaultValue)} display={"flex"} gap={4} defaultValue="1">
                             <HStack gap="6">
                                 <Radio value="1">Feed</Radio>
                             </HStack>
+                            <HStack gap="6">
+                            <Radio value="2">Grid</Radio>
+                        </HStack>
                         </RadioGroup>
                     </div>
                 </div>
                 <div className="category-products__body">
                     <div className="category-products__content">
                         {currentPageProducts.map((product: Product) => (
-                            <PrincipalProductCard product={product} key={product.id} />
+                            <PrincipalProductCard view={view} product={product} key={product.id} />
                         ))}
                         {currentPageProducts.length < 1 && (
                             <section className="no-products">

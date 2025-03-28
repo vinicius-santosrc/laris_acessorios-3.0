@@ -30,7 +30,7 @@
 
 .loader-content {
     animation: loader 0.5s infinite;
-    color: var(--cor-principal);
+    color: var(--cor-principal) !important;
     scale: 1.5;
 }
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
 
@@ -9,7 +9,7 @@ const SubHeaderComponent: React.FC<any> = ({ itemHover, isOpen }) => {
                 <div className="subheader-inside">
                     <div className="subheader-left-side">
                         <div className="subheader-title">
-                            <h1>{itemHover.title.toUpperCase()}</h1>
+                            <h2>EXPLORE: {itemHover.title.toUpperCase()}</h2>
                         </div>
                         <div className="subheader-component">
                             {itemHover?.subItems.map((item: any, id: number) => {
@@ -25,7 +25,7 @@ const SubHeaderComponent: React.FC<any> = ({ itemHover, isOpen }) => {
                         </div>
                     </div>
                     <div className="subheader-right-side">
-                        <img alt={itemHover.title} src={itemHover.photoURL} />
+                        <img alt={itemHover.title} src={"https://i.ibb.co/0jphgqRb/IMG-1322.jpg"} />
                     </div>
                 </div>
             </section>

@@ -6,7 +6,7 @@ import { FavoritesIcon } from "../../../components/icons/icons";
 import { Product } from "@/models/product";
 import { cartService } from "../../../services/cartService";
 
-const PrincipalProductCard = ({ product }: { product: Product }) => {
+const PrincipalProductCard = ({ view, product }: { view: any, product: Product }) => {
     const [isHover, setHover] = useState<boolean>(false);
     const [productMouseIn, setProductMouseIn] = useState<boolean>(false);
     const [isBuying, setIsBuying] = useState<boolean>(false);
@@ -14,6 +14,9 @@ const PrincipalProductCard = ({ product }: { product: Product }) => {
     const tamanhos = product.tamanhos ? JSON.parse(product.tamanhos) : [];
     const Images = product.photoURL ? JSON.parse(product.photoURL) : [];
 
+    if (view === undefined) {
+        view = 1
+    }
 
     useEffect(() => {
         if (tamanhos && tamanhos.length > 0) {
@@ -25,7 +28,7 @@ const PrincipalProductCard = ({ product }: { product: Product }) => {
     }
 
     return (
-        <div className="product-card-wrapper" style={productMouseIn ? { border: "1px solid lightgray" } : { border: "1px solid white" }} onMouseEnter={() => setProductMouseIn(true)} onMouseLeave={() => setProductMouseIn(false)}>
+        <div className="product-card-wrapper" id={view == 1 ? "feed" : "grid"} style={productMouseIn ? { border: "1px solid lightgray" } : { border: "1px solid white" }} onMouseEnter={() => setProductMouseIn(true)} onMouseLeave={() => setProductMouseIn(false)}>
             <section className="product-card">
                 <Link to={window.location.origin + "/product/" + product.url} className="product-link">
                     <article className="product-card-article">

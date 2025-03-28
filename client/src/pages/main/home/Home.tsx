@@ -56,7 +56,12 @@ const Home = () => {
                     href={bannerInfos?.data?.href}
                 />
                 :
-                null
+                <Carousel
+                    url={""}
+                    maintext={""}
+                    description={""}
+                    href={""}
+                />
             }
             <SubCategorys />
             <SectionComponent

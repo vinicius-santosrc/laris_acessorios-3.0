@@ -176,9 +176,10 @@ const ProductPage = () => {
                                         <button>Indisponível</button>
                                     </div>
                                 }
-                                <div className="product-credit-button">
-                                    <button>Ver parcelas</button>
-                                </div>
+                                 <div className="product-credit-button">
+                                    {/* <button>Ver parcelas</button> */}
+                                    <button></button>
+                                </div> 
                             </div>
                             <div className="product-description-content">
                                 <h2>Descrição e Detalhes</h2>

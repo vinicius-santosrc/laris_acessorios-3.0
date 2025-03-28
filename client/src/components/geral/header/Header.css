@@ -1,16 +1,54 @@
 .search-box-area {
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid white;
   width: 250px;
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
+#mode2 .search-box-area {
+  border-bottom: 1px solid black;
+  width: 250px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+
+
+.headerpcicons svg path {
+  color: white;
+  fill: white;
+}
+
+#mode2 .headerpcicons svg path {
+  color: black;
+  fill: black;
+}
+
 .search-box-area input {
   outline: none;
   border: none;
-  color: black;
+  color: white;
   padding: 4px 0;
+}
+
+#mode2 .search-box-area input {
+  color: black;
+}
+
+.search-box-area input::placeholder {
+  color: white;
+}
+
+#mode2 .search-box-area input::placeholder {
+  color: black;
+}
+
+.subheader-right-side img {
+  width: 400px;
+  object-fit: cover;
+  height: 400px;
 }
 
 .subheader-component-wrapper {
@@ -23,12 +61,29 @@
 
 .redirect-item-content span {
   font-size: 12px;
-  border-bottom: 2px solid white;
+  color: white;
+  border-bottom: 2px solid transparent;
+}
+
+#mode2 .redirect-item-content span {
+  color: black;
 }
 
 .redirect-item-content span:hover {
   font-weight: 800;
   border-bottom: 2px solid var(--cor-principal);
+}
+
+.logoTipoH1 {
+  font-size: 24px;
+  color: white;
+  font-family: sans-serif;
+}
+
+#mode2 .logoTipoH1 {
+  font-size: 24px;
+  color: black;
+  font-family: sans-serif;
 }
 
 .subHeader {
@@ -78,16 +133,30 @@
 .header-application {
   margin: auto;
   justify-content: center;
-  padding-bottom: 16px;
+}
+
+#mode1 .search-box-area path {
+  color: white;
+  fill: white;
 }
 
 .header-full-component {
   position: fixed;
   top: 0;
   margin: auto;
-  background-color: white;
   width: 100%;
   z-index: 50;
+  transition: 200ms;
+}
+
+#mode2 {
+  background-color: white;
+  color: black;
+  transition: 500ms;
+}
+
+#mode1 {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.61), transparent);
 }
 
 .header-inside-bottom-content {
@@ -99,7 +168,6 @@
   padding-bottom: 8px;
   width: 1400px;
   margin: auto;
-  border-bottom: 1px solid var(--cinza-principal);
 }
 
 .header-application-mobile {
@@ -486,6 +554,10 @@
     gap: 15px;
   }
 
+  .header-full-component {
+    background-color: white;
+  }
+
   .search-btn-inside {
     display: flex;
     flex-direction: row;
@@ -504,4 +576,5 @@
     color: white;
     border: 1px solid var(--cor-principal);
   }
+
 }
