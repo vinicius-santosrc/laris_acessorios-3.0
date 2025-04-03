@@ -595,3 +595,18 @@
     background: white;
   }
 }
+
+@media screen and (max-width: 400px) {
+  #mode2 .logoTipoH1 {
+    font-size: 15px;
+    margin: auto;
+    text-align: center;
+  }
+
+  #mode1 .logoTipoH1 {
+    font-size: 15px;
+    margin: auto;
+    color: black;
+    text-align: center;
+  }
+}

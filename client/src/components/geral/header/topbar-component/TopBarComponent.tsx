@@ -15,9 +15,9 @@ const TopBarComponent: React.FC<TopBarComponentProps> = ({ isTransparent, text }
 
     useEffect(() => {
         if (isClosed) {
-            return
+            return setShowing(false)
         }
-        if (isTransparent) {
+        else if ((window.scrollY <= 15) && !isClosed) {
             setShowing(true)
         }
         else {
