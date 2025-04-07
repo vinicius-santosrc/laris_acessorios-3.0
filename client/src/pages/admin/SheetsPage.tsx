@@ -93,7 +93,7 @@ export const SheetsPage = () => {
 
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (planilha == "planilha-itens") {
             if (!currentItem.codigo || !currentItem.nameofitem || !currentItem.detalhe || !currentItem.preco_compra || !currentItem.custos || !currentItem.precorevenda || !currentItem.quantcompra || !currentItem.lucroporitem) {
                 toaster.create({
@@ -115,8 +115,8 @@ export const SheetsPage = () => {
         if (itemId) {
             // Atualize o item no Appwrite
             if (planilha == "planilha-itens") {
-                adminService.editSheetById("planilha-itens", JSON.stringify(currentItem)).then(() => {
-                    loadItens();
+                adminService.editSheetById("planilha-itens", JSON.stringify(currentItem)).then(async() => {
+                    await loadItens();
                     setCurrentItem({
                         codigo: "",
                         nameofitem: "",
@@ -140,8 +140,8 @@ export const SheetsPage = () => {
             }
             else if (planilha == "planilha-despesas") {
                 //EDITAR LINHA
-                adminService.editSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS)).then(() => {
-                    loadItens();
+                await adminService.editSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS)).then(async() => {
+                    await loadItens();
                     getTotal();
                     setcurrentItemDESPESAS({
                         descricao: "",
@@ -163,12 +163,12 @@ export const SheetsPage = () => {
         } else {
             // Crie um novo item no Appwrite sem especificar o ID
             if (planilha == "planilha-itens") {
-                adminService.addSheetById("planilha-itens", JSON.stringify(currentItem)).then(() => {
+                adminService.addSheetById("planilha-itens", JSON.stringify(currentItem)).then(async() => {
                     toaster.create({
                         title: "Item criado com sucesso!",
                         type: "sucess"
                     })
-                    loadItens();
+                    await loadItens();
                     setCurrentItem({
                         codigo: "",
                         nameofitem: "",
@@ -191,12 +191,12 @@ export const SheetsPage = () => {
             }
             else if (planilha == "planilha-despesas") {
                 //ADICIONAR LINHA
-                adminService.addSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS)).then(() => {
+                adminService.addSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS)).then(async () => {
                     toaster.create({
                         title: "Item criado com sucesso!",
                         type: "sucess"
                     })
-                    loadItens();
+                    await loadItens();
                     getTotal();
                     setCurrentItem({
                         descricao: "",
@@ -281,7 +281,7 @@ export const SheetsPage = () => {
                                         <h1>Total</h1>
                                         <h3>Entradas: R$<span id="entradas">{totalEntradas?.toFixed(2)}</span></h3>
                                         <h3>Saídas: R$<span id="saidas">{totalSaidas?.toFixed(2)}</span></h3>
-                                        <h3 id="saldoh3">Saldo: R$<span>{saldoWrap?.toFixed(2)}</span></h3>
+                                        <h3 id={saldoWrap?.toFixed(2) < 0 ? "saidas" : "saldoh3"}>Saldo: R$<span>{saldoWrap?.toFixed(2)}</span></h3>
                                     </div>
                                     <table className="item-table item-table-despesas-top">
                                         <thead className="titlecolumns">
@@ -359,7 +359,7 @@ export const SheetsPage = () => {
 
                                     <table className="item-table-despesas">
                                         <Tabs.Root lazyMount unmountOnExit defaultValue="Tudo">
-                                            <Tabs.List>
+                                            <Tabs.List borderRadius={4} padding={4} display={"flex"} overflowY={"hidden"} overflowX={"auto"} gap={12}>
                                                 {
                                                     Object.keys(monthlyData).map((month) => {
                                                         return (
