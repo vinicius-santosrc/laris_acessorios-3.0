@@ -17,6 +17,8 @@ const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }: any)
     ]);
 
     const [isMobile, setIsMobile] = useState(false);  // Estado para verificar se é mobile
+    const [title, setTitle] = useState("JOALHERIA");
+    const [typeFilter, setTypeFilter] = useState("JOALHERIA")
 
     // UseEffect para detectar o tamanho da tela
     useEffect(() => {
@@ -31,6 +33,18 @@ const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }: any)
         // Adiciona o listener para mudanças no tamanho da tela
         window.addEventListener("resize", handleResize);
 
+        if (window.location.href.includes("perfume")) {
+            setTitle("PERFUMARIA");
+            setTypeFilter("PERFUMARIA");
+            setItems([
+                { id: 1, title: "Coleções", options: [] },
+                { id: 2, title: "Seleção", options: [{ label: "PARA ELA", value: "para-ela" }, { label: "PARA ELE", value: "para-ele" }, { label: "UNISSEX", value: "unissex" }] },
+                { id: 3, title: "Categoria", options: [{ label: "EAU DE PARFUM", value: "eau-de-parfum" }, { label: "EAU DE TOILETTE", value: "eau-de-toilette" }, { label: "PARFUM", value: "parfum" }] },
+                { id: 4, title: "Disponibilidade", options: [{ label: "Pronta entrega", value: "pronta-entrega" }, { label: "Encomenda", value: "encomenda" }] }
+            ]);
+
+        }
+
         // Limpa o listener quando o componente for desmontado
         return () => {
             window.removeEventListener("resize", handleResize);
@@ -42,9 +56,43 @@ const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }: any)
     };
 
     const clearFilters = () => {
-        onFilterChange("Coleções", []);
-        onFilterChange("Seleção", [{ label: "Presentes para Ela", value: "para-ela" }]);
-        onFilterChange("Material", [{ label: "Prata de lei", value: "pratas" }, { label: "Banhados a ouro", value: "banhados-a-ouro" }]);
+        if (typeFilter === "PERFUMARIA") {
+            onFilterChange("Coleções", []);
+            onFilterChange("Seleção", [
+                { label: "PARA ELA", value: "para-ela" },
+                { label: "PARA ELE", value: "para-ele" },
+                { label: "UNISSEX", value: "unissex" }
+            ]);
+            onFilterChange("Categoria", [
+                { label: "EAU DE PARFUM", value: "eau-de-parfum" },
+                { label: "EAU DE TOILETTE", value: "eau-de-toilette" },
+                { label: "PARFUM", value: "parfum" }
+            ]);
+            onFilterChange("Disponibilidade", [
+                { label: "Pronta entrega", value: "pronta-entrega" },
+                { label: "Encomenda", value: "encomenda" }
+            ]);
+        } else {
+            onFilterChange("Coleções", []);
+            onFilterChange("Seleção", [
+                { label: "Presentes para Ela", value: "para-ela" }
+            ]);
+            onFilterChange("Material", [
+                { label: "Prata de lei", value: "pratas" },
+                { label: "Banhados a ouro", value: "banhados-a-ouro" }
+            ]);
+            onFilterChange("Categoria", [
+                { label: "Colares", value: "colares" },
+                { label: "Anéis", value: "aneis" },
+                { label: "Brincos", value: "brincos" },
+                { label: "Pulseiras", value: "pulseiras" }
+            ]);
+            onFilterChange("Disponibilidade", [
+                { label: "Pronta entrega", value: "pronta-entrega" },
+                { label: "Encomenda", value: "encomenda" }
+            ]);
+        }
+
     };
 
     return (
@@ -52,7 +100,7 @@ const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }: any)
             {!isMobile ?
                 <div className="category-filter-wrapper">
                     <div className="category-filter__header">
-                        <p>JOALHERIA</p>
+                        <p>{title}</p>
                     </div>
                     <div className="category-filter__body">
                         <div className="category-first-options">
@@ -148,7 +196,7 @@ const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }: any)
                                         </Button>
                                     </div>
                                 </DialogBody>
-                                <DialogCloseTrigger WebkitAppearance={"button"}  appearance={"button"} color={"black"} />
+                                <DialogCloseTrigger WebkitAppearance={"button"} appearance={"button"} color={"black"} />
                             </DialogContent>
                         </DialogRoot>
                     </div>

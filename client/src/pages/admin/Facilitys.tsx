@@ -18,6 +18,9 @@ interface FacilityItem {
     dataMobile?: string;
     hasMobile: boolean;
     type: "IMAGE" | "TEXT";
+    description: string;
+    ref: string;
+    group: string
 }
 
 interface FacilityProps {
@@ -108,7 +111,7 @@ export const FacilitysPage = () => {
                                     <AccordionItem key={banner.reference} value={banner.reference}>
                                         <Box position="relative">
                                             <AccordionItemTrigger indicatorPlacement="start">
-                                                {banner.reference}
+                                                {banner.description ? banner.description : banner.reference}
                                             </AccordionItemTrigger>
                                         </Box>
                                         <AccordionItemContent>
@@ -144,7 +147,7 @@ export const FacilitysPage = () => {
                                     <AccordionItem key={banner.reference} value={banner.reference}>
                                         <Box position="relative">
                                             <AccordionItemTrigger indicatorPlacement="start">
-                                                {banner.reference}
+                                                {banner.description ? banner.description : banner.reference}
                                             </AccordionItemTrigger>
                                         </Box>
                                         <AccordionItemContent>
