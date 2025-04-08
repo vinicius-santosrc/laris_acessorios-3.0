@@ -28,12 +28,12 @@ export class cartService {
         if (existingProductIndex === -1) {
             bagItems.push(productWithSize);
             toaster.create({
-                title: "Item adicionado à sacola",
+                title: "Produto adicionado à sacola",
                 type: "info",
             });
         } else {
             toaster.create({
-                title: "Item já está na sacola",
+                title: "Produto já está na sacola",
                 type: "warning",
             });
         }

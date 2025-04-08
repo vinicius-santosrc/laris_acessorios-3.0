@@ -16,9 +16,11 @@ const CategoryHeader: React.FC<CategoriesProps> = ({ highlightText, highlightDes
                     <div className="categories-page-about__body">
                         <p>{highlightDescription}</p>
                     </div>
-                    <div className="categories-page-about__footer">
-                        <Button className="categories-page-btn">Descubra seu tamanho</Button>
-                    </div>
+                    {highlightText != "Perfumes" &&
+                        <div className="categories-page-about__footer">
+                            <Button className="categories-page-btn">Descubra seu tamanho</Button>
+                        </div>
+                    }
                 </div>
             </div>
         </section>

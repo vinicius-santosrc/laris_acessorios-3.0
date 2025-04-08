@@ -19,7 +19,7 @@ const RelatedProducts = ({ category }: any) => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const fetchedProducts: Product[] = await productService.getByRelatedCategory(category[2]);
+                const fetchedProducts: Product[] = await productService.getByRelatedCategory(category[2] || category[0] || "joias");
                 setProducts(fetchedProducts);
             } catch (err: any) {
                
