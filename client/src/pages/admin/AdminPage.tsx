@@ -7,7 +7,6 @@
  * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
 */
 
-import SideBar from "../../components/admin/SideBar";
 import '../../components/admin/dashboard/dashboard.css'
 import { DashboardHeader } from "../../components/admin/DashboardHeader";
 

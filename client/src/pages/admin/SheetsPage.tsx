@@ -54,68 +54,57 @@ export const SheetsPage = () => {
         getTotal();
     };
 
-    const handleDelete = (item: any) => {
+    const handleDelete = async (item: any) => {
         if (!item.id) {
             toaster.create({
                 title: "Oops...",
                 description: "O item não possui um ID válido para exclusão! Contate um desenvolvedor.",
                 type: "error"
-            })
+            });
             getTotal();
             return;
         }
 
-        if (planilha == 'planilha-despesas') {
-            adminService.deleteSheetById("planilha-despesas", JSON.stringify(item)).then(() => {
+        try {
+            if (planilha === 'planilha-despesas') {
+                await adminService.deleteSheetById("planilha-despesas", JSON.stringify(item));
                 loadItens();
                 getTotal();
-            })
-                .catch(() => {
-                    toaster.create({
-                        title: "Oops...",
-                        description: "O item não possui um ID válido para exclusão! Contate um desenvolvedor.",
-                        type: "error"
-                    })
-                });
-        }
-        else if (planilha == 'planilha-itens') {
-            adminService.deleteSheetById("planilha-itens", JSON.stringify(item)).then(() => {
+            } else if (planilha === 'planilha-itens') {
+                await adminService.deleteSheetById("planilha-itens", JSON.stringify(item));
                 loadItens();
-            })
-                .catch(() => {
-                    toaster.create({
-                        title: "Oops...",
-                        description: "O item não possui um ID válido para exclusão! Contate um desenvolvedor.",
-                        type: "error"
-                    })
-                });
+            }
+        } catch (error) {
+            toaster.create({
+                title: "Oops...",
+                description: "O item não pode ser excluído. Contate um desenvolvedor.",
+                type: "error"
+            });
         }
-
     };
 
     const handleSave = async () => {
-        if (planilha == "planilha-itens") {
+        if (planilha === "planilha-itens") {
             if (!currentItem.codigo || !currentItem.nameofitem || !currentItem.detalhe || !currentItem.preco_compra || !currentItem.custos || !currentItem.precorevenda || !currentItem.quantcompra || !currentItem.lucroporitem) {
                 toaster.create({
                     title: "Preencha todos os campos!",
-                })
+                });
                 return;
             }
-        }
-
-        else if (planilha == "planilha-despesas") {
+        } else if (planilha === "planilha-despesas") {
             if (!currentItemDESPESAS.descricao || !currentItemDESPESAS.valor || !currentItemDESPESAS.tipo) {
                 toaster.create({
                     title: "Preencha todos os campos!",
-                })
+                });
                 return;
             }
         }
 
-        if (itemId) {
-            // Atualize o item no Appwrite
-            if (planilha == "planilha-itens") {
-                adminService.editSheetById("planilha-itens", JSON.stringify(currentItem)).then(async() => {
+        try {
+            if (itemId) {
+                // Atualize o item no Appwrite
+                if (planilha === "planilha-itens") {
+                    await adminService.editSheetById("planilha-itens", JSON.stringify(currentItem));
                     await loadItens();
                     setCurrentItem({
                         codigo: "",
@@ -128,19 +117,8 @@ export const SheetsPage = () => {
                         lucroporitem: "",
                     });
                     setItemId(null);
-                })
-                    .catch(() => {
-                        toaster.create({
-                            title: "Oops...",
-                            description: "O item não pode ser salvo. Contate um desenvolvedor.",
-                            type: "error"
-                        })
-
-                    });
-            }
-            else if (planilha == "planilha-despesas") {
-                //EDITAR LINHA
-                await adminService.editSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS)).then(async() => {
+                } else if (planilha === "planilha-despesas") {
+                    await adminService.editSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS));
                     await loadItens();
                     getTotal();
                     setcurrentItemDESPESAS({
@@ -149,25 +127,15 @@ export const SheetsPage = () => {
                         tipo: "Receita"
                     });
                     setItemId(null);
-
-                })
-                    .catch(() => {
-                        toaster.create({
-                            title: "Oops...",
-                            description: "O item não pode ser salvo. Contate um desenvolvedor.",
-                            type: "error"
-                        })
-
-                    });
-            }
-        } else {
-            // Crie um novo item no Appwrite sem especificar o ID
-            if (planilha == "planilha-itens") {
-                adminService.addSheetById("planilha-itens", JSON.stringify(currentItem)).then(async() => {
+                }
+            } else {
+                // Crie um novo item no Appwrite sem especificar o ID
+                if (planilha === "planilha-itens") {
+                    await adminService.addSheetById("planilha-itens", JSON.stringify(currentItem));
                     toaster.create({
                         title: "Item criado com sucesso!",
-                        type: "sucess"
-                    })
+                        type: "success"
+                    });
                     await loadItens();
                     setCurrentItem({
                         codigo: "",
@@ -178,44 +146,30 @@ export const SheetsPage = () => {
                         precorevenda: "",
                         quantcompra: "",
                         lucroporitem: "",
-                        // Certifique-se de redefinir o ID
                     });
-                })
-                    .catch(() => {
-                        toaster.create({
-                            title: "Oops...",
-                            description: "O item não pode ser criado. Contate um desenvolvedor.",
-                            type: "error"
-                        })
-                    });
-            }
-            else if (planilha == "planilha-despesas") {
-                //ADICIONAR LINHA
-                adminService.addSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS)).then(async () => {
+                } else if (planilha === "planilha-despesas") {
+                    await adminService.addSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS));
                     toaster.create({
                         title: "Item criado com sucesso!",
-                        type: "sucess"
-                    })
+                        type: "success"
+                    });
                     await loadItens();
                     getTotal();
-                    setCurrentItem({
+                    setCurrentItemDESPESAS({
                         descricao: "",
                         valor: "",
                         tipo: "",
-                        // Certifique-se de redefinir o ID
                     });
-                })
-                    .catch(() => {
-                        toaster.create({
-                            title: "Oops...",
-                            description: "O item não pode ser criado. Contate um desenvolvedor.",
-                            type: "error"
-                        })
-                    });
+                }
             }
+        } catch (error) {
+            toaster.create({
+                title: "Oops...",
+                description: "O item não pode ser salvo. Contate um desenvolvedor.",
+                type: "error"
+            });
         }
     };
-
     const calculateTotals = (groupedData: any) => {
         let entradas = 0;
         let saidas = 0;
@@ -409,7 +363,7 @@ export const SheetsPage = () => {
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <button onClick={handleSave}><SaveIcon width={20}/></button>
+                                                                        <button onClick={handleSave}><SaveIcon width={20} /></button>
                                                                     </td>
                                                                 </tr>
                                                                 {monthlyData[month].items.map((item: ModelDespesas) => (

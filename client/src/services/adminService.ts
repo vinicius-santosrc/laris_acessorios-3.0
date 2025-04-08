@@ -11,10 +11,14 @@
 
 import { CategoriesProps } from "@/lib/utils";
 import Compressor from "compressorjs";
+import axios from 'axios';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
 const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
+const authorization = localStorage.getItem("token") ?? "";
+const keyUpload = process.env.REACT_APP_API_UPLOAD_KEY ?? "";
+const urlUpload = process.env.REACT_APP_API_UPLOAD_URL ?? "";
 
 export class adminService {
 
@@ -23,50 +27,46 @@ export class adminService {
 
     static getPlanning = async () => {
         try {
-            const response = await fetch(`${url}${preEndpoint}${secretKey}/planejamentos`);
-            const data = await response.json();
-            return data;
+            const response = await axios.get(`${url}${preEndpoint}${secretKey}/planejamentos`, {
+                headers: {
+                    "Authorization": authorization
+                }
+            });
+            return response.data;
         } catch (err) {
             throw err;
         }
     }
 
     static planningDeleteById = async (id: string) => {
-        fetch(`${url}${preEndpoint}${secretKey}/planejamentos/delete`, {
-            method: 'POST',
+        await axios.post(`${url}${preEndpoint}${secretKey}/planejamentos/delete`, {
+            id: id,
+        }, {
             headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: id,
-            })
-        })
+                "Authorization": authorization
+            }
+        });
     }
 
     static addNewPlanningCard = async (name_card: string) => {
-        fetch(`${url}${preEndpoint}${secretKey}/planejamentos/add`, {
-            method: 'POST',
+        await axios.post(`${url}${preEndpoint}${secretKey}/planejamentos/add`, {
+            name_card: name_card
+        }, {
             headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name_card: name_card
-            }),
-        })
+                "Authorization": authorization
+            }
+        });
     }
 
     static updatedCard = async (list: any, id: any) => {
-        fetch(`${url}${preEndpoint}${secretKey}/planejamentos/update`, {
-            method: "POST",
+        await axios.post(`${url}${preEndpoint}${secretKey}/planejamentos/update`, {
+            id: id,
+            list: list
+        }, {
             headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                id: id,
-                list: list
-            }),
-
-        })
+                "Authorization": authorization
+            }
+        });
     }
 
     //** SHEETS */
@@ -74,56 +74,49 @@ export class adminService {
 
     static getSheet = async (sheet_name: string) => {
         try {
-            const response = await fetch(`${url}${preEndpoint}${secretKey}/${sheet_name}`);
-            const data = await response.json();
-            return data.reverse();
+            const response = await axios.get(`${url}${preEndpoint}${secretKey}/${sheet_name}`, {
+                headers: {
+                    "Authorization": authorization
+                }
+            });
+            return response.data.reverse();
         } catch (err) {
-            throw Error(err);
             throw err;
         }
     }
 
     static deleteSheetById = async (sheet: string, item: any) => {
         try {
-            await fetch(`${url}${preEndpoint}${secretKey}/${sheet}/delete`, {
-                method: 'POST',
+            await axios.post(`${url}${preEndpoint}${secretKey}/${sheet}/delete`, item, {
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: item,
-            })
-        }
-        catch (error: any) {
+                    "Authorization": authorization
+                }
+            });
+        } catch (error: any) {
             throw Error(error);
         }
     }
 
     static editSheetById = async (sheet: string, item: any) => {
         try {
-            fetch(`${url}${preEndpoint}${secretKey}/${sheet}/edit`, {
-                method: 'POST',
+            await axios.post(`${url}${preEndpoint}${secretKey}/${sheet}/edit`, item, {
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: item,
-            })
-        }
-        catch (error: any) {
+                    "Authorization": authorization
+                }
+            });
+        } catch (error: any) {
             throw Error(error);
         }
     }
 
     static addSheetById = async (sheet: string, item: any) => {
         try {
-            fetch(`${url}${preEndpoint}${secretKey}/${sheet}/add`, {
-                method: 'POST',
+            await axios.post(`${url}${preEndpoint}${secretKey}/${sheet}/add`, item, {
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: item,
-            })
-        }
-        catch (error: any) {
+                    "Authorization": authorization
+                }
+            });
+        } catch (error: any) {
             throw Error(error);
         }
     }
@@ -131,49 +124,48 @@ export class adminService {
     // ** CATEGORYS ** //
     static getCategorys = async () => {
         try {
-            const response = await fetch(`${url}${preEndpoint}${secretKey}/categories`);
-            const data = await response.json();
-            return data.reverse();
+            const response = await axios.get(`${url}${preEndpoint}${secretKey}/categories`, {
+                headers: {
+                    "Authorization": authorization
+                }
+            });
+            return response.data.reverse();
         } catch (err) {
-            throw Error(err);
             throw err;
         }
     }
 
     static addNewCategory = async (item: any, itemData: any) => {
         try {
-            await fetch(`${url}${preEndpoint}${secretKey}/categories/add`, {
-                method: 'POST',
+            await axios.post(`${url}${preEndpoint}${secretKey}/categories/add`, item, {
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: item,
-            })
-        }
-        catch (error: any) {
+                    "Authorization": authorization
+                }
+            });
+        } catch (error: any) {
             throw Error(error);
         }
     }
 
     static getAllCategoriesData = async () => {
         try {
-            const response = await fetch(`${url}${preEndpoint}${secretKey}/categoriesData`);
-            const data = await response.json();
-            return data.reverse();
+            const response = await axios.get(`${url}${preEndpoint}${secretKey}/categoriesData`, {
+                headers: {
+                    "Authorization": authorization
+                }
+            });
+            return response.data.reverse();
         } catch (err) {
-            throw Error(err);
             throw err;
         }
     }
 
     static updateByCategory = async (category: CategoriesProps) => {
-        await fetch(`${url}${preEndpoint}${secretKey}/categories/edit`, {
-            method: 'POST',
+        await axios.post(`${url}${preEndpoint}${secretKey}/categories/edit`, category, {
             headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(category)
-        })
+                "Authorization": authorization
+            }
+        });
     }
 
     static upload = async (event: any): Promise<string | null> => {
@@ -184,56 +176,53 @@ export class adminService {
                     success(result: any) {
                         const formData = new FormData();
                         formData.append('image', result, result.name);
-                        formData.append('key', 'f559d2e043626a1955fb14d57caec1e2');
+                        formData.append('key', keyUpload);
 
-                        // Fazendo a requisição POST
-                        fetch('https://api.imgbb.com/1/upload', {
-                            method: 'POST',
-                            body: formData,
-                        })
-                            .then((response) => response.json())
+                        // Making the POST request
+                        axios.post(urlUpload, formData)
                             .then((response) => {
-                                if (response.success) {
-                                    resolve(response.data.url); // Resolva a promessa com a URL
+                                if (response.data.success) {
+                                    resolve(response.data.data.url); // Resolve the promise with the URL
                                 } else {
-                                    console.error('Upload failed:', response.error.message);
-                                    resolve(null); // Resolve com null se falhar
+                                    console.error('Upload failed:', response.data.error.message);
+                                    resolve(null); // Resolve with null if it fails
                                 }
                             })
                             .catch((error) => {
                                 console.error('Error during upload:', error);
-                                resolve(null); // Resolve com null em caso de erro
+                                resolve(null); // Resolve with null in case of error
                             });
                     },
                     error(err: any) {
                         console.error('Error during image compression:', err.message);
-                        resolve(null); // Resolve com null se houver erro de compressão
+                        resolve(null); // Resolve with null if there is a compression error
                     },
                 });
             });
         }
 
-        return null; // Caso não haja arquivo
+        return null; // If there is no file
     };
-
 
     static getMenuItems = async () => {
         try {
-            const response = await fetch(`${url}${preEndpoint}${secretKey}/menuItems`);
-            let data = await response.json();
+            const response = await axios.get(`${url}${preEndpoint}${secretKey}/menuItems`, {
+                headers: {
+                    "Authorization": authorization
+                }
+            });
+            let data = response.data;
             let newData: any = [];
             data.map((categoria: any) => {
                 newData.push({
                     ...categoria,
                     subItems: JSON.parse(categoria.sub_items),
-                })
-            })
+                });
+            });
 
             return newData;
         } catch (err) {
-            throw Error(err);
             throw err;
         }
     }
-
 }

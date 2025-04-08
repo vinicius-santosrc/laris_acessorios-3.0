@@ -9,6 +9,8 @@ interface UserContextType {
     loading: boolean;
 }
 
+const token = process.env.REACT_APP_API_BEARER_TOKEN;
+
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -22,6 +24,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const userContent: UserProps = await authService.getUserByEmail(res.email);
                 const orders: OrderAfterBuyProps[] = await orderService.getByUser(res?.$id);
                 const userArray: any = { ...userContent, orders: orders };
+                if (userArray.label === "Admin") if(token) localStorage.setItem("token", token)
                 setUser(userArray);
             } catch (error: any) {
                 console.error("Erro ao obter dados do usuário", error);

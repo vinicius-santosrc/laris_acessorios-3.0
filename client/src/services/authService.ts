@@ -85,7 +85,6 @@ class authService {
             return await account.get();
         } catch (error: any) {
             console.error("Get user data error:", error);
-            throw error;
         }
     }
 
@@ -99,8 +98,6 @@ class authService {
         try {
             return await account.get() != null;
         } catch (error: any) {
-            throw Error(error);
-            throw error;
         }
     }
 
@@ -113,6 +110,7 @@ class authService {
             const account = new Account(client);
 
             await account.deleteSession('current');
+            localStorage.clear();
             window.location.href = window.location.origin;
         } catch (error: any) {
             console.error('Erro ao realizar logout:', error);
@@ -130,7 +128,6 @@ class authService {
             });
             return response.data[0];
         } catch (error: any) {
-            throw Error(error);
         }
     }
 
@@ -146,7 +143,6 @@ class authService {
             const data: UserProps[] = response.data;
             return data[0] && data[0].label == "Admin";
         } catch (error: any) {
-            throw Error(error);
             return false;
         }
     }

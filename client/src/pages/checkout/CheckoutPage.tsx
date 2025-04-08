@@ -110,6 +110,12 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     }, [loading])
 
     useEffect(() => {
+        if (!user && !loading) {
+            window.location.href = window.location.origin
+        }
+    }, [user])
+
+    useEffect(() => {
         const fetchUserData = async () => {
             const itemsCart = await cartService.get();
             const storedItems: any = await Promise.all(

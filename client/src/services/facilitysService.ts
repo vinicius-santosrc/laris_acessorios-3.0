@@ -13,6 +13,7 @@ const url = process.env.REACT_APP_API_ENDPOINT;
 //const url = process.env.REACT_APP_API_ENDPOINT_TEST;
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
 const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
+const authorization = localStorage.getItem("token") ?? "";
 
 export class Facilitys {
 
