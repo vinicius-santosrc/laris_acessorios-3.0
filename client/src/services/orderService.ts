@@ -58,7 +58,7 @@ export class orderService {
                     to_email: order.dadosPedido.usuario.email,
                     principal_message: order.paymentOption != "PIX" ? "Seu pedido foi confirmado com sucesso. Em breve, você receberá atualizações sobre o envio. Assim que o produto for despachado, enviaremos um e-mail com o código de rastreamento para que você possa acompanhar a entrega." : "Estamos aguardando o pagamento do seu pedido. Entraremos em contato para enviar o QRCode para o pagamento via pix."
                 });
-                
+
                 await emailService.send(templateId.adminConfirmationBuy, {
                     link_rastreio: "https://www.larisacessorios.com.br/admin/orders",
                     userComprador: order.dadosPedido.usuario,
@@ -77,7 +77,7 @@ export class orderService {
                     type: "error"
                 });
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Erro ao criar o pedido:", error);
             toaster.create({
                 title: "Erro de conexão",
@@ -99,7 +99,7 @@ export class orderService {
             const data = await request.json();
             return data;
         }
-        catch (error) {
+        catch (error: any) {
             console.error("Erro ao pegar todas as orders", error);
         }
     }
@@ -118,7 +118,7 @@ export class orderService {
             const orderFounded = data.find((order: any) => order.uid === uid)
             return orderFounded;
         }
-        catch (error) {
+        catch (error: any) {
             console.error("Erro ao pegar a order " + uid + ": ", error)
         }
     }
@@ -144,7 +144,7 @@ export class orderService {
             const data = await request.json();
             return data[0];
         }
-        catch (error) {
+        catch (error: any) {
             console.error("Erro ao pegar a orders", error)
         }
     }
@@ -167,7 +167,7 @@ export class orderService {
             })
             return data;
         }
-        catch (error) {
+        catch (error: any) {
             console.error("Erro ao pegar a orders", error)
         }
     }
@@ -202,7 +202,7 @@ export class orderService {
                     type: "error"
                 });
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Erro ao criar o pedido:", error);
             toaster.create({
                 title: "Erro de conexão",

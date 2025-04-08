@@ -21,7 +21,7 @@ import { CategoriesProps } from "../../lib/utils";
 import { InfoTip } from "../../components/ui/toggle-tip";
 import { Product } from "../../models/product";
 import productService from "../../services/productService";
-import { Badge, Image, Table} from "@chakra-ui/react";
+import { Badge, Image, Table } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { toaster } from "../../components/ui/toaster";
 import { Button } from "../../components/ui/button";
@@ -65,7 +65,7 @@ const CategoriesAdmin = () => {
                 const fetchedProducts: Product[] = await productService.getAll();
                 setProducts(fetchedProducts);
             } catch (err: any) {
-                console.error(err)
+                throw Error(err)
             }
         };
         fetchProduct();
@@ -127,7 +127,7 @@ const CategoriesAdmin = () => {
             }));
 
             setTypeCategorys(createListCollection({ items: formattedCategories }));
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erro ao carregar categorias:', error);
         }
     };
@@ -171,8 +171,8 @@ const CategoriesAdmin = () => {
                 type: "error"
             });
             fetchCategories()
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            throw Error(error);
             toaster.create({
                 title: "Erro ao criar categoria",
                 type: "error"

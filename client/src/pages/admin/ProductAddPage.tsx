@@ -2,7 +2,7 @@ import { Product } from "@/models/product";
 import productService from "../../services/productService";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { createListCollection, Editable, Image } from "@chakra-ui/react";
+import { createListCollection, Editable, Image, Input } from "@chakra-ui/react";
 import "./producteditpage.css";
 import { Tag } from "../../components/ui/tag";
 import {
@@ -22,6 +22,17 @@ import {
     MenuRoot,
     MenuTrigger,
 } from "../../components/ui/menu"
+import {
+    DialogBackdrop,
+    DialogBody,
+    DialogCloseTrigger,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogRoot,
+    DialogTitle,
+    DialogTrigger,
+} from "../../components/ui/dialog"
 import { Button } from "../../components/ui/button";
 import { adminService } from "../../services/adminService";
 
@@ -43,7 +54,9 @@ export const ProductAddPage = () => {
         categoria: "", // Categoria do produto, inicializada como string vazia
         url: "", // URL do produto, inicializada como string vazia
         fornecedor: "", // Nome do fornecedor, inicializada como string vazia
-        tipo: "" // Tipo de produto, inicializado como string vazia
+        tipo: "", // Tipo de produto, inicializado como string vazia
+        type: "",
+
     });
 
     const [itemData, setItemData] = useState<any>(
@@ -64,49 +77,24 @@ export const ProductAddPage = () => {
     const handleFileUpload = async (event: any) => {
         const file = event.target.files[0];
         if (file) {
-            new Compressor(file, {
-                success(result: any) {
-                    const formData = new FormData();
-                    formData.append('image', result, result.name);  // Envia o arquivo compactado (não em base64)
-                    formData.append('key', "f559d2e043626a1955fb14d57caec1e2"); // Adicione sua chave de API
+            const uploadPhoto = await adminService.upload(event);
+            setProduct((prevProduct: any) => {
+                let photoURLs = [];
 
-                    // Fazendo a requisição POST
-                    fetch('https://api.imgbb.com/1/upload', {
-                        method: 'POST',
-                        body: formData,  // O corpo da requisição será o FormData
-                    })
-                        .then(response => response.json())
-                        .then(response => {
-                            if (response.success) {
-                                setProduct((prevProduct: any) => {
-                                    let photoURLs = [];
-
-                                    try {
-                                        photoURLs = JSON.parse(prevProduct?.photoURL || '[]');
-                                    } catch (error) {
-                                        console.error("Erro ao fazer o parse de photoURL:", error);
-                                        photoURLs = [];
-                                    }
-
-                                    return {
-                                        ...prevProduct,
-                                        photoURL: JSON.stringify([
-                                            ...photoURLs,
-                                            response.data.url,
-                                        ]),
-                                    };
-                                });
-                            } else {
-                                console.error('Upload failed:', response.error.message);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error during upload:', error);
-                        });
-                },
-                error(err: any) {
-                    console.error('Error during image compression:', err.message);
+                try {
+                    photoURLs = JSON.parse(prevProduct?.photoURL || '[]');
+                } catch (error: any) {
+                    console.error("Erro ao fazer o parse de photoURL:", error);
+                    photoURLs = [];
                 }
+
+                return {
+                    ...prevProduct,
+                    photoURL: JSON.stringify([
+                        ...photoURLs,
+                        uploadPhoto,
+                    ]),
+                };
             });
         }
     };
@@ -130,7 +118,7 @@ export const ProductAddPage = () => {
                 navigator("/admin/products")
             }, 1000);
             // Redirecionar ou resetar a página após o sucesso, se necessário
-        } catch (error) {
+        } catch (error: any) {
             toaster.create({
                 title: "Erro ao adicionar produto",
                 type: "error"
@@ -156,6 +144,15 @@ export const ProductAddPage = () => {
         // productService.deletePhoto(photoUrl).catch(error => console.error('Erro ao excluir foto:', error));
     };
 
+    const handleInputChangeTextArea = (e: React.ChangeEvent<any>) => {
+        if (product) {
+            setProduct({
+                ...product,
+                [e.target.name]: e.currentTarget.value,
+            });
+        }
+    };
+
     useEffect(() => {
         // Requisição para obter as categorias
         const fetchCategories = async () => {
@@ -166,7 +163,7 @@ export const ProductAddPage = () => {
                     value: category.category,  // Presumindo que `id` seja o identificador da categoria
                 }));
                 setTypeCategorys(createListCollection({ items: formattedCategories }));
-            } catch (error) {
+            } catch (error: any) {
                 console.error('Erro ao carregar categorias:', error);
             }
         };
@@ -187,8 +184,8 @@ export const ProductAddPage = () => {
                 { label: newCategoryName, value: newCategoryName }
             ]);
             setNewCategoryName(""); // Clear the input after adding
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            throw Error(error);
             toaster.create({
                 title: "Erro ao criar categoria",
                 type: "error"
@@ -348,51 +345,121 @@ export const ProductAddPage = () => {
                                     <div className="form-row">
                                         <label htmlFor="categorias">Categorias</label>
                                         <div className="sizes-box">
-                                            {JSON.parse(product?.categoryList).map((category: string) => (
+                                            {JSON.parse(product.categoryList).map((category: string) => (
                                                 <Tag colorPalette={"pink"} closable key={category}>{category.toUpperCase()}</Tag>
                                             ))}
                                         </div>
-                                        <SelectRoot multiple defaultValue={JSON.parse(product?.categoryList)} collection={typeCategorys} size="sm" width="320px">
-                                            <SelectTrigger>
-                                                <SelectValueText placeholder="Selecione as categorias" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {typeCategorys?.items.map((category: any) => (
-                                                    <SelectItem
-                                                        item={category}
-                                                        onClick={() => {
-                                                            const currentCategoryList = JSON.parse(product.categoryList);
-                                                            const categoryExists = currentCategoryList.includes(category.value);
+                                        {typeCategorys &&
+                                            <SelectRoot multiple defaultValue={JSON.parse(product.categoryList)} collection={typeCategorys} size="sm" width="320px">
+                                                <SelectTrigger>
+                                                    <SelectValueText placeholder="Selecione as categorias" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {typeCategorys.items.map((category: any) => (
+                                                        <SelectItem
+                                                            item={category}
+                                                            onClick={() => {
+                                                                const currentCategoryList = JSON.parse(product.categoryList);
+                                                                const categoryExists = currentCategoryList.includes(category.value);
 
-                                                            // Se a categoria já existir, removemos, senão adicionamos
-                                                            if (categoryExists) {
-                                                                setProduct({
-                                                                    ...product,
-                                                                    categoryList: JSON.stringify(currentCategoryList.filter((item) => item !== category.value))
-                                                                });
-                                                            } else {
-                                                                setProduct({
-                                                                    ...product,
-                                                                    categoryList: JSON.stringify([...currentCategoryList, category.value])
-                                                                });
-                                                            }
-                                                        }}
-                                                        key={category.value}
-                                                    >
-                                                        {category.label.toUpperCase()}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </SelectRoot>
+                                                                // Se a categoria já existir, removemos, senão adicionamos
+                                                                if (categoryExists) {
+                                                                    setProduct({
+                                                                        ...product,
+                                                                        categoryList: JSON.stringify(currentCategoryList.filter(item => item !== category.value))
+                                                                    });
+                                                                } else {
+                                                                    setProduct({
+                                                                        ...product,
+                                                                        categoryList: JSON.stringify([...currentCategoryList, category.value])
+                                                                    });
+                                                                }
+                                                            }}
+                                                            key={category.value}
+                                                        >
+                                                            {category.label.toUpperCase()}
+                                                        </SelectItem>
+                                                    ))}
+                                                    <DialogRoot>
+                                                        <DialogBackdrop />
+                                                        <DialogTrigger asChild>
+                                                            <Button className="createNewCategory">
+                                                                Criar categoria
+                                                            </Button>
+                                                        </DialogTrigger>
+                                                        <DialogContent paddingX={12} paddingY={4}>
+                                                            <DialogCloseTrigger />
+                                                            <DialogHeader>
+                                                                <DialogTitle>Nova categoria</DialogTitle>
+                                                            </DialogHeader>
+                                                            <DialogBody>
+                                                                <div className="add-category">
+                                                                    <Input
+                                                                        type="text"
+                                                                        value={itemData.highlightText}
+                                                                        onChange={(e) => { setItemData({ ...itemData, highlightText: e.target.value }) }}
+                                                                        placeholder="Nova categoria"
+                                                                    />
+                                                                    <Input
+                                                                        type="text"
+                                                                        value={itemData.highlightDescription}
+                                                                        onChange={(e) => { setItemData({ ...itemData, highlightDescription: e.target.value }) }}
+                                                                        placeholder="Descrição categoria"
+                                                                    />
+                                                                    <Input
+                                                                        type="text"
+                                                                        value={itemData.urlLink}
+                                                                        onChange={(e) => { setItemData({ ...itemData, urlLink: e.target.value }) }}
+                                                                        placeholder="URL categoria"
+                                                                    />
+                                                                    <Input
+                                                                        type="file"
+                                                                        onChange={async (e) => {
+                                                                            const res = await adminService.upload(e);
+                                                                            if (res) {
+                                                                                setItemData({ ...itemData, highlightImage: res });
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </DialogBody>
+                                                            <DialogFooter>
+                                                                <Button onClick={addNewCategory} className="createNewCategory">
+                                                                    Criar categoria
+                                                                </Button>
+                                                            </DialogFooter>
+                                                        </DialogContent>
+                                                    </DialogRoot>
+                                                </SelectContent>
+                                            </SelectRoot>
+                                        }
+                                    </div>
+
+                                    <div className="form-row">
+                                        <label htmlFor="type">Tipo de produto</label>
+                                        <select
+                                            id="type"
+                                            name="type"
+                                            onChange={(e) => handleInputChange({ target: { name: 'type', value: e.target.value } })}
+                                        >
+                                            <option defaultChecked value="jewelry">Joia/Semijoia</option>
+                                            <option value="perfume">Perfume</option>
+                                        </select>
                                     </div>
 
                                     <div className="form-row">
                                         <label htmlFor="type_full_label">Tipo de Material</label>
                                         <input
+                                            disabled={product.type === "perfume"}
                                             type="text"
                                             id="type_full_label"
                                             name="type_full_label"
-                                            onChange={handleInputChange}
+                                            onChange={() => {
+                                                setProduct({
+                                                    ...product, type_full_label: product.type === "perfume" ? "Perfume" : product.type_full_label
+                                                })
+                                            }}
+                                            value={product.type === "perfume" ? "Perfume" : product.type_full_label}
                                         />
                                     </div>
 
@@ -403,6 +470,16 @@ export const ProductAddPage = () => {
                                             id="type_full_label"
                                             name="type_full_label"
                                             onChange={(e) => setProduct({ ...product, url: e.target.value })}
+                                        />
+                                    </div>
+
+                                    <div className="form-row">
+                                        <label htmlFor="type_full_label">Descrição do Produto</label>
+                                        <textarea
+                                            id="description"
+                                            name="description"
+                                            value={product.description}
+                                            onChange={handleInputChangeTextArea}
                                         />
                                     </div>
 

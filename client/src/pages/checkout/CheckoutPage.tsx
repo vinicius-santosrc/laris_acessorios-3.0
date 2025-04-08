@@ -131,7 +131,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                             setEmail(user?.email ?? "");
                             setCPF(formatCPF(user?.cpf ?? ""));
                             setName(user?.nome_completo ?? "");
-                        } catch (error) {
+                        } catch (error: any) {
                             console.error("Erro ao obter dados do usuário", error);
                             window.location.href = window.location.origin
                         }
@@ -140,7 +140,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                     } else {
                         setLoading(false);
                     }
-                } catch (error) {
+                } catch (error: any) {
                     setLoading(false);
                 }
             } else {
@@ -252,7 +252,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
             setendereco(cepReturned.logradouro)
             setTotal(total + shippingCost)
 
-        } catch (error) {
+        } catch (error: any) {
             console.error("Erro ao buscar informações de entrega", error);
         }
     };
@@ -392,7 +392,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                     await orderService.create(orderContent);
                     window.location.href = window.location.origin + `/success/` + orderUid;
                 }
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Error finalizing purchase:", error);
                 setErrorMessage("Error finalizing purchase. Please try again.");
                 toaster.create({
@@ -405,7 +405,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
             try {
                 await orderService.create(orderContent);
                 window.location.href = window.location.origin + `/success/` + orderUid;
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Error finalizing purchase:", error);
                 setErrorMessage("Error finalizing purchase. Please try again.");
                 toaster.create({

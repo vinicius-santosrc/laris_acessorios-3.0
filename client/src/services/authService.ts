@@ -7,15 +7,16 @@
  * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
  */
 
-import { Account, Client, Databases } from 'appwrite'
+import { Account, Client, Databases } from 'appwrite';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { UserAuthProps } from '@/lib/utils';
 import { UserProps } from '@/models/user';
+import axios from 'axios';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 const endpoint = process.env.REACT_APP_API_ENDPOINT;
-//const endpoint = process.env.REACT_APP_API_ENDPOINT_TEST;
+// const endpoint = process.env.REACT_APP_API_ENDPOINT_TEST;
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
 const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
 
@@ -28,45 +29,47 @@ class authService {
 
     constructor() {
         this.client = new Client();
-        if(endPointAppWrite && projectAppWrite) this.client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+        if (endPointAppWrite && projectAppWrite) {
+            this.client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+        }
         this.database = new Databases(this.client);
     }
 
     static register = async (user: UserAuthProps) => {
         await createUserWithEmailAndPassword(auth, user.email, user.password)
             .then(async (userCredential) => {
-                await fetch(`${endpoint}${preEndpoint}${secretKey}/users/add`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
+                try {
+                    await axios.post(`${endpoint}${preEndpoint}${secretKey}/users/add`, {
                         uid: userCredential.user.uid,
                         nome_completo: user.nome_completo,
                         cpf: user.cpf,
                         email: user.email
-                    }),
-                })
-                    .then((res) => {
-                        window.location.href = window.location.origin;
-                    })
-                    .catch((err) => console.error(err))
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    window.location.href = window.location.origin;
+                } catch (err) {
+                    throw Error(err);
+                }
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.error(error)
             });
     }
 
     static login = async (email: string, password: string) => {
         const client = new Client();
-        if (endPointAppWrite && projectAppWrite) client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+        if (endPointAppWrite && projectAppWrite) {
+            client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+        }
         const account = new Account(client);
 
         try {
             return await account.createEmailPasswordSession(email, password);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Login error:", error);
             throw error;
         }
@@ -74,12 +77,13 @@ class authService {
 
     static getUserData = async () => {
         const client = new Client();
-        if (endPointAppWrite && projectAppWrite) client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+        if (endPointAppWrite && projectAppWrite) {
+            client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+        }
         const account = new Account(client);
-        const accountReturn = await account.get()
         try {
-            return accountReturn;
-        } catch (error) {
+            return await account.get();
+        } catch (error: any) {
             console.error("Get user data error:", error);
             throw error;
         }
@@ -87,16 +91,15 @@ class authService {
 
     static isLogged = async () => {
         const client = new Client();
-        if (endPointAppWrite && projectAppWrite) client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+        if (endPointAppWrite && projectAppWrite) {
+            client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+        }
         const account = new Account(client);
 
         try {
-            if (await account.get()) {
-                return true
-            }
-            return false;
-        } catch (error) {
-            console.error(error)
+            return await account.get() != null;
+        } catch (error: any) {
+            throw Error(error);
             throw error;
         }
     }
@@ -104,56 +107,52 @@ class authService {
     static logout = async () => {
         try {
             const client = new Client();
-            if (endPointAppWrite && projectAppWrite) client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+            if (endPointAppWrite && projectAppWrite) {
+                client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+            }
             const account = new Account(client);
 
-            await account.deleteSession('current'); 
+            await account.deleteSession('current');
             window.location.href = window.location.origin;
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erro ao realizar logout:', error);
         }
     }
 
     static getUserByEmail = async (email: string) => {
         try {
-            const response = await fetch(`${url}${preEndpoint}${secretKey}/user`, {
-                method: 'POST',
+            const response = await axios.post(`${url}${preEndpoint}${secretKey}/user`, {
+                email: email
+            }, {
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email
-                })
-            }
-            );
-            const data = await response.json();
-            return data[0];
-        }
-        catch (error) {
-            console.error(error)
+                }
+            });
+            return response.data[0];
+        } catch (error: any) {
+            throw Error(error);
         }
     }
 
     static isUserAdmin = async (email: string) => {
-        const response = await fetch(`${url}${preEndpoint}${secretKey}/user`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+        try {
+            const response = await axios.post(`${url}${preEndpoint}${secretKey}/user`, {
                 email: email
-            })
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const data: UserProps[] = response.data;
+            return data[0] && data[0].label == "Admin";
+        } catch (error: any) {
+            throw Error(error);
+            return false;
         }
-        );
-        const data: UserProps[] = await response.json();
-        if (data[0] && data[0].label === "Admin") {
-            return true;
-        }
-        return false;
     }
 
     static getUserByUid = async (uid: string) => {
-        return null
+        return null;
     }
 }
 

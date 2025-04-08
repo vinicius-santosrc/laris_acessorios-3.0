@@ -21,7 +21,7 @@ export const Planing = () => {
         try {
             await adminService.planningDeleteById(id);
             getCards();
-        } catch (error) {
+        } catch (error: any) {
             toaster.create({
                 title: "Oops...",
                 description: "Algo deu errado. Contate um desenvolvedor.",
@@ -37,7 +37,7 @@ export const Planing = () => {
                 await adminService.addNewPlanningCard(NameOfNewList);
                 getCards();
                 setNameOfNewList(null);
-            } catch (error) {
+            } catch (error: any) {
                 toaster.create({
                     title: "Oops...",
                     description: "Algo deu errado. Contate um desenvolvedor.",
@@ -62,7 +62,7 @@ export const Planing = () => {
         try {
             await adminService.updatedCard(list, id);
             getCards();
-        } catch (error) {
+        } catch (error: any) {
             toaster.create({
                 title: "Oops...",
                 description: "Algo deu errado. Contate um desenvolvedor.",
@@ -78,7 +78,7 @@ export const Planing = () => {
             try {
                 await adminService.updatedCard(contentCardArray, id);
                 getCards();
-            } catch (error) {
+            } catch (error: any) {
                 toaster.create({
                     title: "Oops...",
                     description: "Algo deu errado. Contate um desenvolvedor.",
@@ -92,7 +92,7 @@ export const Planing = () => {
         try {
             const response = await adminService.getPlanning();
             setContentCards(response);
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
         }
     }
@@ -123,7 +123,7 @@ export const Planing = () => {
             await adminService.updatedCard(updatedCards[destinationCardIndex].content_card, updatedCards[destinationCardIndex].id);
 
             await getCards();
-        } catch (error) {
+        } catch (error: any) {
             toaster.create({
                 title: "Oops...",
                 description: "Erro ao atualizar o banco de dados.",
@@ -150,7 +150,7 @@ export const Planing = () => {
                                                 let parsedContent;
                                                 try {
                                                     parsedContent = JSON.parse(cards.content_card);
-                                                } catch (error) {
+                                                } catch (error: any) {
                                                     console.error("Erro ao analisar content_card:", error);
                                                     parsedContent = []; // valor padrão
                                                 }

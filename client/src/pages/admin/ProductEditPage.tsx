@@ -69,6 +69,7 @@ export const ProductEditPage = () => {
         if (uid) {
             const productAt: Product = await productService.getById(uid);
             setProduct(productAt);
+            console.log(productAt)
         }
     };
 
@@ -81,7 +82,7 @@ export const ProductEditPage = () => {
 
                 try {
                     photoURLs = JSON.parse(prevProduct?.photoURL || '[]');
-                } catch (error) {
+                } catch (error: any) {
                     console.error("Erro ao fazer o parse de photoURL:", error);
                     photoURLs = [];
                 }
@@ -106,7 +107,7 @@ export const ProductEditPage = () => {
             }));
 
             setTypeCategorys(createListCollection({ items: formattedCategories }));
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erro ao carregar categorias:', error);
         }
     };
@@ -148,8 +149,8 @@ export const ProductEditPage = () => {
                 type: "error"
             });
             fetchCategories()
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            throw Error(error);
             toaster.create({
                 title: "Erro ao criar categoria",
                 type: "error"
@@ -183,7 +184,7 @@ export const ProductEditPage = () => {
                     type: "success"
                 });
             }
-            catch (error) {
+            catch (error: any) {
                 toaster.create({
                     title: "Erro ao editar produto",
                     type: "error"

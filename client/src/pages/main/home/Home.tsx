@@ -4,10 +4,11 @@ import SubCategorys from "../../../components/geral/mainpage/SubCategorys";
 import Carousel from "../../../components/geral/mainpage/Carousel";
 import SectionComponent from "../../../components/geral/mainpage/SectionComponent";
 import CategoryList from "../../../components/geral/category-list/CategoryList";
-import Footer from "../../../components/geral/footer/Footer";
 import ProductsMainPage from "../../../components/geral/mainpage/ProductsMainPage";
 import ShowCaseCollection from "../../../components/geral/mainpage/ShowCaseCollection";
 import { Facilitys } from "../../../services/facilitysService";
+import PerfumeShowComponent from "../../../components/geral/mainpage/PerfumeShowComponent";
+import Footer from "../../../components/geral/footer/Footer";
 
 const Home = () => {
     const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -41,8 +42,8 @@ const Home = () => {
             setBanner(facility);
             setBannerInfos({ ...facilityInfo, data: JSON.parse(facilityInfo.data) });
         }
-        catch (error) {
-            console.error(error);
+        catch (error: any) {
+            throw Error(error);
         }
     }
 
@@ -91,6 +92,42 @@ const Home = () => {
                 description='"Encontre as peças dos seus sonhos aqui"'
                 hasDescription={true}
                 component={<ProductsMainPage />} />
+            <ShowCaseCollection
+                items={[
+                    {
+                        url: "https://m.media-amazon.com/images/I/61rIEt70ZPL._AC_SL1000_.jpg",
+                        redirect: "/product/lattafa-asad",
+                        title: "Lattafa Asad Eau De Parfum",
+                        description: "Fragrância intensa e marcante, feita para quem sabe o valor da presença.",
+                    },
+                    {
+                        url: "https://images.tcdn.com.br/img/img_prod/487119/fakhar_rose_lattafa_feminino_eau_de_parfum_100ml_635_3_df83c846247eafb7a1b5cf79ec52122c.png",
+                        redirect: "/product/fakhar-rose-eau-de-parfum-lattafa",
+                        title: "Fakhar Rose Eau de Parfum – Lattafa",
+                        description: "Exala elegância, romantismo e confiança",
+                    },
+                ]}
+                type="Grid"
+                style="default"
+            />
+            <SectionComponent
+                title="Perfumes que encantam"
+                description="Descubra fragrâncias marcantes que combinam com sua personalidade. Dos clássicos aos lançamentos, encontre o perfume ideal para cada momento."
+                hasDescription={true}
+                component={<PerfumeShowComponent />}
+            />
+            <ShowCaseCollection
+                items={[
+                    {
+                        url: "https://i.ibb.co/1ffkJ52j/produto-perfume-arabe-feminino-al-wataniah-sabah-al-ward-edp-100ml-3161-removebg-preview.png",
+                        redirect: "/product/sabah-al-ward-al-wataniah",
+                        title: "Sabah Al Ward Al Wataniah Eau de Parfum 100ml",
+                        description: "Fragrância intensa e marcante, feita para quem sabe o valor da presença.",
+                    },
+                ]}
+                type="Grid"
+                style="alternative"
+            />
             <Footer />
         </React.Fragment>
     )

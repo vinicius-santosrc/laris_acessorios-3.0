@@ -40,7 +40,6 @@ const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }: any)
                 { id: 1, title: "Coleções", options: [] },
                 { id: 2, title: "Seleção", options: [{ label: "PARA ELA", value: "para-ela" }, { label: "PARA ELE", value: "para-ele" }, { label: "UNISSEX", value: "unissex" }] },
                 { id: 3, title: "Categoria", options: [{ label: "EAU DE PARFUM", value: "eau-de-parfum" }, { label: "EAU DE TOILETTE", value: "eau-de-toilette" }, { label: "PARFUM", value: "parfum" }] },
-                { id: 4, title: "Disponibilidade", options: [{ label: "Pronta entrega", value: "pronta-entrega" }, { label: "Encomenda", value: "encomenda" }] }
             ]);
 
         }
@@ -68,10 +67,6 @@ const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }: any)
                 { label: "EAU DE TOILETTE", value: "eau-de-toilette" },
                 { label: "PARFUM", value: "parfum" }
             ]);
-            onFilterChange("Disponibilidade", [
-                { label: "Pronta entrega", value: "pronta-entrega" },
-                { label: "Encomenda", value: "encomenda" }
-            ]);
         } else {
             onFilterChange("Coleções", []);
             onFilterChange("Seleção", [
@@ -86,10 +81,6 @@ const CategoryFilter = ({ onPriceChange, onFilterChange, selectedFilters }: any)
                 { label: "Anéis", value: "aneis" },
                 { label: "Brincos", value: "brincos" },
                 { label: "Pulseiras", value: "pulseiras" }
-            ]);
-            onFilterChange("Disponibilidade", [
-                { label: "Pronta entrega", value: "pronta-entrega" },
-                { label: "Encomenda", value: "encomenda" }
             ]);
         }
 

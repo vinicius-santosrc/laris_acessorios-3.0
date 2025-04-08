@@ -25,8 +25,8 @@ const Orders = () => {
                 return order;
             });
             setOrders(parsedOrders);
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            throw Error(error);
         }
     };
 
@@ -38,8 +38,8 @@ const Orders = () => {
         try {
             await orderService.update(order)
         }
-        catch (error) {
-            console.error(error);
+        catch (error: any) {
+            throw Error(error);
         }
     }
 
@@ -82,7 +82,7 @@ const Orders = () => {
                                                             item={orderState}
                                                             onClick={() => {
                                                                 order.state = orderState.value;
-                                                                
+
                                                                 updateOrder(order)
 
                                                             }}

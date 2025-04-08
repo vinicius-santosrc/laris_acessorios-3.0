@@ -26,7 +26,7 @@ const Success = () => {
                     setItems(JSON.parse(currentOrder.items));
                     setUserComprador(JSON.parse(currentOrder.user));
 
-                } catch (error) {
+                } catch (error: any) {
                     console.error("Erro ao buscar a ordem:", error);
                 }
             }

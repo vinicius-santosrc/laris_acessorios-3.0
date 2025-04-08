@@ -187,7 +187,7 @@ const ProductPage = () => {
                                 <div className="description-tec">
                                     <li>{product.type_full_label}</li>
                                     <li>Tamanhos: {sizesAvaliable.map((size: string) => { return <>{size} </> })}</li>
-                                    <li>Desenhado para ser confortável e fácil de usar</li>
+                                    <li>{product.type == "jewelry" ? "Desenhado para ser confortável e fácil de usar" : "Criado para refletir sua personalidade e deixar sua marca" }</li>
                                 </div>
                             </div>
                         </div>

@@ -19,8 +19,8 @@ const CategoryList = () => {
                 [photoURL]: facility.data,
             }));
 
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            throw Error(error);
         }
     };
 

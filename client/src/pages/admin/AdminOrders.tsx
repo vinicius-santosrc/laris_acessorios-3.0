@@ -50,7 +50,7 @@ const AdminOrders = () => {
                 // Geocodificação do CEP
                 await getCoordinates(JSON.parse(fetchedOrder.address).cep);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Erro ao carregar o pedido:", error);
         }
     }
@@ -63,7 +63,7 @@ const AdminOrders = () => {
 
             setLatitude(response.location.coordinates.latitude)
             setLongitude(response.location.coordinates.longitude)
-        } catch (error) {
+        } catch (error: any) {
             console.error("Erro ao obter coordenadas:", error);
         }
     }
@@ -93,8 +93,8 @@ const AdminOrders = () => {
         try {
             await orderService.update(orderAtual)
         }
-        catch (error) {
-            console.error(error);
+        catch (error: any) {
+            throw Error(error);
         }
     }
 

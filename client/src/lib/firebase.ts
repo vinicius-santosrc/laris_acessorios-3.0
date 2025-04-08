@@ -47,7 +47,7 @@ const CreateNewAccount = async (user: any) => {
                 .then((res) => {
                     window.location.href = window.location.origin;
                 })
-                .catch((err) => console.error(err))
+                .catch((err) => { throw Error(err) })
         })
         .catch((error) => {
             const errorCode = error.code;

@@ -57,7 +57,7 @@ const routes = [
   { path: '/admin/products/:uid', isProtected: true, element: (<AdminPage><ProductEditPage /></AdminPage>) },
   { path: '/admin/clients', isProtected: true, element: (<AdminPage><UsersAdmin /></AdminPage>) },
   { path: '/admin/orders', isProtected: true, element: (<AdminPage><Orders /></AdminPage>) },
-  { path: '/admin/orders/:order', isProtected: true, element: (<AdminPage><AdminOrders /></AdminPage>)},
+  { path: '/admin/orders/:order', isProtected: true, element: (<AdminPage><AdminOrders /></AdminPage>) },
   { path: '/admin/planning', isProtected: true, element: (<AdminPage><Planing /></AdminPage>) },
   { path: '/admin/facilitys', isProtected: true, element: (<AdminPage><FacilitysPage /></AdminPage>) },
   { path: '/admin/reports', isProtected: true, element: (<AdminPage><Reports /></AdminPage>) },
@@ -85,8 +85,8 @@ function App() {
         if (!response.ok) throw new Error("Failed to fetch config");
         const { publishableKey } = await response.json();
         setStripePromise(loadStripe(publishableKey));
-      } catch (error) {
-        console.error("Error fetching config:", error);
+      } catch (error: any) {
+        throw Error("Error fetching config:", error);
       }
     };
 
@@ -107,7 +107,7 @@ function App() {
         if (!response.ok) throw new Error("Failed to create payment intent");
         const { clientSecret } = await response.json();
         setClientSecret(clientSecret);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error creating payment intent:", error);
       }
     };
@@ -175,7 +175,7 @@ function App() {
 
               <Route path="*" element={<Navigate to="/404" />} />
             </Routes>
-            </BrowserRouter>
+          </BrowserRouter>
         </UserProvider>
         <PolicyCookies />
       </Provider>

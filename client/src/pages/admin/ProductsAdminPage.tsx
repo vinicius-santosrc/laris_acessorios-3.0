@@ -54,7 +54,7 @@ export const ProductsAdminPage = () => {
         try {
             const searchedProducts: Product[] = await productService.getAll();
             setProducts(searchedProducts);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to fetch category data:", error);
         }
     };

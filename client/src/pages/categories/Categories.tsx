@@ -28,7 +28,7 @@ const Categories: React.FC<any> = ({ CategoryHeaderContent }) => {
             } else {
                 setCategory(categoryData);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to fetch category data:", error);
         }
     };
@@ -70,12 +70,12 @@ const Categories: React.FC<any> = ({ CategoryHeaderContent }) => {
                 <CategoryFilter
                     onPriceChange={handlePriceChange}
                     onFilterChange={handleFilterChange}
-                    selectedFilters={selectedFilters}  
+                    selectedFilters={selectedFilters}
                 />
                 <CategoryProducts
                     products={categorySelected ? categorySelected : []}
                     priceOrder={priceOrder}
-                    selectedFilters={selectedFilters} 
+                    selectedFilters={selectedFilters}
                 />
             </section>
         </React.Fragment>

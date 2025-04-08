@@ -8,14 +8,14 @@ import { Product } from "@/models/product";
 import PrincipalProductCard from "../principal-product-card/PrincipalProductCard";
 import "../../../styles/categories.css";
 
-const ProductsMainPage = () => {
+const PerfumeShowComponent = () => {
     const [allProducts, setProducts] = useState<Product[]>([])
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 const fetchedProducts: Product[] = await productService.getAll();
-                const filteredProducts = fetchedProducts.filter((item: Product) => item.type == "jewelry")
+                const filteredProducts: any = fetchedProducts.filter((item: Product) => item.type == "perfume");
                 setProducts(filteredProducts);
             } catch (err: any) {
                 throw Error(err)
@@ -69,4 +69,4 @@ const ProductsMainPage = () => {
     )
 }
 
-export default ProductsMainPage;
+export default PerfumeShowComponent;

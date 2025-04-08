@@ -37,7 +37,9 @@ export interface Product {
     type_full_label: string //Prata de Lei // Banhado a ouro // Banhado a prata
     categoryList: any //SubCategories 
     size?: any //Tamanho selecionado pelo usuário
-    description: string
+    description: string;
+    type: "jewelry" | "perfume";
+    availableForImmediateDelivery: boolean
 }
 
 

@@ -58,8 +58,8 @@ export const FacilitysPage = () => {
         try {
             const facilities = await Facilitys.getAll();
             setBanners(facilities);
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            throw Error(error);
         }
     };
 
@@ -89,8 +89,8 @@ export const FacilitysPage = () => {
                 description: "Todas as alterações foram salvas com sucesso!",
                 type: "success",
             });
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            throw Error(error);
             toaster.create({
                 title: "Facilitys",
                 description: "Erro ao atualizar",

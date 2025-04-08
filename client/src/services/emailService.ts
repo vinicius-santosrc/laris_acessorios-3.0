@@ -9,8 +9,8 @@ class emailService {
         try {
             await emailjs.send(serviceAPI, templateId, options);
         }
-        catch (error) {
-            console.error(error);
+        catch (error: any) {
+            throw Error(error);
         }
     }
 }

@@ -23,7 +23,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const orders: OrderAfterBuyProps[] = await orderService.getByUser(res?.$id);
                 const userArray: any = { ...userContent, orders: orders };
                 setUser(userArray);
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Erro ao obter dados do usuário", error);
             } finally {
                 setLoading(false);

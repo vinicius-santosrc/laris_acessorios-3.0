@@ -36,7 +36,7 @@ export const UsersAdmin = () => {
             try {
                 const searchedProducts: UserProps[] = await clientsService.getAll();
                 setClients(searchedProducts);
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Failed to fetch category data:", error);
             }
         };

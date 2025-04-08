@@ -29,7 +29,7 @@ const SubCategories = () => {
             if (categories.length > 0) {
                 setLastCategory(categories[categories.length - 1]);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Erro ao buscar categorias:", error);
         }
     };
@@ -41,7 +41,7 @@ const SubCategories = () => {
                 ...prev,
                 [photoURL]: response?.data,
             }));
-        } catch (error) {
+        } catch (error: any) {
             console.error("Erro ao buscar imagem da subcategoria:", error);
         }
     };

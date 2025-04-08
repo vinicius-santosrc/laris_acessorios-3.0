@@ -78,7 +78,7 @@ export class adminService {
             const data = await response.json();
             return data.reverse();
         } catch (err) {
-            console.error(err);
+            throw Error(err);
             throw err;
         }
     }
@@ -93,8 +93,8 @@ export class adminService {
                 body: item,
             })
         }
-        catch (error) {
-            console.error(error);
+        catch (error: any) {
+            throw Error(error);
         }
     }
 
@@ -108,8 +108,8 @@ export class adminService {
                 body: item,
             })
         }
-        catch (error) {
-            console.error(error);
+        catch (error: any) {
+            throw Error(error);
         }
     }
 
@@ -123,8 +123,8 @@ export class adminService {
                 body: item,
             })
         }
-        catch (error) {
-            console.error(error);
+        catch (error: any) {
+            throw Error(error);
         }
     }
 
@@ -135,7 +135,7 @@ export class adminService {
             const data = await response.json();
             return data.reverse();
         } catch (err) {
-            console.error(err);
+            throw Error(err);
             throw err;
         }
     }
@@ -150,8 +150,8 @@ export class adminService {
                 body: item,
             })
         }
-        catch (error) {
-            console.error(error);
+        catch (error: any) {
+            throw Error(error);
         }
     }
 
@@ -161,7 +161,7 @@ export class adminService {
             const data = await response.json();
             return data.reverse();
         } catch (err) {
-            console.error(err);
+            throw Error(err);
             throw err;
         }
     }
@@ -231,7 +231,7 @@ export class adminService {
 
             return newData;
         } catch (err) {
-            console.error(err);
+            throw Error(err);
             throw err;
         }
     }

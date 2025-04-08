@@ -56,8 +56,8 @@ const AccountOrders = () => {
                     setCurrentStep(0)
                 }
             }
-        } catch (error) {
-            console.error("Erro ao carregar o pedido:", error);
+        } catch (error: any) {
+            throw Error("Erro ao carregar o pedido:", error);
         }
     }
 

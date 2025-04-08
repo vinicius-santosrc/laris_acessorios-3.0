@@ -126,7 +126,7 @@ const AccountComponent = ({ checkoutBtn }: any) => {
                         title: "Ocorreu um erro durante o credenciamento: " + error,
                         type: "error",
                     });
-                    console.error(error);
+                    throw Error(error);
                 });
             }
             else {
@@ -140,7 +140,7 @@ const AccountComponent = ({ checkoutBtn }: any) => {
                         title: "Ocorreu um erro durante criamento da conta: " + error,
                         type: "error",
                     });
-                    console.error(error);
+                    throw Error(error);
                 });
             }
         }
@@ -175,7 +175,7 @@ const AccountComponent = ({ checkoutBtn }: any) => {
     return (
         <DialogRoot size={"lg"} motionPreset="slide-in-bottom" placement="center">
             <DialogTrigger asChild>
-                <span style={checkoutBtn ? {width: "100%"}:null}>
+                <span style={checkoutBtn ? { width: "100%" } : null}>
                     {!checkoutBtn ? (
                         !user ? (
                             <Button variant="ghost" aria-label="Conta">

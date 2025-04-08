@@ -51,8 +51,8 @@ const Header = () => {
             try {
                 const data = await adminService.getMenuItems();
                 setMenuItems(data);
-            } catch (error) {
-                console.error(error);
+            } catch (error: any) {
+                throw Error(error);
             }
         };
 
@@ -175,7 +175,7 @@ const Header = () => {
 
     return (
         <div ref={headerRef} className="header-full-component" onMouseLeave={mouseLeftHeader} onMouseEnter={checkHeader} id={isTransparent ? "mode1" : "mode2"}>
-             <TopBarComponent isTransparent={isTransparent} text="Compre pelo WhatsApp +55 35 99739-4181" />
+            <TopBarComponent isTransparent={isTransparent} text="Compre pelo WhatsApp +55 35 99739-4181" />
             <header className="header-application header-application__wrapper">
                 <div className="header-app-top-content header-app-top-content__wrapper">
                     <section className="header-inside-content header-inside-content__search">
