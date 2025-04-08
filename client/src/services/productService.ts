@@ -14,6 +14,7 @@ import axios from 'axios';
 const url = process.env.REACT_APP_API_ENDPOINT;
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
 const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
+const authorization = localStorage.getItem("token") ?? "";
 
 class productService {
     private static countErr: number = 0;
@@ -71,6 +72,7 @@ class productService {
             }, {
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": authorization
                 }
             });
 
@@ -106,6 +108,7 @@ class productService {
             }, {
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": authorization
                 }
             }));
 
@@ -126,6 +129,7 @@ class productService {
             await axios.post(`${url}${preEndpoint}${secretKey}/products/edit`, product, {
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": authorization
                 }
             });
         } catch (error: any) {
@@ -139,6 +143,7 @@ class productService {
             await axios.post(`${url}${preEndpoint}${secretKey}/products/add`, product, {
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": authorization
                 }
             });
         } catch (error: any) {
