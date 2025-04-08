@@ -37,9 +37,9 @@ import Orders from './pages/admin/Orders';
 import Reports from './pages/admin/Reports';
 import Config from './pages/admin/Config';
 import CategoriesAdmin from './pages/admin/CategoriesAdmin';
-import PolicyCookies from './pages/institutional/PolicyCookies';
 import { UserProvider } from './contexts/UserContext';
 import AdminOrders from './pages/admin/AdminOrders';
+import PolicyCookies from './pages/institutional/PolicyCookies';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 
@@ -177,7 +177,7 @@ function App() {
             </Routes>
           </BrowserRouter>
         </UserProvider>
-        <PolicyCookies />
+        {/* <PolicyCookies /> */}
       </Provider>
     </div>
   );
