@@ -15,7 +15,6 @@ const orderController = {
             if (err) {
                 res.status(500).json({ error: 'Erro ao obter dados' });
             } else {
-                console.log("Consultando pedidos");
                 res.json(result);
             }
         });
@@ -27,7 +26,6 @@ const orderController = {
             if (err) {
                 res.status(500).json({ error: 'Erro ao obter dados' });
             } else {
-                console.log("Consultando pedidos do id", item.id);
                 res.json(result);
             }
         });

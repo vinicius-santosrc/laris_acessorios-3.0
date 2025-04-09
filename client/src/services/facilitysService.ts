@@ -47,6 +47,7 @@ export class Facilitys {
             await axios.post(`${url}${preEndpoint}${secretKey}/facilitys/edit`, item, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': authorization
                 }
             });
         } catch (error: any) {

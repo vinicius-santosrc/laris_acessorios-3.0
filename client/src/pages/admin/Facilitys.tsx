@@ -90,12 +90,12 @@ export const FacilitysPage = () => {
                 type: "success",
             });
         } catch (error: any) {
-            throw Error(error);
             toaster.create({
                 title: "Facilitys",
                 description: "Erro ao atualizar",
                 type: "error",
             });
+            throw Error(error);
         }
     }
 
@@ -151,14 +151,30 @@ export const FacilitysPage = () => {
                                             </AccordionItemTrigger>
                                         </Box>
                                         <AccordionItemContent>
-                                            {Object.entries(JSON.parse(banner?.data)).map(([key, value]) => (
-                                                <Input
-                                                    key={key}
-                                                    value={value}
-                                                    placeholder={`Digite ${key}`}
-                                                    onChange={(e) => changeText(banner, key, e.target.value)}
-                                                />
-                                            ))}
+                                            {Object.entries(JSON.parse(banner?.data)).map(([key, value]) => {
+                                                if (key == "hidden") {
+                                                    return (
+                                                        <>
+                                                            <span>Visibilidade: </span>
+                                                            <select value={value} onChange={(e) => changeText(banner, key, e.target.value)}>
+                                                                <option value={false}>MOSTRAR</option>
+                                                                <option value={true}>ESCONDER</option>
+                                                            </select>
+                                                        </>
+                                                    )
+                                                }
+                                                return (
+                                                    <>
+                                                        <span>{key}: </span>
+                                                        <Input
+                                                            key={key}
+                                                            value={value}
+                                                            placeholder={`Digite ${key}`}
+                                                            onChange={(e) => changeText(banner, key, e.target.value)}
+                                                        />
+                                                    </>
+                                                )
+                                            })}
                                         </AccordionItemContent>
                                     </AccordionItem>
                                 )

@@ -7,10 +7,14 @@
  * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
  */
 
+import axios from "axios";
 import { OrderAfterBuyProps, OrderProps } from "../models/order";
 import { toaster } from "../components/ui/toaster";
 import emailService from "./emailService";
 import { templateId } from "../lib/utils";
+
+const authorization = localStorage.getItem("token") ?? "";
+
 export class orderService {
     private static endpoint = process.env.REACT_APP_API_ENDPOINT;
     private static secretKey = process.env.REACT_APP_API_SECRET_KEY;
@@ -27,27 +31,26 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders/add`;
 
         try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    uid: order.uid,
-                    address: JSON.stringify(order.enderecoPedido),
-                    items: JSON.stringify(order.dadosPedido.produtos),
-                    user: JSON.stringify(order.dadosPedido.usuario),
-                    totalprice: order.precototal,
-                    paymentOption: order.paymentOption,
-                    situation: order.paymentOption === "CART" ? 'PAGO' : 'NAOPAGO',
-                    desconto: order.desconto,
-                    subtotal: order.subtotal,
-                    cupom_desconto: order.CuponsDescontos || 0,
-                    cupons: order.CupomAtual ? order.CupomAtual.name : ''
-                }),
-            });
+            const response = await axios.post(url, {
+                uid: order.uid,
+                address: JSON.stringify(order.enderecoPedido),
+                items: JSON.stringify(order.dadosPedido.produtos),
+                user: JSON.stringify(order.dadosPedido.usuario),
+                totalprice: order.precototal,
+                paymentOption: order.paymentOption,
+                situation: order.paymentOption === "CART" ? 'PAGO' : 'NAOPAGO',
+                desconto: order.desconto,
+                subtotal: order.subtotal,
+                cupom_desconto: order.CuponsDescontos || 0,
+                cupons: order.CupomAtual ? order.CupomAtual.name : ''
+            },
+                {
+                    headers: {
+                        Authorization: authorization
+                    }
+                });
 
-            if (response.ok) {
+            if (response.status === 200 || response.status === 201) {
                 await emailService.send(templateId.confirmationBuy, {
                     link_rastreio: window.location.origin + "/account#orders",
                     userComprador: order.dadosPedido.usuario,
@@ -56,7 +59,9 @@ export class orderService {
                     items: order.dadosPedido.produtos,
                     order: order,
                     to_email: order.dadosPedido.usuario.email,
-                    principal_message: order.paymentOption != "PIX" ? "Seu pedido foi confirmado com sucesso. Em breve, você receberá atualizações sobre o envio. Assim que o produto for despachado, enviaremos um e-mail com o código de rastreamento para que você possa acompanhar a entrega." : "Estamos aguardando o pagamento do seu pedido. Entraremos em contato para enviar o QRCode para o pagamento via pix."
+                    principal_message: order.paymentOption != "PIX"
+                        ? "Seu pedido foi confirmado com sucesso. Em breve, você receberá atualizações sobre o envio. Assim que o produto for despachado, enviaremos um e-mail com o código de rastreamento para que você possa acompanhar a entrega."
+                        : "Estamos aguardando o pagamento do seu pedido. Entraremos em contato para enviar o QRCode para o pagamento via pix."
                 });
 
                 await emailService.send(templateId.adminConfirmationBuy, {
@@ -65,24 +70,15 @@ export class orderService {
                     endereco: order.enderecoPedido,
                     methodPayment: order.paymentOption,
                 });
-                toaster.create({
-                    title: "Pedido realizado com sucesso",
-                    type: "success"
-                });
 
+                toaster.create({ title: "Pedido realizado com sucesso", type: "success" });
                 localStorage.setItem('sacola', '[]');
             } else {
-                toaster.create({
-                    title: "Erro ao realizar pedido",
-                    type: "error"
-                });
+                toaster.create({ title: "Erro ao realizar pedido", type: "error" });
             }
         } catch (error: any) {
             console.error("Erro ao criar o pedido:", error);
-            toaster.create({
-                title: "Erro de conexão",
-                type: "error"
-            });
+            toaster.create({ title: "Erro de conexão", type: "error" });
         }
     };
 
@@ -95,14 +91,12 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
 
         try {
-            const request = await fetch(url);
-            const data = await request.json();
+            const { data } = await axios.get(url);
             return data;
-        }
-        catch (error: any) {
+        } catch (error: any) {
             console.error("Erro ao pegar todas as orders", error);
         }
-    }
+    };
 
     static getByUid = async (uid: string) => {
         if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
@@ -113,15 +107,12 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
 
         try {
-            const request = await fetch(url);
-            const data = await request.json();
-            const orderFounded = data.find((order: any) => order.uid === uid)
-            return orderFounded;
+            const { data } = await axios.get(url);
+            return data.find((order: any) => order.uid === uid);
+        } catch (error: any) {
+            console.error("Erro ao pegar a order " + uid + ": ", error);
         }
-        catch (error: any) {
-            console.error("Erro ao pegar a order " + uid + ": ", error)
-        }
-    }
+    };
 
     static getById = async (id: any) => {
         if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
@@ -132,22 +123,12 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/getOrderById`;
 
         try {
-            const request = await fetch(url, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: id
-                })
-            });
-            const data = await request.json();
+            const { data } = await axios.post(url, { id });
             return data[0];
+        } catch (error: any) {
+            console.error("Erro ao pegar a orders", error);
         }
-        catch (error: any) {
-            console.error("Erro ao pegar a orders", error)
-        }
-    }
+    };
 
     static getByUser = async (userId: string) => {
         if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
@@ -158,19 +139,16 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
 
         try {
-            const request = await fetch(url);
-            const data = await request.json();
+            const { data } = await axios.get(url);
             const filteredData = data.filter((order: OrderAfterBuyProps) => {
                 const orderUser = JSON.parse(order.user);
-
-                return orderUser.uid === userId ? order : null;
-            })
-            return data;
+                return orderUser.uid === userId;
+            });
+            return filteredData;
+        } catch (error: any) {
+            console.error("Erro ao pegar a orders", error);
         }
-        catch (error: any) {
-            console.error("Erro ao pegar a orders", error)
-        }
-    }
+    };
 
     static update = async (order: any) => {
         if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
@@ -181,20 +159,17 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders/edit`;
 
         try {
-            const response = await fetch(url, {
-                method: 'POST',
+            const response = await axios.post(url, order, {
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(order),
+                    Authorization: authorization
+                }
             });
 
-            if (response.ok) {
+            if (response.status === 200 || response.status === 201) {
                 toaster.create({
                     title: `Pedido ${order.id} atualizado com sucesso`,
                     type: "success"
                 });
-
                 localStorage.setItem('sacola', '[]');
             } else {
                 toaster.create({
@@ -203,11 +178,11 @@ export class orderService {
                 });
             }
         } catch (error: any) {
-            console.error("Erro ao criar o pedido:", error);
+            console.error("Erro ao atualizar o pedido:", error);
             toaster.create({
                 title: "Erro de conexão",
                 type: "error"
             });
         }
-    }
+    };
 }

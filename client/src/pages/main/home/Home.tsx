@@ -12,7 +12,7 @@ import Footer from "../../../components/geral/footer/Footer";
 
 const Home = () => {
     const [isMobile, setIsMobile] = useState<boolean>(false);
-    const [banner, setBanner] = useState<any>();
+    const [allFacilitys, setAllFacilitys] = useState<any>();
     const [bannerInfos, setBannerInfos] = useState<any>();
 
     const checkMobileView = () => {
@@ -39,7 +39,17 @@ const Home = () => {
         try {
             const facility = await Facilitys.get("banner-principal");
             const facilityInfo = await Facilitys.get("banner-principal-texts");
-            setBanner(facility);
+
+            const facility2 = await Facilitys.get("banner-secondary");
+            const facility2Texts = await Facilitys.get("banner-secondary-texts");
+
+            const facilitys = [];
+            facilitys.push(facility)
+            facilitys.push(facilityInfo)
+            facilitys.push(facility2)
+            facilitys.push(facility2Texts)
+
+            setAllFacilitys(facilitys);
             setBannerInfos({ ...facilityInfo, data: JSON.parse(facilityInfo.data) });
         }
         catch (error: any) {
@@ -49,20 +59,22 @@ const Home = () => {
 
     return (
         <React.Fragment>
-            {banner ?
+            {allFacilitys ?
                 <>
                     <Carousel
-                        url={isMobile ? banner.dataMobile : banner.data}
-                        maintext={bannerInfos?.data?.mainText}
-                        description={bannerInfos?.data?.description}
-                        href={bannerInfos?.data?.href}
+                        url={isMobile ? allFacilitys[0].dataMobile : allFacilitys[0].data}
+                        maintext={JSON.parse(allFacilitys[1].data)?.mainText}
+                        description={JSON.parse(allFacilitys[1]?.data)?.description}
+                        href={JSON.parse(allFacilitys[1]?.data)?.href}
                     />
-                    <Carousel
-                        url={"https://img.olx.com.br/images/30/300402702427957.webp"}
-                        maintext={"FAKHAR ROSE EAU DE PARFUM - LATTAFA"}
-                        description={"ideal para mulheres que apreciam luxo, autenticidade e presença marcante."}
-                        href={bannerInfos?.data?.href}
-                    />
+                    {JSON.parse(allFacilitys[3]?.data)?.hidden != "true" &&
+                        <Carousel
+                        url={isMobile ? allFacilitys[2].dataMobile : allFacilitys[2].data}
+                            maintext={JSON.parse(allFacilitys[3].data)?.mainText}
+                            description={JSON.parse(allFacilitys[3].data)?.description}
+                            href={JSON.parse(allFacilitys[3]?.data)?.href}
+                        />
+                    }
                 </>
                 :
                 <Carousel
