@@ -33,7 +33,7 @@
 }
 
 .dashboard-laris-acessorios {
-    background-color: #f7f7f7;
+    background-color: var(--cinza-principal);
     width: 82%;
     height: 100vh;
     margin-left: 250px;
@@ -175,7 +175,7 @@
 .widget.products,
 .widget.sales,
 .widget.orders {
-    background-color: #f7f7f7;
+    background-color: var(--cinza-principal);
 }
 
 .widget.cash {
@@ -190,7 +190,7 @@
 }
 
 .widget.stock {
-    background-color: #f7f7f7;
+    background-color: var(--cinza-principal);
     border-left: 5px solid #be0a45;
 }
 
@@ -244,7 +244,7 @@
 
 @media screen and (max-width: 900px) {
     .dashboard-laris-acessorios {
-        background-color: #f7f7f7;
+        background-color: var(--cinza-principal);
         width: 100%;
         height: auto;
         /* Ajustar a altura para auto */

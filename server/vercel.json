@@ -2,28 +2,21 @@
     "version": 2,
     "builds": [
         {
-            "src": "index.js",
+            "src": "app.js",
             "use": "@vercel/node"
         }
     ],
     "routes": [
         {
+            "src": "/",
+            "dest": "/app.js",
+            "headers": {
+                "Content-Type": "text/html"
+            }
+        },
+        {
             "src": "/(.*)",
-            "dest": "index.js'"
-        }
-    ],
-    "rewrites": [
-        {
-            "source": "/api/(.*)",
-            "destination": "index.js'"
-        },
-        {
-            "source": "/shipping/(.*)",
-            "destination": "index.js"
-        },
-        {
-            "source": "/(config|create-payment-intent)",
-            "destination": "index.js"
+            "dest": "/app.js"
         }
     ]
 }

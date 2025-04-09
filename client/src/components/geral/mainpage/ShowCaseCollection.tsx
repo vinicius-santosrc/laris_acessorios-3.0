@@ -13,17 +13,36 @@ interface ShowCaseCollectionProps {
     items: ShowcaseItem[];
     type: "Grid" | "Showcase";
     style: "default" | "alternative"
+    highlight: boolean;
+    side?: "right" | "left";
 }
 
-const ShowCaseCollection = ({ items, type, style }: ShowCaseCollectionProps) => {
-    if (style == "alternative") {
+const ShowCaseCollection = ({ items, type, style, highlight, side }: ShowCaseCollectionProps) => {
+    if (style == "alternative" && side == "right") {
         return (
-            <section className="showcase-component">
+            <section className="showcase-component alternative-style alternative-left">
+                <div className="showcase-inside-alternative">
+                    <div className="showcase-right-side">
+                        {highlight && <p id="novidade">NOVIDADE</p>}
+                        <p>{items[0].title}</p>
+                        <Button onClick={() => window.location.href = window.location.origin + items[0].redirect} className="btn-showcase">COMPRAR AGORA</Button>
+                    </div>
+                    <div className="showcase-left-side">
+                        <img src={items[0].url} alt={`Showcase category`} />
+                    </div>
+                </div>
+            </section>
+        )
+    }
+    if (style == "alternative" && side == "left") {
+        return (
+            <section className="showcase-component alternative-style">
                 <div className="showcase-inside-alternative">
                     <div className="showcase-left-side">
                         <img src={items[0].url} alt={`Showcase category`} />
                     </div>
                     <div className="showcase-right-side">
+                        {highlight && <p id="novidade">NOVIDADE</p>}
                         <p>{items[0].title}</p>
                         <Button onClick={() => window.location.href = window.location.origin + items[0].redirect} className="btn-showcase">COMPRAR AGORA</Button>
                     </div>

@@ -52,6 +52,7 @@ const Header = () => {
                 const data = await adminService.getMenuItems();
                 setMenuItems(data);
             } catch (error: any) {
+                await fetchMenuItems(); //usando recursividade para resolver problemas de erro de carregamento
                 throw Error(error);
             }
         };
@@ -62,7 +63,7 @@ const Header = () => {
     const handleScroll = () => {
         const isHome = window.location.pathname === '/';
         if (isHome) {
-            if (window.scrollY < 15 && !isSubHeaderOpen) {
+            if (window.scrollY < 1500 && !isSubHeaderOpen) {
                 setTransparent(true);
             } else {
                 setTransparent(false);

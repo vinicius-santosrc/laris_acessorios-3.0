@@ -50,12 +50,20 @@ const Home = () => {
     return (
         <React.Fragment>
             {banner ?
-                <Carousel
-                    url={isMobile ? banner.dataMobile : banner.data}
-                    maintext={bannerInfos?.data?.mainText}
-                    description={bannerInfos?.data?.description}
-                    href={bannerInfos?.data?.href}
-                />
+                <>
+                    <Carousel
+                        url={isMobile ? banner.dataMobile : banner.data}
+                        maintext={bannerInfos?.data?.mainText}
+                        description={bannerInfos?.data?.description}
+                        href={bannerInfos?.data?.href}
+                    />
+                    <Carousel
+                        url={"https://img.olx.com.br/images/30/300402702427957.webp"}
+                        maintext={"FAKHAR ROSE EAU DE PARFUM - LATTAFA"}
+                        description={"ideal para mulheres que apreciam luxo, autenticidade e presença marcante."}
+                        href={bannerInfos?.data?.href}
+                    />
+                </>
                 :
                 <Carousel
                     url={""}
@@ -78,14 +86,11 @@ const Home = () => {
                         title: "Pulseira de Ouro Elegante",
                         description: "Um toque de sofisticação e elegância ao seu estilo.",
                     },
-                    {
-                        url: "https://i.ibb.co/0jphgqRb/IMG-1322.jpg",
-                        redirect: "/collections/lancamentos",
-                        title: "Ultimos lançamentos",
-                        description: "Confira nossas ultimas novidades",
-                    },
                 ]}
+                highlight={true}
                 type="Grid"
+                style="alternative"
+                side="left"
             />
             <SectionComponent
                 title="Torne sua WishList realidade"
@@ -95,20 +100,16 @@ const Home = () => {
             <ShowCaseCollection
                 items={[
                     {
-                        url: "https://m.media-amazon.com/images/I/61rIEt70ZPL._AC_SL1000_.jpg",
-                        redirect: "/product/lattafa-asad",
-                        title: "Lattafa Asad Eau De Parfum",
+                        url: "https://aromedecapelin.cdn.magazord.com.br/img/2023/08/produto/3167/design-sem-nome-1.png?ims=fit-in/600x600/filters:fill(fff)",
+                        redirect: "/product/sabah-al-ward-al-wataniah",
+                        title: "Sabah Al Ward Al Wataniah Eau de Parfum 100ml",
                         description: "Fragrância intensa e marcante, feita para quem sabe o valor da presença.",
                     },
-                    {
-                        url: "https://images.tcdn.com.br/img/img_prod/487119/fakhar_rose_lattafa_feminino_eau_de_parfum_100ml_635_3_df83c846247eafb7a1b5cf79ec52122c.png",
-                        redirect: "/product/fakhar-rose-eau-de-parfum-lattafa",
-                        title: "Fakhar Rose Eau de Parfum – Lattafa",
-                        description: "Exala elegância, romantismo e confiança",
-                    },
                 ]}
+                highlight={true}
                 type="Grid"
-                style="default"
+                style="alternative"
+                side="right"
             />
             <SectionComponent
                 title="Perfumes que encantam"
@@ -119,14 +120,16 @@ const Home = () => {
             <ShowCaseCollection
                 items={[
                     {
-                        url: "https://i.ibb.co/1ffkJ52j/produto-perfume-arabe-feminino-al-wataniah-sabah-al-ward-edp-100ml-3161-removebg-preview.png",
-                        redirect: "/product/sabah-al-ward-al-wataniah",
-                        title: "Sabah Al Ward Al Wataniah Eau de Parfum 100ml",
+                        url: "https://a-static.mlcdn.com.br/1500x1500/perfume-arabe-asad-lattafa-eau-de-parfum-100ml-masculino/belaartebelezaeacessorios/f7bd35dc6c8a11efbe9a4201ac18501b/80c7081a91c7e8c43a9762bfea51038d.jpeg",
+                        redirect: "/product/lattafa-asad",
+                        title: "Lattafa Asad Eau De Parfum",
                         description: "Fragrância intensa e marcante, feita para quem sabe o valor da presença.",
-                    },
+                    }
                 ]}
+                highlight={true}
                 type="Grid"
                 style="alternative"
+                side="left"
             />
             <Footer />
         </React.Fragment>
