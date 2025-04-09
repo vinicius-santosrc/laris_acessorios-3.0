@@ -8,6 +8,7 @@
  */
 
 import axios from 'axios';
+import api from './api';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 //const url = process.env.REACT_APP_API_ENDPOINT_TEST;
@@ -17,7 +18,7 @@ const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
 export class clientsService {
     static getAll = async () => {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/users`);
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/users`);
             return response.data;
         }
         catch (err) {

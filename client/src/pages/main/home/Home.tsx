@@ -13,7 +13,6 @@ import Footer from "../../../components/geral/footer/Footer";
 const Home = () => {
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [allFacilitys, setAllFacilitys] = useState<any>();
-    const [bannerInfos, setBannerInfos] = useState<any>();
 
     const checkMobileView = () => {
         if (window.innerWidth <= 768) {
@@ -37,20 +36,8 @@ const Home = () => {
 
     const getFacilitys = async () => {
         try {
-            const facility = await Facilitys.get("banner-principal");
-            const facilityInfo = await Facilitys.get("banner-principal-texts");
-
-            const facility2 = await Facilitys.get("banner-secondary");
-            const facility2Texts = await Facilitys.get("banner-secondary-texts");
-
-            const facilitys = [];
-            facilitys.push(facility)
-            facilitys.push(facilityInfo)
-            facilitys.push(facility2)
-            facilitys.push(facility2Texts)
-
-            setAllFacilitys(facilitys);
-            setBannerInfos({ ...facilityInfo, data: JSON.parse(facilityInfo.data) });
+            const response = await Facilitys.getFacilityByPage("home");
+            setAllFacilitys(response);
         }
         catch (error: any) {
             throw Error(error);
@@ -62,27 +49,22 @@ const Home = () => {
             {allFacilitys ?
                 <>
                     <Carousel
-                        url={isMobile ? allFacilitys[0].dataMobile : allFacilitys[0].data}
-                        maintext={JSON.parse(allFacilitys[1].data)?.mainText}
-                        description={JSON.parse(allFacilitys[1]?.data)?.description}
-                        href={JSON.parse(allFacilitys[1]?.data)?.href}
+                        url={isMobile ? allFacilitys["banner-principal"].dataMobile : allFacilitys["banner-principal"].data}
+                        maintext={JSON.parse(allFacilitys["banner-principal-texts"].data)?.mainText}
+                        description={JSON.parse(allFacilitys["banner-principal-texts"].data)?.description}
+                        href={JSON.parse(allFacilitys["banner-principal-texts"].data)?.href}
                     />
-                    {JSON.parse(allFacilitys[3]?.data)?.hidden != "true" &&
+                    {JSON.parse(allFacilitys["banner-secondary-texts"].data)?.hidden !== "true" &&
                         <Carousel
-                        url={isMobile ? allFacilitys[2].dataMobile : allFacilitys[2].data}
-                            maintext={JSON.parse(allFacilitys[3].data)?.mainText}
-                            description={JSON.parse(allFacilitys[3].data)?.description}
-                            href={JSON.parse(allFacilitys[3]?.data)?.href}
+                            url={isMobile ? allFacilitys["banner-secondary"].dataMobile : allFacilitys["banner-secondary"].data}
+                            maintext={JSON.parse(allFacilitys["banner-secondary-texts"].data)?.mainText}
+                            description={JSON.parse(allFacilitys["banner-secondary-texts"].data)?.description}
+                            href={JSON.parse(allFacilitys["banner-secondary-texts"].data)?.href}
                         />
                     }
                 </>
                 :
-                <Carousel
-                    url={""}
-                    maintext={""}
-                    description={""}
-                    href={""}
-                />
+                <Carousel url={""} maintext={""} description={""} href={""} />
             }
             <SubCategorys />
             <SectionComponent

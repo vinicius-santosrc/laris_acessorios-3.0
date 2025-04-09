@@ -10,6 +10,7 @@
 import { toaster } from "../components/ui/toaster";
 import { Product } from "@/models/product";
 import axios from 'axios';
+import api from "./api";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
@@ -21,7 +22,7 @@ class productService {
 
     public static readonly getAll = async () => {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/products`);
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/products`);
             return response.data.reverse();
         } catch (err) {
 
@@ -31,7 +32,7 @@ class productService {
 
     public static readonly getById = async (id: string) => {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/products`);
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/products`);
             const foundProduct = response.data.find((PRODUCT: any) => PRODUCT.id == id);
             return foundProduct;
         } catch (err) {
@@ -41,7 +42,7 @@ class productService {
 
     public static readonly getByCategory = async (Category: string) => {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/products`);
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/products`);
             const foundProduct = response.data.filter((produto: Product) => JSON.parse(produto.categoryList).includes(Category));
             return foundProduct.reverse();
         } catch (err) {
@@ -51,7 +52,7 @@ class productService {
 
     public static readonly getByURL = async (URL: string) => {
         try {
-            const response = await axios.post(`${url}${preEndpoint}${secretKey}/products/searchbyurl`, {
+            const response = await api.post(`${url}${preEndpoint}${secretKey}/products/searchbyurl`, {
                 url: URL
             });
             const foundProduct = response.data;
@@ -67,7 +68,7 @@ class productService {
 
     public static readonly deleteItemById = async (id: string) => {
         try {
-            const response = await axios.post(`${url}${preEndpoint}${secretKey}/products/delete`, {
+            const response = await api.post(`${url}${preEndpoint}${secretKey}/products/delete`, {
                 id: id,
             }, {
                 headers: {
@@ -102,7 +103,7 @@ class productService {
 
     public static readonly changeVisibilityByList = async (array: any[], state: "avaliable" | "unavaliable") => {
         try {
-            const promises = array.map((id) => axios.post(`${url}${preEndpoint}${secretKey}/products/changevisibility`, {
+            const promises = array.map((id) => api.post(`${url}${preEndpoint}${secretKey}/products/changevisibility`, {
                 disponibilidade: state == "avaliable" ? 1 : 0,
                 id: id,
             }, {
@@ -126,7 +127,7 @@ class productService {
 
     public static readonly updateProduct = async (product: Product) => {
         try {
-            await axios.post(`${url}${preEndpoint}${secretKey}/products/edit`, product, {
+            await api.post(`${url}${preEndpoint}${secretKey}/products/edit`, product, {
                 headers: {
                     'Content-Type': 'application/json',
                     "Authorization": authorization
@@ -140,7 +141,7 @@ class productService {
 
     public static readonly createProduct = async (product: Product) => {
         try {
-            await axios.post(`${url}${preEndpoint}${secretKey}/products/add`, product, {
+            await api.post(`${url}${preEndpoint}${secretKey}/products/add`, product, {
                 headers: {
                     'Content-Type': 'application/json',
                     "Authorization": authorization
@@ -154,7 +155,7 @@ class productService {
 
     public static readonly getByRelatedCategory = async (category: string[]) => {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/products`);
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/products`);
             let dataByCategory: any[] = [];
             response.data.forEach((product: Product) => {
                 if (window.location.pathname === "/product/" + product.url) {

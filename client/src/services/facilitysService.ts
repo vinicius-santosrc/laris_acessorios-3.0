@@ -8,6 +8,7 @@
  */
 
 import axios from 'axios';
+import api from './api';
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 //const url = process.env.REACT_APP_API_ENDPOINT_TEST;
@@ -23,7 +24,7 @@ export class Facilitys {
 
     public static async get(reference: string) {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/facilitys`);
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/facilitys`);
             const retornData = response.data.find((item: any) => item.reference == reference);
             return retornData;
         } catch (err) {
@@ -34,7 +35,7 @@ export class Facilitys {
 
     public static async getAll() {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/facilitys`);
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/facilitys`);
             return response.data;
         } catch (err) {
             console.log(err);
@@ -44,7 +45,7 @@ export class Facilitys {
 
     public static async save(item: any) {
         try {
-            await axios.post(`${url}${preEndpoint}${secretKey}/facilitys/edit`, item, {
+            await api.post(`${url}${preEndpoint}${secretKey}/facilitys/edit`, item, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': authorization
@@ -58,4 +59,31 @@ export class Facilitys {
     public static remove() {
         // Implementar a lógica de remoção, se necessário
     }
+
+    public static async getFacilityByPage(page: string) {
+        if (page === "home") {
+            try {
+                const references = [
+                    "banner-principal",
+                    "banner-principal-texts",
+                    "banner-secondary",
+                    "banner-secondary-texts"
+                ];
+
+                const facilityPromises = references.map(ref => Facilitys.get(ref));
+                const facilityData = await Promise.all(facilityPromises);
+
+                const facilityMap: Record<string, any> = {};
+                references.forEach((ref, index) => {
+                    facilityMap[ref] = facilityData[index];
+                });
+
+                return facilityMap;
+            } catch (error) {
+                console.error("Erro ao buscar os dados de facility da página:", error);
+                throw error;
+            }
+        }
+    }
+
 }

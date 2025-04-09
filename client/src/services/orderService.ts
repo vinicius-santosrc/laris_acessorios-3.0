@@ -12,6 +12,7 @@ import { OrderAfterBuyProps, OrderProps } from "../models/order";
 import { toaster } from "../components/ui/toaster";
 import emailService from "./emailService";
 import { templateId } from "../lib/utils";
+import api from "./api";
 
 const authorization = localStorage.getItem("token") ?? "";
 
@@ -31,7 +32,7 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders/add`;
 
         try {
-            const response = await axios.post(url, {
+            const response = await api.post(url, {
                 uid: order.uid,
                 address: JSON.stringify(order.enderecoPedido),
                 items: JSON.stringify(order.dadosPedido.produtos),
@@ -91,7 +92,7 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
 
         try {
-            const { data } = await axios.get(url);
+            const { data } = await api.get(url);
             return data;
         } catch (error: any) {
             console.error("Erro ao pegar todas as orders", error);
@@ -107,7 +108,7 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
 
         try {
-            const { data } = await axios.get(url);
+            const { data } = await api.get(url);
             return data.find((order: any) => order.uid === uid);
         } catch (error: any) {
             console.error("Erro ao pegar a order " + uid + ": ", error);
@@ -123,7 +124,7 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/getOrderById`;
 
         try {
-            const { data } = await axios.post(url, { id });
+            const { data } = await api.post(url, { id });
             return data[0];
         } catch (error: any) {
             console.error("Erro ao pegar a orders", error);
@@ -139,7 +140,7 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
 
         try {
-            const { data } = await axios.get(url);
+            const { data } = await api.get(url);
             const filteredData = data.filter((order: OrderAfterBuyProps) => {
                 const orderUser = JSON.parse(order.user);
                 return orderUser.uid === userId;
@@ -159,7 +160,7 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders/edit`;
 
         try {
-            const response = await axios.post(url, order, {
+            const response = await api.post(url, order, {
                 headers: {
                     Authorization: authorization
                 }

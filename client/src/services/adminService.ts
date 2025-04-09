@@ -12,6 +12,7 @@
 import { CategoriesProps } from "@/lib/utils";
 import Compressor from "compressorjs";
 import axios from 'axios';
+import api from "./api";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
@@ -27,7 +28,7 @@ export class adminService {
 
     static getPlanning = async () => {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/planejamentos`, {
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/planejamentos`, {
                 headers: {
                     "Authorization": authorization
                 }
@@ -39,7 +40,7 @@ export class adminService {
     }
 
     static planningDeleteById = async (id: string) => {
-        await axios.post(`${url}${preEndpoint}${secretKey}/planejamentos/delete`, {
+        await api.post(`${url}${preEndpoint}${secretKey}/planejamentos/delete`, {
             id: id,
         }, {
             headers: {
@@ -49,7 +50,7 @@ export class adminService {
     }
 
     static addNewPlanningCard = async (name_card: string) => {
-        await axios.post(`${url}${preEndpoint}${secretKey}/planejamentos/add`, {
+        await api.post(`${url}${preEndpoint}${secretKey}/planejamentos/add`, {
             name_card: name_card
         }, {
             headers: {
@@ -59,7 +60,7 @@ export class adminService {
     }
 
     static updatedCard = async (list: any, id: any) => {
-        await axios.post(`${url}${preEndpoint}${secretKey}/planejamentos/update`, {
+        await api.post(`${url}${preEndpoint}${secretKey}/planejamentos/update`, {
             id: id,
             list: list
         }, {
@@ -74,7 +75,7 @@ export class adminService {
 
     static getSheet = async (sheet_name: string) => {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/${sheet_name}`, {
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/${sheet_name}`, {
                 headers: {
                     "Authorization": authorization
                 }
@@ -87,7 +88,7 @@ export class adminService {
 
     static deleteSheetById = async (sheet: string, item: any) => {
         try {
-            await axios.post(`${url}${preEndpoint}${secretKey}/${sheet}/delete`, item, {
+            await api.post(`${url}${preEndpoint}${secretKey}/${sheet}/delete`, item, {
                 headers: {
                     "Authorization": authorization
                 }
@@ -99,7 +100,7 @@ export class adminService {
 
     static editSheetById = async (sheet: string, item: any) => {
         try {
-            await axios.post(`${url}${preEndpoint}${secretKey}/${sheet}/edit`, item, {
+            await api.post(`${url}${preEndpoint}${secretKey}/${sheet}/edit`, item, {
                 headers: {
                     "Authorization": authorization
                 }
@@ -111,7 +112,7 @@ export class adminService {
 
     static addSheetById = async (sheet: string, item: any) => {
         try {
-            await axios.post(`${url}${preEndpoint}${secretKey}/${sheet}/add`, item, {
+            await api.post(`${url}${preEndpoint}${secretKey}/${sheet}/add`, item, {
                 headers: {
                     "Authorization": authorization
                 }
@@ -124,7 +125,7 @@ export class adminService {
     // ** CATEGORYS ** //
     static getCategorys = async () => {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/categories`, {
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/categories`, {
                 headers: {
                     "Authorization": authorization
                 }
@@ -137,7 +138,7 @@ export class adminService {
 
     static addNewCategory = async (item: any, itemData: any) => {
         try {
-            await axios.post(`${url}${preEndpoint}${secretKey}/categories/add`, item, {
+            await api.post(`${url}${preEndpoint}${secretKey}/categories/add`, item, {
                 headers: {
                     "Authorization": authorization
                 }
@@ -149,7 +150,7 @@ export class adminService {
 
     static getAllCategoriesData = async () => {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/categoriesData`, {
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/categoriesData`, {
                 headers: {
                     "Authorization": authorization
                 }
@@ -161,7 +162,7 @@ export class adminService {
     }
 
     static updateByCategory = async (category: CategoriesProps) => {
-        await axios.post(`${url}${preEndpoint}${secretKey}/categories/edit`, category, {
+        await api.post(`${url}${preEndpoint}${secretKey}/categories/edit`, category, {
             headers: {
                 "Authorization": authorization
             }
@@ -179,7 +180,7 @@ export class adminService {
                         formData.append('key', keyUpload);
 
                         // Making the POST request
-                        axios.post(urlUpload, formData)
+                        api.post(urlUpload, formData)
                             .then((response) => {
                                 if (response.data.success) {
                                     resolve(response.data.data.url); // Resolve the promise with the URL
@@ -206,7 +207,7 @@ export class adminService {
 
     static getMenuItems = async () => {
         try {
-            const response = await axios.get(`${url}${preEndpoint}${secretKey}/menuItems`, {
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/menuItems`, {
                 headers: {
                     "Authorization": authorization
                 }
