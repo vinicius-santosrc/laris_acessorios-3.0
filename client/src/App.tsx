@@ -108,7 +108,7 @@ function App() {
         const { clientSecret } = await response.json();
         setClientSecret(clientSecret);
       } catch (error: any) {
-        console.error("Error creating payment intent:", error);
+        throw error;
       }
     };
 

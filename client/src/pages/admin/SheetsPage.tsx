@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./sheetpage.css";
 import { ModelDespesas, SheetItem } from "@/lib/utils";
-import { Input, Select, Tabs } from "@chakra-ui/react";
-import { SaveIcon } from "lucide-react";
+import { Button, Input, Tabs } from "@chakra-ui/react";
+import { Download, SaveIcon } from "lucide-react";
+import SheetService from "../../services/sheetService";
 
 export const SheetsPage = () => {
     const [monthlyData, setMonthlyData] = useState<any>({});
@@ -40,7 +41,7 @@ export const SheetsPage = () => {
     useEffect(() => {
         getTotal();
         loadItens();
-    }, []);
+    }, [planilha]);
 
     async function getTotal() {
         calculateTotals(monthlyData)
@@ -170,6 +171,45 @@ export const SheetsPage = () => {
             });
         }
     };
+
+    const exportItemsToExcel = async () => {
+        const itemsData = await Promise.all(items.map(async (item: any) => ({
+            "Código": item.codigo,
+            "Nome": item.nameofitem,
+            "Detalhe": item.detalhe,
+            "Preço de Compra": item.preco_compra,
+            "Custos": item.custos,
+            "Preço de Revenda": item.precorevenda,
+            "Quantidade de Compra": item.quantcompra,
+            "Lucro por Item": item.lucroporitem,
+        })));
+        await SheetService.export("excel", itemsData, "Produtos");
+    };
+
+    const exportFinancesToExcel = async () => {
+        const financeData = await Promise.all(Object.keys(monthlyData).map(async (month) => ({
+            Mês: month,
+            Entradas: monthlyData[month].entradas.toFixed(2),
+            Saídas: monthlyData[month].saidas.toFixed(2),
+            Total: (monthlyData[month].entradas - monthlyData[month].saidas).toFixed(2),
+        })));
+        await SheetService.export("excel", financeData, "Finanças");
+    };
+
+    const exportFinancesTableToExcel = async () => {
+        const financeTableData: any[] = [];
+        Object.keys(monthlyData).forEach(month => {
+            monthlyData[month].items.forEach((item: any) => {
+                financeTableData.push({
+                    "Descrição": item.descricao,
+                    "Valor": item.valor.toFixed(2),
+                    "Tipo": item.tipo,
+                });
+            });
+        });
+        await SheetService.export("excel", financeTableData, "Entradas e Despesas");
+    };
+
     const calculateTotals = (groupedData: any) => {
         let entradas = 0;
         let saidas = 0;
@@ -236,6 +276,12 @@ export const SheetsPage = () => {
                                         <h3>Entradas: R$<span id="entradas">{totalEntradas?.toFixed(2)}</span></h3>
                                         <h3>Saídas: R$<span id="saidas">{totalSaidas?.toFixed(2)}</span></h3>
                                         <h3 id={saldoWrap?.toFixed(2) < 0 ? "saidas" : "saldoh3"}>Saldo: R$<span>{saldoWrap?.toFixed(2)}</span></h3>
+                                    </div>
+                                    <div className="actions">
+                                        <Button onClick={exportFinancesToExcel} display={"flex"} alignItems={"center"} gap={2}>
+                                            <Download />
+                                            <span>Exportar tabela de saldo para excel</span>
+                                        </Button>
                                     </div>
                                     <table className="item-table item-table-despesas-top">
                                         <thead className="titlecolumns">
@@ -310,7 +356,12 @@ export const SheetsPage = () => {
 
                                     </div>
 
-
+                                    <div className="actions">
+                                        <Button onClick={exportFinancesTableToExcel} display={"flex"} alignItems={"center"} gap={2}>
+                                            <Download />
+                                            <span>Exportar tabela de entradas/despesas para excel</span>
+                                        </Button>
+                                    </div>
                                     <table className="item-table-despesas">
                                         <Tabs.Root lazyMount unmountOnExit defaultValue="Tudo">
                                             <Tabs.List borderRadius={4} padding={4} display={"flex"} overflowY={"hidden"} overflowX={"auto"} gap={12}>
@@ -414,10 +465,10 @@ export const SheetsPage = () => {
             <div className="dashboard-content">
                 <div className="AdminPage-DashBoard">
                     <div className="Admin-ContentDashBoard">
-                        {planilha == "planilha-despesas"
+                        {planilha != "planilha-despesas" && planilha != "planilha-itens"
                             ?
                             <div className="Planilha-404-NotFound">
-                                <img src={window.location.origin + "/static/media/admin-images/undraw_void_-3-ggu.svg"} />
+                                <img src={"https://laris-acessorios.vercel.app" + "/static/media/admin-images/undraw_void_-3-ggu.svg"} />
                                 <h1>Nenhuma planilha foi encontrada.</h1>
                                 <p>Entre em contato com o desenvolvedor ou tente novamente mais tarde.</p>
                             </div>
@@ -504,6 +555,12 @@ export const SheetsPage = () => {
                                 </div>
 
 
+                                <div className="actions">
+                                    <Button onClick={exportItemsToExcel} display={"flex"} alignItems={"center"} gap={2}>
+                                        <Download />
+                                        <span>Exportar para excel</span>
+                                    </Button>
+                                </div>
                                 <table className="item-table">
                                     <thead className="titlecolumns">
                                         <tr>
