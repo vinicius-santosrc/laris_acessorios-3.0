@@ -99,92 +99,90 @@ export const FacilitysPage = () => {
         }
     }
 
-    const FacilitysContent: FacilityProps[] = [
-        {
-            title: "Imagens",
-            content: (
-                <div>
-                    {banners.some((banner) => banner.type === "IMAGE") && (
-                        <AccordionRoot spaceY="4" variant="plain" collapsible>
-                            {banners.map((banner, index) => (
-                                banner.type === "IMAGE" && (
-                                    <AccordionItem key={banner.reference} value={banner.reference}>
-                                        <Box position="relative">
-                                            <AccordionItemTrigger indicatorPlacement="start">
-                                                {banner.description ? banner.description : banner.reference}
-                                            </AccordionItemTrigger>
-                                        </Box>
-                                        <AccordionItemContent>
+    const groupedByRef = banners.reduce((acc, banner) => {
+        if (!acc[banner.ref]) acc[banner.ref] = [];
+        acc[banner.ref].push(banner);
+        return acc;
+    }, {} as Record<string, FacilityItem[]>);
+
+    const refLabels: Record<string, string> = {
+        "banner-principal": "Banner Principal",
+        "categories-jewerlys": "Mini Banners de Categorias",
+        "subCategories": "Mini Banners de Subcategorias",
+        "banner-secondary": "Banner Secundário",
+    };
+
+    const refLabelsText: Record<string, string> = {
+        "mainText": "Texto Principal",
+        "description": "Descrição",
+        "href": "Redirecionamento (URL)"
+    }
+
+    const FacilitysContent: FacilityProps[] = Object.entries(groupedByRef).map(([refKey, bannersGroup]) => ({
+        title: refLabels[refKey] || refKey,
+        content: (
+            <div>
+                <AccordionRoot spaceY="4" variant="plain" collapsible>
+                    {bannersGroup.map((banner, index) => (
+                        <AccordionItem key={banner.reference} value={banner.reference}>
+                            <Box position="relative">
+                                <AccordionItemTrigger indicatorPlacement="start">
+                                    {banner.description || banner.reference}
+                                </AccordionItemTrigger>
+                            </Box>
+                            <AccordionItemContent>
+                                {banner.type === "IMAGE" ? (
+                                    <>
+                                        <div>
+                                            <h2>{banner.hasMobile ? "PC" : "Imagem geral (PC/MOBILE)"}</h2>
+                                            <img className="categoryImageFacilitys" src={banner.data} alt="Imagem da Categoria" />
+                                            <input type="file" onChange={(e) => changeImage(e, banners.indexOf(banner), false)} />
+                                        </div>
+                                        {banner.hasMobile && (
                                             <div>
-                                                <h2>{banner.hasMobile ? "PC" : "Imagem geral (PC/MOBILE)"}</h2>
-                                                <img className="categoryImageFacilitys" src={banner.data} alt="Imagem da Categoria" />
-                                                <input type="file" onChange={(e) => changeImage(e, index, false)} />
+                                                <h2>MOBILE</h2>
+                                                <img className="categoryImageFacilitys" src={banner.dataMobile} alt="Imagem Mobile da Categoria" />
+                                                <input type="file" onChange={(e) => changeImage(e, banners.indexOf(banner), true)} />
                                             </div>
-                                            {banner.hasMobile && (
-                                                <div>
-                                                    <h2>MOBILE</h2>
-                                                    <img className="categoryImageFacilitys" src={banner.dataMobile} alt="Imagem da Categoria" />
-                                                    <input type="file" onChange={(e) => changeImage(e, index, true)} />
+                                        )}
+                                    </>
+                                ) : (
+                                    Object.entries(JSON.parse(banner?.data)).map(([key, value]) => {
+                                        if (key === "hidden") {
+                                            return (
+                                                <div key={key}>
+                                                    <span id="colorHigh">Visibilidade: </span>
+                                                    <select
+                                                        value={value}
+                                                        onChange={(e) => changeText(banner, key, e.target.value)}
+                                                    >
+                                                        <option value={false}>MOSTRAR</option>
+                                                        <option value={true}>ESCONDER</option>
+                                                    </select>
                                                 </div>
-                                            )}
-                                        </AccordionItemContent>
-                                    </AccordionItem>
-                                )
-                            ))}
-                        </AccordionRoot>
-                    )}
-                </div>
-            ),
-        },
-        {
-            title: "Textos",
-            content: (
-                <div>
-                    {banners.some((banner) => banner.type === "TEXT") && (
-                        <AccordionRoot spaceY="4" variant="plain" collapsible>
-                            {banners.map((banner) => (
-                                banner.type === "TEXT" && (
-                                    <AccordionItem key={banner.reference} value={banner.reference}>
-                                        <Box position="relative">
-                                            <AccordionItemTrigger indicatorPlacement="start">
-                                                {banner.description ? banner.description : banner.reference}
-                                            </AccordionItemTrigger>
-                                        </Box>
-                                        <AccordionItemContent>
-                                            {Object.entries(JSON.parse(banner?.data)).map(([key, value]) => {
-                                                if (key == "hidden") {
-                                                    return (
-                                                        <>
-                                                            <span>Visibilidade: </span>
-                                                            <select value={value} onChange={(e) => changeText(banner, key, e.target.value)}>
-                                                                <option value={false}>MOSTRAR</option>
-                                                                <option value={true}>ESCONDER</option>
-                                                            </select>
-                                                        </>
-                                                    )
-                                                }
-                                                return (
-                                                    <>
-                                                        <span>{key}: </span>
-                                                        <Input
-                                                            key={key}
-                                                            value={value}
-                                                            placeholder={`Digite ${key}`}
-                                                            onChange={(e) => changeText(banner, key, e.target.value)}
-                                                        />
-                                                    </>
-                                                )
-                                            })}
-                                        </AccordionItemContent>
-                                    </AccordionItem>
-                                )
-                            ))}
-                        </AccordionRoot>
-                    )}
-                </div>
-            ),
-        },
-    ];
+                                            );
+                                        }
+
+                                        return (
+                                            <div className="item-flex" key={key}>
+                                                <span id="colorHigh">{refLabelsText[key] ?? key}: </span>
+                                                <Input
+                                                    value={value}
+                                                    placeholder={`Digite ${key}`}
+                                                    onChange={(e) => changeText(banner, key, e.target.value)}
+                                                />
+                                            </div>
+                                        );
+                                    })
+                                )}
+                            </AccordionItemContent>
+                        </AccordionItem>
+                    ))}
+                </AccordionRoot>
+            </div>
+        ),
+    }));
+
 
     return (
         <section className="dashboard-laris-acessorios">

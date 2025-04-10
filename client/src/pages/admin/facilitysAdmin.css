@@ -84,3 +84,11 @@
 .categoryImageFacilitys {
     width: 400px;
 }
+#colorHigh {
+    color: var(--cor-principal)
+}
+
+.item-flex {
+    display: flex;
+    align-items: center;
+}
