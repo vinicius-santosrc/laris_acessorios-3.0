@@ -14,6 +14,8 @@ import { Menu } from "@chakra-ui/react"
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Icon } from "leaflet"
+import productService from "../../services/productService";
+import { toaster } from "../../components/ui/toaster";
 
 const AdminOrders = () => {
     const [orderAtual, setOrderAtual] = useState<OrderAfterBuyProps | null>(null);
@@ -105,6 +107,39 @@ const AdminOrders = () => {
     function formatTelefoneToLink(telefone: string) {
         return telefone.replace(/\D/g, '');
     }
+
+    async function changeVisibility(item: any) {
+        try {
+            const isCurrentlyAvailable = item.disponibilidade === 1;
+
+            await productService.changeVisibilityByList(
+                [item.id],
+                isCurrentlyAvailable ? "unavaliable" : "avaliable"
+            );
+
+            toaster.create({
+                title: `Visibilidade dos produtos alterada para ${isCurrentlyAvailable ? "Indisponível" : "Disponível"}.`,
+                type: "success",
+            });
+
+            setOrderAtual((prev) => {
+                if (!prev) return prev;
+
+                const updatedItems = JSON.parse(prev.items).map((i: any) =>
+                    i.id === item.id ? { ...i, disponibilidade: isCurrentlyAvailable ? 0 : 1 } : i
+                );
+
+                return { ...prev, items: JSON.stringify(updatedItems) };
+            });
+        } catch (error) {
+            console.error("Erro ao mudar visibilidade:", error);
+            toaster.create({
+                title: "Erro ao alterar visibilidade.",
+                type: "error",
+            });
+        }
+    }
+
 
     return (
         <section className="dashboard-laris-acessorios">
@@ -246,11 +281,8 @@ const AdminOrders = () => {
                                             <Portal>
                                                 <Menu.Positioner>
                                                     <Menu.Content>
-                                                        <Menu.Item value="new-txt-a">
+                                                        <Menu.Item value="new-txt-a" onClick={() => changeVisibility(item)}>
                                                             Tornar {item.disponibilidade == 0 ? "Disponivel" : "Indisponivel"}
-                                                        </Menu.Item>
-                                                        <Menu.Item value="new-txt-b">
-                                                            Entrar na página do produto
                                                         </Menu.Item>
                                                     </Menu.Content>
                                                 </Menu.Positioner>
