@@ -178,14 +178,13 @@ export const ProductAddPage = () => {
     const addNewCategory = async () => {
         if (!newCategoryName) return; // Prevent adding empty categories
         try {
-            const createdCategory = await adminService.addNewCategory(JSON.stringify({ label: newCategoryName }, itemData));
+            await adminService.addNewCategory(JSON.stringify({ label: newCategoryName }, itemData));
             setTypeCategorys((prev) => [
                 ...prev,
                 { label: newCategoryName, value: newCategoryName }
             ]);
             setNewCategoryName(""); // Clear the input after adding
         } catch (error: any) {
-            throw Error(error);
             toaster.create({
                 title: "Erro ao criar categoria",
                 type: "error"

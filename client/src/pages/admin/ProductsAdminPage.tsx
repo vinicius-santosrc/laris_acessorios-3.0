@@ -105,8 +105,6 @@ export const ProductsAdminPage = () => {
                 {/* Botões de Ação */}
                 <div className="actions">
                     <Button onClick={() => navigator("/admin/products/add")} className="action-button">Adicionar Produto</Button>
-                    <Button className="action-button">Filtrar Produtos</Button>
-                    <Button className="action-button">Resetar Filtros</Button>
                 </div>
 
                 <div className="dashboard-table-content">
