@@ -77,7 +77,7 @@ const Home = () => {
                     {
                         url: "https://i.ibb.co/tTWBKdS3/IMG-1309.jpg",
                         redirect: "/collections/pulseira",
-                        title: "Pulseira de Ouro Elegante",
+                        title: "Pulseira Dourada Elegante",
                         description: "Um toque de sofisticação e elegância ao seu estilo.",
                     },
                 ]}
