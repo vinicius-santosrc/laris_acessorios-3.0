@@ -78,24 +78,25 @@ export const ProductAddPage = () => {
         const file = event.target.files[0];
         if (file) {
             const uploadPhoto = await adminService.upload(event);
-            setProduct((prevProduct: any) => {
-                let photoURLs = [];
+            if (uploadPhoto) {
+                setProduct((prevProduct: any) => {
+                    let photoURLs = [];
 
-                try {
-                    photoURLs = JSON.parse(prevProduct?.photoURL || '[]');
-                } catch (error: any) {
-                    console.error("Erro ao fazer o parse de photoURL:", error);
-                    photoURLs = [];
-                }
+                    try {
+                        photoURLs = JSON.parse(prevProduct?.photoURL || '[]');
+                    } catch (error: any) {
+                        photoURLs = [];
+                    }
 
-                return {
-                    ...prevProduct,
-                    photoURL: JSON.stringify([
-                        ...photoURLs,
-                        uploadPhoto,
-                    ]),
-                };
-            });
+                    return {
+                        ...prevProduct,
+                        photoURL: JSON.stringify([
+                            ...photoURLs,
+                            uploadPhoto,
+                        ]),
+                    };
+                });
+            }
         }
     };
 

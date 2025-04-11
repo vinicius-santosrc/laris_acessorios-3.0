@@ -107,14 +107,15 @@ const CategoriesAdmin = () => {
         const file = e.target.files[0];
         if (file) {
             const uploadPhoto = await adminService.upload(e);
-
-            setCategories((prevCategories) =>
-                prevCategories.map((cat) =>
-                    cat.urlLink === item.urlLink
-                        ? { ...cat, highlightImage: uploadPhoto }
-                        : cat
-                )
-            );
+            if (uploadPhoto) {
+                setCategories((prevCategories) =>
+                    prevCategories.map((cat) =>
+                        cat.urlLink === item.urlLink
+                            ? { ...cat, highlightImage: uploadPhoto }
+                            : cat
+                    )
+                );
+            }
         }
     }
 

@@ -44,12 +44,7 @@ export class orderService {
                 subtotal: order.subtotal,
                 cupom_desconto: order.CuponsDescontos || 0,
                 cupons: order.CupomAtual ? order.CupomAtual.name : ''
-            },
-                {
-                    headers: {
-                        Authorization: authorization
-                    }
-                });
+            });
 
             if (response.status === 200 || response.status === 201) {
                 await emailService.send(templateId.confirmationBuy, {
@@ -160,11 +155,7 @@ export class orderService {
         const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders/edit`;
 
         try {
-            const response = await api.post(url, order, {
-                headers: {
-                    Authorization: authorization
-                }
-            });
+            const response = await api.post(url, order);
 
             if (response.status === 200 || response.status === 201) {
                 toaster.create({

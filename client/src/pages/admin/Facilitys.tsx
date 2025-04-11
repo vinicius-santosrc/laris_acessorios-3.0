@@ -67,15 +67,17 @@ export const FacilitysPage = () => {
         const file = e.target.files[0];
         if (file) {
             const uploadPhoto = await adminService.upload(e);
-            setBanners((prev) => {
-                const updated: any = [...prev];
-                if (isMobile) {
-                    updated[index].dataMobile = uploadPhoto;
-                } else {
-                    updated[index].data = uploadPhoto;
-                }
-                return updated;
-            });
+            if (uploadPhoto) {
+                setBanners((prev) => {
+                    const updated: any = [...prev];
+                    if (isMobile) {
+                        updated[index].dataMobile = uploadPhoto;
+                    } else {
+                        updated[index].data = uploadPhoto;
+                    }
+                    return updated;
+                });
+            }
         }
     }
 

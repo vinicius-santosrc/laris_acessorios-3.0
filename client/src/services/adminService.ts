@@ -13,6 +13,7 @@ import { CategoriesProps } from "@/lib/utils";
 import Compressor from "compressorjs";
 import axios from 'axios';
 import api from "./api";
+import { toaster } from "../components/ui/toaster";
 
 const url = process.env.REACT_APP_API_ENDPOINT;
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
@@ -191,11 +192,21 @@ export class adminService {
                             })
                             .catch((error) => {
                                 console.error('Error during upload:', error);
+                                toaster.create({
+                                    type: "error",
+                                    title: "Erro no upload",
+                                    description: "Erro ao enviar imagem no banco de imagens"
+                                })
                                 resolve(null); // Resolve with null in case of error
                             });
                     },
                     error(err: any) {
                         console.error('Error during image compression:', err.message);
+                        toaster.create({
+                            type: "error",
+                            title: "Erro no upload",
+                            description: "Erro ao enviar imagem no banco de imagens"
+                        })
                         resolve(null); // Resolve with null if there is a compression error
                     },
                 });
