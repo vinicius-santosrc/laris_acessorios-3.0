@@ -9,8 +9,9 @@
 
 import axios from 'axios';
 import { ShippingItem } from "@/models/shipping";
+import { getUrlByAmbient } from './api';
 
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
+const API_URL = getUrlByAmbient();
 
 export class ShippingService {
     static async getShippingOptionsByCep(cep: string): Promise<any> {
