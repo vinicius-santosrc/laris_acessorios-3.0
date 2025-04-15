@@ -13,10 +13,9 @@ import { auth } from '../lib/firebase';
 import { UserAuthProps } from '@/lib/utils';
 import { UserProps } from '@/models/user';
 import axios from 'axios';
+import { getUrlByAmbient } from './api';
 
-const url = process.env.REACT_APP_API_ENDPOINT;
-const endpoint = process.env.REACT_APP_API_ENDPOINT;
-// const endpoint = process.env.REACT_APP_API_ENDPOINT_TEST;
+const url = getUrlByAmbient();
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
 const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
 
@@ -39,7 +38,7 @@ class authService {
         await createUserWithEmailAndPassword(auth, user.email, user.password)
             .then(async (userCredential) => {
                 try {
-                    await axios.post(`${endpoint}${preEndpoint}${secretKey}/users/add`, {
+                    await axios.post(`${url}${preEndpoint}${secretKey}/users/add`, {
                         uid: userCredential.user.uid,
                         nome_completo: user.nome_completo,
                         cpf: user.cpf,

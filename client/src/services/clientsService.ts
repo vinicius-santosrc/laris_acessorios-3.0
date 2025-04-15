@@ -7,11 +7,9 @@
  * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
  */
 
-import axios from 'axios';
-import api from './api';
+import api, { getUrlByAmbient } from './api';
 
-const url = process.env.REACT_APP_API_ENDPOINT;
-//const url = process.env.REACT_APP_API_ENDPOINT_TEST;
+const url = getUrlByAmbient();
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
 const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
 

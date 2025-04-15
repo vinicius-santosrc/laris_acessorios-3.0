@@ -9,12 +9,12 @@ const whiteListUrls = [
     process.env.REACT_APP_API_ENDPOINT_APPWRITE
 ];
 
-const getUrlByAmbient = (): any => {
-    switch (process.env.REACT_APP_DEFAULTCONFIGURATION) {
+const getUrlByAmbient = (): string => {
+    switch (process.env.REACT_APP_DEFAULTCONFIGURATION ?? "") {
         case "production":
-            return process.env.REACT_APP_API_ENDPOINT_PRODUCTION;
+            return process.env.REACT_APP_API_ENDPOINT_PRODUCTION ?? "";
         case "local":
-            return process.env.REACT_APP_API_ENDPOINT;
+            return process.env.REACT_APP_API_ENDPOINT ?? "";
         default:
             return "";
     }
@@ -26,6 +26,7 @@ api.interceptors.request.use(config => {
     
     return config;
 });
+
 export { getUrlByAmbient };
-    
+
 export default api;
