@@ -12,6 +12,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+const helmet = require('helmet');
+const morgan = require('morgan');
+morgan.token('remote-addr', (req) => req.ip);
 
 // Importando rotas
 const authRoutes = require('./src/routes/authRoutes');
@@ -37,6 +40,10 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(helmet({
+    contentSecurityPolicy: false,
+}));
+app.use(morgan('REQUEST :method (:url) with status :status - Respponse time :response-time ms :remote-addr'));
 
 // Conectar ao banco de dados
 connectToDatabase();

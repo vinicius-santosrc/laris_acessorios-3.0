@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import logoHeader from '../../logo.svg';
-import { UserProps } from '../../models/user';
 import authService from '../../services/authService';
 import { LayoutDashboard, Users, BoxIcon, DatabaseIcon, ChevronRight, Calendar, FactoryIcon, FileText, Settings, LogOut, ListOrdered, ChevronDown, ListIcon, LucideChevronsUpDown, Settings2Icon } from 'lucide-react'; // Importando ícone de Menu
 import { getFirstAndLastName, menuItemsAdmin } from '../../lib/utils';
 import './sidebar.css';
 import { Link } from 'react-router-dom';
 import MenuComponent from '../geral/header/menu-mobile/MenuComponent';
-import { LuList } from 'react-icons/lu';
 import { useUser } from '../../contexts/UserContext';
 import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from "../../components/ui/accordion";
 import { Portal, Menu, Separator } from "@chakra-ui/react"
@@ -189,6 +187,7 @@ const SideBar = () => {
                                             {user && user.nome_completo ? getFirstAndLastName(user.nome_completo) : 'Carregando...'}
                                         </p>
                                         <p className="user-role">{user?.label}</p>
+                                        {process.env.DEFAULTCONFIGURATION  === "production" ? null : <p className='user-role'>Ambiente Local</p>}
                                     </div>
                                 </div>
                                 <a className="logout-link">
