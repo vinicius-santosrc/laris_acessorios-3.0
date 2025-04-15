@@ -43,7 +43,8 @@ export class orderService {
                 desconto: order.desconto,
                 subtotal: order.subtotal,
                 cupom_desconto: order.CuponsDescontos || 0,
-                cupons: order.CupomAtual ? order.CupomAtual.name : ''
+                cupons: order.CupomAtual ? order.CupomAtual.name : '',
+                codigoRastreio: ""
             });
 
             if (response.status === 200 || response.status === 201) {
@@ -126,7 +127,7 @@ export class orderService {
         }
     };
 
-    static getByUser = async (userId: string) => {
+    static getByUser = async (email: string) => {
         if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
@@ -136,9 +137,10 @@ export class orderService {
 
         try {
             const { data } = await api.get(url);
+
             const filteredData = data.filter((order: OrderAfterBuyProps) => {
                 const orderUser = JSON.parse(order.user);
-                return orderUser.uid === userId;
+                return orderUser.email === email;
             });
             return filteredData;
         } catch (error: any) {

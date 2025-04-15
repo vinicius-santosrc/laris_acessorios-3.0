@@ -93,7 +93,7 @@ export const Planing = () => {
             const response = await adminService.getPlanning();
             setContentCards(response);
         } catch (error: any) {
-            console.log(error);
+            throw error;
         }
     }
 

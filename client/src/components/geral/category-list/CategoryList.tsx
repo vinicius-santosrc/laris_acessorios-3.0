@@ -16,7 +16,7 @@ const CategoryList = () => {
             const facility = await Facilitys.get(photoURL);
             setFacilityImages((prev: any) => ({
                 ...prev,
-                [photoURL]: facility.data,
+                [photoURL]: facility.data[0].data,
             }));
 
         } catch (error: any) {

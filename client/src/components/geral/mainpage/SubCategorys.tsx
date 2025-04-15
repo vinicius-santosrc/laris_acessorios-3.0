@@ -39,7 +39,7 @@ const SubCategories = () => {
             const response = await Facilitys.get(photoURL);
             setSubCategoryImages((prev) => ({
                 ...prev,
-                [photoURL]: response?.data,
+                [photoURL]: response?.data[0].data,
             }));
         } catch (error: any) {
             throw error;

@@ -69,7 +69,6 @@ export const ProductEditPage = () => {
         if (uid) {
             const productAt: Product = await productService.getById(uid);
             setProduct(productAt);
-            console.log(productAt)
         }
     };
 

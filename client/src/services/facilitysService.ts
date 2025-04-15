@@ -24,11 +24,9 @@ export class Facilitys {
 
     public static async get(reference: string) {
         try {
-            const response = await api.get(`${url}${preEndpoint}${secretKey}/facilitys`);
-            const retornData = response.data.find((item: any) => item.reference == reference);
-            return retornData;
+            const response = await api.put(`${url}${preEndpoint}${secretKey}/facilitys/get`, { reference: reference });
+            return response;
         } catch (err) {
-            console.log(err);
             throw err;
         }
     }
@@ -38,7 +36,6 @@ export class Facilitys {
             const response = await api.get(`${url}${preEndpoint}${secretKey}/facilitys`);
             return response.data;
         } catch (err) {
-            console.log(err);
             throw err;
         }
     }
@@ -71,11 +68,15 @@ export class Facilitys {
                 ];
 
                 const facilityPromises = references.map(ref => Facilitys.get(ref));
-                const facilityData = await Promise.all(facilityPromises);
+                const facilityResponses = await Promise.all(facilityPromises);
 
                 const facilityMap: Record<string, any> = {};
                 references.forEach((ref, index) => {
-                    facilityMap[ref] = facilityData[index];
+                    const response = facilityResponses[index];
+                    const dataArray = response.data;
+
+                    // Pegando só o primeiro item do array de dados
+                    facilityMap[ref] = dataArray && dataArray.length > 0 ? dataArray[0] : null;
                 });
 
                 return facilityMap;

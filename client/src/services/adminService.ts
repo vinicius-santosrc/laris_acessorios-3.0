@@ -11,7 +11,6 @@
 
 import { CategoriesProps } from "@/lib/utils";
 import Compressor from "compressorjs";
-import axios from 'axios';
 import api from "./api";
 import { toaster } from "../components/ui/toaster";
 

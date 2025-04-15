@@ -20,7 +20,6 @@ const Success = () => {
             if (uid) {
                 try {
                     const currentOrder = await orderService.getByUid(uid);
-                    console.log(currentOrder)
                     setOrder(currentOrder);
                     setEndereco(JSON.parse(currentOrder.address));
                     setItems(JSON.parse(currentOrder.items));

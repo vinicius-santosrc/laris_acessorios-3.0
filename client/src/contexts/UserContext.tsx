@@ -22,7 +22,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             try {
                 const res = await authService.getUserData();
                 const userContent: UserProps = await authService.getUserByEmail(res.email);
-                const orders: OrderAfterBuyProps[] = await orderService.getByUser(res?.$id);
+                const orders: OrderAfterBuyProps[] = await orderService.getByUser(res?.email);
                 const userArray: any = { ...userContent, orders: orders };
                 if (userArray.label === "Admin") if(token) localStorage.setItem("token", token)
                 setUser(userArray);

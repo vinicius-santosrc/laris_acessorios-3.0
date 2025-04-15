@@ -56,7 +56,7 @@ const Account = () => {
                                 {user?.orders.map((order: OrderAfterBuyProps) => {
                                     const items = JSON.parse(order.items); // Transformar o JSON de items em um objeto
                                     const address = JSON.parse(order.address); // Transformar o JSON de endereço em um objeto
-                                    const user = JSON.parse(order.user); // Transformar o JSON de usuário em um objeto
+                                    const userProfile = JSON.parse(order.user); // Transformar o JSON de usuário em um objeto
 
                                     return (
                                         <div key={order.id} className="order-card">
