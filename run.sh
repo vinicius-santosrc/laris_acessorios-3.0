@@ -9,4 +9,4 @@ cd ..
 
 # Entrar no diretório server e executar o comando node index.js
 cd server || { echo "Falha ao entrar no diretório 'server'"; exit 1; }
-node index.ts
+node app.js

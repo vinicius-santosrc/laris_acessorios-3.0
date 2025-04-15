@@ -147,13 +147,16 @@ const ProductPage = () => {
                             </div>
                             <div className="product-price-content">
                                 {product.desconto > 0 ?
-                                    <p id="bold"><s style={{fontWeight: 400}}>R$ {product.price.toFixed(2)}</s> R$ {(product.price - product.desconto).toFixed(2)}</p>
+                                    <p id="bold"><s style={{ fontWeight: 400 }}>R$ {product.price.toFixed(2)}</s> R$ {(product.price - product.desconto).toFixed(2)}</p>
                                     :
                                     <p id="bold">R$ {product.price.toFixed(2)}</p>}
                                 <p>Compre pelo cartão de crédito</p>
                             </div>
                             <div className="product-sizes-content">
                                 <p>Tamanhos</p>
+                                {!sizeSelected &&
+                                    <span style={{ color: "red", fontSize: 12 }} color="red">* Selecione um tamanho</span>
+                                }
                                 <div className="product-sizes">
                                     {sizesAvaliable.map((s: any, i: number) => {
                                         return (
@@ -176,18 +179,18 @@ const ProductPage = () => {
                                         <button>Indisponível</button>
                                     </div>
                                 }
-                                 <div className="product-credit-button">
+                                <div className="product-credit-button">
                                     {/* <button>Ver parcelas</button> */}
                                     <button></button>
-                                </div> 
+                                </div>
                             </div>
                             <div className="product-description-content">
                                 <h2>Descrição e Detalhes</h2>
-                                <p>{product.description }</p>
+                                <p>{product.description}</p>
                                 <div className="description-tec">
                                     <li>{product.type_full_label}</li>
                                     <li>Tamanhos: {sizesAvaliable.map((size: string) => { return <>{size} </> })}</li>
-                                    <li>{product.type == "jewelry" ? "Desenhado para ser confortável e fácil de usar" : "Criado para refletir sua personalidade e deixar sua marca" }</li>
+                                    <li>{product.type == "jewelry" ? "Desenhado para ser confortável e fácil de usar" : "Criado para refletir sua personalidade e deixar sua marca"}</li>
                                 </div>
                             </div>
                         </div>
