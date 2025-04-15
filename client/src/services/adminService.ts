@@ -11,10 +11,10 @@
 
 import { CategoriesProps } from "@/lib/utils";
 import Compressor from "compressorjs";
-import api from "./api";
+import api, { getUrlByAmbient } from "./api";
 import { toaster } from "../components/ui/toaster";
 
-const url = process.env.REACT_APP_API_ENDPOINT;
+const url = getUrlByAmbient();
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
 const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
 const authorization = localStorage.getItem("token") ?? "";

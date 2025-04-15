@@ -7,29 +7,28 @@
  * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
  */
 
-import axios from "axios";
 import { OrderAfterBuyProps, OrderProps } from "../models/order";
 import { toaster } from "../components/ui/toaster";
 import emailService from "./emailService";
 import { templateId } from "../lib/utils";
-import api from "./api";
+import api, { getUrlByAmbient } from "./api";
 
 const authorization = localStorage.getItem("token") ?? "";
 
 export class orderService {
-    private static endpoint = process.env.REACT_APP_API_ENDPOINT;
+    private static url = getUrlByAmbient();
     private static secretKey = process.env.REACT_APP_API_SECRET_KEY;
     private static preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
 
     constructor() { }
 
     static create = async (order: OrderProps) => {
-        if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
+        if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
         }
 
-        const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders/add`;
+        const url = `${this.url}${this.preEndpoint}${this.secretKey}/orders/add`;
 
         try {
             const response = await api.post(url, {
@@ -80,12 +79,12 @@ export class orderService {
     };
 
     static getAll = async () => {
-        if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
+        if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
         }
 
-        const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
+        const url = `${this.url}${this.preEndpoint}${this.secretKey}/orders`;
 
         try {
             const { data } = await api.get(url);
@@ -96,12 +95,12 @@ export class orderService {
     };
 
     static getByUid = async (uid: string) => {
-        if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
+        if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
         }
 
-        const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
+        const url = `${this.url}${this.preEndpoint}${this.secretKey}/orders`;
 
         try {
             const { data } = await api.get(url);
@@ -112,12 +111,12 @@ export class orderService {
     };
 
     static getById = async (id: any) => {
-        if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
+        if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
         }
 
-        const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/getOrderById`;
+        const url = `${this.url}${this.preEndpoint}${this.secretKey}/getOrderById`;
 
         try {
             const { data } = await api.post(url, { id });
@@ -128,12 +127,12 @@ export class orderService {
     };
 
     static getByUser = async (email: string) => {
-        if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
+        if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
         }
 
-        const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders`;
+        const url = `${this.url}${this.preEndpoint}${this.secretKey}/orders`;
 
         try {
             const { data } = await api.get(url);
@@ -149,12 +148,12 @@ export class orderService {
     };
 
     static update = async (order: any) => {
-        if (!this.endpoint || !this.secretKey || !this.preEndpoint) {
+        if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
         }
 
-        const url = `${this.endpoint}${this.preEndpoint}${this.secretKey}/orders/edit`;
+        const url = `${this.url}${this.preEndpoint}${this.secretKey}/orders/edit`;
 
         try {
             const response = await api.post(url, order);
