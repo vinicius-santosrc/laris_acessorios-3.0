@@ -99,7 +99,7 @@ function App() {
           method: "POST",
           body: JSON.stringify({ "item": 1 * 100 }),
           headers: {
-            'Authorization': `Bearer ${process.env.REACT_APP_STRIPE_SECRET_KEY_PRODUCTION}`, //USE REACT_APP_STRIPE_SECRET_KEY_PRODUCTION para producao
+            'Authorization': `Bearer ${process.env.REACT_APP_DEFAULTCONFIGURATION == "production" ? process.env.REACT_APP_STRIPE_SECRET_KEY_PRODUCTION : process.env.REACT_APP_STRIPE_SECRET_KEY}`, //USE REACT_APP_STRIPE_SECRET_KEY_PRODUCTION para producao
             'Content-Type': 'application/json'
           }
         });
