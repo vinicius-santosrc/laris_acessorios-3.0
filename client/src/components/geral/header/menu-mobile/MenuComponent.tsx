@@ -148,8 +148,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
                         </DrawerHeader>
                         <DrawerBody className="drawer-header-component__body">
                             <section className="drawer-menu-items">
-                                {menuItems
-                                    .find(item => item.title === activeCollection)
+                                {menuItems?.find(item => item.title === activeCollection)
                                     ?.subItems?.map((subItem: any, subId: number) => (
                                         <Link target="_parent" onClick={closeSubDrawer} to={subItem.href || "javascript:;"} key={subId}>
                                             <div className="drawer-menu__item">

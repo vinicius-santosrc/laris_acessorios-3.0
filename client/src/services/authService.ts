@@ -23,8 +23,8 @@ const endPointAppWrite: string | undefined = process.env.REACT_APP_API_ENDPOINT_
 const projectAppWrite: string | undefined = process.env.REACT_APP_API_PROJECT_APPWRITE;
 
 class authService {
-    private client: Client;
-    private database: Databases;
+    private readonly client: Client;
+    private readonly database: Databases;
 
     constructor() {
         this.client = new Client();
@@ -34,7 +34,7 @@ class authService {
         this.database = new Databases(this.client);
     }
 
-    static register = async (user: UserAuthProps) => {
+    static readonly register = async (user: UserAuthProps) => {
         await createUserWithEmailAndPassword(auth, user.email, user.password)
             .then(async (userCredential) => {
                 try {
@@ -74,7 +74,7 @@ class authService {
         }
     }
 
-    static getUserData = async () => {
+    public static readonly getUserData = async () => {
         const client = new Client();
         if (endPointAppWrite && projectAppWrite) {
             client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
@@ -87,7 +87,7 @@ class authService {
         }
     }
 
-    static isLogged = async () => {
+    static readonly isLogged = async () => {
         const client = new Client();
         if (endPointAppWrite && projectAppWrite) {
             client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
@@ -100,7 +100,7 @@ class authService {
         }
     }
 
-    static logout = async () => {
+    static readonly logout = async () => {
         try {
             const client = new Client();
             if (endPointAppWrite && projectAppWrite) {
@@ -116,7 +116,7 @@ class authService {
         }
     }
 
-    static getUserByEmail = async (email: string) => {
+    static readonly getUserByEmail = async (email: string) => {
         try {
             const response = await axios.post(`${url}${preEndpoint}${secretKey}/user`, {
                 email: email
@@ -130,7 +130,7 @@ class authService {
         }
     }
 
-    static isUserAdmin = async (email: string) => {
+    static readonly isUserAdmin = async (email: string) => {
         try {
             const response = await axios.post(`${url}${preEndpoint}${secretKey}/user`, {
                 email: email
