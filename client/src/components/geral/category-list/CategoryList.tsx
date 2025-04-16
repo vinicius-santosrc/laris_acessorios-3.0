@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CategoryProps, Categorys } from "../../../lib/utils";
+import { Categorys } from "../../../lib/utils";
 import CategoryCard from "../category-card/CategoryCard";
 import "./CategoryList.css";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -7,17 +7,21 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { Facilitys } from "../../../services/facilitysService";
+import { useFacility } from "../../../contexts/FacilityContext";
 
 const CategoryList = () => {
     const [facilityImages, setFacilityImages] = useState<{ [key: string]: string }>({});
+    const { facility } = useFacility();
 
     const getFacilitys = async (photoURL: string) => {
         try {
-            const facility = await Facilitys.get(photoURL);
-            setFacilityImages((prev: any) => ({
-                ...prev,
-                [photoURL]: facility.data[0].data,
-            }));
+            if (facility) {
+                const facilityItem = Facilitys.getByRef(photoURL, facility);
+                setFacilityImages((prev: any) => ({
+                    ...prev,
+                    [photoURL]: facilityItem.data,
+                }));
+            }
 
         } catch (error: any) {
             throw Error(error);
@@ -28,7 +32,7 @@ const CategoryList = () => {
         Categorys.forEach((item) => {
             getFacilitys(item.photoURL);
         });
-    }, []);
+    }, [facility]);
 
     return (
         <section className="category-list-wrapper">

@@ -29,6 +29,18 @@ export class Facilitys {
         }
     }
 
+    public static getByRef(reference: any, contextFacility: any[]) {
+        if (contextFacility) {
+            try {
+                const found = contextFacility.find((item) => item.reference == reference);
+                return found;
+            } catch (error) {
+                console.error("Erro ao buscar os dados de facility da página:", error);
+                throw error;
+            }
+        }
+    }
+
     public static async getAll() {
         try {
             const response = await api.get(`${url}${preEndpoint}${secretKey}/facilitys`);
@@ -55,8 +67,8 @@ export class Facilitys {
         // Implementar a lógica de remoção, se necessário
     }
 
-    public static async getFacilityByPage(page: string) {
-        if (page === "home") {
+    public static getFacilityByPage(page: string, contextFacility: any[]) {
+        if (page === "home" && contextFacility) {
             try {
                 const references = [
                     "banner-principal",
@@ -65,16 +77,11 @@ export class Facilitys {
                     "banner-secondary-texts"
                 ];
 
-                const facilityPromises = references.map(ref => Facilitys.get(ref));
-                const facilityResponses = await Promise.all(facilityPromises);
-
                 const facilityMap: Record<string, any> = {};
-                references.forEach((ref, index) => {
-                    const response = facilityResponses[index];
-                    const dataArray = response.data;
 
-                    // Pegando só o primeiro item do array de dados
-                    facilityMap[ref] = dataArray && dataArray.length > 0 ? dataArray[0] : null;
+                references.forEach((ref) => {
+                    const found = contextFacility.find((item) => item.reference == ref);
+                    facilityMap[ref] = found ?? null;
                 });
 
                 return facilityMap;

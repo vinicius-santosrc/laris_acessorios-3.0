@@ -170,7 +170,7 @@ const ProductPage = () => {
                                 </div>
                             </div>
                             <div className="product-actions-btn">
-                                {product.disponibilidade == true ?
+                                {product.disponibilidade ?
                                     <div className="product-buy-button">
                                         <button onClick={addToCart}>Comprar</button>
                                     </div>

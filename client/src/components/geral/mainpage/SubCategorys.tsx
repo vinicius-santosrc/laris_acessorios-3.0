@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Loader } from "../../../components/ui/loader";
 import { adminService } from "../../../services/adminService";
 import { Facilitys } from "../../../services/facilitysService";
+import { useFacility } from "../../../contexts/FacilityContext";
 
 interface SubCategoryProps {
     title: string;
@@ -15,13 +16,14 @@ interface SubCategoryProps {
 const SubCategories = () => {
     const [lastCategory, setLastCategory] = useState<any>();
     const [subCategoryImages, setSubCategoryImages] = useState<{ [key: string]: string }>({});
+    const { facility } = useFacility();
 
     useEffect(() => {
         getLastCategories();
         subCategories.forEach((item) => {
             getSubCategoryImage(item.photoURL);
         });
-    }, []);
+    }, [facility]);
 
     const getLastCategories = async () => {
         try {
@@ -35,14 +37,16 @@ const SubCategories = () => {
     };
 
     const getSubCategoryImage = async (photoURL: string) => {
-        try {
-            const response = await Facilitys.get(photoURL);
-            setSubCategoryImages((prev) => ({
-                ...prev,
-                [photoURL]: response?.data[0].data,
-            }));
-        } catch (error: any) {
-            throw error;
+        if (facility) {
+            try {
+                const response = Facilitys.getByRef(photoURL, facility);
+                setSubCategoryImages((prev) => ({
+                    ...prev,
+                    [photoURL]: response.data,
+                }));
+            } catch (error: any) {
+                throw error;
+            }
         }
     };
 

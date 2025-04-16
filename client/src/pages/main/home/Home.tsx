@@ -9,10 +9,12 @@ import ShowCaseCollection from "../../../components/geral/mainpage/ShowCaseColle
 import { Facilitys } from "../../../services/facilitysService";
 import PerfumeShowComponent from "../../../components/geral/mainpage/PerfumeShowComponent";
 import Footer from "../../../components/geral/footer/Footer";
+import { useFacility } from "../../../contexts/FacilityContext";
 
 const Home = () => {
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [allFacilitys, setAllFacilitys] = useState<any>();
+    const { facility } = useFacility();
 
     const checkMobileView = () => {
         if (window.innerWidth <= 768) {
@@ -24,7 +26,6 @@ const Home = () => {
 
     useEffect(() => {
         checkMobileView();
-        getFacilitys();
         window.addEventListener("resize", checkMobileView);
 
         document.title = `LARIS ACESSÓRIOS - Acessórios baratos, Entrega Rápida`;
@@ -34,9 +35,13 @@ const Home = () => {
 
     }, []);
 
+    useEffect(() => {
+        getFacilitys();
+    }, [facility])
+
     const getFacilitys = async () => {
         try {
-            const response = await Facilitys.getFacilityByPage("home");
+            const response = Facilitys.getFacilityByPage("home", facility);
             setAllFacilitys(response);
         }
         catch (error: any) {
