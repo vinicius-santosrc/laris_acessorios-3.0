@@ -25,7 +25,7 @@ const SubHeaderComponent: React.FC<any> = ({ itemHover, isOpen }) => {
                         </div>
                     </div>
                     <div className="subheader-right-side">
-                        <img alt={itemHover.title} src={"https://i.ibb.co/0jphgqRb/IMG-1322.jpg"} />
+                        <img alt={itemHover.title} src={itemHover.imgMenuItem} />
                     </div>
                 </div>
             </section>

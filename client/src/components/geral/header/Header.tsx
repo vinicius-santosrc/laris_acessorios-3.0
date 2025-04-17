@@ -201,7 +201,7 @@ const Header = () => {
                 <nav className="header-app-bottom-content header-app-bottom-content__wrapper">
                     <div className="header-inside-bottom-content header-inside-bottom-content__redirects">
                         {menuItems?.length > 0 ? (
-                            menuItems?.map((categoria) => (
+                            menuItems?.map((categoria: any) => (
                                 <article
                                     key={categoria.title}
                                     className="redirect-item-content redirect-item-content__gifts"
