@@ -77,59 +77,65 @@ const Home = () => {
                 description="Explore nossas categorias e encontre a joia que reflete sua essência. Cada peça é única e carrega consigo uma história especial. Descubra a sua!"
                 hasDescription={true}
                 component={<CategoryList />} />
-            <ShowCaseCollection
-                items={[
-                    {
-                        url: "https://i.ibb.co/tTWBKdS3/IMG-1309.jpg",
-                        redirect: "/collections/pulseira",
-                        title: "Pulseira Dourada Elegante",
-                        description: "Um toque de sofisticação e elegância ao seu estilo.",
-                    },
-                ]}
-                highlight={true}
-                type="Grid"
-                style="alternative"
-                side="left"
-            />
+            {allFacilitys &&
+                <ShowCaseCollection
+                    items={[
+                        {
+                            url: allFacilitys["showcase-inside-alternative-1"]?.data,
+                            redirect: JSON.parse(allFacilitys["showcase-inside-alternative-1-text"]?.data)?.href,
+                            title: JSON.parse(allFacilitys["showcase-inside-alternative-1-text"]?.data)?.mainText,
+                            description: "Um toque de sofisticação e elegância ao seu estilo.",
+                        },
+                    ]}
+                    highlight={true}
+                    type="Grid"
+                    style="alternative"
+                    side="left"
+                />
+            }
             <SectionComponent
                 title="Torne sua WishList realidade"
                 description='"Encontre as peças dos seus sonhos aqui"'
                 hasDescription={true}
                 component={<ProductsMainPage />} />
-            <ShowCaseCollection
-                items={[
-                    {
-                        url: "https://aromedecapelin.cdn.magazord.com.br/img/2023/08/produto/3167/design-sem-nome-1.png?ims=fit-in/600x600/filters:fill(fff)",
-                        redirect: "/product/sabah-al-ward-al-wataniah",
-                        title: "Sabah Al Ward Al Wataniah Eau de Parfum 100ml",
-                        description: "Fragrância intensa e marcante, feita para quem sabe o valor da presença.",
-                    },
-                ]}
-                highlight={true}
-                type="Grid"
-                style="alternative"
-                side="right"
-            />
+            {allFacilitys &&
+                <ShowCaseCollection
+                    items={[
+                        {
+                            url: allFacilitys["showcase-inside-alternative-2"]?.data,
+                            redirect: JSON.parse(allFacilitys["showcase-inside-alternative-2-text"]?.data)?.href,
+                            title: JSON.parse(allFacilitys["showcase-inside-alternative-2-text"]?.data)?.mainText,
+                            description: "Um toque de sofisticação e elegância ao seu estilo.",
+                        },
+                    ]}
+                    highlight={true}
+                    type="Grid"
+                    style="alternative"
+                    side="left"
+                />
+            }
             <SectionComponent
                 title="Perfumes que encantam"
                 description="Descubra fragrâncias marcantes que combinam com sua personalidade. Dos clássicos aos lançamentos, encontre o perfume ideal para cada momento."
                 hasDescription={true}
                 component={<PerfumeShowComponent />}
             />
-            <ShowCaseCollection
-                items={[
-                    {
-                        url: "https://a-static.mlcdn.com.br/1500x1500/perfume-arabe-asad-lattafa-eau-de-parfum-100ml-masculino/belaartebelezaeacessorios/f7bd35dc6c8a11efbe9a4201ac18501b/80c7081a91c7e8c43a9762bfea51038d.jpeg",
-                        redirect: "/product/lattafa-asad",
-                        title: "Lattafa Asad Eau De Parfum",
-                        description: "Fragrância intensa e marcante, feita para quem sabe o valor da presença.",
-                    }
-                ]}
-                highlight={true}
-                type="Grid"
-                style="alternative"
-                side="left"
-            />
+            {allFacilitys &&
+                <ShowCaseCollection
+                    items={[
+                        {
+                            url: allFacilitys["showcase-inside-alternative-3"]?.data,
+                            redirect: JSON.parse(allFacilitys["showcase-inside-alternative-3-text"]?.data)?.href,
+                            title: JSON.parse(allFacilitys["showcase-inside-alternative-3-text"]?.data)?.mainText,
+                            description: "Um toque de sofisticação e elegância ao seu estilo.",
+                        },
+                    ]}
+                    highlight={true}
+                    type="Grid"
+                    style="alternative"
+                    side="left"
+                />
+            }
             <Footer />
         </React.Fragment>
     )

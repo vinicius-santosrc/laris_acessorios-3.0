@@ -74,7 +74,13 @@ export class Facilitys {
                     "banner-principal",
                     "banner-principal-texts",
                     "banner-secondary",
-                    "banner-secondary-texts"
+                    "banner-secondary-texts",
+                    'showcase-inside-alternative-1',
+                    "showcase-inside-alternative-1-text",
+                    'showcase-inside-alternative-2',
+                    "showcase-inside-alternative-2-text",
+                    'showcase-inside-alternative-3',
+                    "showcase-inside-alternative-3-text"
                 ];
 
                 const facilityMap: Record<string, any> = {};

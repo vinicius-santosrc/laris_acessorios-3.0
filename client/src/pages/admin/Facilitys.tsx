@@ -112,6 +112,9 @@ export const FacilitysPage = () => {
         "categories-jewerlys": "Mini Banners de Categorias",
         "subCategories": "Mini Banners de Subcategorias",
         "banner-secondary": "Banner Secundário",
+        "showcase-inside-alternative-1": "Primeira Seção Showcase Novidade",
+        "showcase-inside-alternative-2": "Segunda Seção Showcase Novidade",
+        "showcase-inside-alternative-3": "Terceira Seção Showcase Novidade"
     };
 
     const refLabelsText: Record<string, string> = {
