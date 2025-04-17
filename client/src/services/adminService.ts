@@ -44,6 +44,7 @@ export class adminService {
             id: id,
         }, {
             headers: {
+                'Content-Type': 'application/json',
                 "Authorization": authorization
             }
         });
@@ -54,6 +55,7 @@ export class adminService {
             name_card: name_card
         }, {
             headers: {
+                'Content-Type': 'application/json',
                 "Authorization": authorization
             }
         });
@@ -65,6 +67,7 @@ export class adminService {
             list: list
         }, {
             headers: {
+                'Content-Type': 'application/json',
                 "Authorization": authorization
             }
         });
@@ -90,6 +93,7 @@ export class adminService {
         try {
             await api.post(`${url}${preEndpoint}${secretKey}/${sheet}/delete`, item, {
                 headers: {
+                    'Content-Type': 'application/json',
                     "Authorization": authorization
                 }
             });
@@ -102,6 +106,7 @@ export class adminService {
         try {
             await api.post(`${url}${preEndpoint}${secretKey}/${sheet}/edit`, item, {
                 headers: {
+                    'Content-Type': 'application/json',
                     "Authorization": authorization
                 }
             });
@@ -114,6 +119,7 @@ export class adminService {
         try {
             await api.post(`${url}${preEndpoint}${secretKey}/${sheet}/add`, item, {
                 headers: {
+                    'Content-Type': 'application/json',
                     "Authorization": authorization
                 }
             });
@@ -140,6 +146,7 @@ export class adminService {
         try {
             await api.post(`${url}${preEndpoint}${secretKey}/categories/add`, item, {
                 headers: {
+                    'Content-Type': 'application/json',
                     "Authorization": authorization
                 }
             });
@@ -164,6 +171,7 @@ export class adminService {
     static updateByCategory = async (category: CategoriesProps) => {
         await api.post(`${url}${preEndpoint}${secretKey}/categories/edit`, category, {
             headers: {
+                'Content-Type': 'application/json',
                 "Authorization": authorization
             }
         });
