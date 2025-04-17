@@ -46,11 +46,10 @@ export const Dashboard = () => {
     };
 
     // Função para calcular os percentuais de lucro do mês atual
-    const getProfitPercentageOfThisMonth: any = () => {
+    const getProfitPercentageOfThisMonth = () => {
         const groupedData: any = { "Tudo": { entradas: 0, saidas: 0, items: [] } };
 
         expenses.forEach((item: any) => {
-            // Adiciona o item na categoria "Tudo"
             groupedData["Tudo"].items.push(item);
             if (item.tipo === "Receita") {
                 groupedData["Tudo"].entradas += Number(item.valor);
@@ -58,7 +57,6 @@ export const Dashboard = () => {
                 groupedData["Tudo"].saidas += Number(item.valor);
             }
 
-            // Agrupa os dados por mês
             const month = new Date(item.created_at).toLocaleString('default', { month: 'long', year: 'numeric' });
             if (!groupedData[month]) {
                 groupedData[month] = { entradas: 0, saidas: 0, items: [] };
@@ -72,30 +70,26 @@ export const Dashboard = () => {
         });
 
         const currentMonth = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
-        const currentMonthData = groupedData[currentMonth];
-
         const previousMonthDate = new Date();
         previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
         const previousMonth = previousMonthDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-        const previousMonthData = groupedData[previousMonth];
 
-        if (currentMonthData && previousMonthData) {
-            const currentProfit = currentMonthData.entradas - currentMonthData.saidas;
-            const previousProfit = previousMonthData.entradas - previousMonthData.saidas;
+        const currentMonthData = groupedData[currentMonth] || { entradas: 0, saidas: 0, items: [] };
+        const previousMonthData = groupedData[previousMonth] || { entradas: 0, saidas: 0, items: [] };
 
-            if (previousProfit > 0) {
-                const profitDifference = currentProfit - previousProfit;
-                const profitPercentage = (profitDifference / previousProfit) * 100;
-                return {
-                    percetage: profitPercentage.toFixed(2),
-                    profit: profitDifference.toFixed(2),
-                    currentMonth: currentMonthData
-                };
-            }
-        }
+        const currentProfit = currentMonthData.entradas - currentMonthData.saidas;
+        const previousProfit = previousMonthData.entradas - previousMonthData.saidas;
 
-        return 0;
-    }
+        const profitDifference = currentProfit - previousProfit;
+        const profitPercentage = previousProfit !== 0 ? (profitDifference / previousProfit) * 100 : 0;
+
+        return {
+            percetage: profitPercentage.toFixed(2),
+            profit: profitDifference.toFixed(2),
+            currentMonth: currentMonthData
+        };
+    };
+
 
     // Dados para o gráfico de pizza
     const profitData = getProfitPercentageOfThisMonth();
@@ -229,7 +223,7 @@ export const Dashboard = () => {
                     <p>Entradas e Saídas do Mês</p>
                 </div>
             ),
-            value: `Entradas: R$ ${profitData.currentMonth ? profitData.currentMonth.entradas : 0} | Saídas: R$ ${profitData.currentMonth ? profitData.currentMonth.saidas : 0}`,
+            value: `Entradas: R$ ${profitData.currentMonth ? (profitData.currentMonth.entradas).toFixed(2) : 0} | Saídas: R$ ${profitData.currentMonth ? (profitData.currentMonth.saidas).toFixed(2): 0}`,
             className: 'widget small mobile'
         },
         {

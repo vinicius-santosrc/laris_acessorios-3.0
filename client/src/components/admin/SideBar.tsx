@@ -187,7 +187,7 @@ const SideBar = () => {
                                             {user && user.nome_completo ? getFirstAndLastName(user.nome_completo) : 'Carregando...'}
                                         </p>
                                         <p className="user-role">{user?.label}</p>
-                                        {process.env.DEFAULTCONFIGURATION  === "production" ? null : <p className='user-role'>Ambiente Local</p>}
+                                        {process.env.DEFAULTCONFIGURATION  != "local" ? null : <p className='user-role'>Ambiente Local</p>}
                                     </div>
                                 </div>
                                 <a className="logout-link">
