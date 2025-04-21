@@ -42,7 +42,7 @@ import AdminOrders from './pages/admin/AdminOrders';
 import { FacilityProvider } from './contexts/FacilityContext';
 import { MenuItemsProvider } from './contexts/MenuItemsContext';
 
-const url = process.env.REACT_APP_API_ENDPOINT;
+const url = process.env.REACT_APP_DEFAULTCONFIGURATION == "production" ? process.env.REACT_APP_API_ENDPOINT_PRODUCTION : process.env.REACT_APP_API_ENDPOINT;
 
 const routes = [
   { path: '/', element: <Home /> },
