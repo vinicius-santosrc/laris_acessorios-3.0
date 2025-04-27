@@ -114,13 +114,12 @@ const Home = () => {
                     side="left"
                 />
             }
-            {/*
             <SectionComponent
                 title="Perfumes que encantam"
                 description="Descubra fragrâncias marcantes que combinam com sua personalidade. Dos clássicos aos lançamentos, encontre o perfume ideal para cada momento."
                 hasDescription={true}
                 component={<PerfumeShowComponent />}
-            /> */}
+            />
             {allFacilitys &&
                 <ShowCaseCollection
                     items={[

@@ -197,7 +197,7 @@ export const Dashboard = () => {
 
                     return (
                         <Table.Body key={order.id}>
-                            <Table.Cell>{ order.id }</Table.Cell>
+                            <Table.Cell>{order.id}</Table.Cell>
                             <Table.Cell><img className='previewimage' src={previewImage} alt={order.id.toString()} /></Table.Cell>
                             <Table.Cell><p>{user.nome_completo}</p></Table.Cell>
                             <Table.Cell><p>{order.order_totalprice.toFixed(2)}</p></Table.Cell>
