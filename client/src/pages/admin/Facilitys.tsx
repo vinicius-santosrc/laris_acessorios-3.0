@@ -168,6 +168,21 @@ export const FacilitysPage = () => {
                                             );
                                         }
 
+                                        if (key === "isNew") {
+                                            return (
+                                                <div key={key}>
+                                                    <span id="colorHigh">TEXTO NOVIDADE: </span>
+                                                    <select
+                                                        value={value}
+                                                        onChange={(e) => changeText(banner, key, e.target.value)}
+                                                    >
+                                                        <option value={"true"}>MOSTRAR</option>
+                                                        <option value={"false"}>ESCONDER</option>
+                                                    </select>
+                                                </div>
+                                            );
+                                        }
+
                                         return (
                                             <div className="item-flex" key={key}>
                                                 <span id="colorHigh">{refLabelsText[key] ?? key}: </span>

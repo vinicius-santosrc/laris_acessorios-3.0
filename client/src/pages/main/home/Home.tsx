@@ -78,20 +78,25 @@ const Home = () => {
                 hasDescription={true}
                 component={<CategoryList />} />
             {allFacilitys &&
-                <ShowCaseCollection
-                    items={[
-                        {
-                            url: allFacilitys["showcase-inside-alternative-1"]?.data,
-                            redirect: JSON.parse(allFacilitys["showcase-inside-alternative-1-text"]?.data)?.href,
-                            title: JSON.parse(allFacilitys["showcase-inside-alternative-1-text"]?.data)?.mainText,
-                            description: "Um toque de sofisticação e elegância ao seu estilo.",
-                        },
-                    ]}
-                    highlight={true}
-                    type="Grid"
-                    style="alternative"
-                    side="left"
-                />
+                (
+                    JSON.parse(allFacilitys["showcase-inside-alternative-1-text"]?.data)?.hidden !== "true" ?
+                        <ShowCaseCollection
+                            items={[
+                                {
+                                    url: allFacilitys["showcase-inside-alternative-1"]?.data,
+                                    redirect: JSON.parse(allFacilitys["showcase-inside-alternative-1-text"]?.data)?.href,
+                                    title: JSON.parse(allFacilitys["showcase-inside-alternative-1-text"]?.data)?.mainText,
+                                    description: "Um toque de sofisticação e elegância ao seu estilo.",
+                                },
+                            ]}
+                            highlight={JSON.parse(allFacilitys["showcase-inside-alternative-1-text"]?.data)?.isNew === "true"}
+                            type="Grid"
+                            style="alternative"
+                            side="left"
+                        />
+                        :
+                        <></>
+                )
             }
             <SectionComponent
                 title="Torne sua WishList realidade"
@@ -99,20 +104,25 @@ const Home = () => {
                 hasDescription={true}
                 component={<ProductsMainPage />} />
             {allFacilitys &&
-                <ShowCaseCollection
-                    items={[
-                        {
-                            url: allFacilitys["showcase-inside-alternative-2"]?.data,
-                            redirect: JSON.parse(allFacilitys["showcase-inside-alternative-2-text"]?.data)?.href,
-                            title: JSON.parse(allFacilitys["showcase-inside-alternative-2-text"]?.data)?.mainText,
-                            description: "Um toque de sofisticação e elegância ao seu estilo.",
-                        },
-                    ]}
-                    highlight={true}
-                    type="Grid"
-                    style="alternative"
-                    side="left"
-                />
+                (
+                    JSON.parse(allFacilitys["showcase-inside-alternative-2-text"]?.data)?.hidden !== "true" ?
+                        <ShowCaseCollection
+                            items={[
+                                {
+                                    url: allFacilitys["showcase-inside-alternative-2"]?.data,
+                                    redirect: JSON.parse(allFacilitys["showcase-inside-alternative-2-text"]?.data)?.href,
+                                    title: JSON.parse(allFacilitys["showcase-inside-alternative-2-text"]?.data)?.mainText,
+                                    description: "Um toque de sofisticação e elegância ao seu estilo.",
+                                },
+                            ]}
+                            highlight={JSON.parse(allFacilitys["showcase-inside-alternative-2-text"]?.data)?.isNew === "true"}
+                            type="Grid"
+                            style="alternative"
+                            side="left"
+                        />
+                        :
+                        <></>
+                )
             }
             <SectionComponent
                 title="Perfumes que encantam"
@@ -121,20 +131,25 @@ const Home = () => {
                 component={<PerfumeShowComponent />}
             />
             {allFacilitys &&
-                <ShowCaseCollection
-                    items={[
-                        {
-                            url: allFacilitys["showcase-inside-alternative-3"]?.data,
-                            redirect: JSON.parse(allFacilitys["showcase-inside-alternative-3-text"]?.data)?.href,
-                            title: JSON.parse(allFacilitys["showcase-inside-alternative-3-text"]?.data)?.mainText,
-                            description: "Um toque de sofisticação e elegância ao seu estilo.",
-                        },
-                    ]}
-                    highlight={true}
-                    type="Grid"
-                    style="alternative"
-                    side="left"
-                />
+                (
+                    JSON.parse(allFacilitys["showcase-inside-alternative-3-text"]?.data)?.hidden !== "true" ?
+                        <ShowCaseCollection
+                            items={[
+                                {
+                                    url: allFacilitys["showcase-inside-alternative-3"]?.data,
+                                    redirect: JSON.parse(allFacilitys["showcase-inside-alternative-3-text"]?.data)?.href,
+                                    title: JSON.parse(allFacilitys["showcase-inside-alternative-3-text"]?.data)?.mainText,
+                                    description: "Um toque de sofisticação e elegância ao seu estilo.",
+                                },
+                            ]}
+                            highlight={JSON.parse(allFacilitys["showcase-inside-alternative-3-text"]?.data)?.isNew === "true"}
+                            type="Grid"
+                            style="alternative"
+                            side="left"
+                        />
+                        :
+                        <></>
+                )
             }
             <Footer />
         </React.Fragment>
