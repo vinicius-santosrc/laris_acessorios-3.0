@@ -10,7 +10,7 @@ import { ArrowLeft, DollarSignIcon, DotSquareIcon, ListIcon } from "lucide-react
 import { Loader } from "../../components/ui/loader";
 import { Button, Input, Portal, Separator } from "@chakra-ui/react";
 import { Menu } from "@chakra-ui/react"
-
+import Swal from 'sweetalert2'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Icon } from "leaflet"
@@ -102,14 +102,31 @@ const AdminOrders = () => {
 
     async function deleteOrder() {
         try {
-            await orderService.delete(orderAtual);
+            Swal.fire({
+                title: "Você tem certeza?",
+                text: "Deseja realmente excluir esse pedido?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Excluir",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    await orderService.delete(orderAtual);
+                    Swal.fire({
+                        title: "Removido!",
+                        text: "O pedido foi removido.",
+                        icon: "success"
+                    }).then(() => {
+                        window.location.href = window.location.origin + "/admin/orders"
+                    })
+                }
+            });
         }
         catch (error: any) {
             throw Error(error);
-        }
-        finally {
-            window.location.href = window.location.origin + "/admin/orders"
-        }
+        };
     }
 
     const items = JSON.parse(orderAtual.items);
