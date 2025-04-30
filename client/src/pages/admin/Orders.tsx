@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { OrderAfterBuyProps } from "../../models/order";
 import { orderService } from "../../services/orderService";
-import { Table } from '@chakra-ui/react';
+import { Button, Table } from '@chakra-ui/react';
 import './Orders.css';
 import { OrderStates } from "../../lib/utils";
 import {
@@ -12,6 +12,18 @@ import {
     SelectValueText,
 } from "../../components/ui/select";
 import { Link } from "react-router-dom";
+import {
+    DialogBackdrop,
+    DialogBody,
+    DialogCloseTrigger,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogRoot,
+    DialogTitle,
+    DialogTrigger,
+} from "../../components/ui/dialog"
+import CreateNewOrderForm from "../../components/admin/orders/CreateNewOrderForm";
 
 const Orders = () => {
     const [orders, setOrders] = useState<OrderAfterBuyProps[]>([]);
@@ -46,7 +58,26 @@ const Orders = () => {
     return (
         <section className="dashboard-laris-acessorios">
             <div className="dashboard-content">
-                <h1 className="page-title">Administração de Pedidos</h1>
+                <div className="top-bar-admin">
+                    <h1 className="page-title">Administração de Pedidos</h1>
+                    <DialogRoot size={"xl"}>
+                        <DialogBackdrop />
+                        <DialogTrigger asChild>
+                            <Button className="createNewCategoryBtn">
+                                Adicionar pedidos externos
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent top={3} height={"97vh"} overflowY={"scroll"} background={"#f7f7f7"} paddingX={12} paddingY={4}>
+                            <DialogCloseTrigger />
+                            <DialogHeader>
+                                <DialogTitle>Criação de pedidos externos</DialogTitle>
+                            </DialogHeader>
+                            <DialogBody>
+                                <CreateNewOrderForm />
+                            </DialogBody>
+                        </DialogContent>
+                    </DialogRoot>
+                </div>
                 <div className="orders-page">
                     <Table.Root>
                         <Table.Header>

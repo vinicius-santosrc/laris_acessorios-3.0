@@ -78,6 +78,40 @@ export class orderService {
         }
     };
 
+    static createByAdmin = async (order: OrderProps) => {
+        if (!this.url || !this.secretKey || !this.preEndpoint) {
+            console.error("API endpoint ou chave secreta não configurados corretamente.");
+            return;
+        }
+
+        const url = `${this.url}${this.preEndpoint}${this.secretKey}/orders/add`;
+
+        try {
+            const response = await api.post(url, {
+                uid: order.uid,
+                address: JSON.stringify(order.enderecoPedido),
+                items: JSON.stringify(order.dadosPedido.produtos),
+                user: JSON.stringify(order.dadosPedido.usuario),
+                totalprice: order.precototal,
+                paymentOption: order.paymentOption,
+                situation: order.paymentOption === "CART" ? 'PAGO' : 'NAOPAGO',
+                desconto: order.desconto,
+                subtotal: order.subtotal,
+                cupom_desconto: order.CuponsDescontos || 0,
+                cupons: order.CupomAtual ? order.CupomAtual.name : '',
+                codigoRastreio: ""
+            });
+            if (response.status === 200 || response.status === 201) {
+                toaster.create({ title: "Pedido realizado com sucesso", type: "success" });
+            } else {
+                toaster.create({ title: "Erro ao realizar pedido", type: "error" });
+            }
+        } catch (error: any) {
+            console.error("Erro ao criar o pedido:", error);
+            toaster.create({ title: "Erro de conexão", type: "error" });
+        }
+    };
+
     static getAll = async () => {
         if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
@@ -178,4 +212,35 @@ export class orderService {
             });
         }
     };
+
+    static delete = async (order: any) => {
+        if (!this.url || !this.secretKey || !this.preEndpoint) {
+            console.error("API endpoint ou chave secreta não configurados corretamente.");
+            return;
+        }
+
+        const url = `${this.url}${this.preEndpoint}${this.secretKey}/orders/delete`;
+
+        try {
+            const response = await api.post(url, order);
+
+            if (response.status === 200 || response.status === 201) {
+                toaster.create({
+                    title: `Pedido ${order.id} excluido com sucesso`,
+                    type: "success"
+                });
+            } else {
+                toaster.create({
+                    title: "Erro ao excluir pedido",
+                    type: "error"
+                });
+            }
+        } catch (error: any) {
+            console.error("Erro ao atualizar o pedido:", error);
+            toaster.create({
+                title: "Erro de conexão",
+                type: "error"
+            });
+        }
+    }
 }

@@ -100,6 +100,18 @@ const AdminOrders = () => {
         }
     }
 
+    async function deleteOrder() {
+        try {
+            await orderService.delete(orderAtual);
+        }
+        catch (error: any) {
+            throw Error(error);
+        }
+        finally {
+            window.location.href = window.location.origin + "/admin/orders"
+        }
+    }
+
     const items = JSON.parse(orderAtual.items);
     const address = JSON.parse(orderAtual.address);
     const user = JSON.parse(orderAtual.user);
@@ -150,6 +162,7 @@ const AdminOrders = () => {
                 <div className="order-details-page">
                     <h1>Você está visualizando os detalhes do pedido #{orderAtual.id}</h1>
                     <button className="btn-contact" onClick={updateOrder}>Atualizar alterações</button>
+                    <button className="btn-contact" onClick={deleteOrder}>Excluir order</button>
                     <StepsRoot
                         py="6"
                         defaultStep={currentStep}
