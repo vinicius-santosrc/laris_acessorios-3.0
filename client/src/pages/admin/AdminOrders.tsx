@@ -111,7 +111,7 @@ const AdminOrders = () => {
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Excluir",
                 cancelButtonText: "Cancelar"
-            }).then((result) => {
+            }).then(async(result) => {
                 if (result.isConfirmed) {
                     await orderService.delete(orderAtual);
                     Swal.fire({

@@ -81,7 +81,7 @@ const CreateNewOrderForm = () => {
     });
 
     const addNewProduct = () => {
-        if (!newProduct.name || !newProduct.size || !newProduct.photoURL) {
+        if (!newProduct.name || !newProduct.size ) {
             toaster.create({
                 title: "Por favor, preencha todos os campos do novo produto.",
                 type: "error"
