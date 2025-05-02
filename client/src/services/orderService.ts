@@ -122,7 +122,7 @@ export class orderService {
 
         try {
             const { data } = await api.get(url);
-            return data;
+            return data.reverse();
         } catch (error: any) {
             console.error("Erro ao pegar todas as orders", error);
         }

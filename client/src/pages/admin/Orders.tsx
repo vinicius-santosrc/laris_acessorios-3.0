@@ -17,7 +17,6 @@ import {
     DialogBody,
     DialogCloseTrigger,
     DialogContent,
-    DialogFooter,
     DialogHeader,
     DialogRoot,
     DialogTitle,
@@ -27,6 +26,7 @@ import CreateNewOrderForm from "../../components/admin/orders/CreateNewOrderForm
 
 const Orders = () => {
     const [orders, setOrders] = useState<OrderAfterBuyProps[]>([]);
+    const [selectedFilter, setSelectedFilter] = useState<string>("TUDO");
 
     const getAllOrders = async () => {
         try {
@@ -49,11 +49,15 @@ const Orders = () => {
     async function updateOrder(order: any) {
         try {
             await orderService.update(order)
-        }
-        catch (error: any) {
+        } catch (error: any) {
             throw Error(error);
         }
     }
+
+    const filteredOrders = orders.filter(order => {
+        if (selectedFilter === "TUDO") return true;
+        return order.situation === selectedFilter;
+    });
 
     return (
         <section className="dashboard-laris-acessorios">
@@ -78,6 +82,19 @@ const Orders = () => {
                         </DialogContent>
                     </DialogRoot>
                 </div>
+
+                <div className="filters-bar">
+                    {["TUDO", "PAGO", "NAOPAGO"].map((filter) => (
+                        <button
+                            key={filter}
+                            className={`filter-btn ${selectedFilter === filter ? "active" : ""}`}
+                            onClick={() => setSelectedFilter(filter)}
+                        >
+                            {filter}
+                        </button>
+                    ))}
+                </div>
+
                 <div className="orders-page">
                     <Table.Root>
                         <Table.Header>
@@ -91,15 +108,15 @@ const Orders = () => {
                             <Table.ColumnHeader>Ações</Table.ColumnHeader>
                         </Table.Header>
                         <Table.Body>
-                            {orders.map((order) => {
+                            {filteredOrders.map((order) => {
                                 const items = order.items[0];
-                                const previewImage = JSON.parse(items.photoURL)[0]
+                                const previewImage = JSON.parse(items.photoURL)[0];
 
                                 return (
                                     <Table.Row key={order.id}>
                                         <Table.Cell>{order.id}</Table.Cell>
                                         <Table.Cell><img className="previewimage" src={previewImage} alt={order.id.toString()} /></Table.Cell>
-                                        <Table.Cell>{order.user.nome_completo}</Table.Cell> {/* Usando o nome completo do cliente */}
+                                        <Table.Cell>{order.user.nome_completo}</Table.Cell>
                                         <Table.Cell>{new Date(order.createdAt).toLocaleDateString()}</Table.Cell>
                                         <Table.Cell>R$ {order.order_totalprice.toFixed(2)}</Table.Cell>
                                         <Table.Cell>
@@ -113,9 +130,7 @@ const Orders = () => {
                                                             item={orderState}
                                                             onClick={() => {
                                                                 order.state = orderState.value;
-
-                                                                updateOrder(order)
-
+                                                                updateOrder(order);
                                                             }}
                                                             key={orderState.value}
                                                         >
@@ -127,10 +142,10 @@ const Orders = () => {
                                         </Table.Cell>
                                         <Table.Cell>{order.situation}</Table.Cell>
                                         <Table.Cell>
-                                            <Link to={window.location.origin + "/admin/orders/" + order.id} className="action-button">Detalhes</Link>
+                                            <Link to={`/admin/orders/${order.id}`} className="action-button">Detalhes</Link>
                                         </Table.Cell>
                                     </Table.Row>
-                                )
+                                );
                             })}
                         </Table.Body>
                     </Table.Root>
