@@ -231,7 +231,7 @@ export const Dashboard = () => {
             ),
             value: `Entradas: R$ ${profitData.currentMonth ? profitData.currentMonth.entradas : 0} | Saídas: R$ ${profitData.currentMonth ? profitData.currentMonth.saidas : 0}`,
             className: 'widget small mobile'
-        },
+        }, 
         {
             title: 'Atividade',
             content: (
