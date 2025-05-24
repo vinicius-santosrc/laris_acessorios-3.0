@@ -225,11 +225,7 @@ export class adminService {
 
     static getMenuItems = async () => {
         try {
-            const response = await api.get(`${url}${preEndpoint}${secretKey}/menuItems`, {
-                headers: {
-                    "Authorization": authorization
-                }
-            });
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/menuItems`);
             let data = response.data;
             let newData: any = [];
             data.map((categoria: any) => {
