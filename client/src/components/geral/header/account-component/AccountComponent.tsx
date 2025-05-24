@@ -122,8 +122,6 @@ const AccountComponent = ({ checkoutBtn }: any) => {
                             title: "Usuário logado com sucesso",
                             type: "success",
                         });
-                        localStorage.setItem("token_user", response.token);
-                        localStorage.setItem("user_id", response.user.uid);
                         setTimeout(() => {
                             if (checkoutBtn) {
                                 window.location.href = window.location.origin + "/checkout";

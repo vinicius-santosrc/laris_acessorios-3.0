@@ -46,21 +46,19 @@ class authService {
         }
         catch (error: any) {
             if (error.response) {
-                // O servidor respondeu com um status de erro
                 console.error("Resposta do servidor:", error.response.data);
                 throw new Error(error.response.data.error || "Erro desconhecido no servidor.");
             } else if (error.request) {
-                // A requisição foi feita mas não houve resposta
                 console.error("Sem resposta do servidor:", error.request);
                 throw new Error("Sem resposta do servidor.");
             } else {
-                // Algo aconteceu ao configurar a requisição
                 console.error("Erro ao configurar requisição:", error.message);
                 throw new Error("Erro ao configurar requisição.");
             }
         }
     }
-    static login = async (email: string, password: string) => {
+
+    static readonly login = async (email: string, password: string) => {
         try {
             const response = await api.post(`${url}${preEndpoint}${secretKey}/login`, {
                 email: email,
@@ -68,40 +66,52 @@ class authService {
             }, {
                 headers: {
                     'Content-Type': 'application/json',
-                }
+                },
+                withCredentials: true
             });
-            return response.data
+            return response.data;
         }
         catch (error: any) {
             if (error.response) {
-                // O servidor respondeu com um status de erro
                 console.error("Resposta do servidor:", error.response.data);
                 throw new Error(error.response.data.error || "Erro desconhecido no servidor.");
             } else if (error.request) {
-                // A requisição foi feita mas não houve resposta
                 console.error("Sem resposta do servidor:", error.request);
                 throw new Error("Sem resposta do servidor.");
             } else {
-                // Algo aconteceu ao configurar a requisição
                 console.error("Erro ao configurar requisição:", error.message);
                 throw new Error("Erro ao configurar requisição.");
             }
         }
     }
 
-    public static readonly getUserData = () => {
-        return localStorage.getItem("user_id");
+    public static readonly getUserData = async (): Promise<string | null> => {
+        try {
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/me`, {
+                withCredentials: true
+            });
+            return response.data.user?.uid || null;
+        } catch (error) {
+            return null;
+        }
     }
 
-    static readonly isLogged = async () => {
-        if (localStorage.getItem("user_id")) {
-            return true
+    static readonly isLogged = async (): Promise<boolean> => {
+        try {
+            const response = await api.get(`${url}${preEndpoint}${secretKey}/me`, {
+                withCredentials: true
+            });
+            return !!response.data.user;
+        } catch {
+            return false;
         }
-        return false;
     }
 
     static readonly logout = async () => {
         try {
+            await api.post(`${url}${preEndpoint}${secretKey}/logout`, null, {
+                withCredentials: true
+            });
             localStorage.clear();
             window.location.href = window.location.origin;
         } catch (error: any) {
@@ -120,6 +130,7 @@ class authService {
             });
             return response.data[0];
         } catch (error: any) {
+            console.error("Erro ao buscar usuário por e-mail:", error);
         }
     }
 
@@ -150,6 +161,7 @@ class authService {
             });
             return response.data[0];
         } catch (error: any) {
+            console.error("Erro ao buscar usuário por UID:", error);
         }
     }
 }
