@@ -120,7 +120,7 @@ function App() {
     const checkUserLoggedIn = async () => {
       const authentication = await authService.getUserData();
       if (authentication) {
-        const isAdmin = await authService.isUserAdmin(authentication.email);
+        const isAdmin = await authService.isUserAdmin(authentication);
         setIsAuthenticated(isAdmin);
       }
       else {

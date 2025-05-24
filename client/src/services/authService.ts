@@ -8,12 +8,10 @@
  */
 
 import { Account, Client, Databases } from 'appwrite';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../lib/firebase';
 import { UserAuthProps } from '@/lib/utils';
 import { UserProps } from '@/models/user';
 import axios from 'axios';
-import { getUrlByAmbient } from './api';
+import api, { getUrlByAmbient } from './api';
 
 const url = getUrlByAmbient();
 const secretKey = process.env.REACT_APP_API_SECRET_KEY;
@@ -24,91 +22,86 @@ const projectAppWrite: string | undefined = process.env.REACT_APP_API_PROJECT_AP
 
 class authService {
     private readonly client: Client;
-    private readonly database: Databases;
 
     constructor() {
         this.client = new Client();
         if (endPointAppWrite && projectAppWrite) {
             this.client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
         }
-        this.database = new Databases(this.client);
     }
 
-    static readonly register = async (user: UserAuthProps) => {
-        await createUserWithEmailAndPassword(auth, user.email, user.password)
-            .then(async (userCredential) => {
-                try {
-                    await axios.post(`${url}${preEndpoint}${secretKey}/users/add`, {
-                        uid: userCredential.user.uid,
-                        nome_completo: user.nome_completo,
-                        cpf: user.cpf,
-                        email: user.email
-                    }, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    });
-                    window.location.href = window.location.origin;
-                } catch (err) {
-                    throw Error(err);
+    static readonly register = async (user: UserAuthProps, password: string) => {
+        try {
+            const response = await api.post(`${url}${preEndpoint}${secretKey}/register`, {
+                nome_completo: user.nome_completo,
+                cpf: user.cpf,
+                email: user.email,
+                password: password
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
                 }
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
             });
+            return response.data;
+        }
+        catch (error: any) {
+            if (error.response) {
+                // O servidor respondeu com um status de erro
+                console.error("Resposta do servidor:", error.response.data);
+                throw new Error(error.response.data.error || "Erro desconhecido no servidor.");
+            } else if (error.request) {
+                // A requisição foi feita mas não houve resposta
+                console.error("Sem resposta do servidor:", error.request);
+                throw new Error("Sem resposta do servidor.");
+            } else {
+                // Algo aconteceu ao configurar a requisição
+                console.error("Erro ao configurar requisição:", error.message);
+                throw new Error("Erro ao configurar requisição.");
+            }
+        }
     }
-
     static login = async (email: string, password: string) => {
-        const client = new Client();
-        if (endPointAppWrite && projectAppWrite) {
-            client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
-        }
-        const account = new Account(client);
-
         try {
-            return await account.createEmailPasswordSession(email, password);
-        } catch (error: any) {
-            console.error("Login error:", error);
-            throw error;
+            const response = await api.post(`${url}${preEndpoint}${secretKey}/login`, {
+                email: email,
+                password: password
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            return response.data
+        }
+        catch (error: any) {
+            if (error.response) {
+                // O servidor respondeu com um status de erro
+                console.error("Resposta do servidor:", error.response.data);
+                throw new Error(error.response.data.error || "Erro desconhecido no servidor.");
+            } else if (error.request) {
+                // A requisição foi feita mas não houve resposta
+                console.error("Sem resposta do servidor:", error.request);
+                throw new Error("Sem resposta do servidor.");
+            } else {
+                // Algo aconteceu ao configurar a requisição
+                console.error("Erro ao configurar requisição:", error.message);
+                throw new Error("Erro ao configurar requisição.");
+            }
         }
     }
 
-    public static readonly getUserData = async () => {
-        const client = new Client();
-        if (endPointAppWrite && projectAppWrite) {
-            client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
-        }
-        const account = new Account(client);
-        try {
-            return await account.get();
-        } catch (error: any) {
-            console.error("Get user data error:", error);
-        }
+    public static readonly getUserData = () => {
+        return localStorage.getItem("user_id");
     }
 
     static readonly isLogged = async () => {
-        const client = new Client();
-        if (endPointAppWrite && projectAppWrite) {
-            client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+        if (localStorage.getItem("user_id")) {
+            return true
         }
-        const account = new Account(client);
-
-        try {
-            return await account.get() != null;
-        } catch (error: any) {
-        }
+        return false;
     }
 
     static readonly logout = async () => {
         try {
-            const client = new Client();
-            if (endPointAppWrite && projectAppWrite) {
-                client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
-            }
-            const account = new Account(client);
-
-            await account.deleteSession('current');
             localStorage.clear();
             window.location.href = window.location.origin;
         } catch (error: any) {
@@ -130,10 +123,10 @@ class authService {
         }
     }
 
-    static readonly isUserAdmin = async (email: string) => {
+    static readonly isUserAdmin = async (uid: string) => {
         try {
-            const response = await axios.post(`${url}${preEndpoint}${secretKey}/user`, {
-                email: email
+            const response = await axios.post(`${url}${preEndpoint}${secretKey}/userByUid`, {
+                uid: uid
             }, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -147,7 +140,17 @@ class authService {
     }
 
     static getUserByUid = async (uid: string) => {
-        return null;
+        try {
+            const response = await axios.post(`${url}${preEndpoint}${secretKey}/userByUid`, {
+                uid: uid
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            return response.data[0];
+        } catch (error: any) {
+        }
     }
 }
 

@@ -20,11 +20,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const res = await authService.getUserData();
-                const userContent: UserProps = await authService.getUserByEmail(res.email);
-                const orders: OrderAfterBuyProps[] = await orderService.getByUser(res?.email);
+                const res = authService.getUserData();
+                const userContent: UserProps = await authService.getUserByUid(res || "");
+                const orders: OrderAfterBuyProps[] = await orderService.getByUser(userContent?.email);
                 const userArray: any = { ...userContent, orders: orders };
-                if (userArray.label === "Admin") if(token) localStorage.setItem("token", token)
+                if (userArray.label === "Admin") if (token) localStorage.setItem("token", token)
+                if (!res || !userContent) {
+                    return;
+                }
                 setUser(userArray);
             } catch (error: any) {
                 console.error("Erro ao obter dados do usuário", error);
