@@ -7,7 +7,7 @@ const getUrlByAmbient = (): string => {
     switch (process.env.REACT_APP_DEFAULTCONFIGURATION ?? "") {
         case "production":
             return process.env.REACT_APP_API_ENDPOINT_PRODUCTION ?? "";
-        case "local":
+        case "development":
             return process.env.REACT_APP_API_ENDPOINT ?? "";
         default:
             return "";
