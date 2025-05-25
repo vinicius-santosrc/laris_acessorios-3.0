@@ -112,10 +112,12 @@ class authService {
             await api.post(`${url}${preEndpoint}${secretKey}/logout`, null, {
                 withCredentials: true
             });
-            localStorage.clear();
-            window.location.href = window.location.origin;
         } catch (error: any) {
             console.error('Erro ao realizar logout:', error);
+        }
+        finally {
+            localStorage.clear();
+            window.location.href = window.location.origin;
         }
     }
 
