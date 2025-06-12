@@ -30,6 +30,7 @@ export class adminService {
         try {
             const response = await api.get(`${url}${preEndpoint}${secretKey}/planejamentos`, {
                 headers: {
+                    // 'Content-Type': 'application/json',
                     "Authorization": authorization
                 }
             });
