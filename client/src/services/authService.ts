@@ -85,6 +85,19 @@ class authService {
         }
     }
 
+    static readonly refreshToken = async () => {
+        try {
+            const response = await api.post(`${url}${preEndpoint}${secretKey}/refreshToken`, null, {
+                withCredentials: true
+            });
+            return response.data;
+        } catch (error: any) {
+            console.error("Erro ao renovar o token:", error);
+            throw new Error("Falha ao renovar token.");
+        }
+    }
+    
+
     public static readonly getUserData = async (): Promise<string | null> => {
         try {
             const response = await api.get(`${url}${preEndpoint}${secretKey}/me`, {
@@ -117,7 +130,7 @@ class authService {
         }
         finally {
             localStorage.clear();
-            window.location.href = window.location.origin;
+            // window.location.href = window.location.origin;
         }
     }
 

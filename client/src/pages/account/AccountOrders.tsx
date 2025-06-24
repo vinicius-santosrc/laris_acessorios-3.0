@@ -23,18 +23,36 @@ const AccountOrders = () => {
         getOrderAtual();
 
         const checkUserLoggedIn = async () => {
-            const authentication = await authService.getUserData();
-            if (authentication) {
-                const isAdmin = await authService.isUserAdmin(authentication.email);
-                setIsAuthenticated(isAdmin);
-            }
-            else {
-                setIsAuthenticated(false)
+            try {
+                let authentication = await authService.getUserData();
+
+                if (!authentication) {
+                    console.warn("Access token possivelmente expirado. Tentando renovar...");
+                    try {
+                        await authService.refreshToken();
+                        authentication = await authService.getUserData();
+                    } catch (refreshError) {
+                        console.error("Falha ao renovar o token:", refreshError);
+                        await authService.logout();
+                        setIsAuthenticated(false);
+                        return;
+                    }
+                }
+
+                if (authentication) {
+                    const isAdmin = await authService.isUserAdmin(authentication.email);
+                    setIsAuthenticated(isAdmin);
+                } else {
+                    setIsAuthenticated(false);
+                }
+            } catch (error) {
+                console.error("Erro ao verificar autenticação do usuário:", error);
+                setIsAuthenticated(false);
             }
         };
 
         checkUserLoggedIn();
-    }, [order]);
+    }, [order]);    
 
     async function getOrderAtual() {
         try {

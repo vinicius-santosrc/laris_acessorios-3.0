@@ -125,7 +125,12 @@ const Account = () => {
     };
 
     const logout = async () => {
-        await authService.logout();
+        try {
+            await authService.logout()
+        }
+        finally {
+            window.location.href = window.location.origin;
+        }
     }
 
     return (

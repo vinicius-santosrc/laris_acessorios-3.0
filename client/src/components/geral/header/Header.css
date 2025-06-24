@@ -397,6 +397,17 @@
   flex-wrap: nowrap !important;
 }
 
+@media screen and (max-width: 1400px) {
+  .header-app-top-content {
+      width: 100%;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+    }
+}
+
 @media screen and (max-width: 900px) {
   .header-app-top-content {
     width: 100%;

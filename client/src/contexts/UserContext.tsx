@@ -20,24 +20,41 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const res = await authService.getUserData();
-                const userContent: UserProps = await authService.getUserByUid(res || "");
-                const orders: OrderAfterBuyProps[] = await orderService.getByUser(userContent?.email);
-                const userArray: any = { ...userContent, orders: orders };
-                if (userArray.label === "Admin") if (token) localStorage.setItem("token", token);
-                if (!res || !userContent) {
+                let res = await authService.getUserData();
+
+                if (!res) {
+                    try {
+                        await authService.refreshToken();
+                        res = await authService.getUserData();
+                    } catch (refreshError) {
+                        await authService.logout();
+                        return;
+                    }
+                }
+
+                if (!res) {
                     return;
                 }
+
+                const userContent: UserProps = await authService.getUserByUid(res);
+                const orders: OrderAfterBuyProps[] = await orderService.getByUser(userContent?.email);
+                const userArray: any = { ...userContent, orders: orders };
+
+                if (userArray.label === "Admin" && token) {
+                    localStorage.setItem("token", token);
+                }
+
                 setUser(userArray);
+
             } catch (error: any) {
-                console.error("Erro ao obter dados do usuário", error);
+                console.error("Erro ao obter dados do usuário:", error);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchUserData();
-    }, []);
+    }, []);    
 
     return (
         <UserContext.Provider value={{ user, loading }}>

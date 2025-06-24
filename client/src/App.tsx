@@ -118,13 +118,28 @@ function App() {
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
-      const authentication = await authService.getUserData();
-      if (authentication) {
-        const isAdmin = await authService.isUserAdmin(authentication);
-        setIsAuthenticated(isAdmin);
-      }
-      else {
-        setIsAuthenticated(false)
+      try {
+        let authentication = await authService.getUserData();
+
+        if (!authentication) {
+          try {
+            await authService.refreshToken();
+            authentication = await authService.getUserData();
+          } catch (refreshError) {
+            await authService.logout();
+            setIsAuthenticated(false);
+            return;
+          }
+        }
+
+        if (authentication) {
+          const isAdmin = await authService.isUserAdmin(authentication);
+          setIsAuthenticated(isAdmin);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        setIsAuthenticated(false);
       }
     };
 
