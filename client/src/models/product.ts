@@ -1,50 +1,87 @@
-export interface ProductNew {
-    productId: string;          // ID único do produto
-    uid: string;                // UID associado ao produto
-    productName: string;        // Nome do produto
-    productReference: string;   // Referência do produto
-    linkText: string;           // Texto do link relacionado ao produto
-    releaseDate: string;        // Data de lançamento do produto
-    productAvailability: string; // Disponibilidade do produto (ex: "Em estoque", "Fora de estoque")
-    productSupplier: string;    // Nome do fornecedor do produto
-    productType: string;        // Tipo de produto
-    productCollections: string[]; // Coleções às quais o produto pertence (ex: ["Coleção Verão 2024", "Novidades"])
-    productJewerlyType: string; // Tipo de joia, caso seja joia (ex: "Anel", "Brinco")
-    productJewerlyName: string; // Nome específico de uma joia (ex: "Anel de Ouro")
-    productDiscount: number;    // Desconto aplicado (ex: 10 para 10%)
-    productPrice: number;       // Preço do produto
-    productExtender: string;    // Extensor do produto
-    productSizes: string[];     // Tamanhos disponíveis (ex: ["P", "M", "G"])
-    productQuantity: number;    // Quantidade disponível em estoque
-    productPhotoURL: string;    // URL da imagem do produto
+export class ProductNew {
+    productId: string;
+    uid: string;
+    productName: string;
+    productReference: string;
+    linkText: string;
+    releaseDate: string;
+    productAvailability: string;
+    productSupplier: string;
+    productType: string;
+    productCollections: string[];
+    productJewerlyType: string;
+    productJewerlyName: string;
+    productDiscount: number;
+    productPrice: number;
+    productExtender: string;
+    productSizes: string[];
+    productQuantity: number;
+    productPhotoURL: string;
+
+    constructor(init?: Partial<ProductNew>) {
+        this.productId = init?.productId ?? '';
+        this.uid = init?.uid ?? '';
+        this.productName = init?.productName ?? '';
+        this.productReference = init?.productReference ?? '';
+        this.linkText = init?.linkText ?? '';
+        this.releaseDate = init?.releaseDate ?? '';
+        this.productAvailability = init?.productAvailability ?? '';
+        this.productSupplier = init?.productSupplier ?? '';
+        this.productType = init?.productType ?? '';
+        this.productCollections = init?.productCollections ?? [];
+        this.productJewerlyType = init?.productJewerlyType ?? '';
+        this.productJewerlyName = init?.productJewerlyName ?? '';
+        this.productDiscount = init?.productDiscount ?? 0;
+        this.productPrice = init?.productPrice ?? 0;
+        this.productExtender = init?.productExtender ?? '';
+        this.productSizes = init?.productSizes ?? [];
+        this.productQuantity = init?.productQuantity ?? 0;
+        this.productPhotoURL = init?.productPhotoURL ?? '';
+    }
 }
 
-export interface Product {
-    id: number; // Identificador único do produto
-    name_product: string; // Nome do produto
-    price: number; // Preço do produto
-    desconto: number; // Desconto aplicado no produto (se houver)
-    disponibilidade: 1 | 0; // Indica se o produto está disponível ou não
-    tamanhos: string; // Lista de tamanhos disponíveis para o produto
-    quantidade_disponivel: number; // Quantidade disponível do produto no estoque
-    categoria: string; // Categoria do produto
-    url: string; // URL do produto na loja
-    fornecedor: string; // Nome do fornecedor do produto
-    tipo: string; // Tipo do produto (ex: "colar", "brinco", etc.)
-    personalizavel: boolean; // Indica se o produto é personalizável
-    photoURL: string; // URL da foto do produto
-    extensor: string; // Campo adicional para qualquer outra informação sobre o produto
-    type_full_label: string //Prata de Lei // Banhado a ouro // Banhado a prata
-    categoryList: any //SubCategories 
-    size?: any //Tamanho selecionado pelo usuário
+export class Product {
+    id: number;
+    name_product: string;
+    price: number;
+    desconto: number;
+    disponibilidade: 1 | 0;
+    tamanhos: string;
+    quantidade_disponivel: number;
+    categoria: string;
+    url: string;
+    fornecedor: string;
+    tipo: string;
+    personalizavel: boolean;
+    photoURL: string;
+    extensor: string;
+    type_full_label: string;
+    categoryList: any;
+    size?: any;
     description: string;
     type: "jewelry" | "perfume";
-    availableForImmediateDelivery: boolean
+    availableForImmediateDelivery: boolean;
+
+    constructor(init?: Partial<Product>) {
+        this.id = init?.id ?? 0;
+        this.name_product = init?.name_product ?? '';
+        this.price = init?.price ?? 0;
+        this.desconto = init?.desconto ?? 0;
+        this.disponibilidade = init?.disponibilidade ?? 1;
+        this.tamanhos = init?.tamanhos ?? '';
+        this.quantidade_disponivel = init?.quantidade_disponivel ?? 0;
+        this.categoria = init?.categoria ?? '';
+        this.url = init?.url ?? '';
+        this.fornecedor = init?.fornecedor ?? '';
+        this.tipo = init?.tipo ?? '';
+        this.personalizavel = init?.personalizavel ?? false;
+        this.photoURL = init?.photoURL ?? '';
+        this.extensor = init?.extensor ?? '';
+        this.type_full_label = init?.type_full_label ?? '';
+        this.categoryList = init?.categoryList ?? null;
+        this.size = init?.size;
+        this.description = init?.description ?? '';
+        this.type = init?.type ?? "jewelry";
+        this.availableForImmediateDelivery = init?.availableForImmediateDelivery ?? false;
+    }
 }
-
-
-
-
-
-
-

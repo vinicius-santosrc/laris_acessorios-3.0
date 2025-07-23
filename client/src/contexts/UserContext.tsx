@@ -27,7 +27,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                         await authService.refreshToken();
                         res = await authService.getUserData();
                     } catch (refreshError) {
-                        await authService.logout();
+                        // await authService.logout();
                         return;
                     }
                 }

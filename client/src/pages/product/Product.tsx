@@ -36,9 +36,9 @@ const ProductPage = () => {
 
         const fetchProduct = async () => {
             try {
-                const fetchedProduct: Product = await productService.getByURL(product_url);
+                const fetchedProduct = new Product(await productService.getByURL(product_url));
                 setProduct(fetchedProduct);
-                setSizes(JSON.parse(fetchedProduct.tamanhos))
+                setSizes(JSON.parse(fetchedProduct.tamanhos));
                 setPhotos(JSON.parse(fetchedProduct.photoURL));
                 setLoading(false);
 

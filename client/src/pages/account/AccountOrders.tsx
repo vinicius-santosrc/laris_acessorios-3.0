@@ -2,10 +2,10 @@ import { OrderAfterBuyProps } from "../../models/order";
 import { orderService } from "../../services/orderService";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import "./accountOrders.css"; // Estilos para página
+import "./accountOrders.css";
 import { TimelineConnector, TimelineContent, TimelineDescription, TimelineItem, TimelineRoot, TimelineTitle } from "../../components/ui/timeline";
 import { LuCheck, LuPackage, LuShip } from "react-icons/lu";
-import { StepsCompletedContent, StepsContent, StepsItem, StepsList, StepsRoot } from "../../components/ui/steps";
+import { StepsItem, StepsList, StepsRoot } from "../../components/ui/steps";
 import { Button } from "../../components/ui/button";
 import { ArrowLeft, DollarSignIcon } from "lucide-react";
 import authService from "../../services/authService";

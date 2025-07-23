@@ -1,4 +1,3 @@
-import React from 'react';
 import './NotFoundPage.css'; 
 import ErrorSvg from '../../images/undraw_page-not-found_6wni.svg';
 import Footer from '../../components/geral/footer/Footer';

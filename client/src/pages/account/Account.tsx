@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Account.css';
-import { UserProps } from '../../models/user';
 import { Loader } from '../../components/ui/loader';
 import authService from '../../services/authService';
 import { formatCPF, getFirstAndLastName } from '../../lib/utils';
-import { auth } from '@/lib/firebase';
 import { OrderAfterBuyProps } from '@/models/order';
-import { orderService } from '../../services/orderService';
 import { Link } from 'react-router-dom';
 import { useUser } from '../../contexts/UserContext';
 

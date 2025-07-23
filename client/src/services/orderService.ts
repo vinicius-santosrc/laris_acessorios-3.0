@@ -22,7 +22,7 @@ export class orderService {
 
     constructor() { }
 
-    static create = async (order: OrderProps) => {
+    static readonly create = async (order: OrderProps) => {
         if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
@@ -78,7 +78,7 @@ export class orderService {
         }
     };
 
-    static createByAdmin = async (order: OrderProps) => {
+    static readonly createByAdmin = async (order: OrderProps) => {
         if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
@@ -112,7 +112,7 @@ export class orderService {
         }
     };
 
-    static getAll = async () => {
+    static readonly getAll = async () => {
         if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
@@ -128,7 +128,7 @@ export class orderService {
         }
     };
 
-    static getByUid = async (uid: string) => {
+    static readonly getByUid = async (uid: string) => {
         if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
@@ -144,7 +144,7 @@ export class orderService {
         }
     };
 
-    static getById = async (id: any) => {
+    static readonly getById = async (id: any) => {
         if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
@@ -160,7 +160,7 @@ export class orderService {
         }
     };
 
-    static getByUser = async (email: string) => {
+    static readonly getByUser = async (email: string) => {
         if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
@@ -181,7 +181,7 @@ export class orderService {
         }
     };
 
-    static update = async (order: any) => {
+    static readonly update = async (order: any) => {
         if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;
@@ -213,7 +213,7 @@ export class orderService {
         }
     };
 
-    static delete = async (order: any) => {
+    static readonly delete = async (order: any) => {
         if (!this.url || !this.secretKey || !this.preEndpoint) {
             console.error("API endpoint ou chave secreta não configurados corretamente.");
             return;

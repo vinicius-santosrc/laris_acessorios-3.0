@@ -120,13 +120,12 @@ function App() {
     const checkUserLoggedIn = async () => {
       try {
         let authentication = await authService.getUserData();
-
         if (!authentication) {
           try {
             await authService.refreshToken();
             authentication = await authService.getUserData();
           } catch (refreshError) {
-            await authService.logout();
+            // await authService.logout();
             setIsAuthenticated(false);
             return;
           }
