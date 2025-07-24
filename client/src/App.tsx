@@ -132,7 +132,6 @@ function App() {
         let authentication = await authRepo.getUserData();
         if (!authentication) {
           try {
-            await authRepo.refreshToken();
             authentication = await authRepo.getUserData();
           } catch (refreshError) {
             // await authRepo.logout();
@@ -142,7 +141,7 @@ function App() {
         }
 
         if (authentication) {
-          const isAdmin = await authRepo.isUserAdmin(authentication);
+          const isAdmin = await authRepo.isUserAdmin(authentication.uid);
           setIsAuthenticated(isAdmin);
         } else {
           setIsAuthenticated(false);

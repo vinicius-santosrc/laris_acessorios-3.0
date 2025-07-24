@@ -30,30 +30,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                let res = await authRepo.getUserData();
-
-                if (!res) {
-                    try {
-                        await authRepo.refreshToken();
-                        res = await authRepo.getUserData();
-                    } catch (refreshError) {
-                        // await authRepo.logout();
-                        return;
-                    }
-                }
-
-                if (!res) {
-                    return;
-                }
-
-                const userContent: UserProps = await authRepo.getUserByUid(res);
+                const userContent: UserProps = await authRepo.getUserData();
                 const orders: OrderAfterBuyProps[] = await OrderRepository.getByUser(userContent?.email);
                 const userArray: any = { ...userContent, orders: orders };
-
+                
                 if (userArray.label === "Admin" && token) {
                     localStorage.setItem("token", token);
                 }
-
                 setUser(userArray);
 
             } catch (error: any) {

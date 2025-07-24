@@ -26,7 +26,8 @@
     "morgan": "^1.10.0",
     "mysql2": "^3.11.5",
     "stripe": "^14.14.0",
-    "tailwind-merge": "^2.5.5"
+    "tailwind-merge": "^2.5.5",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.2"

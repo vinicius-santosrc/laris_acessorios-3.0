@@ -31,6 +31,7 @@ const userRoutes = require('./src/routes/userRoutes');
 
 // Importando configurações do banco
 const { connectToDatabase } = require('./src/config/database');
+const { runSystemChecks } = require('./src/system/index');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -80,6 +81,9 @@ app.use(morgan('REQUEST :method (:url) with status :status - Respponse time :res
 
 // Conectar ao banco de dados
 connectToDatabase();
+
+//Verificações de códigos / Migrações 
+runSystemChecks();
 
 // Configuração de rotas
 app.use('/', authRoutes);

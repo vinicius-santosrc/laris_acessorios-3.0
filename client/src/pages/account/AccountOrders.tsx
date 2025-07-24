@@ -39,7 +39,6 @@ const AccountOrders = () => {
                 if (!authentication) {
                     console.warn("Access token possivelmente expirado. Tentando renovar...");
                     try {
-                        await authRepo.refreshToken();
                         authentication = await authRepo.getUserData();
                     } catch (refreshError) {
                         console.error("Falha ao renovar o token:", refreshError);

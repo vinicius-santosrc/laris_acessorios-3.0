@@ -86,23 +86,11 @@ class AuthRepository {
         }
     }
 
-    readonly refreshToken = async () => {
-        try {
-            const response = await api.post(`${this.url}${this.preEndpoint}${this.secretKey}/refreshToken`, null, {
-                withCredentials: true
-            });
-            return response.data;
-        } catch (error: any) {
-            console.error("Erro ao renovar o token:", error);
-            throw new Error("Falha ao renovar token.");
-        }
-    }
-
     public readonly getUserData = async (): Promise<any | null> => {
         const response = await api.get(`${this.url}${this.preEndpoint}${this.secretKey}/me`, {
             withCredentials: true
         });
-        return response.data.user?.uid || null;
+        return response.data.data.user || null;
     }
 
     readonly isLogged = async (): Promise<boolean> => {
@@ -172,6 +160,20 @@ class AuthRepository {
             });
             return response.data[0];
         } catch (error: any) {
+            console.error("Erro ao buscar usuário por UID:", error);
+        }
+    }
+
+    readonly getUser = async () => {
+        try {
+            const response = await axios.post(`${this.url}${this.preEndpoint}${this.secretKey}/me`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            return response.data[0].data.user;
+        }
+        catch (error: any) {
             console.error("Erro ao buscar usuário por UID:", error);
         }
     }
