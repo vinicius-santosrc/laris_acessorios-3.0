@@ -36,8 +36,9 @@ const authService = {
             pool.query(sql, [email], async (err, results) => {
                 if (err) return reject(createError('Erro interno', ERROR_CODES.DB_QUERY_ERROR));
                 if (results.length === 0) return reject(createError('Usuário não encontrado', ERROR_CODES.USER_NOT_FOUND));
-
+                
                 const user = results[0];
+                console.log(user);
                 const match = await bcrypt.compare(password, user.password);
                 if (!match) return reject(createError('Senha inválida', ERROR_CODES.INVALID_PASSWORD));
 

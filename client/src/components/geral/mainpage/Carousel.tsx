@@ -14,14 +14,20 @@ interface CarouselProps {
     url: string,
     maintext: string,
     description: string,
-    href: string
+    href: string,
+    type?: "image" | "video",
+    height?: number
 }
 
-const Carousel: React.FC<CarouselProps> = ({ url, maintext, description, href }) => {
+const Carousel: React.FC<CarouselProps> = ({ url, maintext, description, href, type = "image", height = "auto" }) => {
     return (
-        <section className="carrousel carousel-wrapper">
+        <section className="carrousel carousel-wrapper" style={{ height: height }}>
             <div className="carrousel-item">
-                <Image src={url} alt="Banner" />
+                {type === "image" ?
+                    <Image src={url} alt="Banner" />
+                    :
+                    <video preload="auto" src={url} alt="Banner" autoPlay={true} loop={true} muted={true}></video>
+                }
             </div>
             <div className="carrousel-text">
                 <h1>{maintext}</h1>

@@ -40,7 +40,8 @@ const allowedOrigins = [
     'https://www.larisacessorios.com.br',
     'http://larisacessorios.com.br',
     'https://staging-laris-acessorios-3-0.vercel.app',
-    'https://api.larisacessorios.com.br'
+    'https://api.larisacessorios.com.br',
+    'http://localhost:3001',
 ];
 
 app.use(cors({

@@ -67,7 +67,8 @@ export class FacilitysRepository {
                 'showcase-inside-alternative-2',
                 "showcase-inside-alternative-2-text",
                 'showcase-inside-alternative-3',
-                "showcase-inside-alternative-3-text"
+                "showcase-inside-alternative-3-text",
+                'video–showcase-texts'
             ];
 
             const facilityMap: Record<string, any> = {};
@@ -76,6 +77,8 @@ export class FacilitysRepository {
                 const found = contextFacility.find((item) => item.reference == ref);
                 facilityMap[ref] = found ?? null;
             });
+
+            console.log(facilityMap)
 
             return facilityMap;
         }

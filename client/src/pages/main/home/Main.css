@@ -51,7 +51,7 @@
   border-radius: 0;
 }
 
-.carousel-wrapper img {
+.carousel-wrapper img, .carousel-wrapper video {
   width: 100%;
   max-width: 100%;
   min-width: 100%;
