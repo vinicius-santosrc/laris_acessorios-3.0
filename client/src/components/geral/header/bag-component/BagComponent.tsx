@@ -1,4 +1,13 @@
-import { cartService } from "../../../../services/cartService";
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
+import { CartRepository } from "../../../../repositories/cart";
 import { SacolaIcon } from "../../../../components/icons/icons";
 import { Button } from "../../../../components/ui/button";
 import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerRoot, DrawerTrigger } from "../../../../components/ui/drawer";
@@ -6,9 +15,9 @@ import React, { useEffect, useState } from "react";
 import { Product } from "../../../../models/product";
 import { TrashIcon } from "lucide-react";
 import { DataListItem, DataListRoot } from "../../../../components/ui/data-list";
-import productService from "../../../../services/productService";
+import ProductRepository from "../../../../repositories/product";
 import AccountComponent from "../account-component/AccountComponent";
-import authService from "../../../../services/authService";
+import AuthRepository from "../../../../repositories/auth";
 
 interface BagComponentProps {
     setBagOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,13 +28,17 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
     const [bagItems, setBagItems] = useState<Product[]>([]);
     const [isLogged, setIsLogged] = useState(false);
 
+    const authRepo = new AuthRepository();
+    const productRepo = new ProductRepository();
+    const cartRepo = new CartRepository();
+
     useEffect(() => {
         checkIfIsLogged()
         const fetchBagItems = async () => {
-            const items = await cartService.get();
+            const items = await cartRepo.get();
             const products = await Promise.all(
                 items.map(async (item) => {
-                    const product = await productService.getById(item.id);
+                    const product = await productRepo.getById(item.id);
                     return { ...product, size: item.size };
                 })
             );
@@ -35,13 +48,13 @@ const BagComponent: React.FC<BagComponentProps> = ({ setBagOpen, isBagOpen }) =>
     }, [isBagOpen]);
 
     async function checkIfIsLogged() {
-        const isLogged: boolean = await authService.isLogged();
+        const isLogged: boolean = await authRepo.isLogged();
         setIsLogged(isLogged)
     }
 
     const handleRemove = async (productId: any) => {
-        await cartService.remove(productId);
-        setBagItems(await cartService.get());
+        await cartRepo.remove(productId);
+        setBagItems(await cartRepo.get());
     };
 
     const subtotal = bagItems.reduce((acc, item) => {

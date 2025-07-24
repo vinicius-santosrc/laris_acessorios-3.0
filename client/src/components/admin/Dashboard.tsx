@@ -1,18 +1,27 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import { HiCash } from 'react-icons/hi';
 import './dashboard/dashboard.css';
 import cash from "./undraw_savings_uwjn.svg";
 import { useEffect, useState } from 'react';
-import productService from '../../services/productService';
-import { clientsService } from '../../services/clientsService';
+import ProductRepository from '../../repositories/product';
+import { ClientsRepository } from '../../repositories/clients';
 import { Badge, Table } from '@chakra-ui/react';
-import { adminService } from '../../services/adminService';
+import AdminRepository from '../../repositories/admin';
 import { UserProps } from '../../models/user';
 import { formatCPF, getFirstAndLastName } from '../../lib/utils';
 import ApexCharts from 'react-apexcharts';
 import { Product } from '@/models/product';
 import { Link } from 'react-router-dom';
 import { OrderAfterBuyProps } from '@/models/order';
-import { orderService } from '../../services/orderService';
+import OrderRepository from '../../repositories/order';
 import GraficoPrecos from './dashboard/WidgetGrafico';
 
 export const Dashboard = () => {
@@ -24,14 +33,18 @@ export const Dashboard = () => {
     const [expenses, setExpenses] = useState([]);
     const [orders, setOrders] = useState<OrderAfterBuyProps[]>([]);
     const [valores, setValores] = useState([])
+    const productRepo = new ProductRepository();
+    const clientsRepo = new ClientsRepository();
+    const adminRepo = new AdminRepository();
+
 
     // Função para pegar os itens de vendas, clientes e despesas
     const getItems = async () => {
-        const products = await productService.getAll();
-        const clients = await clientsService.getAll();
-        const expensesSheet = await adminService.getSheet("planilha-despesas");
-        const orders = await orderService.getAll();
-        const sheetValues = await adminService.getSheet("planilha-despesas")
+        const products = await productRepo.getAll();
+        const clients = await clientsRepo.getAll();
+        const expensesSheet = await adminRepo.getSheet("planilha-despesas");
+        const orders = await OrderRepository.getAll();
+        const sheetValues = await adminRepo.getSheet("planilha-despesas")
 
         setProducts(products);
         setUsers(clients);
@@ -223,7 +236,7 @@ export const Dashboard = () => {
                     <p>Entradas e Saídas do Mês</p>
                 </div>
             ),
-            value: `Entradas: R$ ${profitData.currentMonth ? (profitData.currentMonth.entradas).toFixed(2) : 0} | Saídas: R$ ${profitData.currentMonth ? (profitData.currentMonth.saidas).toFixed(2): 0}`,
+            value: `Entradas: R$ ${profitData.currentMonth ? (profitData.currentMonth.entradas).toFixed(2) : 0} | Saídas: R$ ${profitData.currentMonth ? (profitData.currentMonth.saidas).toFixed(2) : 0}`,
             className: 'widget small mobile'
         },
         {

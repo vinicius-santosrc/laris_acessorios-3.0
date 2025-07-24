@@ -1,7 +1,16 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import { useEffect, useState } from 'react';
 import './Account.css';
 import { Loader } from '../../components/ui/loader';
-import authService from '../../services/authService';
+import AuthRepository from '../../repositories/auth';
 import { formatCPF, getFirstAndLastName } from '../../lib/utils';
 import { OrderAfterBuyProps } from '@/models/order';
 import { Link } from 'react-router-dom';
@@ -11,7 +20,7 @@ const Account = () => {
     const fotoUsuario = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp";
     const [selectedSection, setSelectedSection] = useState("dadosPessoais");
     const { user, loading } = useUser();
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         window.document.title = "Conta - Lari's Acessórios"
@@ -27,6 +36,8 @@ const Account = () => {
             window.location.href = window.location.origin;
         }
     }, []);
+
+    const authRepo = new AuthRepository();
 
     useEffect(() => {
         setLoading(loading);
@@ -123,7 +134,7 @@ const Account = () => {
 
     const logout = async () => {
         try {
-            await authService.logout()
+            await authRepo.logout()
         }
         finally {
             window.location.href = window.location.origin;

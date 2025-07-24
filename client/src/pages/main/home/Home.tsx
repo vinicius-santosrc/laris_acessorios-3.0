@@ -6,7 +6,7 @@ import SectionComponent from "../../../components/geral/mainpage/SectionComponen
 import CategoryList from "../../../components/geral/category-list/CategoryList";
 import ProductsMainPage from "../../../components/geral/mainpage/ProductsMainPage";
 import ShowCaseCollection from "../../../components/geral/mainpage/ShowCaseCollection";
-import { Facilitys } from "../../../services/facilitysService";
+import { FacilitysRepository } from "../../../repositories/facilitys";
 import PerfumeShowComponent from "../../../components/geral/mainpage/PerfumeShowComponent";
 import Footer from "../../../components/geral/footer/Footer";
 import { useFacility } from "../../../contexts/FacilityContext";
@@ -15,6 +15,8 @@ const Home = () => {
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [allFacilitys, setAllFacilitys] = useState<any>();
     const { facility } = useFacility();
+
+    const facilitysRepo = new FacilitysRepository();
 
     const checkMobileView = () => {
         if (window.innerWidth <= 768) {
@@ -41,7 +43,7 @@ const Home = () => {
 
     const getFacilitys = async () => {
         try {
-            const response = Facilitys.getFacilityByPage("home", facility);
+            const response = facilitysRepo.getFacilityByPage("home", facility);
             setAllFacilitys(response);
         }
         catch (error: any) {

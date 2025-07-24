@@ -1,20 +1,30 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
+
 import { OrderAfterBuyProps } from "../../models/order";
-import { orderService } from "../../services/orderService";
+import OrderRepository from "../../repositories/order";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./adminOrders.css";
 import { TimelineConnector, TimelineContent, TimelineDescription, TimelineItem, TimelineRoot, TimelineTitle } from "../../components/ui/timeline";
 import { LuCheck, LuPackage, LuShip } from "react-icons/lu";
 import { StepsItem, StepsList, StepsRoot } from "../../components/ui/steps";
-import { ArrowLeft, DollarSignIcon, DotSquareIcon, ListIcon } from "lucide-react";
+import { ArrowLeft, DollarSignIcon, ListIcon } from "lucide-react";
 import { Loader } from "../../components/ui/loader";
 import { Button, Input, Portal, Separator } from "@chakra-ui/react";
-import { Menu } from "@chakra-ui/react"
-import Swal from 'sweetalert2'
+import { Menu } from "@chakra-ui/react";
+import Swal from 'sweetalert2';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Icon } from "leaflet"
-import productService from "../../services/productService";
+import { Icon } from "leaflet";
+import ProductRepository from "../../repositories/product";
 import { toaster } from "../../components/ui/toaster";
 
 const AdminOrders = () => {
@@ -32,7 +42,7 @@ const AdminOrders = () => {
     async function getOrderAtual() {
         try {
             if (order) {
-                const fetchedOrder = await orderService.getById(order);
+                const fetchedOrder = await OrderRepository.getById(order);
                 setOrderAtual(fetchedOrder);
 
                 if (fetchedOrder.state === "PREPARANDO") {
@@ -93,7 +103,7 @@ const AdminOrders = () => {
 
     async function updateOrder() {
         try {
-            await orderService.update(orderAtual)
+            await OrderRepository.update(orderAtual)
         }
         catch (error: any) {
             throw Error(error);
@@ -111,9 +121,9 @@ const AdminOrders = () => {
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Excluir",
                 cancelButtonText: "Cancelar"
-            }).then(async(result) => {
+            }).then(async (result) => {
                 if (result.isConfirmed) {
-                    await orderService.delete(orderAtual);
+                    await OrderRepository.delete(orderAtual);
                     Swal.fire({
                         title: "Removido!",
                         text: "O pedido foi removido.",
@@ -140,8 +150,9 @@ const AdminOrders = () => {
     async function changeVisibility(item: any) {
         try {
             const isCurrentlyAvailable = item.disponibilidade === 1;
+            const productRepo = new ProductRepository();
 
-            await productService.changeVisibilityByList(
+            await productRepo.changeVisibilityByList(
                 [item.id],
                 isCurrentlyAvailable ? "unavaliable" : "avaliable"
             );

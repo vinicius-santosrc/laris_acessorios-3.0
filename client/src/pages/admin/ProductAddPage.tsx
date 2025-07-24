@@ -1,7 +1,16 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import { Product } from "@/models/product";
-import productService from "../../services/productService";
+import ProductRepository from "../../repositories/product";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createListCollection, Editable, Image, Input } from "@chakra-ui/react";
 import "./producteditpage.css";
 import { Tag } from "../../components/ui/tag";
@@ -15,7 +24,6 @@ import {
 import { InfoTip } from "../../components/ui/toggle-tip";
 import { ArrowLeftIcon } from "lucide-react";
 import { toaster } from "../../components/ui/toaster";
-import Compressor from 'compressorjs';
 import {
     MenuContent,
     MenuItem,
@@ -34,7 +42,7 @@ import {
     DialogTrigger,
 } from "../../components/ui/dialog"
 import { Button } from "../../components/ui/button";
-import { adminService } from "../../services/adminService";
+import AdminRepository from "../../repositories/admin";
 
 export const ProductAddPage = () => {
     const navigator = useNavigate();
@@ -56,8 +64,9 @@ export const ProductAddPage = () => {
         fornecedor: "", // Nome do fornecedor, inicializada como string vazia
         tipo: "", // Tipo de produto, inicializado como string vazia
         type: "",
-
     });
+    const adminRepo = new AdminRepository();
+    const productRepo = new ProductRepository();
 
     const [itemData, setItemData] = useState<any>(
         {
@@ -77,7 +86,7 @@ export const ProductAddPage = () => {
     const handleFileUpload = async (event: any) => {
         const file = event.target.files[0];
         if (file) {
-            const uploadPhoto = await adminService.upload(event);
+            const uploadPhoto = await adminRepo.upload(event);
             if (uploadPhoto) {
                 setProduct((prevProduct: any) => {
                     let photoURLs = [];
@@ -110,7 +119,7 @@ export const ProductAddPage = () => {
     const handleSave = async () => {
         try {
             // Como não estamos editando um produto existente, chamamos a função de criar
-            const newProduct = await productService.createProduct(product);
+            const newProduct = await productRepo.createProduct(product);
             toaster.create({
                 title: "Produto adicionado com sucesso",
                 type: "success"
@@ -142,7 +151,7 @@ export const ProductAddPage = () => {
 
         // Opcional: Aqui você pode chamar o serviço para remover a foto do backend, se necessário.
         // Exemplo:
-        // productService.deletePhoto(photoUrl).catch(error => console.error('Erro ao excluir foto:', error));
+        // ProductRepository.deletePhoto(photoUrl).catch(error => console.error('Erro ao excluir foto:', error));
     };
 
     const handleInputChangeTextArea = (e: React.ChangeEvent<any>) => {
@@ -158,7 +167,7 @@ export const ProductAddPage = () => {
         // Requisição para obter as categorias
         const fetchCategories = async () => {
             try {
-                const response = await adminService.getCategorys(); // Obtém as categorias via serviço
+                const response = await adminRepo.getCategorys(); // Obtém as categorias via serviço
                 const formattedCategories = response.map((category: any) => ({
                     label: category.category,  // Presumindo que `category` seja o nome da categoria
                     value: category.category,  // Presumindo que `id` seja o identificador da categoria
@@ -179,7 +188,7 @@ export const ProductAddPage = () => {
     const addNewCategory = async () => {
         if (!newCategoryName) return; // Prevent adding empty categories
         try {
-            await adminService.addNewCategory(JSON.stringify({ label: newCategoryName }, itemData));
+            await adminRepo.addNewCategory(JSON.stringify({ label: newCategoryName }, itemData));
             setTypeCategorys((prev) => [
                 ...prev,
                 { label: newCategoryName, value: newCategoryName }
@@ -415,7 +424,7 @@ export const ProductAddPage = () => {
                                                                     <Input
                                                                         type="file"
                                                                         onChange={async (e) => {
-                                                                            const res = await adminService.upload(e);
+                                                                            const res = await adminRepo.upload(e);
                                                                             if (res) {
                                                                                 setItemData({ ...itemData, highlightImage: res });
                                                                             }

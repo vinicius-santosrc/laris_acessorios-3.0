@@ -22,7 +22,7 @@ import { FormAccount } from "../FormAccount";
 import { Checkbox } from "../../../../components/ui/checkbox";
 import "../Header.css";
 import LogoHeader from "../../../../images/logo.webp";
-import authService from "../../../../services/authService";
+import AuthRepository from "../../../../repositories/auth";
 import { toaster } from "../../../../components/ui/toaster";
 import { formatCPF, UserAuthProps } from "../../../../lib/utils";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
@@ -112,10 +112,12 @@ const AccountComponent = ({ checkoutBtn }: any) => {
             password
         };
 
+        const authRepo = new AuthRepository();
+
         try {
             if (!isRegistering) {
                 try {
-                    const response = await authService.login(User.email, User.password);
+                    const response = await authRepo.login(User.email, User.password);
 
                     if (response) {
                         toaster.create({
@@ -140,7 +142,7 @@ const AccountComponent = ({ checkoutBtn }: any) => {
                 }
             } else {
                 try {
-                    await authService.register(User, password);
+                    await authRepo.register(User, password);
                     toaster.create({
                         title: "Usuário criado com sucesso",
                         type: "success",

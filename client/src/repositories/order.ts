@@ -9,18 +9,17 @@
 
 import { OrderAfterBuyProps, OrderProps } from "../models/order";
 import { toaster } from "../components/ui/toaster";
-import emailService from "./emailService";
+import MailRepository from "./email";
 import { templateId } from "../lib/utils";
 import api, { getUrlByAmbient } from "./api";
 
-const authorization = localStorage.getItem("token") ?? "";
+export default class OrderRepository {
+    private static readonly url = getUrlByAmbient();
+    private static readonly secretKey = process.env.REACT_APP_API_SECRET_KEY;
+    private static readonly preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
+    public static readonly mailRepo = new MailRepository();
 
-export class orderService {
-    private static url = getUrlByAmbient();
-    private static secretKey = process.env.REACT_APP_API_SECRET_KEY;
-    private static preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
-
-    constructor() { }
+    constructor() {}
 
     static readonly create = async (order: OrderProps) => {
         if (!this.url || !this.secretKey || !this.preEndpoint) {
@@ -47,7 +46,7 @@ export class orderService {
             });
 
             if (response.status === 200 || response.status === 201) {
-                await emailService.send(templateId.confirmationBuy, {
+                await this.mailRepo.send(templateId.confirmationBuy, {
                     link_rastreio: window.location.origin + "/account#orders",
                     userComprador: order.dadosPedido.usuario,
                     endereco: order.enderecoPedido,
@@ -60,7 +59,7 @@ export class orderService {
                         : "Estamos aguardando o pagamento do seu pedido. Entraremos em contato para enviar o QRCode para o pagamento via pix."
                 });
 
-                await emailService.send(templateId.adminConfirmationBuy, {
+                await this.mailRepo.send(templateId.adminConfirmationBuy, {
                     link_rastreio: "https://www.larisacessorios.com.br/admin/orders",
                     userComprador: order.dadosPedido.usuario,
                     endereco: order.enderecoPedido,

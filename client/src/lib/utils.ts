@@ -1,5 +1,14 @@
-import { adminService } from "../services/adminService";
-import { createListCollection, MenuItemProps } from "@chakra-ui/react";
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
+import AdminRepository from "../repositories/admin";
+import { createListCollection } from "@chakra-ui/react";
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -63,21 +72,21 @@ export const typeCategorys = createListCollection({
     items: [
         { label: 'para-ela', value: "para-ela" },
         { label: 'anel', value: "anel" },
-        { label: "colar", value: "colar"},
-        { label: "brinco", value: "brinco"},
+        { label: "colar", value: "colar" },
+        { label: "brinco", value: "brinco" },
         { label: 'pulseira', value: "pulseira" },
         { label: 'bracelete', value: "bracelete" },
         { label: 'piercing', value: "piercing" },
         { label: "joias", value: "joias" },
         { label: "semijoias", value: "semijoias" },
         { label: "pratas", value: "pratas" },
-        { label: "banhados-a-ouro", value: "banhados-a-ouro"}
+        { label: "banhados-a-ouro", value: "banhados-a-ouro" }
     ]
 });
 
 export const OrderStates = createListCollection({
     items: [
-        { label: 'Preparando', value: "PREPARANDO"},
+        { label: 'Preparando', value: "PREPARANDO" },
         { label: 'Fase de Entrega', value: "ENTREGA" },
         { label: 'Finalizado', value: "FINALIZADO" },
     ]
@@ -114,10 +123,10 @@ export interface SheetItem {
 }
 
 export const defaultsCategories = async (): Promise<CategoriesProps[]> => {
-    const categories: CategoriesProps[] = await adminService.getAllCategoriesData();
+    const adminRepo = new AdminRepository();
+    const categories: CategoriesProps[] = await adminRepo.getAllCategoriesData();
     return categories;
 }
-    
 
 export const modelData = [
     {
@@ -342,7 +351,8 @@ export const menuItemsAdmin: MenuItemsProps[] = [
 
 
 export const menuItems: any = async () => {
-    const getMenuItems = await adminService.getMenuItems();
+    const adminRepo = new AdminRepository();
+    const getMenuItems = await adminRepo.getMenuItems();
     return getMenuItems;
 }
 

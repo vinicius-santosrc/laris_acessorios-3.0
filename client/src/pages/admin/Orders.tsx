@@ -1,6 +1,15 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import { useEffect, useState } from "react";
 import { OrderAfterBuyProps } from "../../models/order";
-import { orderService } from "../../services/orderService";
+import OrderRepository from "../../repositories/order";
 import { Button, Table } from '@chakra-ui/react';
 import './Orders.css';
 import { OrderStates } from "../../lib/utils";
@@ -30,7 +39,7 @@ const Orders = () => {
 
     const getAllOrders = async () => {
         try {
-            const orders = await orderService.getAll();
+            const orders = await OrderRepository.getAll();
             const parsedOrders = orders.map((order: OrderAfterBuyProps) => {
                 order.user = JSON.parse(order.user);
                 order.items = JSON.parse(order.items);
@@ -48,7 +57,7 @@ const Orders = () => {
 
     async function updateOrder(order: any) {
         try {
-            await orderService.update(order)
+            await OrderRepository.update(order)
         } catch (error: any) {
             throw Error(error);
         }

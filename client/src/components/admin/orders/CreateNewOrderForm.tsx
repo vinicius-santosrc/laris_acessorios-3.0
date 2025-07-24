@@ -1,3 +1,12 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import React, { useEffect, useState } from "react";
 import { ShippingItem } from "../../../models/shipping";
 import { formatCEP, formatCPF, formatTelefone, gerarUidComCaracteresENumeros, getCEPJson } from "../../../lib/utils";
@@ -8,21 +17,20 @@ import {
     createListCollection,
     Image,
     Input,
-    Select,
-    useSelectContext
+    Select
 } from "@chakra-ui/react";
 import "./CreateNewOrderForm.css";
 import { Product } from "../../../models/product";
-import productService from "../../../services/productService";
+import ProductRepository from "../../../repositories/product";
 import { UserProps } from "../../../models/user";
-import { clientsService } from "../../../services/clientsService";
+import { ClientsRepository } from "../../../repositories/clients";
 import { Button } from "../../../components/ui/button";
 import { Edit } from "lucide-react";
-import { ShippingService } from "../../../services/shippingService";
+import { ShippingRepository } from "../../../repositories/shipping";
 import { CepProps } from "../../../models/cep";
 import { toaster } from "../../../components/ui/toaster";
-import { orderService } from "../../../services/orderService";
-import { adminService } from "../../../services/adminService";
+import OrderRepository from "../../../repositories/order";
+import AdminRepository from "../../../repositories/admin";
 import {
     MenuContent,
     MenuItem,
@@ -47,6 +55,11 @@ const CreateNewOrderForm = () => {
     const [endereco, setendereco] = useState<any>(null);
     const [numero, setnumero] = useState<any>(null);
     const [referencia, setreferencia] = useState<any>(null);
+
+    const shippingRepo = new ShippingRepository();
+    const productRepo = new ProductRepository();
+    const clientsRepo = new ClientsRepository();
+    const adminRepo = new AdminRepository();
 
     // States for Step 0
     const [email, setEmail] = useState<string>("");
@@ -81,7 +94,7 @@ const CreateNewOrderForm = () => {
     });
 
     const addNewProduct = () => {
-        if (!newProduct.name || !newProduct.size ) {
+        if (!newProduct.name || !newProduct.size) {
             toaster.create({
                 title: "Por favor, preencha todos os campos do novo produto.",
                 type: "error"
@@ -124,7 +137,7 @@ const CreateNewOrderForm = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const fetchedProducts: Product[] = await productService.getAll();
+                const fetchedProducts: Product[] = await productRepo.getAll();
                 setAllProducts(fetchedProducts);
             } catch (err: any) {
                 throw Error(err);
@@ -133,7 +146,7 @@ const CreateNewOrderForm = () => {
 
         const fetchClients = async () => {
             try {
-                const searchedProducts: UserProps[] = await clientsService.getAll();
+                const searchedProducts: UserProps[] = await clientsRepo.getAll();
                 setClients(searchedProducts);
             } catch (error: any) {
                 console.error("Failed to fetch category data:", error);
@@ -174,7 +187,7 @@ const CreateNewOrderForm = () => {
 
         try {
             const cepReturned: CepProps = await getCEPJson(cep);
-            const detailsShipping: any = await ShippingService.getShippingOptionsByCep(cep);
+            const detailsShipping: any = await shippingRepo.getShippingOptionsByCep(cep);
             detailsShipping.push({
                 id: 4,
                 name: "Retirada",
@@ -306,10 +319,10 @@ const CreateNewOrderForm = () => {
         const file = event.target.files?.[0]; // Use optional chaining to safely access the first file
         if (file) {
             try {
-                const uploadPhoto = await adminService.upload(event); // Upload the file
+                const uploadPhoto = await adminRepo.upload(event); // Upload the file
                 if (uploadPhoto) {
                     // Update the newProduct state with the uploaded photo URL
-                    setNewProduct((prevProduct) => ({
+                    setNewProduct((prevProduct): any => ({
                         ...prevProduct,
                         photoURL: [uploadPhoto], // Store the uploaded photo URL
                     }));
@@ -334,7 +347,7 @@ const CreateNewOrderForm = () => {
         });
 
         // Optional: Call a service to remove the photo from the backend if necessary
-        // productService.deletePhoto(photoUrl).catch(error => console.error('Error deleting photo:', error));
+        // productRepo.deletePhoto(photoUrl).catch(error => console.error('Error deleting photo:', error));
     };
 
     const handleFinalize = async () => {
@@ -348,7 +361,7 @@ const CreateNewOrderForm = () => {
         }
 
         try {
-            await orderService.createByAdmin(orderContent);
+            await OrderRepository.createByAdmin(orderContent);
         }
         catch (error) {
             toaster.create({

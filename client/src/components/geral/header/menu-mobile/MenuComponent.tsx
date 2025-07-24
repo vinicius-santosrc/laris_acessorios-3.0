@@ -1,10 +1,18 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
 import { DrawerDescription } from "@chakra-ui/react"
 import { Button } from "../../../../components/ui/button"
 import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger, DrawerRoot } from "../../../../components/ui/drawer"
-import { ChevronRightIcon, ContactIcon, HeartIcon, MenuIcon, User2Icon, ChevronLeftIcon } from "lucide-react"
+import { ChevronRightIcon, ContactIcon, HeartIcon, MenuIcon, User2Icon } from "lucide-react"
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import authService from "../../../../services/authService"
+import AuthRepository from "../../../../repositories/auth"
 
 interface MenuComponentProps {
     logoHeader: string;
@@ -17,6 +25,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
     const [isSubDrawerOpen, setIsSubDrawerOpen] = useState<boolean>(false);
     const [activeCollection, setActiveCollection] = useState<string | null>(null);
     const [isLogged, setIsLogged] = useState(false);
+    const authRepo = new AuthRepository();
 
     useEffect(() => {
         checkIfIsLogged();
@@ -36,7 +45,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
     }
 
     async function checkIfIsLogged() {
-        const isLogged: boolean = await authService.isLogged();
+        const isLogged: boolean = await authRepo.isLogged();
         setIsLogged(isLogged)
     }
 

@@ -1,8 +1,17 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import authService from '../services/authService';
+import AuthRepository from '../repositories/auth';
 import { UserProps } from '../models/user';
 import { OrderAfterBuyProps } from '@/models/order';
-import { orderService } from '../services/orderService';
+import OrderRepository from '../repositories/order';
 
 interface UserContextType {
     user: UserProps | null;
@@ -16,18 +25,19 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<UserProps | null>(null);
     const [loading, setLoading] = useState(true);
+    const authRepo = new AuthRepository();
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                let res = await authService.getUserData();
+                let res = await authRepo.getUserData();
 
                 if (!res) {
                     try {
-                        await authService.refreshToken();
-                        res = await authService.getUserData();
+                        await authRepo.refreshToken();
+                        res = await authRepo.getUserData();
                     } catch (refreshError) {
-                        // await authService.logout();
+                        // await authRepo.logout();
                         return;
                     }
                 }
@@ -36,8 +46,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     return;
                 }
 
-                const userContent: UserProps = await authService.getUserByUid(res);
-                const orders: OrderAfterBuyProps[] = await orderService.getByUser(userContent?.email);
+                const userContent: UserProps = await authRepo.getUserByUid(res);
+                const orders: OrderAfterBuyProps[] = await OrderRepository.getByUser(userContent?.email);
                 const userArray: any = { ...userContent, orders: orders };
 
                 if (userArray.label === "Admin" && token) {
@@ -54,7 +64,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
 
         fetchUserData();
-    }, []);    
+    }, []);
 
     return (
         <UserContext.Provider value={{ user, loading }}>

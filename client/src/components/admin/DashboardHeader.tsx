@@ -1,13 +1,19 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import { Button, Input } from "@chakra-ui/react";
 import './dashboard/dashboard-header.css'
 import { useEffect, useState } from "react";
-import { UserProps } from "../../models/user";
-import authService from "../../services/authService";
 import { getFirstAndLastName } from "../../lib/utils";
 import { Settings } from "lucide-react";
 import NotificationsComponent from "./notifications/NotificationsComponent";
 import SideBar from "./SideBar";
-import logoHeader from '../../logo.svg';
 import { useUser } from "../../contexts/UserContext";
 
 export const DashboardHeader = () => {
@@ -15,12 +21,11 @@ export const DashboardHeader = () => {
 
     const { user, loading } = useUser();
     const [isLoading, setLoading] = useState(true);
-    const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null); // Para controlar qual submenu está aberto
+    const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null);
     const [dateToday, setDateToday] = useState<string>("");
     const [isMobile, setIsMobile] = useState<boolean>(false);
-    useEffect(() => {
 
-        // Função para verificar a largura da tela
+    useEffect(() => {
         const checkIfMobile = () => {
             if (window.innerWidth <= 768) {
                 setIsMobile(true);
@@ -29,13 +34,9 @@ export const DashboardHeader = () => {
             }
         };
 
-        // Verifica ao carregar o componente
         checkIfMobile();
-
-        // Adiciona evento para verificar mudanças na largura da tela
         window.addEventListener("resize", checkIfMobile);
 
-        // Remove o evento ao desmontar o componente
         return () => {
             window.removeEventListener("resize", checkIfMobile);
         }
@@ -50,7 +51,7 @@ export const DashboardHeader = () => {
             year: 'numeric' // Ano
         }).format(today);
 
-        setDateToday(formattedDate); // Atualiza o estado com a data formatad
+        setDateToday(formattedDate);
     }, []);
 
     return (

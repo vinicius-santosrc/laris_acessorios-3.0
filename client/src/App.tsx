@@ -1,3 +1,12 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+ */
+
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Header from './components/geral/header/Header';
@@ -23,7 +32,7 @@ import { Questions } from './pages/institutional/questions/Questions';
 import { BeaModelPage } from './pages/institutional/beamodel/BeAModel';
 import { ContactUs } from './pages/institutional/contact-us/ContactUs';
 import { NotFoundPage } from './pages/404/404';
-import authService from './services/authService';
+import AuthRepository from './repositories/auth';
 import { Dashboard } from './components/admin/Dashboard';
 import { ProductsAdminPage } from './pages/admin/ProductsAdminPage';
 import { UsersAdmin } from './pages/admin/UsersAdmin';
@@ -119,20 +128,21 @@ function App() {
   useEffect(() => {
     const checkUserLoggedIn = async () => {
       try {
-        let authentication = await authService.getUserData();
+        const authRepo = new AuthRepository();
+        let authentication = await authRepo.getUserData();
         if (!authentication) {
           try {
-            await authService.refreshToken();
-            authentication = await authService.getUserData();
+            await authRepo.refreshToken();
+            authentication = await authRepo.getUserData();
           } catch (refreshError) {
-            // await authService.logout();
+            // await authRepo.logout();
             setIsAuthenticated(false);
             return;
           }
         }
 
         if (authentication) {
-          const isAdmin = await authService.isUserAdmin(authentication);
+          const isAdmin = await authRepo.isUserAdmin(authentication);
           setIsAuthenticated(isAdmin);
         } else {
           setIsAuthenticated(false);

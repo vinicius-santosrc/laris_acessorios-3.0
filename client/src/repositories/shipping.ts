@@ -11,12 +11,16 @@ import axios from 'axios';
 import { ShippingItem } from "@/models/shipping";
 import { getUrlByAmbient } from './api';
 
-const API_URL = getUrlByAmbient();
+export class ShippingRepository {
+    private readonly apiUrl: string;
 
-export class ShippingService {
-    static async getShippingOptionsByCep(cep: string): Promise<any> {
+    constructor() {
+        this.apiUrl = getUrlByAmbient();
+    }
+
+    async getShippingOptionsByCep(cep: string): Promise<ShippingItem[]> {
         try {
-            const response = await axios.post(`${API_URL}/shipping/calculate`, {
+            const response = await axios.post(`${this.apiUrl}/shipping/calculate`, {
                 to: { postal_code: cep },
             }, {
                 headers: {
@@ -25,10 +29,9 @@ export class ShippingService {
             });
 
             const data: ShippingItem[] = response.data;
-            const dataFiltered = data.filter((item: ShippingItem) =>
+            return data.filter((item: ShippingItem) =>
                 item.error === undefined && (item.company.name === "Correios" || item.name === ".Package")
             );
-            return dataFiltered;
         } catch (error: any) {
             console.error("Erro ao buscar opções de frete:", error);
             throw error;

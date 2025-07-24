@@ -39,12 +39,12 @@ const allowedOrigins = [
     'http://localhost:3000',
     'https://www.larisacessorios.com.br',
     'http://larisacessorios.com.br',
-    'https://staging-laris-acessorios-3-0.vercel.app'
+    'https://staging-laris-acessorios-3-0.vercel.app',
+    'https://api.larisacessorios.com.br'
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        console.log(origin)
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, origin);
         } else {

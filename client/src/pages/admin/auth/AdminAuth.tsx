@@ -10,7 +10,7 @@
 import { useEffect, useState } from "react"
 import { auth, CheckIfUserIsLogged, loginIn } from "../../../lib/firebase";
 import { toaster } from "../../../components/ui/toaster";
-import authService from "../../../services/authService";
+import AuthRepository from "../../../repositories/auth";
 import "../Admin.css";
 import LogoHeader from "../../../logo.svg"
 
@@ -21,6 +21,7 @@ export default function AdminLogin() {
     const [isAlert, setIsAlert] = useState<any>(false);
     const [typeAlert, settypeAlert] = useState<any>("error");
     const [alertMessage, setMessageAlert] = useState<any>("");
+    const authRepo = new AuthRepository();
 
     async function signIn() {
         if (!email || !password) {
@@ -67,7 +68,7 @@ export default function AdminLogin() {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user: any) => {
             if (user && user.uid) {
-                const u = await authService.getUserByUid(user.uid);
+                const u = await authRepo.getUserByUid(user.uid);
                 if (u) {
                     if (CheckIfUserIsLogged()) {
                         window.location.href = window.location.origin + "/admin";
@@ -88,7 +89,7 @@ export default function AdminLogin() {
             {isAlert ?
                 toaster.create({
                     title: alertMessage,
-                    type: typeAlert 
+                    type: typeAlert
 
                 })
                 : null

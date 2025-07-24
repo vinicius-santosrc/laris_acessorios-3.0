@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import productService from "../../services/productService";
+import ProductRepository from "../../repositories/product";
 import { Product } from "../../models/product";
 import { BreadcrumbRoot, BreadcrumbLink, BreadcrumbCurrentLink } from "../../components/ui/breadcrumb";
 import "../../styles/product.css"
@@ -12,7 +12,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import { Pagination } from 'swiper/modules';
-import { cartService } from "../../services/cartService";
+import { CartRepository } from "../../repositories/cart";
 import { CloseIcon } from "../../components/icons/icons";
 
 const ProductPage = () => {
@@ -27,6 +27,9 @@ const ProductPage = () => {
     const [isPhotoShowing, setPhotoShowing] = useState<boolean>(false);
     const [photoShowingContent, setPhotoShowingContent] = useState<string>("");
 
+    const productRepo = new ProductRepository();
+    const cartRepo = new CartRepository();
+
     useEffect(() => {
         if (!product_url) {
             setError("Produto não encontrado.");
@@ -36,7 +39,7 @@ const ProductPage = () => {
 
         const fetchProduct = async () => {
             try {
-                const fetchedProduct = new Product(await productService.getByURL(product_url));
+                const fetchedProduct = new Product(await productRepo.getByURL(product_url));
                 setProduct(fetchedProduct);
                 setSizes(JSON.parse(fetchedProduct.tamanhos));
                 setPhotos(JSON.parse(fetchedProduct.photoURL));
@@ -54,7 +57,7 @@ const ProductPage = () => {
 
     function addToCart() {
         if (product && sizeSelected) {
-            cartService.add(product, sizeSelected);
+            cartRepo.add(product, sizeSelected);
         }
     }
 

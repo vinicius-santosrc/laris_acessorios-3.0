@@ -1,3 +1,12 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import React, { useEffect, useRef, useState } from "react";
 import TopBarComponent from "./topbar-component/TopBarComponent";
 import logoHeader from "../../../images/logo.svg";
@@ -11,7 +20,6 @@ import BagComponent from "./bag-component/BagComponent";
 import MenuComponent from "./menu-mobile/MenuComponent";
 import AccountComponent from "./account-component/AccountComponent";
 import SubHeaderComponent from "./SubHeaderComponent";
-import { adminService } from "../../../services/adminService";
 import { useMenuItems } from "../../../contexts/MenuItemsContext";
 
 const Header = () => {

@@ -16,11 +16,11 @@ import {
 } from "../../components/ui/accordion"
 import { AbsoluteCenter, Box, createListCollection, Editable, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { adminService } from "../../services/adminService";
+import AdminRepository from "../../repositories/admin";
 import { CategoriesProps } from "../../lib/utils";
 import { InfoTip } from "../../components/ui/toggle-tip";
 import { Product } from "../../models/product";
-import productService from "../../services/productService";
+import ProductRepository from "../../repositories/product";
 import { Badge, Image, Table } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { toaster } from "../../components/ui/toaster";
@@ -54,15 +54,16 @@ const CategoriesAdmin = () => {
             urlLink: null,
             products: "[]"
         }
-    )
-
+    );
+    const adminRepo = new AdminRepository();
+    const productRepo = new ProductRepository();
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const fetchedCategories: CategoriesProps[] = await adminService.getAllCategoriesData();
+                const fetchedCategories: CategoriesProps[] = await adminRepo.getAllCategoriesData();
                 setCategories(fetchedCategories);
 
-                const fetchedProducts: Product[] = await productService.getAll();
+                const fetchedProducts: Product[] = await productRepo.getAll();
                 setProducts(fetchedProducts);
             } catch (err: any) {
                 throw Error(err)
@@ -84,7 +85,7 @@ const CategoriesAdmin = () => {
 
     function saveCategories() {
         const promises = allCategories.map((category) => {
-            return adminService.updateByCategory(category);
+            return adminRepo.updateByCategory(category);
         });
         Promise.all(promises)
             .then(() => {
@@ -106,7 +107,7 @@ const CategoriesAdmin = () => {
     async function changeImage(e: any, item: CategoriesProps) {
         const file = e.target.files[0];
         if (file) {
-            const uploadPhoto = await adminService.upload(e);
+            const uploadPhoto = await adminRepo.upload(e);
             if (uploadPhoto) {
                 setCategories((prevCategories) =>
                     prevCategories.map((cat) =>
@@ -121,7 +122,7 @@ const CategoriesAdmin = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await adminService.getCategorys(); // Certifique-se de que este método retorna um array de categorias
+            const response = await adminRepo.getCategorys(); // Certifique-se de que este método retorna um array de categorias
             const formattedCategories = response.map((category: any) => ({
                 label: category.category,
                 value: category.category,
@@ -154,7 +155,7 @@ const CategoriesAdmin = () => {
         }
         try {
             // Enviar a nova categoria e os dados adicionais
-            const createdCategory = await adminService.addNewCategory(
+            const createdCategory = await adminRepo.addNewCategory(
                 JSON.stringify({ label: newCategoryName, highlightText: itemData.highlightText, highlightDescription: itemData.highlightDescription, highlightImage: itemData.highlightImage, urlLink: itemData.urlLink }),
                 itemData
             );
@@ -223,7 +224,7 @@ const CategoriesAdmin = () => {
                                         <Input
                                             type="file"
                                             onChange={async (e) => {
-                                                const res = await adminService.upload(e);
+                                                const res = await adminRepo.upload(e);
                                                 if (res) {
                                                     setItemData({ ...itemData, highlightImage: res });
                                                 }

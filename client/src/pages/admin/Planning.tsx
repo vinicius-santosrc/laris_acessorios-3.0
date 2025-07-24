@@ -1,7 +1,16 @@
-import { adminService } from "../../services/adminService";
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
+import AdminRepository from "../../repositories/admin";
 import { toaster } from "../../components/ui/toaster";
 import { useEffect, useState } from "react";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import CardItem from "../../components/admin/planning/CardItem";
 import "./planning.css";
 
@@ -10,6 +19,7 @@ export const Planing = () => {
     const [ContentCards, setContentCards] = useState<any[]>([]);
     const [NameOfNewList, setNameOfNewList] = useState<string | null>(null);
     const [newItems, setNewItems] = useState('');
+    const adminRepo = new AdminRepository();
 
     useEffect(() => {
         getCards();
@@ -19,7 +29,7 @@ export const Planing = () => {
 
     async function deleteThatCard(id: any) {
         try {
-            await adminService.planningDeleteById(id);
+            await adminRepo.planningDeleteById(id);
             getCards();
         } catch (error: any) {
             toaster.create({
@@ -34,7 +44,7 @@ export const Planing = () => {
     async function createNewList() {
         if (NameOfNewList) {
             try {
-                await adminService.addNewPlanningCard(NameOfNewList);
+                await adminRepo.addNewPlanningCard(NameOfNewList);
                 getCards();
                 setNameOfNewList(null);
             } catch (error: any) {
@@ -60,7 +70,7 @@ export const Planing = () => {
         const list = content_card !== "[]" ? [...itensantigos, newItems] : [newItems.toString()];
 
         try {
-            await adminService.updatedCard(list, id);
+            await adminRepo.updatedCard(list, id);
             getCards();
         } catch (error: any) {
             toaster.create({
@@ -76,7 +86,7 @@ export const Planing = () => {
         if (index >= 0 && index < contentCardArray.length) {
             contentCardArray.splice(index, 1);
             try {
-                await adminService.updatedCard(contentCardArray, id);
+                await adminRepo.updatedCard(contentCardArray, id);
                 getCards();
             } catch (error: any) {
                 toaster.create({
@@ -90,7 +100,7 @@ export const Planing = () => {
 
     async function getCards() {
         try {
-            const response = await adminService.getPlanning();
+            const response = await adminRepo.getPlanning();
             setContentCards(response);
         } catch (error: any) {
             throw error;
@@ -119,8 +129,8 @@ export const Planing = () => {
         setContentCards(updatedCards);
 
         try {
-            await adminService.updatedCard(updatedCards[sourceCardIndex].content_card, updatedCards[sourceCardIndex].id);
-            await adminService.updatedCard(updatedCards[destinationCardIndex].content_card, updatedCards[destinationCardIndex].id);
+            await adminRepo.updatedCard(updatedCards[sourceCardIndex].content_card, updatedCards[sourceCardIndex].id);
+            await adminRepo.updatedCard(updatedCards[destinationCardIndex].content_card, updatedCards[destinationCardIndex].id);
 
             await getCards();
         } catch (error: any) {

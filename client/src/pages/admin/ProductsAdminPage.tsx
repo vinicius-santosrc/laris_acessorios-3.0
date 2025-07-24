@@ -1,5 +1,14 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import { Product } from "@/models/product";
-import productService from "../../services/productService";
+import ProductRepository from "../../repositories/product";
 import { Badge, Image, Table, Tabs } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import "./productsadminpage.css";
@@ -26,6 +35,9 @@ export const ProductsAdminPage = () => {
     const [products, setProducts] = useState<Product[] | null>(null);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [isMobile, setIsMobile] = useState<boolean>(false);
+
+    const productRepo = new ProductRepository();
+
     useEffect(() => {
         fetchCategoryData();
 
@@ -52,7 +64,7 @@ export const ProductsAdminPage = () => {
 
     const fetchCategoryData = async () => {
         try {
-            const searchedProducts: Product[] = await productService.getAll();
+            const searchedProducts: Product[] = await productRepo.getAll();
             setProducts(searchedProducts);
         } catch (error: any) {
             console.error("Failed to fetch category data:", error);
@@ -72,7 +84,7 @@ export const ProductsAdminPage = () => {
     const navigator = useNavigate()
 
     const handleChangevisibility = async (value: "avaliable" | "unavaliable") => {
-        await productService.changeVisibilityByList(selectedIds, value).then(() => {
+        await productRepo.changeVisibilityByList(selectedIds, value).then(() => {
             fetchCategoryData()
             setSelectedIds([])
             toaster.create({
@@ -83,7 +95,7 @@ export const ProductsAdminPage = () => {
     };
 
     const deleteSelectedItems = async () => {
-        await productService.deleteByList(selectedIds).then(() => {
+        await productRepo.deleteByList(selectedIds).then(() => {
             fetchCategoryData()
             setSelectedIds([])
             toaster.create({

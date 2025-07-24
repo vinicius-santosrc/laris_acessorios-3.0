@@ -7,32 +7,33 @@
  * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
  */
 
-import { Account, Client, Databases } from 'appwrite';
+import { Client } from 'appwrite';
 import { UserAuthProps } from '@/lib/utils';
 import { UserProps } from '@/models/user';
 import axios from 'axios';
 import api, { getUrlByAmbient } from './api';
 
-const url = getUrlByAmbient();
-const secretKey = process.env.REACT_APP_API_SECRET_KEY;
-const preEndpoint = process.env.REACT_APP_API_PREENDPOINT;
-
-const endPointAppWrite: string | undefined = process.env.REACT_APP_API_ENDPOINT_APPWRITE;
-const projectAppWrite: string | undefined = process.env.REACT_APP_API_PROJECT_APPWRITE;
-
-class authService {
-    private readonly client: Client;
+class AuthRepository {
+    protected url: string;
+    protected secretKey: string;
+    protected preEndpoint: string;
 
     constructor() {
-        this.client = new Client();
+        this.url = getUrlByAmbient();
+        this.secretKey = process.env.REACT_APP_API_SECRET_KEY ?? "";
+        this.preEndpoint = process.env.REACT_APP_API_PREENDPOINT ?? "";
+
+        const client = new Client();
+        const endPointAppWrite: string | undefined = process.env.REACT_APP_API_ENDPOINT_APPWRITE;
+        const projectAppWrite: string | undefined = process.env.REACT_APP_API_PROJECT_APPWRITE;
         if (endPointAppWrite && projectAppWrite) {
-            this.client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
+            client.setEndpoint(endPointAppWrite).setProject(projectAppWrite);
         }
     }
 
-    static readonly register = async (user: UserAuthProps, password: string) => {
+    readonly register = async (user: UserAuthProps, password: string) => {
         try {
-            const response = await api.post(`${url}${preEndpoint}${secretKey}/register`, {
+            const response = await api.post(`${this.url}${this.preEndpoint}${this.secretKey}/register`, {
                 nome_completo: user.nome_completo,
                 cpf: user.cpf,
                 email: user.email,
@@ -58,9 +59,9 @@ class authService {
         }
     }
 
-    static readonly login = async (email: string, password: string) => {
+    readonly login = async (email: string, password: string) => {
         try {
-            const response = await api.post(`${url}${preEndpoint}${secretKey}/login`, {
+            const response = await api.post(`${this.url}${this.preEndpoint}${this.secretKey}/login`, {
                 email: email,
                 password: password
             }, {
@@ -85,9 +86,9 @@ class authService {
         }
     }
 
-    static readonly refreshToken = async () => {
+    readonly refreshToken = async () => {
         try {
-            const response = await api.post(`${url}${preEndpoint}${secretKey}/refreshToken`, null, {
+            const response = await api.post(`${this.url}${this.preEndpoint}${this.secretKey}/refreshToken`, null, {
                 withCredentials: true
             });
             return response.data;
@@ -96,22 +97,17 @@ class authService {
             throw new Error("Falha ao renovar token.");
         }
     }
-    
 
-    public static readonly getUserData = async (): Promise<string | null> => {
-        try {
-            const response = await api.get(`${url}${preEndpoint}${secretKey}/me`, {
-                withCredentials: true
-            });
-            return response.data.user?.uid || null;
-        } catch (error) {
-            return null;
-        }
+    public readonly getUserData = async (): Promise<any | null> => {
+        const response = await api.get(`${this.url}${this.preEndpoint}${this.secretKey}/me`, {
+            withCredentials: true
+        });
+        return response.data.user?.uid || null;
     }
 
-    static readonly isLogged = async (): Promise<boolean> => {
+    readonly isLogged = async (): Promise<boolean> => {
         try {
-            const response = await api.get(`${url}${preEndpoint}${secretKey}/me`, {
+            const response = await api.get(`${this.url}${this.preEndpoint}${this.secretKey}/me`, {
                 withCredentials: true
             });
             return !!response.data.user;
@@ -120,9 +116,9 @@ class authService {
         }
     }
 
-    static readonly logout = async () => {
+    readonly logout = async () => {
         try {
-            await api.post(`${url}${preEndpoint}${secretKey}/logout`, null, {
+            await api.post(`${this.url}${this.preEndpoint}${this.secretKey}/logout`, null, {
                 withCredentials: true
             });
         } catch (error: any) {
@@ -134,9 +130,9 @@ class authService {
         }
     }
 
-    static readonly getUserByEmail = async (email: string) => {
+    readonly getUserByEmail = async (email: string) => {
         try {
-            const response = await axios.post(`${url}${preEndpoint}${secretKey}/user`, {
+            const response = await axios.post(`${this.url}${this.preEndpoint}${this.secretKey}/user`, {
                 email: email
             }, {
                 headers: {
@@ -149,9 +145,9 @@ class authService {
         }
     }
 
-    static readonly isUserAdmin = async (uid: string) => {
+    readonly isUserAdmin = async (uid: string) => {
         try {
-            const response = await axios.post(`${url}${preEndpoint}${secretKey}/userByUid`, {
+            const response = await axios.post(`${this.url}${this.preEndpoint}${this.secretKey}/userByUid`, {
                 uid: uid
             }, {
                 headers: {
@@ -165,9 +161,9 @@ class authService {
         }
     }
 
-    static getUserByUid = async (uid: string) => {
+    readonly getUserByUid = async (uid: string) => {
         try {
-            const response = await axios.post(`${url}${preEndpoint}${secretKey}/userByUid`, {
+            const response = await axios.post(`${this.url}${this.preEndpoint}${this.secretKey}/userByUid`, {
                 uid: uid
             }, {
                 headers: {
@@ -181,4 +177,4 @@ class authService {
     }
 }
 
-export default authService;
+export default AuthRepository;

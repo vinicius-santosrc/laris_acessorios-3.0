@@ -1,4 +1,13 @@
-import { adminService } from '../services/adminService';
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
+import AdminRepository from '../repositories/admin';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const MenuItemsContext = createContext<any | undefined>(undefined);
@@ -7,10 +16,12 @@ export const MenuItemsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const [menuItems, setMenuItems] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
 
+    const adminRepo = new AdminRepository();
+
     useEffect(() => {
         const fetchMenu = async () => {
             try {
-                const data = await adminService.getMenuItems();
+                const data = await adminRepo.getMenuItems();
                 setMenuItems(data);
             } catch (error: any) {
                 console.error("Erro ao obter dados do usuário", error);
