@@ -1,4 +1,13 @@
-import React, { useEffect } from "react";
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
+import React from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
 
@@ -25,7 +34,7 @@ const SubHeaderComponent: React.FC<any> = ({ itemHover, isOpen }) => {
                         </div>
                     </div>
                     <div className="subheader-right-side">
-                        <img alt={itemHover.title} src={"https://i.ibb.co/0jphgqRb/IMG-1322.jpg"} />
+                        <img alt={itemHover.title} src={itemHover.imgMenuItem} />
                     </div>
                 </div>
             </section>

@@ -1,4 +1,13 @@
-import React, { useEffect, useState } from "react";
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
+import { useEffect, useState } from "react";
 import ApexChart from 'react-apexcharts';
 
 const GraficoPrecos = ({ valores }: any) => {
@@ -16,13 +25,11 @@ const GraficoPrecos = ({ valores }: any) => {
                 } else {
                     newY = parseFloat((currentUltimoValor + item.valor).toFixed(2));
                 }
-            } else {
-                if (index === 0) {
+            } else if (index === 0) {
                     newY = parseFloat(item.valor.toFixed(2));
                 } else {
                     newY = parseFloat((currentUltimoValor - item.valor).toFixed(2));
                 }
-            }
 
             currentUltimoValor = newY;
 

@@ -12,6 +12,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+morgan.token('remote-addr', (req) => req.ip);
 
 // Importando rotas
 const authRoutes = require('./src/routes/authRoutes');
@@ -31,12 +35,47 @@ const { connectToDatabase } = require('./src/config/database');
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Configurações de CORS e body parser
-app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://www.larisacessorios.com.br',
+    'http://larisacessorios.com.br',
+    'https://staging-laris-acessorios-3-0.vercel.app',
+    'https://api.larisacessorios.com.br'
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, origin);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Libera pré-flights (OPTIONS)
+app.options('*', cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, origin);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
+
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(helmet({
+    contentSecurityPolicy: false,
+}));
+app.use(cookieParser());
+
+app.use(morgan('REQUEST :method (:url) with status :status - Respponse time :response-time ms :remote-addr'));
 
 // Conectar ao banco de dados
 connectToDatabase();

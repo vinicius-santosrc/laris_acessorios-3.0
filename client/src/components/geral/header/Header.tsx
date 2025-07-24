@@ -1,3 +1,12 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import React, { useEffect, useRef, useState } from "react";
 import TopBarComponent from "./topbar-component/TopBarComponent";
 import logoHeader from "../../../images/logo.svg";
@@ -11,7 +20,7 @@ import BagComponent from "./bag-component/BagComponent";
 import MenuComponent from "./menu-mobile/MenuComponent";
 import AccountComponent from "./account-component/AccountComponent";
 import SubHeaderComponent from "./SubHeaderComponent";
-import { adminService } from "../../../services/adminService";
+import { useMenuItems } from "../../../contexts/MenuItemsContext";
 
 const Header = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
@@ -24,7 +33,7 @@ const Header = () => {
     const [isTransparent, setTransparent] = useState<boolean>(true);
     const headerRef = useRef<HTMLDivElement | null>(null);
 
-    const [menuItems, setMenuItems] = useState<any[]>([]);
+    const { menuItems } = useMenuItems();
 
     const handleMouseEnter = (categoria: any) => {
         if (categoria.sub_items) {
@@ -46,19 +55,6 @@ const Header = () => {
             }
         }, 1500);
     };
-    useEffect(() => {
-        const fetchMenuItems = async () => {
-            try {
-                const data = await adminService.getMenuItems();
-                setMenuItems(data);
-            } catch (error: any) {
-                await fetchMenuItems(); //usando recursividade para resolver problemas de erro de carregamento
-                throw Error(error);
-            }
-        };
-
-        fetchMenuItems();
-    }, []);
 
     const handleScroll = () => {
         const isHome = window.location.pathname === '/';
@@ -212,8 +208,8 @@ const Header = () => {
 
                 <nav className="header-app-bottom-content header-app-bottom-content__wrapper">
                     <div className="header-inside-bottom-content header-inside-bottom-content__redirects">
-                        {menuItems.length > 0 ? (
-                            menuItems.map((categoria) => (
+                        {menuItems?.length > 0 ? (
+                            menuItems?.map((categoria: any) => (
                                 <article
                                     key={categoria.title}
                                     className="redirect-item-content redirect-item-content__gifts"

@@ -1,12 +1,21 @@
-import React, { useState, useEffect } from "react";
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+ */
+
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Success.css";
-import { orderService } from "../../services/orderService";
+import OrderRepository from "../../repositories/order";
 import { Loader } from "../../components/ui/loader";
 import { Product } from "../../models/product";
 import { OrderAfterBuyProps } from "@/models/order";
-import { CheckIcon, LoaderCircle, LoaderIcon, LoaderPinwheel } from "lucide-react";
-import { FaMoneyBill, FaMoneyBillWave } from "react-icons/fa";
+import { CheckIcon } from "lucide-react";
+import { FaMoneyBillWave } from "react-icons/fa";
 
 const Success = () => {
     const { uid } = useParams();
@@ -19,7 +28,7 @@ const Success = () => {
         const fetchOrder = async () => {
             if (uid) {
                 try {
-                    const currentOrder = await orderService.getByUid(uid);
+                    const currentOrder = await OrderRepository.getByUid(uid);
                     setOrder(currentOrder);
                     setEndereco(JSON.parse(currentOrder.address));
                     setItems(JSON.parse(currentOrder.items));

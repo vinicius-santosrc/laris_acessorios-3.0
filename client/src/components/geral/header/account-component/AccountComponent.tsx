@@ -22,7 +22,7 @@ import { FormAccount } from "../FormAccount";
 import { Checkbox } from "../../../../components/ui/checkbox";
 import "../Header.css";
 import LogoHeader from "../../../../images/logo.webp";
-import authService from "../../../../services/authService";
+import AuthRepository from "../../../../repositories/auth";
 import { toaster } from "../../../../components/ui/toaster";
 import { formatCPF, UserAuthProps } from "../../../../lib/utils";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
@@ -85,66 +85,86 @@ const AccountComponent = ({ checkoutBtn }: any) => {
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const fields = formData[0].btnForm;
         const missingFields = fields.filter((field: any) => field.required && !formValues[field.label]);
 
         if (missingFields.length > 0) {
             setError("Preencha todos os campos obrigatórios.");
-        } else if (isRegistering && !isChecked) {
+            return;
+        }
+
+        if (isRegistering && !isChecked) {
             setError("Você precisa aceitar os termos de privacidade.");
-        } else {
-            setError(null);
-            const email: string = formValues["E-mail"];
-            const password: string = formValues["Senha"];
-            const nome_completo: string = formValues["Nome Completo"];
-            const cpf: string = formValues["CPF"]
+            return;
+        }
 
-            const User: UserAuthProps = {
-                nome_completo: nome_completo,
-                email: email,
-                cpf: cpf,
-                password: password
-            }
+        setError(null);
+        const email: string = formValues["E-mail"];
+        const password: string = formValues["Senha"];
+        const nome_completo: string = formValues["Nome completo"];
+        const cpf: string = formValues["CPF"];
 
+        const User: UserAuthProps = {
+            nome_completo,
+            email,
+            cpf,
+            password
+        };
+
+        const authRepo = new AuthRepository();
+
+        try {
             if (!isRegistering) {
-                authService.login(User.email, User.password).then(response => {
+                try {
+                    const response = await authRepo.login(User.email, User.password);
+
+                    if (response) {
+                        toaster.create({
+                            title: "Usuário logado com sucesso",
+                            type: "success",
+                        });
+                        setTimeout(() => {
+                            if (checkoutBtn) {
+                                window.location.href = window.location.origin + "/checkout";
+                            } else {
+                                window.location.href = window.location.origin + "/account";
+                            }
+                        }, 1000);
+                    }
+                }
+                catch (error: any) {
                     toaster.create({
-                        title: "Usuário logado com sucesso",
-                        type: "success",
-                    })
-                    setTimeout(() => {
-                        if (checkoutBtn) {
-                            window.location.href = window.location.origin + "/checkout"
-                        }
-                        else {
-                            window.location.href = window.location.origin + "/account"
-                        }
-                    }, 1000);
-                }).catch(error => {
-                    toaster.create({
-                        title: "Ocorreu um erro durante o credenciamento: " + error,
+                        title: `Erro ao tentar logar`,
+                        description: `${error?.message?.toString()}`,
                         type: "error",
                     });
-                    throw Error(error);
-                });
-            }
-            else {
-                authService.register(User).then(response => {
+                }
+            } else {
+                try {
+                    await authRepo.register(User, password);
                     toaster.create({
                         title: "Usuário criado com sucesso",
                         type: "success",
                     });
-                }).catch(error => {
+                }
+                catch (error: any) {
                     toaster.create({
-                        title: "Ocorreu um erro durante criamento da conta: " + error,
+                        title: `Erro ao realizar o registro`,
+                        description: `${error?.message?.toString()}`,
                         type: "error",
                     });
-                    throw Error(error);
-                });
+                }
             }
+        } catch (error: any) {
+            toaster.create({
+                title: `Erro ao realizar o registro`,
+                description: `${error?.message?.toString()}`,
+                type: "error",
+            });
         }
     };
+
     const formData = isRegistering ? FormRegisterAccount : FormLoginAccount;
 
     useEffect(() => {

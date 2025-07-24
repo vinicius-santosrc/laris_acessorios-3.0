@@ -1,10 +1,19 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import { useEffect, useState } from "react";
 import "./PrincipalProductCard.css";
 import { Link } from "react-router-dom";
 import { Image } from "@chakra-ui/react";
 import { FavoritesIcon } from "../../../components/icons/icons";
 import { Product } from "@/models/product";
-import { cartService } from "../../../services/cartService";
+import { CartRepository } from "../../../repositories/cart";
 
 const PrincipalProductCard = ({ view, product }: { view: any, product: Product }) => {
     const [isHover, setHover] = useState<boolean>(false);
@@ -13,6 +22,8 @@ const PrincipalProductCard = ({ view, product }: { view: any, product: Product }
     const [tamanhoSelected, setTamanhoSelect] = useState<any>();
     const tamanhos = product.tamanhos ? JSON.parse(product.tamanhos) : [];
     const Images = product.photoURL ? JSON.parse(product.photoURL) : [];
+
+    const cartRepo = new CartRepository();
 
     if (view === undefined) {
         view = 1
@@ -77,26 +88,26 @@ const PrincipalProductCard = ({ view, product }: { view: any, product: Product }
                                                 )
                                             })}
                                         </select>
-                                        <button onClick={() => tamanhoSelected != "" && cartService.add(product, tamanhoSelected)}>
+                                        <button onClick={() => tamanhoSelected != "" && cartRepo.add(product, tamanhoSelected)}>
                                             ADICIONAR A SACOLA
                                         </button>
                                     </>
                                 ) : (
                                     <>
-                                            {product?.disponibilidade != 0 ? <button
-                                                onClick={() => setIsBuying(true)}
+                                        {product?.disponibilidade != 0 ? <button
+                                            onClick={() => setIsBuying(true)}
+                                            style={{ display: productMouseIn ? "block" : "none" }}
+                                        >
+                                            COMPRAR
+                                        </button>
+                                            :
+                                            <button
+                                                disabled={true}
                                                 style={{ display: productMouseIn ? "block" : "none" }}
                                             >
-                                                COMPRAR
+                                                INDISPONÍVEL
                                             </button>
-                                                :
-                                                <button
-                                                    disabled={true}
-                                                    style={{ display: productMouseIn ? "block" : "none" }}
-                                                >
-                                                    INDISPONÍVEL
-                                                </button>
-                                            }
+                                        }
                                     </>
 
                                 )}

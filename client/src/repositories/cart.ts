@@ -9,14 +9,15 @@
 
 import { toaster } from "../components/ui/toaster";
 import { Product } from "../models/product";
-import productService from "./productService";
+import ProductRepository from "./product";
 
-export class cartService {
-    private static updateLocalStorage(bagItems: any[]) {
+export class CartRepository {
+    productRepo = new ProductRepository();
+    protected updateLocalStorage(bagItems: any[]) {
         localStorage.setItem("sacola", JSON.stringify(bagItems));
     }
 
-    public static add = async (product: Product, size: any) => {
+    public readonly add = async (product: Product, size: any) => {
         let bagItems = await this.get();
 
         const productWithSize = {
@@ -41,7 +42,7 @@ export class cartService {
         this.updateLocalStorage(bagItems);
     };
 
-    public static remove = async (productId: any) => {
+    public readonly remove = async (productId: string) => {
         let bagItems = await this.get();
 
         if (!Array.isArray(bagItems)) {
@@ -65,7 +66,7 @@ export class cartService {
         this.updateLocalStorage(updatedBagItems);
     };
 
-    public static get = async (): Promise<any[]> => {
+    public readonly get = async (): Promise<any[]> => {
         const localStorageBag = localStorage.getItem("sacola");
         let bagItems: Product[] = localStorageBag ? JSON.parse(localStorageBag) : [];
 
@@ -75,7 +76,7 @@ export class cartService {
 
         const updatedBagItems = await Promise.all(
             bagItems.map(async (product) => {
-                const currentProduct = await productService.getById(product.id.toString());
+                const currentProduct = await this.productRepo.getById(product.id.toString());
                 if (currentProduct.disponibilidade > 0) {
                     return product;
                 } else {

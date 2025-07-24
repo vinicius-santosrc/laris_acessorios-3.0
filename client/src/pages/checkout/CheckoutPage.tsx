@@ -1,3 +1,12 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+ */
+
 import React, { useEffect, useState } from "react";
 import "../../styles/checkout.css";
 import { DataListItem, DataListRoot } from "../../components/ui/data-list";
@@ -8,22 +17,21 @@ import { StepsContent, StepsItem, StepsList, StepsNextTrigger, StepsPrevTrigger,
 import { Checkbox, Input } from "@chakra-ui/react";
 import { LuCalendar, LuUser, LuWallet } from "react-icons/lu";
 import { SelectContent, SelectItem, SelectLabel, SelectRoot, SelectTrigger, SelectValueText } from "../../components/ui/select";
-import { EnumPaymentMethod, formatarCartaoCredito, formatCEP, formatCPF, formatTelefone, gerarUidComCaracteresENumeros, getCEPJson, parcelamentosDisponiveis, paymentInsideMethod, paymentsMethods } from "../../lib/utils";
+import { EnumPaymentMethod, formatCEP, formatCPF, formatTelefone, gerarUidComCaracteresENumeros, getCEPJson, parcelamentosDisponiveis, paymentInsideMethod, paymentsMethods } from "../../lib/utils";
 import { toaster } from "../../components/ui/toaster";
 import { Loader } from "../../components/ui/loader";
 import { CepProps } from "../../models/cep";
-import { orderService } from "../../services/orderService";
+import OrderRepository from "../../repositories/order";
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { useElements, useStripe } from "@stripe/react-stripe-js";
 import { OrderProps } from "../../models/order";
-import { cartService } from "../../services/cartService";
-import productService from "../../services/productService";
+import { CartRepository } from "../../repositories/cart";
+import ProductRepository from "../../repositories/product";
 import Footer from "../../components/geral/footer/Footer";
-import { ShippingService } from "../../services/shippingService";
+import { ShippingRepository } from "../../repositories/shipping";
 import { ShippingItem } from "@/models/shipping";
 import { useUser } from "../../contexts/UserContext";
-
-const url = process.env.REACT_APP_API_ENDPOINT;
+import { PaymentRepository } from "../../repositories/payment";
 
 const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     const [step, setStep] = useState<number>(0);
@@ -54,14 +62,8 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     const [shipMethodSelected, setShipMethod] = useState<ShippingItem>();
 
     //States for Step 1
-
     const [paymentMethodSelected, setPaymentMethodSelected] = useState<any>();
     const [parcelamento, setParcelamento] = useState<any>();
-    const [numeroCartao, setNumeroCartao] = useState<any>();
-    const [cardName, setNameCard] = useState<string>("");
-    const [validadeCard, setValidade] = useState<any>()
-    const [cvv, setCVV] = useState<any>();
-    const [cpfTitular, setCPFTITULAR] = useState<any>();
 
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -73,17 +75,20 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
     const elements: any = useElements();
     const [errorMessage, setErrorMessage] = useState<string>();
 
+    const cartRepo = new CartRepository();
+    const productRepo = new ProductRepository();
+    const shippingRepo = new ShippingRepository();
+
     useEffect(() => {
-        window.document.title = "Finalizar compra"
-        fetch(`${url}/create-payment-intent`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ amount: total * 100, paymentMethodType: paymentMethodTypes }),
-        })
-            .then((res) => res.json())
-    }, []);
+        window.document.title = "Finalizar compra";
+        PaymentRepository.createPaymentIntent(total, paymentMethodTypes)
+            .then((clientSecret) => {
+                // Armazenar ou utilizar clientSecret conforme necessário
+            })
+            .catch((err) => {
+                console.error("Erro ao criar PaymentIntent:", err);
+            });
+    }, [total, paymentMethodTypes]);
 
     if (!stripe || !elements) {
         console.error("Stripe ou Elements não inicializados");
@@ -107,20 +112,20 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
 
     useEffect(() => {
         setLoading(loading);
-    }, [loading])
+    }, [loading]);
 
     useEffect(() => {
         if (!user && !loading) {
-            window.location.href = window.location.origin
+            window.location.href = window.location.origin;
         }
-    }, [user])
+    }, [user]);
 
     useEffect(() => {
         const fetchUserData = async () => {
-            const itemsCart = await cartService.get();
+            const itemsCart = await cartRepo.get();
             const storedItems: any = await Promise.all(
-                itemsCart.map(async (item) => {
-                    const product = await productService.getById(item.id);
+                itemsCart.map(async (item: any) => {
+                    const product = await productRepo.getById(item.id);
                     return { ...product, size: item.size };
                 })
             );
@@ -139,7 +144,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                             setName(user?.nome_completo ?? "");
                         } catch (error: any) {
                             console.error("Erro ao obter dados do usuário", error);
-                            window.location.href = window.location.origin
+                            window.location.href = window.location.origin;
                         }
 
                         setLoading(false);
@@ -161,7 +166,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
         setEmail(user?.email ?? "");
         setCPF(formatCPF(user?.cpf ?? ""));
         setName(user?.nome_completo ?? "");
-    }, [user])
+    }, [user]);
 
     const calculateTotal = (items: Product[]) => {
         const newSubtotal = items.reduce((acc, item) => acc + item.price, 0);
@@ -203,7 +208,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
 
         try {
             const cepReturned: CepProps = await getCEPJson(cep);
-            const detailsShipping: any = await ShippingService.getShippingOptionsByCep(cep);
+            const detailsShipping: any = await shippingRepo.getShippingOptionsByCep(cep);
             detailsShipping.push({
                 id: 4,
                 name: "Retirada",
@@ -249,14 +254,14 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
                 toaster.create({
                     title: "Não foi possível encontrar o cep informado, insira os dados manualmente",
                     type: "error"
-                })
+                });
             }
 
             setcidade(cepReturned.localidade);
             setEstado(cepReturned.estado);
             setbairro(cepReturned.bairro);
-            setendereco(cepReturned.logradouro)
-            setTotal(total + shippingCost)
+            setendereco(cepReturned.logradouro);
+            setTotal(total + shippingCost);
 
         } catch (error: any) {
             console.error("Erro ao buscar informações de entrega", error);
@@ -334,68 +339,17 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
 
         if (paymentMethodSelected?.value === EnumPaymentMethod.CreditCard) {
             try {
-                const response = await fetch(`${url}/create-payment-intent`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ item: total * 100 }),
-                });
-
-                if (!response.ok) {
-                    throw new Error("Failed to create payment intent");
-                }
-
-                const { clientSecret } = await response.json();
-
-                const { error } = await stripe.confirmPayment({
+                const error = await PaymentRepository.confirmCreditCardPayment(
+                    stripe,
                     elements,
                     clientSecret,
-                    confirmParams: {
-                        return_url: window.location.origin + `/success/` + orderUid, // Redirect after payment
-                    },
-                    redirect: "if_required",
-                });
+                    `${window.location.origin}/success/${orderUid}`
+                );
 
                 if (error) {
-                    if (error.code === "card_declined") {
-                        toaster.create({
-                            title: `${error.message} Tente novamente com outro cartão ou aguarde.`,
-                            type: "error"
-                        });
-                    } else if (error.code === "expired_card") {
-                        toaster.create({
-                            title: "O cartão expirou. Utilize um cartão válido.",
-                            type: "error"
-                        });
-                    } else if (error.code === "incorrect_cvc") {
-                        toaster.create({
-                            title: "O código de segurança do cartão está incorreto.",
-                            type: "error"
-                        });
-                    } else if (error.code === "insufficient_funds") {
-                        toaster.create({
-                            title: "Saldo insuficiente. Utilize outro cartão ou verifique com seu banco.",
-                            type: "error"
-                        });
-                    } else if (error.code === "processing_error") {
-                        toaster.create({
-                            title: "Ocorreu um erro no processamento do pagamento. Tente novamente.",
-                            type: "error"
-                        });
-                    } else if (error.code === "incorrect_number") {
-                        toaster.create({
-                            title: "O número do cartão está incorreto. Verifique e tente novamente.",
-                            type: "error"
-                        });
-                    } else {
-                        toaster.create({
-                            title: "Não foi possível realizar a compra com seu cartão. Tente novamente com outro cartão ou aguarde.",
-                            type: "error"
-                        });
-                    }
+                    PaymentRepository.handleCardPaymentError(error);
                 } else {
-                    await orderService.create(orderContent);
+                    await OrderRepository.create(orderContent);
                     window.location.href = window.location.origin + `/success/` + orderUid;
                 }
             } catch (error: any) {
@@ -409,7 +363,7 @@ const CheckoutPage = ({ paymentMethodTypes, clientSecret }: any) => {
             }
         } else if (paymentMethodSelected?.value === EnumPaymentMethod.Pix) {
             try {
-                await orderService.create(orderContent);
+                await OrderRepository.create(orderContent);
                 window.location.href = window.location.origin + `/success/` + orderUid;
             } catch (error: any) {
                 console.error("Error finalizing purchase:", error);

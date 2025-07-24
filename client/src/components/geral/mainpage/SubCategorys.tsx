@@ -1,10 +1,20 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import { Link } from "react-router-dom";
 import SubCategoryCard from "../subcategory-card/SubcategoryCard";
 import "./SubCategory.css";
 import { useEffect, useState } from "react";
 import { Loader } from "../../../components/ui/loader";
-import { adminService } from "../../../services/adminService";
-import { Facilitys } from "../../../services/facilitysService";
+import AdminRepository from "../../../repositories/admin";
+import { FacilitysRepository } from "../../../repositories/facilitys";
+import { useFacility } from "../../../contexts/FacilityContext";
 
 interface SubCategoryProps {
     title: string;
@@ -15,17 +25,21 @@ interface SubCategoryProps {
 const SubCategories = () => {
     const [lastCategory, setLastCategory] = useState<any>();
     const [subCategoryImages, setSubCategoryImages] = useState<{ [key: string]: string }>({});
+    const { facility } = useFacility();
+
+    const adminRepo = new AdminRepository();
+    const facilityRepo = new FacilitysRepository();
 
     useEffect(() => {
         getLastCategories();
         subCategories.forEach((item) => {
             getSubCategoryImage(item.photoURL);
         });
-    }, []);
+    }, [facility]);
 
     const getLastCategories = async () => {
         try {
-            const categories: any[] = await adminService.getAllCategoriesData();
+            const categories: any[] = await adminRepo.getAllCategoriesData();
             if (categories.length > 0) {
                 setLastCategory(categories[categories.length - 1]);
             }
@@ -35,14 +49,16 @@ const SubCategories = () => {
     };
 
     const getSubCategoryImage = async (photoURL: string) => {
-        try {
-            const response = await Facilitys.get(photoURL);
-            setSubCategoryImages((prev) => ({
-                ...prev,
-                [photoURL]: response?.data[0].data,
-            }));
-        } catch (error: any) {
-            throw error;
+        if (facility) {
+            try {
+                const response = facilityRepo.getByRef(photoURL, facility);
+                setSubCategoryImages((prev) => ({
+                    ...prev,
+                    [photoURL]: response.data,
+                }));
+            } catch (error: any) {
+                throw error;
+            }
         }
     };
 

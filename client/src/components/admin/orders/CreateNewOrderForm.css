@@ -1,0 +1,125 @@
+.admin-createnew-order {
+    padding: 2rem;
+    border-radius: 16px;
+    font-family: "Segoe UI", sans-serif;
+    color: #1a1a1a;
+    margin: 0 auto;
+}
+
+.step-createnew-order {
+    background: #fff;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.step-createnew-order h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #be0a45;
+}
+
+.non-account {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.hasnt-account input {
+    margin-bottom: 0.8rem;
+    border: 1px solid #cccccc;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    width: 100%;
+    transition: border-color 0.2s;
+}
+
+.hasnt-account input:focus {
+    border-color: #be0a45;
+    outline: none;
+}
+
+.select-label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.product-list {
+    margin-top: 1rem;
+}
+
+.product-list h2 {
+    margin-bottom: 0.5rem;
+    color: #be0a45;
+}
+
+.item-cart-box {
+    background: #fff;
+    border: 1px solid #eaeaea;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-cart-box__inside {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.item-info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex: 2;
+}
+
+.item-left-side img {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid #be0a45;
+}
+
+.item-right-side h1 {
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+}
+
+.item-right-side p {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.item-middle {
+    text-align: right;
+    flex: 1;
+}
+
+.item-middle h1 {
+    font-size: 1.2rem;
+    color: #be0a45;
+}
+
+.item-middle s {
+    font-size: 0.9rem;
+}
+
+.SelectTrigger {
+    border: 2px solid #be0a45;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    color: #1a1a1a;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.SelectTrigger:hover {
+    background-color: #be0a4510;
+}

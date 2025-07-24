@@ -1,3 +1,12 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+ */
+
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Header from './components/geral/header/Header';
@@ -23,7 +32,7 @@ import { Questions } from './pages/institutional/questions/Questions';
 import { BeaModelPage } from './pages/institutional/beamodel/BeAModel';
 import { ContactUs } from './pages/institutional/contact-us/ContactUs';
 import { NotFoundPage } from './pages/404/404';
-import authService from './services/authService';
+import AuthRepository from './repositories/auth';
 import { Dashboard } from './components/admin/Dashboard';
 import { ProductsAdminPage } from './pages/admin/ProductsAdminPage';
 import { UsersAdmin } from './pages/admin/UsersAdmin';
@@ -39,8 +48,10 @@ import Config from './pages/admin/Config';
 import CategoriesAdmin from './pages/admin/CategoriesAdmin';
 import { UserProvider } from './contexts/UserContext';
 import AdminOrders from './pages/admin/AdminOrders';
+import { FacilityProvider } from './contexts/FacilityContext';
+import { MenuItemsProvider } from './contexts/MenuItemsContext';
 
-const url = process.env.REACT_APP_API_ENDPOINT;
+const url = process.env.REACT_APP_DEFAULTCONFIGURATION == "production" ? process.env.REACT_APP_API_ENDPOINT_PRODUCTION : process.env.REACT_APP_API_ENDPOINT;
 
 const routes = [
   { path: '/', element: <Home /> },
@@ -116,13 +127,28 @@ function App() {
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
-      const authentication = await authService.getUserData();
-      if (authentication) {
-        const isAdmin = await authService.isUserAdmin(authentication.email);
-        setIsAuthenticated(isAdmin);
-      }
-      else {
-        setIsAuthenticated(false)
+      try {
+        const authRepo = new AuthRepository();
+        let authentication = await authRepo.getUserData();
+        if (!authentication) {
+          try {
+            await authRepo.refreshToken();
+            authentication = await authRepo.getUserData();
+          } catch (refreshError) {
+            // await authRepo.logout();
+            setIsAuthenticated(false);
+            return;
+          }
+        }
+
+        if (authentication) {
+          const isAdmin = await authRepo.isUserAdmin(authentication);
+          setIsAuthenticated(isAdmin);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        setIsAuthenticated(false);
       }
     };
 
@@ -140,42 +166,46 @@ function App() {
     <div className="page">
       <Provider>
         <Toaster />
-        <UserProvider>
-          <BrowserRouter>
-            <Header />
-            <Routes>
-              {routes.map((route, index) => {
-                if (route.isProtected) {
-                  return (
-                    <Route
-                      key={index}
-                      path={route.path}
-                      element={<ProtectedRoute element={route.element} />}
-                    />
-                  );
-                }
+        <FacilityProvider>
+          <MenuItemsProvider>
+            <UserProvider>
+              <BrowserRouter>
+                <Header />
+                <Routes>
+                  {routes.map((route, index) => {
+                    if (route.isProtected) {
+                      return (
+                        <Route
+                          key={index}
+                          path={route.path}
+                          element={<ProtectedRoute element={route.element} />}
+                        />
+                      );
+                    }
 
-                return <Route key={index} path={route.path} element={route.element} />;
-              })}
+                    return <Route key={index} path={route.path} element={route.element} />;
+                  })}
 
-              <Route
-                path='/checkout'
-                element={clientSecret && stripePromise ? (
-                  <Elements stripe={stripePromise} options={{
-                    paymentMethodTypes: ['card'],
-                    appearance: { variables: { colorPrimaryText: '#be0a45', colorDanger: "#be0a45" } }, mode: "payment", amount: 1 * 100, currency: 'brl',
-                  }}>
-                    <CheckoutPage paymentMethodTypes={['card']} clientSecret={clientSecret} />
-                  </Elements>
-                ) : (
-                  <Loader />
-                )}
-              />
+                  <Route
+                    path='/checkout'
+                    element={clientSecret && stripePromise ? (
+                      <Elements stripe={stripePromise} options={{
+                        paymentMethodTypes: ['card'],
+                        appearance: { variables: { colorPrimaryText: '#be0a45', colorDanger: "#be0a45" } }, mode: "payment", amount: 1 * 100, currency: 'brl',
+                      }}>
+                        <CheckoutPage paymentMethodTypes={['card']} clientSecret={clientSecret} />
+                      </Elements>
+                    ) : (
+                      <Loader />
+                    )}
+                  />
 
-              <Route path="*" element={<Navigate to="/404" />} />
-            </Routes>
-          </BrowserRouter>
-        </UserProvider>
+                  <Route path="*" element={<Navigate to="/404" />} />
+                </Routes>
+              </BrowserRouter>
+            </UserProvider>
+          </MenuItemsProvider>
+        </FacilityProvider>
         {/* <PolicyCookies /> */}
       </Provider>
     </div>

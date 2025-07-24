@@ -1,8 +1,17 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import authService from '../services/authService';
+import AuthRepository from '../repositories/auth';
 import { UserProps } from '../models/user';
 import { OrderAfterBuyProps } from '@/models/order';
-import { orderService } from '../services/orderService';
+import OrderRepository from '../repositories/order';
 
 interface UserContextType {
     user: UserProps | null;
@@ -16,18 +25,39 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<UserProps | null>(null);
     const [loading, setLoading] = useState(true);
+    const authRepo = new AuthRepository();
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const res = await authService.getUserData();
-                const userContent: UserProps = await authService.getUserByEmail(res.email);
-                const orders: OrderAfterBuyProps[] = await orderService.getByUser(res?.email);
+                let res = await authRepo.getUserData();
+
+                if (!res) {
+                    try {
+                        await authRepo.refreshToken();
+                        res = await authRepo.getUserData();
+                    } catch (refreshError) {
+                        // await authRepo.logout();
+                        return;
+                    }
+                }
+
+                if (!res) {
+                    return;
+                }
+
+                const userContent: UserProps = await authRepo.getUserByUid(res);
+                const orders: OrderAfterBuyProps[] = await OrderRepository.getByUser(userContent?.email);
                 const userArray: any = { ...userContent, orders: orders };
-                if (userArray.label === "Admin") if(token) localStorage.setItem("token", token)
+
+                if (userArray.label === "Admin" && token) {
+                    localStorage.setItem("token", token);
+                }
+
                 setUser(userArray);
+
             } catch (error: any) {
-                console.error("Erro ao obter dados do usuário", error);
+                console.error("Erro ao obter dados do usuário:", error);
             } finally {
                 setLoading(false);
             }

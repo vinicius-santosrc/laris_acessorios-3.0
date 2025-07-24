@@ -1,35 +1,63 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import { OrderAfterBuyProps } from "../../models/order";
-import { orderService } from "../../services/orderService";
+import OrderRepository from "../../repositories/order";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import "./accountOrders.css"; // Estilos para página
+import "./accountOrders.css";
 import { TimelineConnector, TimelineContent, TimelineDescription, TimelineItem, TimelineRoot, TimelineTitle } from "../../components/ui/timeline";
 import { LuCheck, LuPackage, LuShip } from "react-icons/lu";
-import { StepsCompletedContent, StepsContent, StepsItem, StepsList, StepsRoot } from "../../components/ui/steps";
+import { StepsItem, StepsList, StepsRoot } from "../../components/ui/steps";
 import { Button } from "../../components/ui/button";
 import { ArrowLeft, DollarSignIcon } from "lucide-react";
-import authService from "../../services/authService";
+import AuthRepository from "../../repositories/auth";
 import { Loader } from "../../components/ui/loader";
 import { Separator } from "@chakra-ui/react";
 
 const AccountOrders = () => {
     const [orderAtual, setOrderAtual] = useState<OrderAfterBuyProps | null>(null);
     const [isAdmin, setIsAuthenticated] = useState<boolean>(false);
-    const { order } = useParams(); // Pega o ID do pedido da URL
-    const [currentStep, setCurrentStep] = useState(1);
+    const { order } = useParams();
+    const [currentStep, setCurrentStep] = useState<number>(1);
     const steps = ["Preparando", "Enviado", "Entregue"];
+    const authRepo = new AuthRepository();
 
     useEffect(() => {
         getOrderAtual();
 
         const checkUserLoggedIn = async () => {
-            const authentication = await authService.getUserData();
-            if (authentication) {
-                const isAdmin = await authService.isUserAdmin(authentication.email);
-                setIsAuthenticated(isAdmin);
-            }
-            else {
-                setIsAuthenticated(false)
+            try {
+                let authentication = await authRepo.getUserData();
+
+                if (!authentication) {
+                    console.warn("Access token possivelmente expirado. Tentando renovar...");
+                    try {
+                        await authRepo.refreshToken();
+                        authentication = await authRepo.getUserData();
+                    } catch (refreshError) {
+                        console.error("Falha ao renovar o token:", refreshError);
+                        await authRepo.logout();
+                        setIsAuthenticated(false);
+                        return;
+                    }
+                }
+
+                if (authentication) {
+                    const isAdmin = await authRepo.isUserAdmin(authentication?.email);
+                    setIsAuthenticated(isAdmin);
+                } else {
+                    setIsAuthenticated(false);
+                }
+            } catch (error) {
+                console.error("Erro ao verificar autenticação do usuário:", error);
+                setIsAuthenticated(false);
             }
         };
 
@@ -39,7 +67,7 @@ const AccountOrders = () => {
     async function getOrderAtual() {
         try {
             if (order) {
-                const fetchedOrder = await orderService.getById(order);
+                const fetchedOrder = await OrderRepository.getById(order);
                 setOrderAtual(fetchedOrder);
 
                 if (fetchedOrder.state === "PREPARANDO") {
@@ -66,14 +94,14 @@ const AccountOrders = () => {
     }
 
     function formatOrderDate(createdAt: string): string {
-        const date = new Date(createdAt); // Converte a string para objeto Date
+        const date = new Date(createdAt);
         const options: Intl.DateTimeFormatOptions = {
             day: '2-digit',
             month: 'long',
             year: 'numeric',
         };
 
-        return date.toLocaleDateString('pt-BR', options); // Formata a data
+        return date.toLocaleDateString('pt-BR', options);
     }
 
 
@@ -134,7 +162,7 @@ const AccountOrders = () => {
                             </TimelineConnector>
                             <TimelineContent>
                                 <TimelineTitle>Pedido Confirmado</TimelineTitle>
-                                <TimelineDescription>{orderAtual.situation != "NAOPAGO" ? <>{formatOrderDate(orderAtual.createdAt)}</> : "Pendente" }</TimelineDescription>
+                                <TimelineDescription>{orderAtual.situation != "NAOPAGO" ? <>{formatOrderDate(orderAtual.createdAt)}</> : "Pendente"}</TimelineDescription>
                             </TimelineContent>
                         </TimelineItem>
 

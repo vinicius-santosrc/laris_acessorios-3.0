@@ -1,5 +1,14 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+ */
+
 import { Product } from "@/models/product";
-import productService from "../../services/productService";
+import ProductRepository from "../../repositories/product";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { createListCollection, Editable, Image, Input } from "@chakra-ui/react";
@@ -23,7 +32,6 @@ import {
     MenuRoot,
     MenuTrigger,
 } from "../../components/ui/menu"
-import { adminService } from "../../services/adminService";
 import {
     DialogBackdrop,
     DialogBody,
@@ -34,7 +42,8 @@ import {
     DialogRoot,
     DialogTitle,
     DialogTrigger,
-} from "../../components/ui/dialog"
+} from "../../components/ui/dialog";
+import AdminRepository from "../../repositories/admin";
 
 export const ProductEditPage = () => {
     const [product, setProduct] = useState<Product | null>(null);
@@ -46,6 +55,8 @@ export const ProductEditPage = () => {
 
     const [novoTamanho, setNovoTamanho] = useState<string>();
     const [newPhoto, setNewPhoto] = useState<any>();
+    const productRepo = new ProductRepository();
+    const adminRepo = new AdminRepository();
 
     const [itemData, setItemData] = useState<any>(
         {
@@ -67,7 +78,7 @@ export const ProductEditPage = () => {
 
     const getProductAtual = async () => {
         if (uid) {
-            const productAt: Product = await productService.getById(uid);
+            const productAt: Product = await productRepo.getById(uid);
             setProduct(productAt);
         }
     };
@@ -75,7 +86,7 @@ export const ProductEditPage = () => {
     const handleFileUpload = async (event: any) => {
         const file = event.target.files[0];
         if (file) {
-            const uploadPhoto = await adminService.upload(event);
+            const uploadPhoto = await adminRepo.upload(event);
             if (uploadPhoto) {
                 setProduct((prevProduct: any) => {
                     let photoURLs = [];
@@ -101,7 +112,7 @@ export const ProductEditPage = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await adminService.getCategorys(); // Certifique-se de que este método retorna um array de categorias
+            const response = await adminRepo.getCategorys(); // Certifique-se de que este método retorna um array de categorias
             const formattedCategories = response.map((category: any) => ({
                 label: category.category,
                 value: category.category,
@@ -132,13 +143,13 @@ export const ProductEditPage = () => {
         }
         try {
             // Enviar a nova categoria e os dados adicionais
-            const createdCategory = await adminService.addNewCategory(
+            const createdCategory = await adminRepo.addNewCategory(
                 JSON.stringify({ label: newCategoryName, highlightText: itemData.highlightText, highlightDescription: itemData.highlightDescription, highlightImage: itemData.highlightImage, urlLink: itemData.urlLink }),
                 itemData
             );
 
             // Atualizar a lista de categorias
-            setTypeCategorys((prev: any) => [
+            setTypeCategorys((prev: any): any => [
                 ...prev,
                 { label: newCategoryName, value: newCategoryName }
             ]);
@@ -151,11 +162,11 @@ export const ProductEditPage = () => {
             });
             fetchCategories()
         } catch (error: any) {
-            throw Error(error);
             toaster.create({
                 title: "Erro ao criar categoria",
                 type: "error"
             });
+            throw Error(error);
         }
     };
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -179,7 +190,7 @@ export const ProductEditPage = () => {
     const handleSave = async () => {
         if (product) {
             try {
-                const updatedProduct: any = await productService.updateProduct(product);
+                const updatedProduct: any = await productRepo.updateProduct(product);
                 toaster.create({
                     title: "Produto editado com sucesso",
                     type: "success"
@@ -210,7 +221,7 @@ export const ProductEditPage = () => {
 
         // Opcional: Aqui você pode chamar o serviço para remover a foto do backend, se necessário.
         // Exemplo:
-        // productService.deletePhoto(photoUrl).catch(error => console.error('Erro ao excluir foto:', error));
+        // ProductRepository.deletePhoto(photoUrl).catch(error => console.error('Erro ao excluir foto:', error));
     };
 
     return (
@@ -434,7 +445,7 @@ export const ProductEditPage = () => {
                                                                         <Input
                                                                             type="file"
                                                                             onChange={async (e) => {
-                                                                                const res = await adminService.upload(e);
+                                                                                const res = await adminRepo.upload(e);
                                                                                 if (res) {
                                                                                     setItemData({ ...itemData, highlightImage: res });
                                                                                 }

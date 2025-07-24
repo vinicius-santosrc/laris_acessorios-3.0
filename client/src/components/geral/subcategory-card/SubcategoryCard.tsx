@@ -1,10 +1,17 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import { Image } from "@chakra-ui/react";
 import { ArrowRight } from "../../icons/icons";
 import { Button } from "../../ui/button";
 import "./SubcategoryCard.css";
 import React from "react";
-
-// Destructure props properly
 interface SubCategoryCardProps {
     title: string;
     photoURL: string;

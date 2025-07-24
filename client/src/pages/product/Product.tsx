@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import productService from "../../services/productService";
+import ProductRepository from "../../repositories/product";
 import { Product } from "../../models/product";
 import { BreadcrumbRoot, BreadcrumbLink, BreadcrumbCurrentLink } from "../../components/ui/breadcrumb";
 import "../../styles/product.css"
@@ -12,7 +12,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import { Pagination } from 'swiper/modules';
-import { cartService } from "../../services/cartService";
+import { CartRepository } from "../../repositories/cart";
 import { CloseIcon } from "../../components/icons/icons";
 
 const ProductPage = () => {
@@ -27,6 +27,9 @@ const ProductPage = () => {
     const [isPhotoShowing, setPhotoShowing] = useState<boolean>(false);
     const [photoShowingContent, setPhotoShowingContent] = useState<string>("");
 
+    const productRepo = new ProductRepository();
+    const cartRepo = new CartRepository();
+
     useEffect(() => {
         if (!product_url) {
             setError("Produto não encontrado.");
@@ -36,9 +39,9 @@ const ProductPage = () => {
 
         const fetchProduct = async () => {
             try {
-                const fetchedProduct: Product = await productService.getByURL(product_url);
+                const fetchedProduct = new Product(await productRepo.getByURL(product_url));
                 setProduct(fetchedProduct);
-                setSizes(JSON.parse(fetchedProduct.tamanhos))
+                setSizes(JSON.parse(fetchedProduct.tamanhos));
                 setPhotos(JSON.parse(fetchedProduct.photoURL));
                 setLoading(false);
 
@@ -54,7 +57,7 @@ const ProductPage = () => {
 
     function addToCart() {
         if (product && sizeSelected) {
-            cartService.add(product, sizeSelected);
+            cartRepo.add(product, sizeSelected);
         }
     }
 
@@ -147,13 +150,16 @@ const ProductPage = () => {
                             </div>
                             <div className="product-price-content">
                                 {product.desconto > 0 ?
-                                    <p id="bold"><s style={{fontWeight: 400}}>R$ {product.price.toFixed(2)}</s> R$ {(product.price - product.desconto).toFixed(2)}</p>
+                                    <p id="bold"><s style={{ fontWeight: 400 }}>R$ {product.price.toFixed(2)}</s> R$ {(product.price - product.desconto).toFixed(2)}</p>
                                     :
                                     <p id="bold">R$ {product.price.toFixed(2)}</p>}
                                 <p>Compre pelo cartão de crédito</p>
                             </div>
                             <div className="product-sizes-content">
                                 <p>Tamanhos</p>
+                                {!sizeSelected &&
+                                    <span style={{ color: "red", fontSize: 12 }} color="red">* Selecione um tamanho</span>
+                                }
                                 <div className="product-sizes">
                                     {sizesAvaliable.map((s: any, i: number) => {
                                         return (
@@ -167,7 +173,7 @@ const ProductPage = () => {
                                 </div>
                             </div>
                             <div className="product-actions-btn">
-                                {product.disponibilidade == true ?
+                                {product.disponibilidade ?
                                     <div className="product-buy-button">
                                         <button onClick={addToCart}>Comprar</button>
                                     </div>
@@ -176,18 +182,18 @@ const ProductPage = () => {
                                         <button>Indisponível</button>
                                     </div>
                                 }
-                                 <div className="product-credit-button">
+                                <div className="product-credit-button">
                                     {/* <button>Ver parcelas</button> */}
                                     <button></button>
-                                </div> 
+                                </div>
                             </div>
                             <div className="product-description-content">
                                 <h2>Descrição e Detalhes</h2>
-                                <p>{product.description }</p>
+                                <p>{product.description}</p>
                                 <div className="description-tec">
                                     <li>{product.type_full_label}</li>
                                     <li>Tamanhos: {sizesAvaliable.map((size: string) => { return <>{size} </> })}</li>
-                                    <li>{product.type == "jewelry" ? "Desenhado para ser confortável e fácil de usar" : "Criado para refletir sua personalidade e deixar sua marca" }</li>
+                                    <li>{product.type == "jewelry" ? "Desenhado para ser confortável e fácil de usar" : "Criado para refletir sua personalidade e deixar sua marca"}</li>
                                 </div>
                             </div>
                         </div>

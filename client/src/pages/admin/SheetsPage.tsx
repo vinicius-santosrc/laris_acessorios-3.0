@@ -1,4 +1,13 @@
-import { adminService } from "../../services/adminService";
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
+import AdminRepository from "../../repositories/admin";
 import { toaster } from "../../components/ui/toaster";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -6,7 +15,7 @@ import "./sheetpage.css";
 import { ModelDespesas, SheetItem } from "@/lib/utils";
 import { Button, Input, Tabs } from "@chakra-ui/react";
 import { Download, SaveIcon } from "lucide-react";
-import SheetService from "../../services/sheetService";
+import SheetRepository from "../../repositories/sheet";
 
 export const SheetsPage = () => {
     const [monthlyData, setMonthlyData] = useState<any>({});
@@ -18,6 +27,9 @@ export const SheetsPage = () => {
     const { planilha } = useParams();
 
     const [AddItemOpen, setAddItemOpen] = useState(false)
+
+    const adminRepo = new AdminRepository();
+    const sheetsRepo = new SheetRepository();
 
     const [items, setItems] = useState([]);
     const [itemId, setItemId] = useState(null)
@@ -68,11 +80,11 @@ export const SheetsPage = () => {
 
         try {
             if (planilha === 'planilha-despesas') {
-                await adminService.deleteSheetById("planilha-despesas", JSON.stringify(item));
+                await adminRepo.deleteSheetById("planilha-despesas", JSON.stringify(item));
                 loadItens();
                 getTotal();
             } else if (planilha === 'planilha-itens') {
-                await adminService.deleteSheetById("planilha-itens", JSON.stringify(item));
+                await adminRepo.deleteSheetById("planilha-itens", JSON.stringify(item));
                 loadItens();
             }
         } catch (error) {
@@ -105,7 +117,7 @@ export const SheetsPage = () => {
             if (itemId) {
                 // Atualize o item no Appwrite
                 if (planilha === "planilha-itens") {
-                    await adminService.editSheetById("planilha-itens", JSON.stringify(currentItem));
+                    await adminRepo.editSheetById("planilha-itens", JSON.stringify(currentItem));
                     await loadItens();
                     setCurrentItem({
                         codigo: "",
@@ -119,7 +131,7 @@ export const SheetsPage = () => {
                     });
                     setItemId(null);
                 } else if (planilha === "planilha-despesas") {
-                    await adminService.editSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS));
+                    await adminRepo.editSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS));
                     await loadItens();
                     getTotal();
                     setcurrentItemDESPESAS({
@@ -132,7 +144,7 @@ export const SheetsPage = () => {
             } else {
                 // Crie um novo item no Appwrite sem especificar o ID
                 if (planilha === "planilha-itens") {
-                    await adminService.addSheetById("planilha-itens", JSON.stringify(currentItem));
+                    await adminRepo.addSheetById("planilha-itens", JSON.stringify(currentItem));
                     toaster.create({
                         title: "Item criado com sucesso!",
                         type: "success"
@@ -149,7 +161,7 @@ export const SheetsPage = () => {
                         lucroporitem: "",
                     });
                 } else if (planilha === "planilha-despesas") {
-                    await adminService.addSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS));
+                    await adminRepo.addSheetById("planilha-despesas", JSON.stringify(currentItemDESPESAS));
                     toaster.create({
                         title: "Item criado com sucesso!",
                         type: "success"
@@ -183,7 +195,7 @@ export const SheetsPage = () => {
             "Quantidade de Compra": item.quantcompra,
             "Lucro por Item": item.lucroporitem,
         })));
-        await SheetService.export("excel", itemsData, "Produtos");
+        await sheetsRepo.export("excel", itemsData, "Produtos");
     };
 
     const exportFinancesToExcel = async () => {
@@ -193,7 +205,7 @@ export const SheetsPage = () => {
             Saídas: monthlyData[month].saidas.toFixed(2),
             Total: (monthlyData[month].entradas - monthlyData[month].saidas).toFixed(2),
         })));
-        await SheetService.export("excel", financeData, "Finanças");
+        await sheetsRepo.export("excel", financeData, "Finanças");
     };
 
     const exportFinancesTableToExcel = async () => {
@@ -207,7 +219,7 @@ export const SheetsPage = () => {
                 });
             });
         });
-        await SheetService.export("excel", financeTableData, "Entradas e Despesas");
+        await sheetsRepo.export("excel", financeTableData, "Entradas e Despesas");
     };
 
     const calculateTotals = (groupedData: any) => {
@@ -224,7 +236,7 @@ export const SheetsPage = () => {
 
     const loadItens = async () => {
         if (planilha === 'planilha-despesas') {
-            const items = await adminService.getSheet("planilha-despesas");
+            const items = await adminRepo.getSheet("planilha-despesas");
             const groupedData: any = { "Tudo": { entradas: 0, saidas: 0, items: [] } };
 
             items.forEach((item: any) => {
@@ -251,7 +263,7 @@ export const SheetsPage = () => {
             calculateTotals(groupedData);
         }
         else if (planilha == 'planilha-itens') {
-            const Items = await adminService.getSheet("planilha-itens");
+            const Items = await adminRepo.getSheet("planilha-itens");
             setItems(Items)
         }
     };

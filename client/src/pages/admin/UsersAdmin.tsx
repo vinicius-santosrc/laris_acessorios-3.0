@@ -1,13 +1,25 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+ */
+
 import { Image, Table, Tabs } from "@chakra-ui/react"
 import { useEffect, useState } from "react";
 import "./productsadminpage.css"
 import { Users } from "lucide-react";
-import { clientsService } from "../../services/clientsService";
+import { ClientsRepository } from "../../repositories/clients";
 import { UserProps } from "../../models/user";
 
 export const UsersAdmin = () => {
     const [clients, setClients] = useState<UserProps[] | null>(null);
     const [isMobile, setIsMobile] = useState<boolean>(false);
+
+    const clientsRepo = new ClientsRepository();
+
     useEffect(() => {
 
         // Função para verificar a largura da tela
@@ -34,7 +46,7 @@ export const UsersAdmin = () => {
     useEffect(() => {
         const fetchCategoryData = async () => {
             try {
-                const searchedProducts: UserProps[] = await clientsService.getAll();
+                const searchedProducts: UserProps[] = await clientsRepo.getAll();
                 setClients(searchedProducts);
             } catch (error: any) {
                 console.error("Failed to fetch category data:", error);

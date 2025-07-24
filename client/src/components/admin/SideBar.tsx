@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from 'react';
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
+import { useEffect, useState } from 'react';
 import logoHeader from '../../logo.svg';
-import { UserProps } from '../../models/user';
-import authService from '../../services/authService';
+import AuthRepository from '../../repositories/auth';
 import { LayoutDashboard, Users, BoxIcon, DatabaseIcon, ChevronRight, Calendar, FactoryIcon, FileText, Settings, LogOut, ListOrdered, ChevronDown, ListIcon, LucideChevronsUpDown, Settings2Icon } from 'lucide-react'; // Importando ícone de Menu
 import { getFirstAndLastName, menuItemsAdmin } from '../../lib/utils';
 import './sidebar.css';
 import { Link } from 'react-router-dom';
 import MenuComponent from '../geral/header/menu-mobile/MenuComponent';
-import { LuList } from 'react-icons/lu';
 import { useUser } from '../../contexts/UserContext';
 import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from "../../components/ui/accordion";
 import { Portal, Menu, Separator } from "@chakra-ui/react"
@@ -17,6 +24,7 @@ const SideBar = () => {
     const [isLoading, setLoading] = useState(true);
     const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null);
     const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
+    const authRepo = new AuthRepository();
 
     useEffect(() => {
         setLoading(loading)
@@ -189,6 +197,7 @@ const SideBar = () => {
                                             {user && user.nome_completo ? getFirstAndLastName(user.nome_completo) : 'Carregando...'}
                                         </p>
                                         <p className="user-role">{user?.label}</p>
+                                        {process.env.REACT_APP_DEFAULTCONFIGURATION != "local" ? null : <p className='user-role'>Ambiente Local</p>}
                                     </div>
                                 </div>
                                 <a className="logout-link">
@@ -217,7 +226,7 @@ const SideBar = () => {
                                         <Settings2Icon /> Configurações
                                     </Menu.Item>
                                     <Separator />
-                                    <Menu.Item onClick={() => authService.logout()} value="new-txt-c">
+                                    <Menu.Item onClick={() => authRepo.logout()} value="new-txt-c">
                                         <LogOut /> Sair da conta
                                     </Menu.Item>
                                 </Menu.Content>

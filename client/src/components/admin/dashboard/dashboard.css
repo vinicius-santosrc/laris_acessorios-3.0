@@ -275,7 +275,7 @@
     .widget.small,
     .widget.medium,
     .widget.full {
-        grid-column: span 1;
+        grid-column: span 2;
         /* Todos os widgets ocupam uma linha inteira no mobile */
     }
 

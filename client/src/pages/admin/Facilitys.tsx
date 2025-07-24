@@ -1,3 +1,12 @@
+/**
+ * Creation Date: 23/07/2025
+ * Author: Vinícius da Silva Santos
+ * Coordinator: Larissa Alves de Andrade Moreira
+ * Developed by: Lari's Acessórios Team
+ * Copyright 2025, LARI'S ACESSÓRIOS
+ * All rights are reserved. Reproduction in whole or part is prohibited without the written consent of the copyright owner.
+*/
+
 import "./facilitysAdmin.css";
 import {
     AccordionItem,
@@ -6,9 +15,9 @@ import {
     AccordionRoot,
 } from "../../components/ui/accordion";
 import { Box, Input } from "@chakra-ui/react";
-import { adminService } from "../../services/adminService";
+import AdminRepository from "../../repositories/admin";
 import { useEffect, useState } from "react";
-import { Facilitys } from "../../services/facilitysService";
+import { FacilitysRepository } from "../../repositories/facilitys";
 import { Button } from "../../components/ui/button";
 import { toaster } from "../../components/ui/toaster";
 
@@ -30,6 +39,8 @@ interface FacilityProps {
 
 export const FacilitysPage = () => {
     const [banners, setBanners] = useState<FacilityItem[]>([]);
+    const facilitysRepo = new FacilitysRepository();
+    const adminRepo = new AdminRepository();
 
     useEffect(() => {
         getFacilitys();
@@ -56,7 +67,7 @@ export const FacilitysPage = () => {
 
     const getFacilitys = async () => {
         try {
-            const facilities = await Facilitys.getAll();
+            const facilities = await facilitysRepo.getAll();
             setBanners(facilities);
         } catch (error: any) {
             throw Error(error);
@@ -66,7 +77,7 @@ export const FacilitysPage = () => {
     async function changeImage(e: any, index: number, isMobile: boolean) {
         const file = e.target.files[0];
         if (file) {
-            const uploadPhoto = await adminService.upload(e);
+            const uploadPhoto = await adminRepo.upload(e);
             if (uploadPhoto) {
                 setBanners((prev) => {
                     const updated: any = [...prev];
@@ -84,7 +95,7 @@ export const FacilitysPage = () => {
     async function saveFacilitys() {
         try {
             for (const banner of banners) {
-                await Facilitys.save(banner);
+                await facilitysRepo.save(banner);
             }
             toaster.create({
                 title: "Facilitys",
@@ -112,6 +123,9 @@ export const FacilitysPage = () => {
         "categories-jewerlys": "Mini Banners de Categorias",
         "subCategories": "Mini Banners de Subcategorias",
         "banner-secondary": "Banner Secundário",
+        "showcase-inside-alternative-1": "Primeira Seção Showcase Novidade",
+        "showcase-inside-alternative-2": "Segunda Seção Showcase Novidade",
+        "showcase-inside-alternative-3": "Terceira Seção Showcase Novidade"
     };
 
     const refLabelsText: Record<string, string> = {
@@ -160,6 +174,21 @@ export const FacilitysPage = () => {
                                                     >
                                                         <option value={false}>MOSTRAR</option>
                                                         <option value={true}>ESCONDER</option>
+                                                    </select>
+                                                </div>
+                                            );
+                                        }
+
+                                        if (key === "isNew") {
+                                            return (
+                                                <div key={key}>
+                                                    <span id="colorHigh">TEXTO NOVIDADE: </span>
+                                                    <select
+                                                        value={value}
+                                                        onChange={(e) => changeText(banner, key, e.target.value)}
+                                                    >
+                                                        <option value={"true"}>MOSTRAR</option>
+                                                        <option value={"false"}>ESCONDER</option>
                                                     </select>
                                                 </div>
                                             );
