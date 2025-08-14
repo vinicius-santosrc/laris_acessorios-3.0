@@ -8,13 +8,13 @@
 */
 
 import AdminRepository from "../../repositories/admin";
+import GenericTable from "../../components/geral/generic-table/GenericTableComponent";
 import { toaster } from "../../components/ui/toaster";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./sheetpage.css";
-import { ModelDespesas, SheetItem } from "@/lib/utils";
-import { Button, Input, Tabs } from "@chakra-ui/react";
-import { Download, SaveIcon } from "lucide-react";
+import { Button } from "@chakra-ui/react";
+import { Download } from "lucide-react";
 import SheetRepository from "../../repositories/sheet";
 
 export const SheetsPage = () => {
@@ -96,6 +96,52 @@ export const SheetsPage = () => {
         }
     };
 
+    const handleSaveAll = async (loadData: any) => {
+        try {
+            if (planilha === "planilha-itens") {
+                if (loadData.length === 0) {
+                    toaster.create({ title: "Nenhum item para salvar!" });
+                    return;
+                }
+
+                for (const item of loadData) {
+                    // Se o item já tiver ID, atualiza, senão cria
+                    if (item.id) {
+                        await adminRepo.editSheetById("planilha-itens", JSON.stringify(item));
+                    } else {
+                        await adminRepo.addSheetById("planilha-itens", JSON.stringify(item));
+                    }
+                }
+
+                toaster.create({ title: "Todos os itens foram salvos com sucesso!", type: "success" });
+                await loadItens();
+            } else if (planilha === "planilha-despesas") {
+                if (loadData.length === 0) {
+                    toaster.create({ title: "Nenhum item para salvar!" });
+                    return;
+                }
+
+                for (const item of loadData) {
+                    if (item.id) {
+                        await adminRepo.editSheetById("planilha-despesas", JSON.stringify(item));
+                    } else {
+                        await adminRepo.addSheetById("planilha-despesas", JSON.stringify(item));
+                    }
+                }
+
+                toaster.create({ title: "Todos os itens foram salvos com sucesso!", type: "success" });
+                await loadItens();
+                getTotal();
+            }
+        } catch (error) {
+            toaster.create({
+                title: "Oops...",
+                description: "Algum item não pôde ser salvo. Contate um desenvolvedor.",
+                type: "error"
+            });
+        }
+    };
+
     const handleSave = async () => {
         if (planilha === "planilha-itens") {
             if (!currentItem.codigo || !currentItem.nameofitem || !currentItem.detalhe || !currentItem.preco_compra || !currentItem.custos || !currentItem.precorevenda || !currentItem.quantcompra || !currentItem.lucroporitem) {
@@ -168,7 +214,7 @@ export const SheetsPage = () => {
                     });
                     await loadItens();
                     getTotal();
-                    setCurrentItemDESPESAS({
+                    setcurrentItemDESPESAS({
                         descricao: "",
                         valor: "",
                         tipo: "",
@@ -287,7 +333,7 @@ export const SheetsPage = () => {
                                         <h1>Total</h1>
                                         <h3>Entradas: R$<span id="entradas">{totalEntradas?.toFixed(2)}</span></h3>
                                         <h3>Saídas: R$<span id="saidas">{totalSaidas?.toFixed(2)}</span></h3>
-                                        <h3 id={saldoWrap?.toFixed(2) < 0 ? "saidas" : "saldoh3"}>Saldo: R$<span>{saldoWrap?.toFixed(2)}</span></h3>
+                                        <h3 id={Number(saldoWrap?.toFixed(2)) < 0 ? "saidas" : "saldoh3"}>Saldo: R$<span>{saldoWrap?.toFixed(2)}</span></h3>
                                     </div>
                                     <div className="actions">
                                         <Button onClick={exportFinancesToExcel} display={"flex"} alignItems={"center"} gap={2}>
@@ -310,156 +356,41 @@ export const SheetsPage = () => {
                                                     <td>{month}</td>
                                                     <td>R$ {monthlyData[month].entradas.toFixed(2)}</td>
                                                     <td>R$ {monthlyData[month].saidas.toFixed(2)}</td>
-                                                    <td>R$ {(monthlyData[month].entradas.toFixed(2) - monthlyData[month].saidas.toFixed(2)).toFixed(2)}</td>
+                                                    <td>R$ {(monthlyData[month].entradas - monthlyData[month].saidas).toFixed(2)}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
                                     </table>
-                                    <div className="newItem">
-                                        <div className="headeritem">
-                                            <div className="side1item">
-                                                <h1>{itemId ? 'Editando' : 'Adicionar'} um Item</h1>
-                                                <p>Preencha todos os dados para adicionar o item ao banco de dados.</p>
-                                            </div>
-                                            <div>
-                                                {AddItemOpen
-                                                    ?
-                                                    <button onClick={() => {
-                                                        setAddItemOpen(false)
-                                                    }}><i className="fa-solid fa-minus"></i></button>
-                                                    :
-                                                    <button onClick={() => {
-                                                        setAddItemOpen(true)
-                                                    }}><i className="fa-solid fa-plus"></i></button>
-                                                }
-
-
-                                            </div>
-
-                                        </div>
-                                        {AddItemOpen
-                                            ?
-                                            <div className="exboxitem">
-                                                <p>Descrição:</p>
-                                                <input
-                                                    type="text"
-                                                    value={currentItemDESPESAS.descricao}
-                                                    onChange={(e) => setcurrentItemDESPESAS({ ...currentItemDESPESAS, descricao: e.target.value })}
-                                                />
-                                                <p>Valor:</p>
-                                                <input
-                                                    type="number"
-                                                    value={currentItemDESPESAS.valor}
-                                                    onChange={(e) => setcurrentItemDESPESAS({ ...currentItemDESPESAS, valor: e.target.value })}
-                                                />
-                                                <p>Tipo:</p>
-                                                <select
-                                                    value={currentItemDESPESAS.tipo}
-                                                    onChange={(e) => setcurrentItemDESPESAS({ ...currentItemDESPESAS, tipo: e.target.value })}
-                                                >
-                                                    <option value={'Receita'} selected>Receita</option>
-                                                    <option value={'Despesa'}>Despesa</option>
-                                                </select>
-                                                <br />
-                                                <button onClick={handleSave}>{itemId ? 'Salvar' : 'Adicionar item na tabela'}</button>
-                                            </div>
-                                            :
-                                            null}
-
-                                    </div>
-
                                     <div className="actions">
                                         <Button onClick={exportFinancesTableToExcel} display={"flex"} alignItems={"center"} gap={2}>
                                             <Download />
                                             <span>Exportar tabela de entradas/despesas para excel</span>
                                         </Button>
                                     </div>
-                                    <table className="item-table-despesas">
-                                        <Tabs.Root lazyMount unmountOnExit defaultValue="Tudo">
-                                            <Tabs.List borderRadius={4} padding={4} display={"flex"} overflowY={"hidden"} overflowX={"auto"} gap={12}>
-                                                {
-                                                    Object.keys(monthlyData).map((month) => {
-                                                        return (
-                                                            <Tabs.Trigger value={month}>
-                                                                {month}
-                                                            </Tabs.Trigger>
-                                                        )
-                                                    })}
-                                            </Tabs.List>
-                                            {Object.keys(monthlyData).map((month) => {
-                                                return (
-                                                    <Tabs.Content className="contentTab" value={month} key={month}>
-                                                        <table className="item-table item-table-despesas">
-                                                            <thead className="titlecolumns">
-                                                                <tr>
-                                                                    <th>Descrição</th>
-                                                                    <th>Valor</th>
-                                                                    <th>Tipo</th>
-                                                                    <th>Ações</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td id="bggray">
-                                                                        <Input
-                                                                            type="text"
-                                                                            placeholder="Adicione um novo item"
-                                                                            value={currentItemDESPESAS.descricao}
-                                                                            onChange={(e) => setcurrentItemDESPESAS({ ...currentItemDESPESAS, descricao: e.target.value })}
-                                                                        />
-                                                                    </td>
-                                                                    <td>
-                                                                        <Input
-                                                                            type="number"
-                                                                            placeholder="Escreva o valor"
-                                                                            value={currentItemDESPESAS.valor}
-                                                                            onChange={(e) => setcurrentItemDESPESAS({ ...currentItemDESPESAS, valor: e.target.value })}
-                                                                        />
-                                                                    </td>
-                                                                    <td id="bggray">
-                                                                        <select
-                                                                            value={currentItemDESPESAS.tipo}
-                                                                            onChange={(e) => setcurrentItemDESPESAS({ ...currentItemDESPESAS, tipo: e.target.value })}
-                                                                        >
-                                                                            <option value={'Receita'} selected>Receita</option>
-                                                                            <option value={'Despesa'}>Despesa</option>
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button onClick={handleSave}><SaveIcon width={20} /></button>
-                                                                    </td>
-                                                                </tr>
-                                                                {monthlyData[month].items.map((item: ModelDespesas) => (
-                                                                    <tr className={item.tipo === "Receita" ? "color-green-receita" : "red-color-despesa"} id={item.id.toString()} key={item.id}>
-                                                                        <td id="bggray">{item.descricao}</td>
-                                                                        <td>R$ {item.valor.toFixed(2)}</td>
-                                                                        <td id="bggray">
-                                                                            {item.tipo === 'Receita'
-                                                                                ? <>
-                                                                                    <i className="fa-solid fa-circle-chevron-up"></i>
-                                                                                    <span>Entrada</span>
-                                                                                </>
-                                                                                : <>
-                                                                                    <i className="fa-solid fa-circle-chevron-down"></i>
-                                                                                    <span>Saída</span>
-                                                                                </>
-                                                                            }
-                                                                        </td>
-                                                                        <td>
-                                                                            <button onClick={() => handleEdit(item)}><i className="fa-solid fa-pen-to-square"></i></button>
-                                                                            <button onClick={() => handleDelete(item)}><i className="fa-solid fa-trash"></i></button>
-                                                                        </td>
-                                                                    </tr>
-                                                                ))}
-                                                            </tbody>
-                                                        </table>
-                                                    </Tabs.Content>
-                                                )
-                                            })}
-                                        </Tabs.Root>
-
-                                    </table>
-                                </>}
+                                    <GenericTable
+                                        columns={[
+                                            { label: "Descrição", key: "descricao", type: "text" },
+                                            { label: "Valor", key: "valor", type: "number" },
+                                            { label: "Tipo", key: "tipo", type: [{ label: "Receita", value: "Receita" }, { label: "Despesa", value: "Despesa" }] }
+                                        ]}
+                                        data={monthlyData["Tudo"]?.items || []}
+                                        currentItem={currentItemDESPESAS}
+                                        setCurrentItem={setcurrentItemDESPESAS}
+                                        onSave={handleSave}
+                                        onSaveAll={handleSaveAll}
+                                        onEdit={handleEdit}
+                                        onDelete={handleDelete}
+                                        inputPlaceholders={{
+                                            descricao: "Adicione uma descrição",
+                                            valor: "Digite o valor",
+                                            tipo: "Tipo (Receita ou Despesa)"
+                                        }}
+                                        addItemOpen={AddItemOpen}
+                                        setAddItemOpen={setAddItemOpen}
+                                        actions={true}
+                                    />
+                                </>
+                            }
                         </div>
                     </div>
                 </div>
@@ -486,196 +417,46 @@ export const SheetsPage = () => {
                             </div>
                             :
                             <>
-                                <div className="newItem">
-                                    <div className="headeritem">
-                                        <div className="side1item">
-                                            <h1>{itemId ? 'Editando' : 'Adicionar'} um Item</h1>
-                                            <p>Preencha todos os dados para adicionar o item ao banco de dados.</p>
-                                        </div>
-                                        <div>
-                                            {AddItemOpen
-                                                ?
-                                                <button onClick={() => {
-                                                    setAddItemOpen(false)
-                                                }}><i className="fa-solid fa-minus"></i></button>
-                                                :
-                                                <button onClick={() => {
-                                                    setAddItemOpen(true)
-                                                }}><i className="fa-solid fa-plus"></i></button>
-                                            }
-
-
-                                        </div>
-
-                                    </div>
-                                    {AddItemOpen
-                                        ?
-                                        <div className="exboxitem">
-                                            <p>Código:</p>
-                                            <input
-                                                type="text"
-                                                value={currentItem.codigo}
-                                                onChange={(e) => setCurrentItem({ ...currentItem, codigo: e.target.value })}
-                                            />
-                                            <p>Nome do Item:</p>
-                                            <input
-                                                type="text"
-                                                value={currentItem.nameofitem}
-                                                onChange={(e) => setCurrentItem({ ...currentItem, nameofitem: e.target.value })}
-                                            />
-                                            <p>Detalhe:</p>
-                                            <input
-                                                type="text"
-                                                value={currentItem.detalhe}
-                                                onChange={(e) => setCurrentItem({ ...currentItem, detalhe: e.target.value })}
-                                            />
-                                            <p>Preço de Compra:</p>
-                                            <input
-                                                type="number"
-                                                value={currentItem.preco_compra}
-                                                onChange={(e) => setCurrentItem({ ...currentItem, preco_compra: e.target.value })}
-                                            />
-                                            <p>Custos:</p>
-                                            <input
-                                                type="number"
-                                                value={currentItem.custos}
-                                                onChange={(e) => setCurrentItem({ ...currentItem, custos: e.target.value })}
-                                            />
-                                            <p>Preço de Revenda:</p>
-                                            <input
-                                                type="number"
-                                                value={currentItem.precorevenda}
-                                                onChange={(e) => setCurrentItem({ ...currentItem, precorevenda: e.target.value })}
-                                            />
-                                            <p>Quantidade de Compra:</p>
-                                            <input
-                                                type="number"
-                                                value={currentItem.quantcompra}
-                                                onChange={(e) => setCurrentItem({ ...currentItem, quantcompra: e.target.value })}
-                                            />
-                                            <p>Lucro por Item:</p>
-                                            <input
-                                                type="number"
-                                                value={currentItem.lucroporitem}
-                                                onChange={(e) => setCurrentItem({ ...currentItem, lucroporitem: e.target.value })}
-                                            />
-                                            <button onClick={handleSave}>Salvar</button>
-                                        </div>
-                                        :
-                                        null}
-
-                                </div>
-
-
                                 <div className="actions">
                                     <Button onClick={exportItemsToExcel} display={"flex"} alignItems={"center"} gap={2}>
                                         <Download />
                                         <span>Exportar para excel</span>
                                     </Button>
                                 </div>
-                                <table className="item-table">
-                                    <thead className="titlecolumns">
-                                        <tr>
-                                            <th>Código</th>
-                                            <th>Nome do Item</th>
-                                            <th>Detalhe</th>
-                                            <th>Preço de Compra</th>
-                                            <th>Custos</th>
-                                            <th>Preço de Revenda</th>
-                                            <th>Quantidade de Compra</th>
-                                            <th>Lucro por Item</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td id="bggray">
-                                                <Input
-                                                    type="text"
-                                                    placeholder="Adicione um novo item"
-                                                    value={currentItem.codigo}
-                                                    onChange={(e) => setCurrentItem({ ...currentItem, codigo: e.target.value })}
-                                                />
-                                            </td>
-                                            <td>
-                                                <Input
-                                                    type="text"
-                                                    placeholder="Nome do item"
-                                                    value={currentItem.nameofitem}
-                                                    onChange={(e) => setCurrentItem({ ...currentItem, nameofitem: e.target.value })}
-                                                />
-                                            </td>
-                                            <td>
-                                                <Input
-                                                    type="text"
-                                                    placeholder="Detalhe"
-                                                    value={currentItem.detalhe}
-                                                    onChange={(e) => setCurrentItem({ ...currentItem, detalhe: e.target.value })}
-                                                />
-                                            </td>
-                                            <td>
-                                                <Input
-                                                    type="number"
-                                                    placeholder="Preço de compra"
-                                                    value={currentItem.preco_compra}
-                                                    onChange={(e) => setCurrentItem({ ...currentItem, preco_compra: e.target.value })}
-                                                />
-                                            </td>
-                                            <td>
-                                                <Input
-                                                    type="number"
-                                                    placeholder="Custos"
-                                                    value={currentItem.custos}
-                                                    onChange={(e) => setCurrentItem({ ...currentItem, custos: e.target.value })}
-                                                />
-                                            </td>
-                                            <td>
-                                                <Input
-                                                    type="number"
-                                                    placeholder="Preço de revenda"
-                                                    value={currentItem.precorevenda}
-                                                    onChange={(e) => setCurrentItem({ ...currentItem, precorevenda: e.target.value })}
-                                                />
-                                            </td>
-                                            <td>
-                                                <Input
-                                                    type="number"
-                                                    placeholder="Qtd. Compra"
-                                                    value={currentItem.quantcompra}
-                                                    onChange={(e) => setCurrentItem({ ...currentItem, quantcompra: e.target.value })}
-                                                />
-                                            </td>
-                                            <td>
-                                                <Input
-                                                    type="number"
-                                                    placeholder="Lucro por item"
-                                                    value={currentItem.lucroporitem}
-                                                    onChange={(e) => setCurrentItem({ ...currentItem, lucroporitem: e.target.value })}
-                                                />
-                                            </td>
-                                            <td>
-                                                <button onClick={handleSave}><SaveIcon width={20} /></button>
-                                            </td>
-                                        </tr>
-                                        {items.map((item: SheetItem, index) => (
-                                            <tr id={item.id.toString()} key={item.id}>
-                                                <td id="bggray">{item.codigo}</td>
-                                                <td>{item.nameofitem}</td>
-                                                <td id="bggray">{item.detalhe}</td>
-                                                <td>R$ {item.preco_compra}</td>
-                                                <td id="bggray">R$ {item.custos}</td>
-                                                <td>R$ {item.precorevenda}</td>
-                                                <td id="bggray">{item.quantcompra}</td>
-                                                <td id="lucrolinha">R$ {item.lucroporitem}</td>
-                                                <td>
-                                                    <button onClick={() => handleEdit(item)}><i className="fa-solid fa-pen-to-square"></i></button>
-                                                    <button onClick={() => handleDeleteItem(item)}><i className="fa-solid fa-trash"></i></button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </>}
+                                <GenericTable
+                                    columns={[
+                                        { label: "Código", key: "codigo", type: "text" },
+                                        { label: "Nome do Item", key: "nameofitem", type: "text" },
+                                        { label: "Detalhe", key: "detalhe", type: "text" },
+                                        { label: "Preço de Compra", key: "preco_compra", type: "number" },
+                                        { label: "Custos", key: "custos", type: "number" },
+                                        { label: "Preço de Revenda", key: "precorevenda", type: "number" },
+                                        { label: "Quantidade de Compra", key: "quantcompra", type: "number" },
+                                        { label: "Lucro por Item", key: "lucroporitem", type: "number" }
+                                    ]}
+                                    data={items}
+                                    currentItem={currentItem}
+                                    setCurrentItem={setCurrentItem}
+                                    onSave={handleSave}
+                                    onSaveAll={handleSaveAll}
+                                    onEdit={handleEdit}
+                                    onDelete={handleDeleteItem}
+                                    inputPlaceholders={{
+                                        codigo: "Adicione um novo item",
+                                        nameofitem: "Nome do item",
+                                        detalhe: "Detalhe",
+                                        preco_compra: "Preço de compra",
+                                        custos: "Custos",
+                                        precorevenda: "Preço de revenda",
+                                        quantcompra: "Qtd. Compra",
+                                        lucroporitem: "Lucro por item"
+                                    }}
+                                    addItemOpen={AddItemOpen}
+                                    setAddItemOpen={setAddItemOpen}
+                                    actions={true}
+                                />
+                            </>
+                        }
                     </div>
                 </div>
             </div>

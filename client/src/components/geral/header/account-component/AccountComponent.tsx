@@ -188,6 +188,15 @@ const AccountComponent = ({ checkoutBtn }: any) => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    const finalizeBtn = () => {
+        if (!user) {
+            return
+        }
+        else {
+            window.location.href = window.location.origin + "/checkout";
+        }
+    }
+
     if (isLoading) {
         return <Loader />
     }
@@ -207,7 +216,7 @@ const AccountComponent = ({ checkoutBtn }: any) => {
                             </Link>
                         )
                     ) : (
-                        <Button variant="ghost" style={{ width: "100% !important" }} aria-label="Ir para checkout" className="finalizeBtn">
+                        <Button onClick={finalizeBtn} variant="ghost" style={{ width: "100% !important" }} aria-label="Ir para checkout" className="finalizeBtn">
                             FINALIZAR COMPRA
                         </Button>
                     )}

@@ -91,7 +91,7 @@ export default class AdminRepository {
     }
 
     async deleteSheetById(sheet: string, item: any) {
-        await api.delete(`${this.url}${this.preEndpoint}${this.secretKey}/${sheet}/delete`, item);
+        await api.post(`${this.url}${this.preEndpoint}${this.secretKey}/${sheet}/delete`, item);
     }
 
     async editSheetById(sheet: string, item: any) {

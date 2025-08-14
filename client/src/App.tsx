@@ -83,84 +83,120 @@ const routes = [
   { path: '/404', element: <NotFoundPage /> }
 ];
 
-function App() {
+
+const ProtectedRoute = ({ element, isAuthenticated }: { element: JSX.Element, isAuthenticated: boolean }) => {
+  if (!isAuthenticated) return <Loader />;
+  return isAuthenticated ? element : <Navigate to="/404" />;
+};
+
+const fetchStripeConfig = async (setStripePromise: any, url: string) => {
+  try {
+    const response = await fetch(`${url}/config`);
+    if (!response.ok) throw new Error("Failed to fetch config");
+    const { publishableKey } = await response.json();
+    setStripePromise(loadStripe(publishableKey));
+  } catch (error: any) {
+    throw Error("Error fetching config:", error);
+  }
+};
+
+const createPaymentIntent = async (setClientSecret: any, url: string) => {
+  try {
+    const response = await fetch(`${url}/create-payment-intent`, {
+      method: "POST",
+      body: JSON.stringify({ item: 1 * 100 }),
+      headers: {
+        'Authorization': `Bearer ${process.env.REACT_APP_DEFAULTCONFIGURATION == "production" ? process.env.REACT_APP_STRIPE_SECRET_KEY_PRODUCTION : process.env.REACT_APP_STRIPE_SECRET_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) throw new Error("Failed to create payment intent");
+    const { clientSecret } = await response.json();
+    setClientSecret(clientSecret);
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+const checkUserLoggedIn = async (setIsAuthenticated: any) => {
+  try {
+    const authRepo = new AuthRepository();
+    let authentication = await authRepo.getUserData();
+    if (!authentication) {
+      try {
+        authentication = await authRepo.getUserData();
+      } catch (refreshError) {
+        setIsAuthenticated(false);
+        return;
+      }
+    }
+    if (authentication) {
+      const isAdmin = await authRepo.isUserAdmin(authentication.uid);
+      setIsAuthenticated(isAdmin);
+    } else {
+      setIsAuthenticated(false);
+    }
+  } catch (error) {
+    setIsAuthenticated(false);
+  }
+};
+
+function AppRoutes({ clientSecret, stripePromise, isAuthenticated }: any) {
+  return (
+    <Routes>
+      {routes.map((route, index) => {
+        if (route.isProtected) {
+          return (
+            <Route
+              key={index}
+              path={route.path}
+              element={<ProtectedRoute element={route.element} isAuthenticated={isAuthenticated} />}
+            />
+          );
+        }
+
+        return <Route key={index} path={route.path} element={route.element} />;
+      })}
+
+      <Route
+        path='/checkout'
+        element={clientSecret && stripePromise ? (
+          <Elements stripe={stripePromise} options={{
+            paymentMethodTypes: ['card'],
+            appearance: { variables: { colorPrimaryText: '#be0a45', colorDanger: "#be0a45" } },
+            mode: "payment",
+            amount: 1 * 100,
+            currency: 'brl',
+          }}>
+            <CheckoutPage paymentMethodTypes={['card']} clientSecret={clientSecret} />
+          </Elements>
+        ) : (
+          <Loader />
+        )}
+      />
+
+      <Route path="*" element={<Navigate to="/404" />} />
+    </Routes>
+  );
+}
+
+const App = () => {
   const [stripePromise, setStripePromise] = useState<any>(null);
   const [clientSecret, setClientSecret] = useState<any>("");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchConfig = async () => {
-      try {
-        const response = await fetch(`${url}/config`);
-        if (!response.ok) throw new Error("Failed to fetch config");
-        const { publishableKey } = await response.json();
-        setStripePromise(loadStripe(publishableKey));
-      } catch (error: any) {
-        throw Error("Error fetching config:", error);
-      }
-    };
-
-    fetchConfig();
+    fetchStripeConfig(setStripePromise, url);
   }, []);
 
   useEffect(() => {
-    const createPaymentIntent = async () => {
-      try {
-        const response = await fetch(`${url}/create-payment-intent`, {
-          method: "POST",
-          body: JSON.stringify({ "item": 1 * 100 }),
-          headers: {
-            'Authorization': `Bearer ${process.env.REACT_APP_DEFAULTCONFIGURATION == "production" ? process.env.REACT_APP_STRIPE_SECRET_KEY_PRODUCTION : process.env.REACT_APP_STRIPE_SECRET_KEY}`, //USE REACT_APP_STRIPE_SECRET_KEY_PRODUCTION para producao
-            'Content-Type': 'application/json'
-          }
-        });
-        if (!response.ok) throw new Error("Failed to create payment intent");
-        const { clientSecret } = await response.json();
-        setClientSecret(clientSecret);
-      } catch (error: any) {
-        throw error;
-      }
-    };
-
-    createPaymentIntent();
+    createPaymentIntent(setClientSecret, url);
   }, []);
 
   useEffect(() => {
-    const checkUserLoggedIn = async () => {
-      try {
-        const authRepo = new AuthRepository();
-        let authentication = await authRepo.getUserData();
-        if (!authentication) {
-          try {
-            authentication = await authRepo.getUserData();
-          } catch (refreshError) {
-            // await authRepo.logout();
-            setIsAuthenticated(false);
-            return;
-          }
-        }
-
-        if (authentication) {
-          const isAdmin = await authRepo.isUserAdmin(authentication.uid);
-          setIsAuthenticated(isAdmin);
-        } else {
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        setIsAuthenticated(false);
-      }
-    };
-
-    checkUserLoggedIn();
+    checkUserLoggedIn(setIsAuthenticated);
   }, []);
 
-  const ProtectedRoute = ({ element }: any) => {
-    if (!isAuthenticated) {
-      return <Loader />;
-    }
-
-    return isAuthenticated ? element : <Navigate to="/404" />;
-  };
   return (
     <div className="page">
       <Provider>
@@ -170,37 +206,7 @@ function App() {
             <UserProvider>
               <BrowserRouter>
                 <Header />
-                <Routes>
-                  {routes.map((route, index) => {
-                    if (route.isProtected) {
-                      return (
-                        <Route
-                          key={index}
-                          path={route.path}
-                          element={<ProtectedRoute element={route.element} />}
-                        />
-                      );
-                    }
-
-                    return <Route key={index} path={route.path} element={route.element} />;
-                  })}
-
-                  <Route
-                    path='/checkout'
-                    element={clientSecret && stripePromise ? (
-                      <Elements stripe={stripePromise} options={{
-                        paymentMethodTypes: ['card'],
-                        appearance: { variables: { colorPrimaryText: '#be0a45', colorDanger: "#be0a45" } }, mode: "payment", amount: 1 * 100, currency: 'brl',
-                      }}>
-                        <CheckoutPage paymentMethodTypes={['card']} clientSecret={clientSecret} />
-                      </Elements>
-                    ) : (
-                      <Loader />
-                    )}
-                  />
-
-                  <Route path="*" element={<Navigate to="/404" />} />
-                </Routes>
+                <AppRoutes clientSecret={clientSecret} stripePromise={stripePromise} isAuthenticated={isAuthenticated} />
               </BrowserRouter>
             </UserProvider>
           </MenuItemsProvider>

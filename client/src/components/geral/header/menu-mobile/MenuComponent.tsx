@@ -29,7 +29,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ logoHeader, menuItems, ha
 
     useEffect(() => {
         checkIfIsLogged();
-    }, [])
+    }, [isLogged])
     const closeMainDrawer = () => {
         setIsMainDrawerOpen(false);
     }
