@@ -200,7 +200,7 @@ export const Dashboard = () => {
                     <Table.ColumnHeader className='hide-mobile'>Pagamento</Table.ColumnHeader>
                 </Table.Header>
 
-                {orders.map((order: OrderAfterBuyProps) => {
+                {orders.slice(0, 10).map((order: OrderAfterBuyProps) => {
                     const items = JSON.parse(order.items);
                     const address = JSON.parse(order.address);
                     const user = JSON.parse(order.user);

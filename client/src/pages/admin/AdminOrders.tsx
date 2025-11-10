@@ -237,32 +237,38 @@ const AdminOrders = () => {
                     </div>
                     <div className="order-summary">
                         <h1>Entrega</h1>
-                        <p><strong>{address?.shippingMethodSelected?.company.name} - {address?.shippingMethodSelected?.name}</strong></p>
-                        {address?.shippingMethodSelected?.company.name !== "Retirada" ? <p><strong>Seu pedido será entregue em {address?.shippingMethodSelected?.delivery_time} dias após ser enviado.</strong></p> : "Entraremos em contato via WhatsApp para definir um local em Pouso Alegre MG para retirada de seu produto"}
-                        {address?.shippingMethodSelected?.company.name !== "Retirada" && <input onChange={(e) => setOrderAtual({ ...orderAtual, codigoRastreio: e.target.value })} value={orderAtual.codigoRastreio} placeholder="Coloque aqui o código de rastreio do produto" />}
-                        <br />
-                        <p><strong>Endereço {address?.shippingMethodSelected?.company.name !== "Retirada" ? "de Entrega" : ""}:</strong> {address.endereço}, {address.numero}, {address.bairro} - {address.cidade}/{address.estado} ({address.cep})</p>
-                        <div style={{ height: "300px", width: "100%" }}>
-                            {latitude && longitude ? (
-                                <MapContainer center={[latitude, longitude]} zoom={13} style={{ height: "100%", width: "100%" }}>
-                                    <TileLayer
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                    />
-                                    <Marker position={[latitude, longitude]} icon={boxIcon}>
-                                        <Popup>
-                                            <h2 style={{ fontSize: 18 }}>Pedido #{orderAtual.id}</h2>
-                                            Cliente: {user.nome_completo} <br />
-                                            <br />
-                                            {address.cidade} [{address.estado}] - {address.bairro} - {address["endereço"]} {address.numero}
-                                        </Popup>
-                                    </Marker>
-                                </MapContainer>
-                            ) : (
-                                <p>Carregando mapa...</p>
-                            )}
-                        </div>
-                        <p><strong>Referência:</strong> {address.referencia}</p>
+                        {address.cep ?
+                            <>
+                                <p><strong>{address?.shippingMethodSelected?.company.name} - {address?.shippingMethodSelected?.name}</strong></p>
+                                {address?.shippingMethodSelected?.company.name !== "Retirada" ? <p><strong>Seu pedido será entregue em {address?.shippingMethodSelected?.delivery_time} dias após ser enviado.</strong></p> : "Entraremos em contato via WhatsApp para definir um local em Pouso Alegre MG para retirada de seu produto"}
+                                {address?.shippingMethodSelected?.company.name !== "Retirada" && <input onChange={(e) => setOrderAtual({ ...orderAtual, codigoRastreio: e.target.value })} value={orderAtual.codigoRastreio} placeholder="Coloque aqui o código de rastreio do produto" />}
+                                <br />
+                                <p><strong>Endereço {address?.shippingMethodSelected?.company.name !== "Retirada" ? "de Entrega" : ""}:</strong> {address.endereço}, {address.numero}, {address.bairro} - {address.cidade}/{address.estado} ({address.cep})</p>
+                                <div style={{ height: "300px", width: "100%" }}>
+                                    {latitude && longitude ? (
+                                        <MapContainer center={[latitude, longitude]} zoom={13} style={{ height: "100%", width: "100%" }}>
+                                            <TileLayer
+                                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                            />
+                                            <Marker position={[latitude, longitude]} icon={boxIcon}>
+                                                <Popup>
+                                                    <h2 style={{ fontSize: 18 }}>Pedido #{orderAtual.id}</h2>
+                                                    Cliente: {user.nome_completo} <br />
+                                                    <br />
+                                                    {address.cidade} [{address.estado}] - {address.bairro} - {address["endereço"]} {address.numero}
+                                                </Popup>
+                                            </Marker>
+                                        </MapContainer>
+                                    ) : (
+                                        <p>Carregando mapa...</p>
+                                    )}
+                                </div>
+                                <p><strong>Referência:</strong> {address.referencia}</p>
+                            </>
+                            :
+                            <></>
+                        }
 
                         {/* Timeline de Status do Pedido */}
                         <TimelineRoot>

@@ -278,11 +278,16 @@ export const ProductAddPage = () => {
                             {/* Informações do produto */}
                             <div className="info-box">
                                 <form className="product-form">
-                                    <Editable.Root placeholder="Escreva o nome do produto" style={{ fontWeight: 600 }} size={"lg"} defaultValue={product?.name_product} activationMode="dblclick">
-                                        <Editable.Preview />
-                                        <Editable.Input placeholder="Escreva o nome do produto" onChange={(e) => { setProduct({ ...product, name_product: e.target.value }) }} />
-                                        <InfoTip content="Clique duas vezes para editar" />
-                                    </Editable.Root>
+                                    <div className="form-row">
+                                        <label htmlFor="price">Nome do produto<InfoTip content="Nome mostrado publicamente do produto." /></label>
+                                        <input
+                                            type="text"
+                                            id="name"
+                                            name="name"
+                                            onChange={(e) => { setProduct({ ...product, name_product: e.target.value }) }}
+                                            required
+                                        />
+                                    </div>
 
                                     <div className="form-row">
                                         <label htmlFor="price">Preço do Produto<InfoTip content="Preço do produto. Não se esqueça que esse preço será subtraído com o desconto" /></label>

@@ -15,6 +15,7 @@ import { Settings } from "lucide-react";
 import NotificationsComponent from "./notifications/NotificationsComponent";
 import SideBar from "./SideBar";
 import { useUser } from "../../contexts/UserContext";
+import SearchComponent from "./header/SearchComponent";
 
 export const DashboardHeader = () => {
     const [isBagOpen, setBagOpen] = useState<boolean>(false);
@@ -75,7 +76,7 @@ export const DashboardHeader = () => {
                     </div>
                 </div>
                 <div className="dashboard-header-component-action-btns">
-                    <Input placeholder="Buscar" background={"white"} padding={2} width={400} variant={"subtle"} />
+                    <SearchComponent />
                     <Button disabled><Settings /></Button>
                     <NotificationsComponent setBagOpen={setBagOpen} isBagOpen={isBagOpen} />
                 </div>

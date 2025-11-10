@@ -206,6 +206,10 @@ html {
   }
 }
 
+.css-jzkeae {
+  z-index: 100000 !important;
+}
+
 @layer base {
   * {
     @apply border-border;

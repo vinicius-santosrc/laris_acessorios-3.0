@@ -13,6 +13,7 @@ import { CategoriesProps } from "@/lib/utils";
 import Compressor from "compressorjs";
 import api, { getUrlByAmbient } from "./api";
 import { toaster } from "../components/ui/toaster";
+import axios from "axios";
 
 
 export default class AdminRepository {
@@ -164,7 +165,7 @@ export default class AdminRepository {
                         formData.append('key', this.keyUpload);
 
                         // Making the POST request
-                        api.post(this.urlUpload, formData)
+                        axios.post(this.urlUpload, formData)
                             .then((response) => {
                                 if (response.data.success) {
                                     resolve(response.data.data.url); // Resolve the promise with the URL
